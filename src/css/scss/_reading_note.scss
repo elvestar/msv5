@@ -1,0 +1,27 @@
+.readingNote {
+    .note {
+        blockquote {
+            padding: 3px 15px;
+            font-size: 15px;
+        }
+        padding: 5px 330px 5px 0;
+        position: relative;
+
+        .imageWrapper {
+            position: absolute;
+            z-index: 100;
+            top: 0;
+            right: 0;
+            width: 300px;
+            img {
+                margin: 0 auto;
+                max-height: 300px;
+                max-width: 270px;
+                // float: right;
+            }
+        }
+        .imageWrapper::before {
+            content: "➴";
+        }
+    }
+}

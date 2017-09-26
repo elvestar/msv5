@@ -1,0 +1,67 @@
+{
+  "_args": [
+    [
+      "gatsby-transformer-org@1.7.10",
+      "/Users/elvestar/github/elvestar/msv5"
+    ]
+  ],
+  "_from": "gatsby-transformer-org@1.7.10",
+  "_id": "gatsby-transformer-org@1.7.10",
+  "_inBundle": false,
+  "_integrity": "sha512-x8Cgfx31sUw1SV7y2NQ3yY4zhdq/sM7zaeDM13sOsz6lMOUk7594GbbW2FBamceCWr8cc/X2w3veVv4Gg0OUUw==",
+  "_location": "/gatsby-transformer-org",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "gatsby-transformer-org@1.7.10",
+    "name": "gatsby-transformer-org",
+    "escapedName": "gatsby-transformer-org",
+    "rawSpec": "1.7.10",
+    "saveSpec": null,
+    "fetchSpec": "1.7.10"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/gatsby-transformer-org/-/gatsby-transformer-org-1.7.10.tgz",
+  "_spec": "1.7.10",
+  "_where": "/Users/elvestar/github/elvestar/msv5",
+  "author": {
+    "name": "Kyle Mathews",
+    "email": "mathews.kyle@gmail.com"
+  },
+  "dependencies": {
+    "babel-runtime": "^6.26.0",
+    "bluebird": "^3.5.0",
+    "gray-matter": "^2.1.0",
+    "hast-util-to-html": "^3.0.0",
+    "lodash": "^4.17.4",
+    "mdast-util-to-hast": "^2.4.0",
+    "mdast-util-toc": "^2.0.1",
+    "sanitize-html": "^1.14.1",
+    "underscore.string": "^3.3.4",
+    "unist-util-select": "^1.5.0",
+    "unist-util-visit": "^1.1.1"
+  },
+  "description": "Gatsby transformer plugin for Markdown using the org library and ecosystem",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.20.2",
+    "cross-env": "^5.0.5"
+  },
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "markdown",
+    "org"
+  ],
+  "license": "MIT",
+  "name": "gatsby-transformer-org",
+  "scripts": {
+    "build": "babel src --out-dir . --ignore __tests__",
+    "prepublish": "cross-env NODE_ENV=production npm run build",
+    "watch": "babel -w src --out-dir . --ignore __tests__"
+  },
+  "version": "1.7.10"
+}

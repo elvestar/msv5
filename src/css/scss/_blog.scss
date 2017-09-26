@@ -1,0 +1,20 @@
+.section-number {
+    display: none;
+}
+
+
+.pageMeta {
+    margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 18px;
+  color: #999;
+
+  span {
+    margin-left: 2px;
+    margin-right: 5px;
+    a, i {
+      margin-right: 5px;
+    //   margin-left: 2px;
+    }
+  }
+}
