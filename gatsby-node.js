@@ -43,5 +43,49 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
         })
       })
     )
+
+
+    const orgPost = path.resolve("./src/templates/org-post.js")
+    resolve(
+      graphql(
+        `
+      {
+        allOrg(limit: 1000) {
+          edges {
+            node {
+              frontmatter {
+                path
+              }
+            }
+          }
+        }
+      }
+    `
+      ).then(result => {
+        if (result.errors) {
+          console.log(result.errors)
+          reject(result.errors)
+        }
+
+        // Create blog posts pages.
+        _.each(result.data.allOrg.edges, edge => {
+          createPage({
+            path: edge.node.frontmatter.path,
+            component: orgPost,
+            context: {
+              path: edge.node.frontmatter.path,
+            },
+          })
+        })
+      })
+    )
+
   })
+}
+
+exports.onCreateNode = ({ node, getNode, boundActionCreators }) => {
+
+  
+  const { createNode, updateNode } = boundActionCreators
+  console.log(node.internal.type, node.internal.mediaType)
 }
