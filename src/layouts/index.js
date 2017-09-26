@@ -1,8 +1,5 @@
 import React from 'react'
 import Link from 'gatsby-link'
-import { Container } from 'react-responsive-grid'
-
-import { rhythm, scale } from '../utils/typography'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../css/scss/styles.scss'
@@ -17,7 +14,7 @@ class Template extends React.Component {
       rootPath = __PATH_PREFIX__ + `/`
     }
 
-    if (location.pathname === rootPath) {
+    if (true || location.pathname === rootPath) {
       header = (
         <nav className="navbar" id="header">
           <div className="container">
@@ -38,28 +35,7 @@ class Template extends React.Component {
           </div>
         </nav>
       )
-    } else {
-      header = (
-        <h3
-          style={{
-            fontFamily: 'Montserrat, sans-serif',
-            marginTop: 0,
-            marginBottom: rhythm(-1),
-          }}
-        >
-          <Link
-            style={{
-              boxShadow: 'none',
-              textDecoration: 'none',
-              color: 'inherit',
-            }}
-            to={'/'}
-          >
-            Gatsby Starter Blog
-          </Link>
-        </h3>
-      )
-    }
+    } 
     return (
       <div>
         {header}

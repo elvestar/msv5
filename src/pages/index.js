@@ -10,13 +10,13 @@ import { rhythm } from '../utils/typography'
 class BlogIndex extends React.Component {
   render() {
     const siteTitle = get(this, 'props.data.site.siteMetadata.title')
-    var posts = get(this, 'props.data.allMarkdownRemark.edges')
-    posts = concat(posts, get(this, 'props.data.allOrg.edges'))
+    var posts = get(this, 'props.data.allOrg.edges')
+    // posts = concat(posts, get(this, 'props.data.allOrg.edges'))
 
     return (
       <div>
         <Helmet title={get(this, 'props.data.site.siteMetadata.title')} />
-        <Bio />
+        <h3>共 {posts.length} 篇文章</h3>
         {posts.map(post => {
           if (post.node.path !== '/404/') {
             const title = get(post, 'node.frontmatter.title') || post.node.path
@@ -58,19 +58,7 @@ export const pageQuery = graphql`
         title
       }
     }
-    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
-      edges {
-        node {
-          excerpt
-          frontmatter {
-            path
-            date(formatString: "DD MMMM, YYYY")
-            title
-          }
-        }
-      }
-    }
-    allOrg {
+    allOrg(sort: { fields: [frontmatter___date], order: DESC }) {
       edges {
         node {
           excerpt

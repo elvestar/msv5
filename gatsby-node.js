@@ -9,42 +9,6 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
 
   return new Promise((resolve, reject) => {
     const pages = []
-    const blogPost = path.resolve("./src/templates/blog-post.js")
-    resolve(
-      graphql(
-        `
-      {
-        allMarkdownRemark(limit: 1000) {
-          edges {
-            node {
-              frontmatter {
-                path
-              }
-            }
-          }
-        }
-      }
-    `
-      ).then(result => {
-        if (result.errors) {
-          console.log(result.errors)
-          reject(result.errors)
-        }
-
-        // Create blog posts pages.
-        _.each(result.data.allMarkdownRemark.edges, edge => {
-          createPage({
-            path: edge.node.frontmatter.path,
-            component: blogPost,
-            context: {
-              path: edge.node.frontmatter.path,
-            },
-          })
-        })
-      })
-    )
-
-
     const orgPost = path.resolve("./src/templates/org-post.js")
     resolve(
       graphql(
@@ -85,7 +49,6 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
 
 exports.onCreateNode = ({ node, getNode, boundActionCreators }) => {
 
-  
   const { createNode, updateNode } = boundActionCreators
-  console.log(node.internal.type, node.internal.mediaType)
+  // console.log(node.internal.type, node.internal.mediaType)
 }

@@ -27,14 +27,15 @@ async function onCreateNode({ node, boundActionCreators, loadNodeContent }) {
     const body = orgHTMLDocument.contentHTML
     const toc = orgHTMLDocument.tocHTML
     const events = orgHTMLDocument.events
-    console.log(events)
     const metaData = extractMetaData(content)
 
+    node_path = _.replace(node.relativePath, '.org', '/'),
     node.internal.type = 'org'
     node.excerpt = metaData.summary
     node.events = events
+    node.path = node_path
     node.frontmatter = {
-        path: node.name,
+        path: node_path,
         date: metaData.date,
         title: metaData.title,
         tags: metaData.tags,
@@ -53,7 +54,7 @@ async function onCreateNode({ node, boundActionCreators, loadNodeContent }) {
             excerpt: event.summary,
             children: [],
             frontmatter: {
-                path: `${node.name}/#${event.anchor}`,
+                path: `${node.path}#${event.anchor}`,
                 date: event.date,
                 title: event.title,
                 cover: event.cover
@@ -64,17 +65,24 @@ async function onCreateNode({ node, boundActionCreators, loadNodeContent }) {
             }
         })
     })
-    const contentDigest = crypto
+    
+    var contentDigest = crypto
         .createHash(`md5`)
-        .update(metaData.summary)
+        .update('nil')
         .digest(`hex`)
+    if (metaData.summary !== undefined) {
+        contentDigest = crypto
+            .createHash(`md5`)
+            .update(metaData.summary)
+            .digest(`hex`)
+    }
     createNode({
         id: `${node.id} event root`,
         parent: node.id,
         excerpt: metaData.summary,
         children: [],
         frontmatter: {
-            path: node.name,
+            path: node.path,
             date: metaData.date,
             title: metaData.title,
             cover: '#'
