@@ -1,0 +1,124 @@
+#+TITLE: D3.js: Data-Driven Documents
+#+DATE: 2016-01-09
+
+* 前言
+一直以来我在 Web 页面上画图使用的都是 Highcharts/ECharts/ChartJS 等 JS 库，
+它们用法大同小异，都是传递以 ~格式复杂的 JSON 数据~ 和 ~形式更为复杂的选项~
+的来实现画图。个人感觉这些画图库存在着一些劣势：
+1. 配置琐碎，虽易于上手，但当想进一步提升开发效率却不易（即难于精通）
+2. 难以精确控制
+3. 绘图效果比较不够理想（ChartJS 除外，可惜它功能略简单）
+4. 有的场景存在性能问题
+   
+这几天在实现 [[./tms-v2.org][TMS V2]] ，在思考如何展示 TMS 时，觉得我需要更强大的绘图工具。我
+一直以来都觉得 [[https://github.com/torvalds/linux/graphs/contributors][GitHub Graph]] 绘图效果很不错，经过多方调研，在 [[http://stackoverflow.com/questions/14507778/github-contributions-graph][这里]] 得知
+GitHub 是使用 D3 来绘制的。
+
+于是，我开始学习 D3。
+
+* 资料收集
+- http://d3js.org/
+- https://github.com/mbostock/d3
+- [[https://github.com/mbostock/d3/wiki/API--%25E4%25B8%25AD%25E6%2596%2587%25E6%2589%258B%25E5%2586%258C][D3 API 中文手册]]
+- [[http://d3.decembercafe.org/index.html][Learning D3.JS - DecemberCafe]]
+
+** 文章
+- [[http://vegibit.com/create-a-bar-chart-with-d3-javascript/][Create A Bar Chart With D3 JavaScript]]
+
+* D3学习
+** Learning D3.JS - DecemberCafe <2016-09-04 日 11:00>
+1. 绑定：将数据绑定到选择集上，方便 *后续* 操作。datum是一绑多，而data是多
+   绑多，即将一个数据集绑定到一个选择集上。data更常用。
+2. 插入append：在选择集的最后一个孩子元素之前插入一个元素（注意不是选择集自
+   身）。
+3. enter+append组合：有数据，而没有足够图形元素的时候，使用此方法可以添加足
+   够的元素。
+4. 比例尺（scale）实现了从定义域（doman）到值域（range）之间的映射，比例尺
+   有很多种，例如线性比例尺（d3.scale.linear），（用于离散数据的）序数比例
+   尺（d3.scale.ordinal）。当定义好一个比例尺并绑定好数据集后，我们可以在
+   attr函数里通过比例尺来为图形元素指定宽度、长度和坐标等参数。
+5. d3.svg.axis用来绘制坐标轴，可以通过.scale()指定坐标轴的比例尺，使用.orient()
+   指定坐标轴刻度线的朝向，使用.ticks()指定刻度的数量。一个绘制完成的坐标轴，
+   包块一个path，多个line（刻度），刻度文字，还有若干个分组元素<g>。
+6. D3把动态效果叫做过渡（transition），相关方法有四个：transition（启用过
+   渡），duration（指定过渡时间），ease（指定过渡的方式），delay（指定延时
+   的时间）
+
+** TensorFlow Playground分析 <2016-09-04 日 16:09>
+   
+TensorFlow是Google开源的一款机器学习的库，而 [[http://playground.tensorflow.org/][TensorFlow Playground]] 则是将
+TensorFlow的神经网络进行可视化展现的一个工具，效果很炫。它是用D3和
+TypeScript编写，UI使用了Google的MDL。可以借助它来了解一下D3的用法。
+
+分析要点：
+1. 如何确定元素的坐标？
+2. 元素之前有何分组关系？
+3. 点击Play后的动态效果是如何实现？
+4. 节点黄蓝白相间的背景是如何绘制的？
+5. 那些带拐弯的复杂路径是如何绘制的？
+
+*** 如何确定元素的坐标？
+根据神经网络的层数确定x坐标，根据结点在这一层的次序决定y坐标。通过
+transform="translate(dx, dy)"来设置坐标。
+
+*** 点击Play后的动态效果是如何实现？
+点击Play按钮后，会设定一个timer，定期调用oneStep()方法，进而调用updateUI()
+方法，进而调用updateWeightsUI()方法，在updateWeightsUI()方法里，会通过id取
+出各条线，然后计算各条连线的当前权值，进而改变stroke-width（填充宽度）和
+stroke（填充颜色），同时会改变stroke-dashoffset（通过一个全局变量iter来控制
+改变为多少，这个iter可能代表算法的迭代轮数）。
+
+*** 节点黄蓝白相间的背景是如何绘制的？
+heatmap实际上分为上下两层，上层是一个canvas，下层是可以D3操控的svg。有个
+updateBackground()方法，它会将整个heatmap的矩形canvas取出来，计算每个像素点
+的值，赋上对应的color。
+
+*** 那些带拐弯的复杂路径是如何绘制的？
+应该是通过 let diagonal = d3.svg.diagonal().projection(d => [d.y, d.x]); 来
+生成<path>的d属性。
+
+* 解决方案
+** d3下实现onhover <2016-09-16 五 23:03>
+待补完   
+
+* 问题记录
+** 使用d3.svg.diagonal为两个rect绘制平滑的连接曲线 <2016-09-04 日 23:55>
+代码如下：
+#+BEGIN_SRC js
+    var line = container.insert("path", ":first-child");
+    var datum = {
+        source: {
+            y: cx1 + RECT_SIZE / 2 + 2,
+            x: cy1
+        },
+        target: {
+            y: cx2 - RECT_SIZE / 2 - 2,
+            x: cy2
+        }
+    };
+    var diagonal = d3.svg.diagonal()
+        .projection(function(d) { return [d.y, d.x]; });
+    line.attr({
+        class: 'link',
+        d: diagonal(datum, 0)
+    });
+#+END_SRC
+
+要点：
+1. 定义projection时函数应该返回的[d.y, d.x]，而不是[d.x, d.y]，否则会出现曲
+   线和rect的连接处会很辣眼睛。
+2. source和target的x和y也需要一起调换一下。
+   
+最终绘制效果如下图（这个曲线还会动的说）：
+
+#+CAPTION: ./imgs/d3js/20160904235419.png
+[[../static/imgs/d3js/20160904235419.png]]
+
+参考：
+- [[http://stackoverflow.com/questions/15007877/how-to-use-the-d3-diagonal-function-to-draw-curved-lines][javascript - How to use the D3 diagonal function to draw curved lines? - Stack Overflow]]
+* 回顾
+** 使用 D3 画了 TMS Calendar <2016-01-10 日>
+第一次使用 D3 画图，感觉良好！
+
+#+CAPTION: ./imgs/d3js/20160110020323.png
+[[../static/imgs/d3js/20160110020323.png]]

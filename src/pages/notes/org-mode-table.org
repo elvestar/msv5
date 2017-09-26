@@ -1,0 +1,14 @@
+#+TITLE: Org mode table
+#+DATE: 2015-01-11
+#+KEYWORDS: Org-mode
+
+* 前言
+Org table 的功能太丰富了，而且拥有 Org Exporter 的完整支持。
++ [[http://orgmode.org/manual/Tables.html]]
+
+* 转义
++ [[http://orgmode.org/worg/org-symbols.html][Symbols in Org-mode]]
+
+** 表格中的 | (pipe) 的转义
+使用 ~\vert~
++ [[http://stackoverflow.com/questions/5144862/escape-pipe-character-in-org-mode]]

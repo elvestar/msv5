@@ -1,0 +1,10 @@
+#+TITLE: WebStorm
+#+DATE: 2015-02-16
+#+KEYWORDS: IDE
+
+* 前言
+
+* 资料搜集
+- [[http://www.zhihu.com/question/25490540/answer/30896641][阅读大型 JavaScript 源码时有什么好用的工具？]]
+
+- [[https://www.jetbrains.com/webstorm/help/using-bower-package-manager.html][Using Bower Package Manager]]

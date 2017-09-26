@@ -1,0 +1,53 @@
+#+TITLE: Javascript DOM
+#+DATE: 2014-03-23
+#+KEYWORDS: DOM, XML
+
+* DOM 简介
+DOM 是 Javascript 之所以能够灵活操纵 HTML 的根本原因。
+
+#+BEGIN_QUOTE
+*DOM（文档对象模型）* 是针对 HTML 和 XML 文档的一个 API（应用程序编程接口）。DOM 描绘了一
+个层次化的节点树，允许开发人员添加、移除和修改页面的某一部分。DOM 脱胎于 Netscape 及
+微软公司创始的 DHTML（动态 HTML），但现在它已经成为表现和操作页面标记的真正的跨平台、
+语言中立的方式。
+#+END_QUOTE
+
+DOM 由各种节点构成，简要总结如下：
+1. 最基本的节点类型是 Node，用于抽象地表示文档中一个独立的部分；所有其他类型都继承
+   自 Node。
+2. Document 类型表示整个文档，是一组分层节点的根节点。在 JavaScript 中，document 对象
+   是 Document 的一个实例。使用 document 对象，有很多种方式可以查询和取得节点。
+3. Element 节点表示文档中的所有 HTML 或 XML 元素，可以用来操作这些元素的内容和特性。
+4. 另外还有一些节点类型，分别表示文本内容、注释、文档类型、CDATA 区域和文档片段。
+
+* Node
+** Node 类型
+每个节点都有一个 nodeType 属性，用于表明节点的类型。节点类型由在 Node 类型中定义的下列 12 个数值常量来表示，任何节点类型必居其一：
+1. Node.ELEMENT_NODE(1)；
+2. Node.ATTRIBUTE_NODE(2)；
+3. Node.TEXT_NODE(3)；
+4. Node.CDATA_SECTION_NODE(4)；
+5. Node.ENTITY_REFERENCE_NODE(5)；
+6. Node.ENTITY_NODE(6)；
+7. Node.PROCESSING_INSTRUCTION_NODE(7)；
+8. Node.COMMENT_NODE(8)；
+9. Node.DOCUMENT_NODE(9)；
+10. Node.DOCUMENT_TYPE_NODE(10)；
+11. Node.DOCUMENT_FRAGMENT_NODE(11)；
+12. Node.NOTATION_NODE(12)。
+
+** 常用操作
+*** appendChild()
+*** insertBefore()
+*** replaceChild()
+*** removeChild()
+*** cloneNode()
+*** normalize()
+
+
+* 节点属性操作
+** 设置 class
+#+BEGIN_SRC js
+left.className = 'col-md-2';
+right.className = 'col-md-10';
+#+END_SRC

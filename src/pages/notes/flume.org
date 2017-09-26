@@ -1,0 +1,153 @@
+#+TITLE: Flume
+#+DATE: 2015-09-01
+
+* 资料收集
+- [[https://flume.apache.org/FlumeDeveloperGuide.html][Flume Developer Guide — Apache Flume]]
+
+* Configuration
+Flume 支持两种配置方式：本地文件配置和 Zookeeper 远程配置。前者不必多说，关
+于后者，我了解了一下，是要在启动 Flume agent 时指定 ZooKeeper 集群和根路径，
+以及一个独一无二的 agent name。
+#+BEGIN_SRC sh
+$ bin/flume-ng agent –conf conf -z zkhost:2181,zkhost1:2181 -p /flume –name a1 -Dflume.root.logger=INFO,console
+#+END_SRC
+
+总的看来，Flume 的这种配置方式相当原始，很不灵活，适合小规模使用。当业务规
+模扩大时，运维压力会很大。
+* 代码分析
+
+* 阅读 Flume 1.7.0 User Guide <2017-07-26 三 14:06>
+- [[https://flume.apache.org/FlumeUserGuide.html][Flume 1.7.0 User Guide — Apache Flume]]
+
+#+BEGIN_QUOTE
+Apache Flume is a distributed, reliable, and available system for
+efficiently collecting, aggregating and moving large amounts of log data
+from many different sources to a centralized data store.
+#+END_QUOTE
+
+1. 功能：收集、汇聚、转储。
+2. 从多种数据源到一个集中的数据存储。
+
+Flume 系统需求：
+1. JRE
+2. 内存
+3. 磁盘空间
+4. 读写权限
+
+** 架构
+#+CAPTION: Flume Architecture
+[[../static/imgs/flume/flume_1.png]]
+
+Flume Event and Flume Agent: 
+- *A Flume event* is defined as a unit of data flow having a byte payload and an optional set of string attributes.
+- *A Flume agent* is a (JVM) process that hosts the components through which events flow from an external source to the next destination (hop).
+
+Complex flows（复杂流）
+Flume allows a user to build multi-hop flows where events travel through
+multiple agents before reaching the final destination. It also allows
+fan-in and fan-out flows, contextual routing and backup routes (fail-over)
+for failed hops.
+- 扇入(fan-in)：是指直接调用该模块的上级模块的个数。扇入大表示模块的复用程序高。
+- 扇出(fan-out)：是指该模块直接调用的下级模块的个数。扇出大表示模块的复杂度高，需要控制和协调过多的下级模块
+
+多跳模式
+#+CAPTION: Multi-agent Flow
+[[../static/imgs/flume/flume_2.png]]
+汇聚
+#+CAPTION: Consolidation
+[[../static/imgs/flume/flume_3.png]]
+多路复用
+#+CAPTION: Multiplexing the flow
+[[../static/imgs/flume/flume_4.png]]
+
+Reliability（可靠性）
+- The events are staged in a channel on each agent.（Events暂存在每个Agent的Channel里）
+- 只有当Events成功存储在下一跳Agent的Channel或者终端仓库（如HDFS）中后，它
+  们才会被从本跳的Channel中删掉。
+- Flume uses a transactional approach to guarantee the reliable delivery of
+  the events.（Flume使用事务手段来保证Events的可靠传递）
+  
+Recoverability（可恢复性）
+- Flume支持Durable File Channel（持久文件通道），来将Event暂存在本地文件系统中。
+- 此外还有Memory Channel，它很快，但是当Agent进程挂掉后，Events将不可恢复。
+
+** 配置
+
+** Flume Sources
+1. Avro Source
+2. Thrift Source
+3. Exec Source
+4. JMS Source
+5. Spooling Directory Source
+6. Taildir Source
+7. Twitter 1% firehose Source (experimental)
+8. Kafka Source
+9. NetCat Source
+10. Sequence Generator Source
+11. Syslog Sources
+12. Syslog TCP Source
+13. Multiport Syslog TCP Source
+14. Syslog UDP Source
+15. HTTP Source
+16. Stress Source
+17. Legacy Sources
+18. Avro Legacy Source
+19. Thrift Legacy Source
+20. Custom Source
+21. Scribe Source
+
+** Flume Sinks
+1. HDFS Sink
+2. Hive Sink
+3. Logger Sink
+4. Avro Sink
+5. Thrift Sink
+6. IRC Sink
+7. File Roll Sink
+8. Null Sink
+9. HBaseSinks
+10. AsyncHBaseSink
+11. MorphlineSolrSink
+12. ElasticSearchSink
+13. Kite Dataset Sink
+14. Kafka Sink
+15. Custom Sink
+
+** Flume Channels
+1. Memory Channel
+2. JDBC Channel
+3. Kafka Channel
+4. File Channel
+5. Spillable Memory Channel
+6. Pseudo Transaction Channel
+7. Custom Channel    
+   
+** Flume Channel Selectors
+1. Replicating Channel Selector (default)
+2. Multiplexing Channel Selector
+3. Custom Channel Selector
+
+** Flume Sink Processors
+1. Default Sink Processor
+2. Failover Sink Processor
+3. Load balancing Sink Processor
+4. Custom Sink Processor
+   
+** Flume Interceptors
+1. Timestamp Interceptor
+2. Host Interceptor
+3. Static Interceptor
+4. UUID Interceptor
+5. Morphline Interceptor
+6. Search and Replace Interceptor
+7. Regex Filtering Interceptor
+8. Regex Extractor Interceptor
+
+** Monitoring（监控）
+Flume的监控目前仍然不完善。
+
+#+BEGIN_QUOTE
+Monitoring in Flume is still a work in progress. Changes can happen very
+often. Several Flume components report metrics to the JMX platform MBean
+server. These metrics can be queried using Jconsole.
+#+END_QUOTE

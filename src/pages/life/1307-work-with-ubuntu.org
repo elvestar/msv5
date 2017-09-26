@@ -1,0 +1,130 @@
+#+TITLE: Ubuntu 三日游
+#+DATE: 2013-08-20
+
+这几天，我在我的笔记本上安装了 Ubuntu，并尝试完全使用它来工作一天，然后又装
+回了 Windows。通过这次折腾，我熟悉了 Ubuntu 这个系统，并且开始关注苹果的
+MacBook。
+
+* 第零天：虚拟机下安装 Ubuntu
+这是大概步骤：
+1. 下载 VirtualBox 4.2.16。
+2. 下载 Ubuntu 13.04。
+3. 在龌蹉盒子上安装乌班图。
+4. 发现超级慢，卸载之！！！
+
+* 第一天：安装 Ubuntu <2013-08-17 六>
+** 相关文章收集
+- [[https://www.zhihu.com/question/20509148][如何优雅地使用 Ubuntu？ - 知乎]]
+- [[http://www.linuxidc.com/Linux/2011-05/35370.htm][联想Thinkpad x200安装Ubuntu 11.04手记_Linux教程_Linux公社-Linux系统门户网站]]
+- [[http://www.cnbeta.com/articles/tech/85203.htm][用Ubuntu工作的两周_Ubuntu_cnBeta.COM]]
+- [[http://coolshell.cn/articles/936.html][最完美的Linux桌面软件 | | 酷壳 - CoolShell]]
+
+** 安装 Ubuntu
+1. 在官网下载 Ubuntu 12.04。
+2. 备份笔记本上的文件到移动硬盘的"工作"分区的 ~备份文件(8.17 安装 Ubuntu)~
+   文件夹里。
+3. 运行 ~wubi.exe~ ，等来 N 久也没反映，怀疑该版本不能使用硬盘安装来，于是寻
+   求制作安装 U 盘。
+4. 按照 [[http://blog.chinaunix.net/uid-26215986-id-3390231.html][此文所述]] 的步骤，下载 ~UUI~ ，将移动硬盘等 "工作" 分区作为 U 盘安装
+   目录（之前将 "工作" 下面等文件都拷贝到了 "软件" 里面了），然后制作
+   Ubuntu 的安装 U 盘。
+5. 然后重启电脑，通过 U 盘启动 Ubuntu 安装程序。在安装磁盘选择这一步，我将
+   sda（即三星 ssd 盘）清空掉，并让安装程序在上面自动划分分区，之后一步一步
+   安装成功。
+6. 开始使用 Ubuntu，连接 Baidu 这个 WiFi 结点，登录内网准入平台，下载Ubuntu
+   版本的bnac，解压之，执行 ~./bnac -u xxxx -p yyyy~ 成功通过准入（这时候
+   bnac 程序会 hang 住，并提示: "Please keep this session Do not kill it or
+   you will auto logout 15min later!"。
+7. 连接 relay 机器： ~ssh zhongyixx@xxxxxxx.baidu.com~
+8. 连接开发机： ~ssh zhongyi@xxxx-xxxxxxx-xxxxxx.xxxx.baidu.com~
+
+#+CAPTION: 正在安装 Ubuntu
+[[../static/imgs/1307-work-with-ubuntu/P30817-153815.jpg]]
+
+** 安装常用软件
+1. *Chrome* ：Ubuntu 下可以使用开源版本的 Chromium，用 Google 的账号登陆，可
+   以同步网络搜藏夹，可以同步各种插件。跟 Windows 下的 Chrome 的体验差不多。
+   有一点不好，top 后，发现 Chome 的 CPU 占用率略高。
+2. *Evernote* ：Ubuntu 下没有 Evernote 可用，只好用 Web 版的。将就能用，但
+   是不支持快捷键，编辑文字的效率较低。
+3. *Office* ：Ubuntu 自带 libxxx 的 Office 套件，用起来不爽。还好有
+   Crossover，能够在 Ubuntu 上完美安装 Office 2010（[[http://linux.cn/thread/9683/1/1/][参考此文]]）。
+4. *BaiduHi* ：可以通过 wine 来安装和启动 BaiduHi，我试了下，发现不够完美，
+   于是决定在 Ubuntu 下安装 VirtualBox和WinXP 来安装 BaiduHi。
+
+** 使用体验
+1. 安装包自带各种驱动，包括无线网卡，显卡和小红点。在 x220 上安装后，不用到处找驱动。
+2. 速度很流畅，浏览器的字体很好看。
+3. 四个工作区自由切换（CTRL+ALT+上下左右），非常提升工作效率。
+4. 快捷键 F11，使当前程序全屏（包括终端，浏览器等任何 GUI），使我能更加心无旁骛。
+
+* 第二天：在 Ubuntu 下工作
+在周末安装好 Ubuntu 之后，今天（周一）上班后是使用 Ubuntu 来工作的。
+
+** 收发邮件
+Ubuntu 下收发邮件体验和 Windows 一模一样，至少对我来说如此。因为：
+
+#+BEGIN_EXAMPLE
+即使在 Windows 下，我也已经抛弃了 Outlook 客户端，而使用在浏览器上登录 Outlook Web App 来收发邮件，因为它速度既快，又能满足我的所有需求，最重要的是它是一种 Web 服务，无论我身在何处，用何种设备，我都能无碍地使用这个服务。
+#+END_EXAMPLE
+
+由此推导出 *在 Ubuntu 下面的收发邮件的体验跟 Windows 下的一模一样* 这一结论。
+
+** 写代码
+Ubuntu 下写代码的体验要比 Windows 要好。我在 Windows 写代码的方式是：
+#+BEGIN_EXAMPLE
+通过 SecureCRT 登录开发机，使用开发机 Vim 和 Vim 配置开写代码。
+#+END_EXAMPLE
+
+在我的新 Ubuntu 下面，我的写代码方式是：
+#+BEGIN_EXAMPLE
+使用 Ubuntu 自带的终端登录开发机，使用开发机的 Vim 和 Vim 配置写代码。
+#+END_EXAMPLE
+
+两种写代码的方式唯一的差别是终端软件的不同。由于 Ubuntu 下面的终端要比
+Windows 下的终端略好一点，所以我说在 Ubuntu 下面写代码的体验要比 Windows 好。
+
+** 知识管理
+知识管理对我而言是很重要的一块，我在 Windows 下惯用 Evernote 和 Chrome 书签
+来做知识管理。在 Ubuntu 下，Chrome 是有的，但是 Evernote 客户端是没有的。好
+在 Evernote 提供了 Web 版，但也只能凑合着用（其实它的 Web 版可以做到更好的）。
+
+虽然 Ubuntu 下的 Evernote 要比 Windows 下难用，但我并不担忧。因为在使用了
+Evernote 两年之后，我已经感觉它无法满足我的需求了，我正在找寻替代它的工具。
+
+*** Evernote 的弱点
+在我看来，Evernote 的弱点主要体现在这两点：
+
+1. *编辑模式* 。Evernote 用的是 *所见即所得* 的编辑模式，而当今流行的却是 *所思即所得* 的编辑模式。
+2. *知识分享* 。虽然 Evernote 提供了一些分享机制，但感觉它还是一个封闭性的软件，无法方便地与人分享知识。
+
+*** Evernote 的替代品
+所以我在寻求 Evernote 的替代品，但这个过程会很长。目前我设想的方案是：Vim + Vimwiki + Git + Github + Github Page。具体地说：
+
+1. 使用 *Vim* 作为文本编辑器，编写符合 Vimwiki 格式的文档。
+2. 用 *Vimwiki* 来管理和组织文档。
+3. 用 *Git* 作为 vimwiki 文档的版本管理工具。
+4. 用 *Github* 作为 vimwiki 文档的存储中心。
+5. 通过 Vimwiki 来将 vimwiki 文档生成静态网页，并通过 *Github Pages* 进行展示和分享。
+
+然后回到 Ubuntu 下的知识管理。虽然目前来说，我无法有效地使用 Evernote 来做
+知识管理，但是在 Ubuntu 下工作能促使我寻求比 Evernote 更先进的工具来进行知
+识管理。毕竟对程序员而言，Linux 更加易用友好，上面提到的各种工具在 Windows
+下是难得以及难用的。
+
+* 第三天：卸载 Ubuntu，重新安装 Windows 
+在使用 Ubuntu 一天之后，我决定换回 Windows 7。虽然 Ubuntu 有很多优点，而且
+有很多继承自 *nix 的强大工具们，但是作为一个桌面操作系统，它在细节上面是有
+一些瑕疵的，最终这些细节上的瑕疵让我对 Ubuntu 失望，并促成了我换回 Windows
+的决定（还有一个主要原因是 Ubuntu 下没有好用的 BaiduHi）。
+
+但是，出于对 *nix 下强大的工具们的留恋以及公司开发机无法访问互联网的绝望，
+我在 Windows 下通过虚拟机安装了 Ubuntu 的 Server 版，并通过 SecureCRT 来登
+录Ubuntu Server，我发现速度很让人满意。
+#+CAPTION: 在 VirtualBox 上安装 Ubuntu Server
+[[../static/imgs/1307-work-with-ubuntu/1.jpg]]
+
+经过了这次的折腾之后，我发现苹果的 MacBook 很适合我。从参数上来看，苹果的
+MacBook 很了解用户内心的诉求，所以 MacBook 获得了市场方面的巨大成功。对于程
+序员而言，MacBook 还有额外的意义，因为 MacBook 下有 *继承自*nix 的强大工具
+们* 。

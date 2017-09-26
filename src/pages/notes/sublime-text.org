@@ -1,0 +1,29 @@
+#+TITLE: Sublime Text
+#+DATE: 2014-02-27
+#+KEYWORDS: IDE
+
+* 安装 Package Control
+*C-`* 调出控制台，输入下面 Python 代码并回车。
+#+begin_src python
+import urllib2,os;pf='Package Control.sublime-package';ipp=sublime.installed_packages_path();os.makedirs(ipp) if not os.path.exists(ipp) else None;open(os.path.join(ipp,pf),'wb').write(urllib2.urlopen('http://sublime.wbond.net/'+pf.replace(' ','%20')).read())
+#+end_src
+
+* Vintage Mode
+Sublime 支持模拟 Vim，而且做得还不错。这个功能是 Vintage Mode 插件提供的，
+属于 Sublime 的原生插件。例如，想把 Vim 的 *退出插入模式* 映射为 *kj* ，可
+以在 Key Binding 配置中加入如下几行：
+#+BEGIN_EXAMPLE
+[
+{ "keys": ["k", "j"], "command": "exit_insert_mode",
+    "context":
+    [
+        { "key": "setting.command_mode", "operand": false },
+        { "key": "setting.is_widget", "operand": false }
+    ]
+}
+]
+#+END_EXAMPLE
+
++ [[http://www.sublimetext.com/docs/2/vintage.html][Vintage Mode]] 
+
+* 学习回顾

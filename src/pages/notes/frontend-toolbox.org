@@ -1,0 +1,164 @@
+#+TITLE: 我的前端开发工具箱
+#+DATE: 2014-04-04
+
+* Bootstrap
+不多介绍了，后端出身的码农的最爱。[[./bootstrap.org]]
+* Google Charts
+[[https://developers.google.com/chart/][Google Charts]] 提供了一系列生成图表的在线服务。
+
+[[http://sanshi.me/articles/release_time_chart/images/google_chart_gallery.gif]]
+
+* Data Tables
+[[http://www.datatables.net/blog/Twitter_Bootstrap_2][Data Tables (with Twitter Bootstrap)]] 增强了 HTML Table 的展现，提供了分页、排序、搜
+索等强大功能。
+** 关掉下拉菜单
+可以将某属性置为 false 来实现，但是我是通过置空 language 的一个配置项来达到类似的目的的。
+#+BEGIN_SRC js
+"language": {
+      "lengthMenu": "",
+}
+#+END_SRC
+
+** 排序的列不要变色
+默认 datatables 会未排完序的列高亮，这样会与原来表格中每列的配色相冲突，导致很难看。
+我们可以关掉它：
+#+BEGIN_SRC js
+"bSortClasses": false,
+#+END_SRC
+
+** 定制外观
+不啰嗦，直接贴出我当前的配置。
+#+BEGIN_SRC js
+$(document).ready(function() {                                                                        
+  $('#datatable').dataTable({
+    "bSortClasses": false,
+    "iDisplayLength":10,
+    "language": {
+      "search": "搜索:",
+      "lengthMenu": "",
+      "zeroRecords": "啥都没找见",
+      "info": "_PAGE_ / _PAGES_ 页，共 _MAX_ 条",
+      "infoEmpty": "No records available",
+      "infoFiltered": "(filtered from _MAX_ total records)"
+    },
+  });
+});           
+#+END_SRC
+
+* Highcharts
++ [[http://www.highcharts.com/][主页]]
++ [[http://jsfiddle.net/gh/get/jquery/1.9.1/highslide-software/highcharts.com/tree/master/samples/highcharts/demo/column-parsed/][Highcharts 和 HighchartsTable 的合用]]
+* Select2
++ [[http://ivaynberg.github.io/select2/]]
+注意：select2.js 和 select2.css 要一起使用，否则会有显示错乱的问题。
+
+** Placeholder
+关于 placeholder，这里有个坑，就是当非 Multi-Value Select Boxes 情况时，需要留个空
+的 option，否则 placeholder 不生效。
+#+BEGIN_QUOTE
+When placeholder is used for a non-multi-value select box, it requires that you include an empty <option></option> tag as your first option.
+#+END_QUOTE
+
+* Multi-level Dropdown Menu
++ [[http://jsfiddle.net/chirayu45/YXkUT/16/]]
++ [[http://bootsnipp.com/snippets/featured/multi-level-dropdown-menu-bs3]]
+  
+我选择了前者。
+
+** 改造为当鼠标滑过时，自动触发弹出弹入菜单
+原来是 onclick 时触发，想要改造的话，可以从修改为 onmousemove/onmouseout 时触发着手。
+* 开关（switch)
++ [[http://www.bootstrap-switch.org/documentation-3.html][Bootstrap Switch]]
+** 感受
+还挺好看的，特别是将 onText 和 offText 设为汉字时。
+#+BEGIN_SRC javascript
+$('#log_status').bootstrapSwitch({
+    size: 'normal',
+    onText: '启动',
+    offText: '禁用',
+    offColor: 'warning'
+});
+#+END_SRC
+* jQuery UI
+#+BEGIN_QUOTE
+jQuery UI is a curated set of user interface interactions, effects, widgets, and
+themes built on top of the jQuery JavaScript Library. Whether you're building
+highly interactive web applications or you just need to add a date picker to a
+form control, jQuery UI is the perfect choice.
+#+END_QUOTE
++ [[http://jqueryui.com/]]
++ [[http://jqueryui.com/tabs/#collapsible][jquery ui tabs]]
+* jquery.tablesorter.js
++ [[http://mottie.github.io/tablesorter/docs/][Tablesorter Docs]]
++ [[http://jsfiddle.net/Mottie/4mVfu/][Tablesorter demo - JSFiddle]]
+初步的使用，发现 tablesorter 比 datatables 强很多，尤其体现在速度上。而且，
+tablesorter 不容易破坏页面展现。
+
+* EasyTabs.js
++ [[http://os.alfajango.com/easytabs/][EasyTabs Docs]]
++ [[https://github.com/JangoSteve/jQuery-EasyTabs]]
+我用它，是因为 jQuery UI 的 Tabs 的 UI 太过陈旧。
+* typeahead.js
+它看样子比 jQuery 的自动补全插件好用。
++ http://twitter.github.io/typeahead.js/
+* AngularJS
+* Bootstrap DateTime Picker
++ [[http://www.malot.fr/bootstrap-datetimepicker/][DateTime Picker Docs]]
+#+BEGIN_SRC js
+$("#start_time, #end_time").datetimepicker({
+    format: 'yyyy-mm-dd hh:ii',
+    language: 'zh-CN'
+});
+#+END_SRC
+* uikit
++ [[http://getuikit.com/index.html]]
+* Font Awesome
++ [[http://fontawesome.io/]]
++ [[http://www.bootcss.com/p/font-awesome/][http://www.bootcss.com/p/font-awesome/  （中文版，版本较落后）]]
+
+支持各种漂亮的图标，且能正交地设定大小。
+* TemplateVamp: A Bootstrap Admin Template
+- [[http://egrappler.com/templatevamp-free-twitter-bootstrap-admin-template/][TemplateVamp: {FREE} Twitter Bootstrap Admin Template]]
+* FancyBox: 图片的展示，缩放，轮播
+- http://fancybox.net/
+- http://fancyapps.com/fancybox/
+  
+要点：
+- 需要引用一堆 js 和 css
+- 我的笔记的图片就是使用它来展示的
+- 这个插件很不错，很专业
+
+#+CAPTION: ./imgs/frontend-toolbox/20150606002515.png
+[[../static/imgs/frontend-toolbox/20150606002515.png]]
+* fullPage.js: 全屏滑动，幻灯片
+- https://github.com/alvarotrigo/fullPage.js
+- [[http://alvarotrigo.com/blog/fullpage-jquery-plugin-for-fullscreen-scrolling-websites/][fullPage.js jQuery Plugin for fullscreen scrolling websites]]
+  
+使用 fullPage.js 可以非常轻易地实现类似于微软 PPT 的那种幻灯片效果。后续我
+可以基于它来搞出一个使用 Org 来写幻灯片的玩意儿。
+* ECharts: 我厂出品的一个纯 Javascript 的图表库
+- https://github.com/ecomfe/echarts
+- http://echarts.baidu.com/doc/doc.html
+  
+了解了一下例子和文档，感觉真不错。我决定弃用 Highcharts，专用 ECharts。我厂
+的前端技术，靠谱！
+* Requirejs: 使 JS 代码模块化
+- http://www.requirejs.cn/
+
+** Requirejs 下如何使用 $(document).ready() ？
+这样用！
+
+#+BEGIN_SRC js
+<script>
+    require(['jQuery', 'fullPage'], function () {
+        $(document).ready(function () {
+            $('#fullpage').fullpage({
+                navigation: true,
+                navigationPosition: 'right',
+                navigationTooltips: ['firstSlide', 'secondSlide'],
+            });
+        });
+    });
+</script>
+#+END_SRC
+

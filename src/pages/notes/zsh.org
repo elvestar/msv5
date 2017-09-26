@@ -1,0 +1,100 @@
+#+TITLE: Zsh
+#+DATE: 2014-02-16
+#+KEYWORDS: Unix 工具, 终端
+
+* oh-my-zsh
+我是 zsh 的初学者，为了尽快入手 zsh，我选择了使用 [[https://github.com/robbyrussell/oh-my-zsh][oh-my-zsh]] （在 MacTalk 的 [[http://macshuo.com/?p=676][终极
+Shell]]一文的介绍下）。
+
+据作者 robbyrussell 介绍，oh-my-zsh 是一个开源的，社区驱动的，用来管理 zsh 配置的框架。
+它附带了 *数以吨记* 的有价值的函数，插件和主题，以及其它让使用者“大呼过瘾”的有
+趣玩意……
+
+* zsh 配置相关
+** 查看所有选项
+直接在 zsh 中输入 *setopt* 即可查看。在我安装好 oh-my-zsh 后，setopt 的结果如下：
+
+#+BEGIN_SRC sh
+➜  ~  setopt             
+alwaystoend
+autocd
+autonamedirs
+autopushd
+cdablevars
+completeinword
+extendedhistory
+noflowcontrol
+histexpiredupsfirst
+histignoredups
+histignorespace
+histverify
+incappendhistory
+interactive
+login
+longlistjobs
+monitor
+promptsubst
+pushdignoredups
+pushdminus
+sharehistory
+shinstdin
+zle
+#+END_SRC
+
+在上述配置项中： 
+- *sharehistory* 代表在多个 zsh 会话中，共享一份 command history。
+- *incappendhistory* 代表在 command 被执行之前就把它保存到 history 中。
+
+** 禁止多会话间共享 command history
+多会话间共享 command history 是 oh-my-zsh 默认开启的特性，我用起来感觉不适应，因为我
+不同的会话是用来干不同的事情的，它们间的 comand history 不应该混杂到一起，所以我想
+关闭它。
+
+该特性相关的配置项是 share_history，开启它的指令是 setopt share_history。我根据 Vim
+的使用经验猜测，关闭它的指令是 setopt no_share_history。试了一下，发现我猜得没错。
+
+下面是具体的执行步骤；
+1. 打开~/.zshrc，加入 setopt no_share_history
+2. 执行 source ~/.zshrc
+* zsh 的自动补全
+zsh 的自动补全是最为人陈道的地方。
+** kill process-id
+** 大小写不感知
+** ssh 的自动补全 hostname
+* 问题记录
+** 问题记录：使用 oh-my-zsh 时，进入 zsh 后打印：compdef: unknown command or service: git
+原因：公司开发机的 zsh 版本过低，更新 zsh 即可。
+
+** sed: 1: "zsh.org": invalid command code z <2017-02-14 二 23:36>
+之前在Mac下使用sed进行原地替换还是正常的，但是最近缺不正常了，报了这样的错误：
+#+BEGIN_SRC sh
+➜  notes git:(master) ✗ sed -i 's/\[\[.\/imgs/[[..\/static\/imgs/' zsh.org
+sed: 1: "zsh.org": invalid command code z
+#+END_SRC
+
+网上查了一下，说是在Mac下使用sed进行原地替换时需要制定一个备份文件，如果坚
+持不备份，那么还是要加一个空字符串占位。如下：
+#+BEGIN_SRC sh
+sed -i '' 's/\[\[.\/imgs/[[..\/static\/imgs/' zsh.org
+#+END_SRC
+
+参考：
+- [[http://stackoverflow.com/questions/7573368/in-place-edits-with-sed-on-os-x][osx - In-place edits with sed on OS X - Stack Overflow]]
+
+* 指定 ssh 登录后默认使用的 zsh <2015-11-04 三>
+假设我们安装了新版的 zsh，但是安装路径不是 ~/bin/zsh~ ，而是类似于
+~/home/ljx/.jumbo/bin/zsh~ 这样的路径。我们会发现，通过 ssh 登录，
+默认使用的 zsh 不是我们新安装的 zsh，而仍然是 ~/bin/zsh~ 。
+
+为了让 ssh 登录后默认使用我们新安装的 zsh，我们可以执行下面的步骤：
+1. 安装新版 zsh（假设安装好的路径是 ~/home/ljx/.jumbo/bin/zsh~ ）
+2. 切换到 root 账号（没有 root，朝对口的 OP/QA，或者技术 Leader 要）
+3. 使用 vim 打开 ~/etc/shells~ 文件，在最下面一行加入
+   ~/home/ljx/.jumbo/bin/zsh~ ，然后保存并关闭该文件
+4. 退出 root 账号，切换回自己的账号，执行 ~chsh -s
+   /home/ljx/.jumbo/bin/zsh~ ，输入密码，回车
+5. 退出并重新 ssh 登录，观察使用的 zsh 是否是我们新安装的 zsh
+
+运行成功后如下图所示：
+#+CAPTION: ./imgs/zsh/20151103222942.png
+[[../static/imgs/zsh/20151103222942.png]]

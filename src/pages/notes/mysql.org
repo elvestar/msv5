@@ -1,0 +1,371 @@
+#+TITLE: MySQL
+#+DATE: 2014-06-29
+#+KEYWORDS: MySQL, 数据库
+
+* SQL 实践经验
+** 字符串替换（REPLACE)
+具体问题：修改数据库里的一批记录，将其中的报警人字段中的指定人去掉（该报警人字段的值是由多个人组成，用分号间隔）
+
+解决方法：利用 SQL 中的内置的 replace 函数。如下：
+#+begin_src sql
+update download_config set mailList = replace(mailList, "lixxx11@xxxxx.com;", "") where nodeId = 200006912;
+update download_config set mailList = replace(mailList, "lixxx11@xxxxx.com", "") where nodeId = 200006912;
+#+end_src
+
+** 修改字段默认值
+#+BEGIN_SRC sql
+mysql> alter table agent_config alter zk_log_file set default "/xxx/log/xxx.log";
+#+END_SRC
+参考： [[http://dev.mysql.com/doc/refman/5.1/en/alter-table.html][MySQL: 13.1.7 ALTER TABLE Syntax]]
+** 修改 enum 字段
+#+BEGIN_SRC sql
+alter table log_config change log_status log_status ENUM('enabled','disabled','applying','deleting','deleted') default null;
+#+END_SRC
+** 为字段加注释
+目前只发现通过 change 的方式来修改 comment，如下：
+#+BEGIN_SRC sql
+alter table log_config change start_time start_time datetime comment '传输开始时间'
+#+END_SRC
+** 用 CONCAT 来生成 SQL 语句（用代码生成代码）
+MySQL 貌似不支持跨数据库的操作，我想探索下 SQL 是否支持某种类似于 C/C++的宏
+或者 Ruby 的 yield 语句这样的的功能，这时我找到了 CONCAT。
+
+CONCAT 其实就是用来做字符串拼接的，在其他语言里也是很普通的特性，但是一旦和
+SQL 结合，就会变得强大。
+
+使用下面 SQL 语句，我们就能得到一批 SQL， *用 CONCAT 实现了用代码生成代码的功
+能* 。
+#+BEGIN_SRC sql
+  select CONCAT('update log_config set log_logging="', log_logging, '",
+  log_class ="',log_class,'", log_usage="',log_usage,'"
+  ,description="',description,'" where log_module_id = ', log_module_id) from
+  log_config where description is not NULL;
+#+END_SRC
+
+我们将这批 SQL 导入一个文件里，再用 =<= 来执行该文件里面的 SQL。当然，也可以先
+登录数据库，再使用 source 来执行该文件。这样，我们就实现了跨数据库的字段更
+新。
+
+*** 结论
+SQL 本身蕴含了计算，将大大小小的复杂度融汇进一条 SQL 语句里，而且 SQL 本身就
+是字符串，因此具有了灵活性。
+
+*** 后记
+发现通过这个方式来将中文在数据库之间导容易产生乱码问题，于是我做了变通，先
+通过 mysql 的 -Bse 来在 shell 下执行 SQL，并将结果导入到 description.txt 里，然后
+写几行简单的 Python 脚本，来生成一批 SQL。如下：
+#+BEGIN_SRC python
+for line in file('description.txt'):                                                                   
+  log_module_id, description = line.strip('\n').split('\t')                                            
+  print 'update log_config set description = "%s" where log_module_id = %s;' % (description, log_module_id)
+#+END_SRC
+然后在登录另外一个数据库，用 source 来批量执行刚才生成的那批 SQL。最后发现，乱
+码问题解决！
+** 同表间两批记录之间的字段值拷贝 <2015-03-27 五>
+使用 *联表法* ，而且是 *同一张表的联表* 。这两批记录肯定在某些字段间存在关
+联（例如 id 字段差值为 1000），我们利用这种关联来写 where 子句来将进行同表
+联表。联表完后我们得到了一张规模 x2 的临时表，想要拷贝的两个字段都在这个大
+表里，我们通过简单的 set 子句就能实现字段值拷贝。
+
+在下面的例子中，表名是 log_config，想要拷贝的是 description 字段，两批字段的
+关联就是其中一批记录的 log_module_id 字段是另一批记录的相应字段的值加上 5000000。
+#+BEGIN_SRC sql
+update log_config as t1, log_config as t2 set t1.description =t2.description where  t1.log_module_id = t2.log_module_id + 5000000 and t1.log_format = 'pb' and t1.name like '%parallel_%' ;
+#+END_SRC
+
+* 正则表达式
+下面的 SQL 实现了搜索表中 bns_name 字段不满足正确的 faker.bns 的模式的所有记录。
+#+BEGIN_SRC sql
+mysql> select log_module_id , xxx_name  from xxxxx_logs where noah_node_path = "XXXXX" and bns_name not REGEXP "^[0-9.;]{1,}faker.bns";
++---------------+-----------------------------------------------------------------------------------------------------------------------------------+
+| log_module_id | xxx_name                                                                                                                       |
++---------------+-----------------------------------------------------------------------------------------------------------------------------------+
+|          1252 | xx-qianqian28.jx;10.xx.xx.176.faker.bns                                                                                      | 
+|          1379 | 10.xx.xx.206;xx-jt06.yx01.faker.bns                                                                                          | 
++---------------+-----------------------------------------------------------------------------------------------------------------------------------+
+11 rows in set (0.00 sec)
+#+END_SRC
+* MySQL 的导入导出
+** 导出
+#+BEGIN_SRC sh
+mysqldump -h10.xx.xx.10 -P3306 -uxx -p xx --skip-lock-tables > xx.sql 
+#+END_SRC
+说明：由于没有 root 账号，无法 Lock table，所以只能用 ~--skip-lock-table~
+参数。
+** 导入
+#+BEGIN_SRC sh
+mysql -hm1-dt-log01.m1 -P3306 -uzy -p bdg_bbs < inf.sql
+#+END_SRC
+** 如何解决导入太慢的问题
+有时候数据导入时会特别慢，而且会 Lock Table，导致该表无法被访问。我研究了
+mysqldump 导出的文件的格式，发现它是由两部分组成。第一部分是 drop table（如
+果存在） 并重建一张表，第二部分是由一行行的大型 INSERT 语句构成，并且外面用
+Lock Table Write 包围起来。
+
+我发现这些大型 INSERT 语句特别耗时，我想是否有方法能减小这些 INSERT 语句的粒度，
+这时我发现了在执行 mysqldump 时可以通过 -e 指定 max_allowed_packed 和
+net_buffer_length，或许这样可以 dump 出粒度较小的 INSERT 语句。于是我执行下面语
+句，发现我得到了它们。
+#+BEGIN_SRC sh
+  mysqldump -hx1-xx-xxx01.xx -uxxx_admin -pxx-xxx -P3306 xxxxx
+  --skip-lock-tables data_slice --where='base_time="2014-11-30 00:00:00"'
+  --skip-tz-utc -e --max_allowed_packet=4096 --net_buffer_length=4096 >
+  data_slice.2014-11-30
+#+END_SRC
+
+导入时，可以不使用 mysqldump -hx1-xx-xxx01.xx -uxxx_admin -pxx-xxx -P3306
+Dxxxxx < data_slice.2014-11-30，而使用先登录数据库，再执行 =source
+data_slice.2014-11-30= 的方式，这样可以使导入过程变得更加具有交互性，让我们
+知道导入进度。
+*** 注意
+mysqldump 生成的文件里含有 drop table 的步骤，所以在做导入导出是要慎重！ 
+** 解决时区问题
+方法：--skip-tz-utc。如上面的那条 mysqldump 语句
+** 生成建表语句
+*** 方法 0：show create table xxxxx;
+*** 方法 1：使用 phpMyAdmin
+我想把公司开发机上表复制到我的 Mac 上，方便测试，但是我没有找到方便生成建表语句的
+工具。最后我发现 phpMyAdmin 可以很方便地帮我实现。下面是步骤：
+1. 在 Web 上访问 phpMyAdmin，选择想要的表，然后选择 "导出"。
+2. 指定导出那些记录，并确保 "对象创建选项" 中的 *CREATE TABLE 选项* 被勾选上，然
+   后执行导出，导出的文件可以通过浏览器直接下载到 Mac 上。
+3. 在 Mac 的终端里面执行 *mysql -uminos_test -pminos_test -Dminos_test <
+   ~/Downloads/data_slice.sql* ，即完成了 *表的创建* 以及数据的导入。
+*** 方法 2：使用 mysqldump
+使用 mysqldump，将整张或者部分表导出，因为导出数据的同时，还会把表结构也导出来，
+然后的步骤就参考 " 导入"  一节了。
+** 同数据库内用表 1 复制生成表 2 <2015-01-28 三>
+方法：
+1. 使用 LIKE 来复制表结构
+2. 使用 INSERT + SELECT * 来完全复制表内容
+#+BEGIN_SRC sql
+CREATE TABLE t2 LIKE t2
+INSERT INTO t2 (SELECT * FROM t1);
+#+END_SRC
+
+** 修改字段类型：从 datetime 到 int <2015-02-06 五>
+很遗憾，无法直接转！MySQL 会报字段长度不匹配的错误。但是，我们可以曲线救国，
+先新建一个新的 int 字段，再利用 unix_timestamp 函数将该新字段赋值，然后将原
+来的 datetime 字段改名，再将新的 int 字段名字改为和原来的 datetime 名字相同，
+最后删掉被改名后的 datetime 字段。例如我想把 comment 表的 created_at 字段的
+类型从 datetime 改为 int，可以按照下面的方法来做：
+#+BEGIN_SRC sql
+alter table comment add created_at_new int(11);
+update comment set created_at_new = unix_timestamp(created_at);
+alter table comment change created_at created_at_old datetime;
+alter table comment change created_at_new created_at int(11);  
+alter table comment drop created_at_old; 
+#+END_SRC
+
+** 两个字段差异很大的表之间的导入 <2015-02-10 二>
+思路：
+- 利用数据库的 ~文本亲和性~
+- SELECT 有几种文本变换的方法，如 CONCAT，直接输出字符串等
+
+步骤：
+1. 利用 mysql -Bse "SELECT xxx, 'xxx', CONCAT('yyy', yyy) FROM t1 WHERE xxx
+   > xxx and yyy = yyy" > t1.txt 来将表 1 中的全部或者部分字段变换为表 2 的形式
+   并以文本的形式导入到一个文件里面
+2. 通过 LOAD DATA LOCAL INFILE 't1slice.txt' INTO TABLE t2; 来将该文件的内容
+   导入到表 2 里面
+
+** 解决导入导出时的中文乱码问题 <2016-04-21 四>
+要点：
+1. 通过mysqldump导出
+2. 导入时，先登录数据库，注意加上 ~--default-character-set=utf8~ 参数
+3. 登陆后，执行 ~set names 'utf8';~ ，再执行 ~source xxx.sql~ 
+   
+说明：其实 ~--default-character-set=utf8~  和  ~set names 'utf8';~ 效果等价，
+执行其中一个即可避免乱码。
+
+参考：
+- [[http://makandracards.com/makandra/595-dumping-and-importing-from-to-mysql-in-an-utf-8-safe-way][Dumping and importing from/to MySQL in an UTF-8 safe way]]
+
+* MySQL 的安装
+** 启动 mysqld
+修改配置中的服务器端口号为 8306（为了让外网能访问公司的 mysqld），然后执行 mysqld，
+mysql 服务器就简单地启动起来了。
+** 创建数据库
+#+BEGIN_SRC sql
+create database minos_test;
+#+END_SRC
+** 创建用户
+#+BEGIN_SRC sql
+CREATE USER 'minos_test'@'%' IDENTIFIED BY 'minos_test';
+#+END_SRC
+有时候我发现上面的方法创建的用户不管用，于是只得用原生的方法：
+#+BEGIN_SRC sql
+INSERT into mysql.user(Host,User,Password) VALUES("%","minos_r",password("xxxx"));
+GRANT SELECT on minos.* to minos_r@'%' identified by 'xxxx;
+FLUSH PRIVILEGES;
+#+END_SRC
+** 赋权限
+下面语句赋予了用户 minos_test 在任何机器上 minos_test 数据库中所有表的所有权限。
+#+BEGIN_SRC sql
+grant all privileges on minos.* to minos_test@'%' identified by 'minos_test';
+#+END_SRC
+
+* MySQL 配置
+** 在线修改配置
+| 示例 SQL                        | 作用 |
+|--------------------------------+------|
+| set global wait_timeout= 3600; |      |
+| show global variables like 'wait_timeout';                               |      |
+** 修改 my.cnf
+[mysqld] 部分有两个配置项需要重点修改，它们是：wait_timeout 和
+max_connections。我将其修改为 3600 和 500，即我的 MySQL 服务器允许的最大连接数是
+500，超过这个值后，新的连接将失败。每个连接最大空闲等待时间是 3600 秒，超过这
+个值后，mysqld 将自动回收这个连接。
+** Client 端
+*** 自动补全
+按 tab 自动是 mysql client 的设置，故需要在[mysql]下面配置，如下：
+#+BEGIN_SRC sh
+[mysql] 
+auto-rehash 
+#+END_SRC
+顺带提一句，Mac 下 mysql 的配置的默认路径是 */etc/my.conf* 。
+
+** mysqld
+** 未归类
+*** 修改存储引擎
+#+BEGIN_SRC sh
+ALTER TABLE xxx_config ENGINE = InnoDB;
+#+END_SRC
+
+* MySQL 常用操作
+** 加索引（add index）
+*** 复合索引
+有的耗时查询通过多个条件过滤，这时我们可以建立复合索引，加快这种查询的速度。
+#+BEGIN_SRC sql
+CREATE INDEX cloudatlas_index ON data_slice (is_notify_cloudatlas, is_cloudatlas_notified);
+#+END_SRC
+*** 表虽不大（20 几万条记录），但是加索引很慢的原因？
+加索引是一个很重的操作，要先 lock，再 copy 整张表到一个临时表，然后为临时表做
+做索引操作，完成后用临时表替换原表，并 unlock。
+
+当表非常大时，加索引耗时极久。但是我的表只有 20 万条记录，为其做加索引操作
+时，耗了 15 分钟仍然没结果。这不正常！
+
+最后，我找到了原因，原来这个数据库还被其他的一个频繁读写它的模块在做重度读
+写操作。同事暂停掉这个模块后，再加索引，发现几秒就加完了。
+* MySQL 状态监控
+** 查看连接数
+show status 后的 Thread_connected 字段。
+#+BEGIN_SRC mysql
+mysql> show status;
+...
+...
+| Threads_cached                    | 19            |
+| Threads_connected                 | 23            |
+| Threads_created                   | 301582        |
+| Threads_running                   | 2             |
+| Uptime                            | 6295556       |
+| Uptime_since_flush_status         | 6295556       |
+...
+...
+#+END_SRC
+** 查看正在执行的查询
+尤其是当我们发现查询阻塞时，我们可以通过 show processlist;来列出正在执行的查询。
+#+BEGIN_SRC mysql
+mysql> show processlist;
+#+END_SRC
+
+** 查看平均单行大小
+使用 show table status，看 Avg_row_length 字段。在我的 MySQL 服务器上查询，发
+现 Rows 和 Avg_row_length 有浮动，暂时还不知道为啥。
+#+BEGIN_SRC sql
+mysql> show table status like 'data_slice'\G
+\*************************** 1. row ***************************
+	    Name: data_slice
+	    Engine: InnoDB
+	    Version: 10
+	    Row_format: Compact
+	    Rows: 2551791
+	    Avg_row_length: 492
+	    Data_length: 1256013824
+	    Max_data_length: 0
+	    Index_length: 599293952
+	    Data_free: 7340032
+	    Auto_increment: 11925216
+	    Create_time: 2014-12-04 18:28:01
+	    Update_time: NULL
+	    Check_time: NULL
+	    Collation: utf8_general_ci
+	    Checksum: NULL
+	    Create_options: 
+	    Comment: 
+1 row in set (0.03 sec)
+#+END_SRC
+
+** 计算 QPS/TPS
+使用 mysqladmin 工具以及 extended-status，--relative，--sleep=1 等参数来获
+取数据库的实时 QPS 和 TPS（TPS 是 每秒事务数，包扩 insert/update/delete）。 参
+考 [[http://www.cnblogs.com/yuyue2014/p/3679628.html][MySQL 性能指标及计算方法]] 一文。
+
+我在 shell 下面执行下面语句，将该数据库的每秒的 insert/update 次数统计记录在文
+件里面，执行一小时后分析结果，得到平均 TPS 以及峰值 TPS（忽略 delete）。
+#+BEGIN_SRC sql
+mysqladmin -hdbl-xxxx.dbl01 -uminos_r -pxxxxxx -P3306 extended-status --relative --sleep=1 | grep -E '(Com_update|Com_insert) ' > Com_update_insert.txt
+#+END_SRC
+
+* MySQL Connector/C++
+MySQL Connector/C++ 是 MySQL 官方推荐的 C++客户端。
+
+- [[http://dev.mysql.com/doc/connector-cpp/en/connector-cpp-getting-started-examples.html][MySQL Connector/C++ Getting Started: Usage Examples]] 
+  
+隔壁组的同学包装了一个连接池，简化了该库的使用。
+
+SQL 分为两类，查询是 executeQuery，剩下的增删改都是 executeUpdate。
+
+* 问题记录
+** ERROR 1044 (42000): Access denied for user ''@'localhost' to database
+当我执行 *mysql -uminos_test -Dminos_test -pminos_test;* 时报这个错误，我百思不
+得其解，为啥我填写了用户名，但是报错中会提示我使用了一个空的用户名？后来我在 [[http://blog.csdn.net/tys1986blueboy/article/details/7056835][这
+篇文章]] 上找到了答案，原来是我的 mysql.user 表中出现了用户名为空的 User。
+
+** ERROR 1133 (42000): Can't find any matching row in the user table
+原因：用户不存在！如果你是明明添加了用户，但是仍然这个错，那么就需要先执行：
+*FLUSH PRIVILEGES;*
+** 建表时提示：Specified key was too long; max key length is 767 bytes')
+查明原因，是被的指定为 unique key 的某 string 字段太长了为 1024 * 3（因为是 Unicode），
+建表代码如下：
+#+BEGIN_SRC python
+class ProductLine(Base):
+    __tablename__ = 'product_line'
+
+    id = Column(Integer, primary_key=True)
+    noah_node_id = Column(Integer, unique=True, nullable=False)
+    name = Column(String(1024), nullable=False)
+    path = Column(String(1024), unique=True, nullable=False)
+    department = Column(String(1024), nullable=False)
+    log_module_num = Column(Integer)
+#+END_SRC
+
+由于 path 字段不能改得太小，我只能不将其设为 unique key，而是只留 noah_node_id 作为
+unique key。
+** Mac下pip install MySQL-python失败，报错：ld: library not found for -lssl <2017-04-28 五 20:29>
+昨天我的Mac下的mysql启动失败，原因是有张表（InnoDB引擎）的索引坏了，最后我
+通过 *删除整张表所有相关数据* 来解决。期间我尝试过重装mysql，当我重装完后，
+我发现Django启动失败了，报错如下：
+#+BEGIN_SRC sh
+django.core.exceptions.ImproperlyConfigured: Error loading MySQLdb module: dlopen(/Library/Python/2.7/site-packages/_mysql.so, 2): Library not loaded: /usr/local/lib/libmysqlclient.18.dylib
+#+END_SRC
+
+看来是这次重装mysql后，python下的 ~_mysql.so~ 不兼容了。不得已我通过pip重装
+了mysql-python，结果重装老是失败，报错如下：
+#+BEGIN_SRC sh
+    cc -bundle -undefined dynamic_lookup -arch i386 -arch x86_64 -Wl,-F. build/temp.macosx-10.12-intel-2.7/_mysql.o -L/usr/local/Cellar/mysql/5.7.18/lib -lmysqlclient -lssl -lcrypto -o build/lib.macosx-10.12-intel-2.7/_mysql.so
+    ld: library not found for -lssl
+    clang: error: linker command failed with exit code 1 (use -v to see invocation)
+    error: command 'cc' failed with exit status 1
+#+END_SRC
+
+我尝试多种方法都不行，最后在GitHub上找到了解法 （[[https://github.com/brianmario/mysql2/issues/795][ld: library not found for
+-lssl` after Mac OS Sierra upgrade · Issue #795 · brianmario/mysql2]]），执行
+*xcode-select --install*  后再执行 *pip install mysql-python* 后，重装成功。
+
+原来，又是XCode这货搞的鬼！
+
+经验：
+1. _mysql.so 是pip在安装mysql-python之后通过gcc/clang编译出来的动态链接库。
+2. 长期以来，XCode为Mac用户带来了很多不必要的麻烦。

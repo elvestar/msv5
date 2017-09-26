@@ -1,0 +1,10 @@
+#+TITLE: Laravel - A PHP Framework
+#+DATE: 2015-08-21
+
+- [[http://laravel.com/]]
+
+* 安装
+安装 Composer
+#+BEGIN_SRC sh
+curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/bin --filename=composer
+#+END_SRC

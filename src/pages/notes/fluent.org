@@ -1,0 +1,48 @@
+#+TITLE: Fluent 日志收集系统
+#+DATE: 2015-01-02
+#+KEYWORDS: 日志收集
+
+* 环境搭建
+** fluentd
+官方给出的安装启动步骤是：
+#+BEGIN_SRC sh
+$ gem install fluentd
+$ fluentd -s conf
+$ fluentd -c conf/fluent.conf &
+$ echo '{"json":"message"}' | fluent-cat debug.test
+#+END_SRC
+Note: 不在这里启动，而是通过 Fluentd-ui 来进行自动的安装和启动。
+
+** fluentd-ui
+安装和启动的过程如下，不过安装得很慢。
+
+#+BEGIN_SRC sh
+$ gem install -V fluentd-ui
+$ fluentd-ui start
+#+END_SRC
+
+安装好后访问 http://localhost:9292/ 即可使用，账号密码默认是 admin 和
+changeme。点击 "Setup fluentd" ，然后点 Start 后会启动 fluentd 进程，如果发
+现启动失败，可能是你在本机已经启动了一个 fluentd，两者发生了端口号冲突，解
+法是杀掉之前启动的那个 fluent 进程。
+
+** nginx
+Fluentd 和 Fluentd-ui 已经搭建好了，这时我们需要一个日志源。考虑到我平时经
+常在浏览器本地访问我的 Org 笔记，想到了搭建一个 Nginx 来记录我的 Org 笔记访
+问日志。这样，日志源就有了。
+
+** mongodb
+要了日志源和日志收集工具，我还缺少一个日志存储，考虑到 HDFS 安装费事，我想到
+了使用 MongoDB。在 Mac 安装 MongoDB 很轻松：
+#+BEGIN_SRC sh
+brew update
+brew install mongodb
+launchctl load ~/Library/LaunchAgents/homebrew.mxcl.mongodb.plist
+#+END_SRC
+
+* 回顾
+** Fluent 的作者很擅长推广，但是项目本身像个玩具 <2015-01-03 Sat>
+如果公司规模小，日志量小，业务少，源端机器少，用起 Fluent 应该会很 Happy。
+如果规模大起来，得要使用 Flume 这样的大型的日志收集系统。
+
+先到这里，不做更多的了解了。

@@ -1,0 +1,55 @@
+#+TITLE: Test
+#+DATE: 2016-04-10
+
+[[sdf]]
+jsdf
+sdfsdf
+dfsdf
+
+[[http://sdfsdf][asdfasdf]]
+
+#+CAPTION: ./imgs/test/20160410180536.png
+[[../static/imgs/test/20160410180536.png]]
+
+
+#+BEGIN_HTML
+<form>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputFile">File input</label>
+    <input type="file" id="exampleInputFile">
+    <p class="help-block">Example block-level help text here.</p>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Check me out
+    </label>
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+#+END_HTML
+
+
+[[http://blog.binchen.org/posts/copypaste-in-emacs.html][Copy/Paste in
+Emacs |
+
+[[http://blog.binchen.org/posts/copypaste-in-emacs.html][Copy/Paste in Emacs | Chen's blog]]
+
+https://bitbucket.org/lfk/downloads-router-chrome-extension
+[[http://www.cnblogs.com/guogangj/p/3235703.html][Chrome插件（Extensions） 开发攻略 - guogangj - 博客园]]
+
+
+
+#+CAPTION: ./imgs/test/20161108183213.jpg
+[[../static/imgs/test/20161108183213.jpg]]
+
+| 标题 | sdf | sdfs |
+|      |     |      |
+

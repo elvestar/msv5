@@ -1,0 +1,93 @@
+#+TITLE: Python 生态下的工具
+#+DATE: 2015-12-06
+
+* pip
+pip 是 PyPA 推荐的 Python 包安装工具。
+- [[http://pip.readthedocs.org/en/stable/][pip Docs]]
+  
+常用命令：
+| 命令                            | 功能                          | 频度 |
+|---------------------------------+-------------------------------+------|
+| pip install SomePackage         | 安装某个表                    |   10 |
+| pip list --outdated             | 列出过期的包（包括 pip 自己） |      |
+| pip install -U pip              | 升级 pip 本身到最新版本       |      |
+| pip show --files SomePackage    | 列出某个包安装了那些文件      |      |
+| pip install -r requirements.txt | 安装依赖文件中的全部包        |    9 |
+| pip freeze                      | 列出全部安装包（以 requirements 的格式）     |      |
+
+* Virtualenv
+Virtualenv 一个用来构建隔离的 Python 运行环境的工具。
+- [[https://virtualenv.readthedocs.org/en/latest/][Virtualenv Docs]]
+
+解决了啥问题：
+1. 有时候由于权限问题，我们无法在 ~/usr/lib/python2.7/site-packages~ 下安装
+   Python 包
+1. 不同应用依赖不同版本的 Python 库，如果 Python 库都安装在
+   ~/usr/lib/python2.7/site-packages~ 下，如何避免冲突？
+2. 为了部署 Python 应用可能要升级改动共用的
+   ~/usr/lib/python2.7/site-packages~ ，可能会影响到其他应用
+   
+用法：
+1. mkdir web
+2. cd web
+3. virtualenv ENV
+4. source ./ENV/bin/activate
+
+** 遇到问题
+*** ENV 目录里的脚本设置的环境变量的路径是写死的
+即，在开发环境下生成的 ENV 放到生产环境下是可能出现无法找到 python 和 pip
+的，也无法找到./ENV/lib 下的全部依赖库。
+
+解法：在开发环境下精心维护着 ENV 的库依赖。在生产环境下，通过 ~export
+PYTHONPATH=/path/to/ENV/lib/python2.7/site-packages/~ 来找到依赖库。
+
+*** ENV 目录里的 bin 是针对特定操作系统的
+即，在 Mac 开发环境下生成的 ENV 放到 Linux 生产环境下运行是要出问题的，
+连./ENV/bin/python 本身都无法运行。
+
+
+* Fabric
+- [[http://www.fabfile.org/][Fabric Docs]]
+
+常用的命令行选项：
+- -w, --warn-only :: 当执行命令遇到 error 时不退出，继续执行
+- -p PASSWORD, --password=PASSWORD :: 通过命令行设置 ~env.password~
+
+** 自定义参数
+在 fabfile.py 中加入：
+#+BEGIN_SRC py
+@roles('online')
+def rollback_online(commit_id):
+    with cd('/home/work/xxx/web/'):
+        run('git reset %s --hard' % commit_id)
+        run('supervisorctl restart xxxweb')
+#+END_SRC
+
+执行：   
+#+BEGIN_SRC sh
+fab rollback_online:5b86826ce4c68c39ad69c29d135e028dc5a3c227
+#+END_SRC
+
+或者
+#+BEGIN_SRC sh
+fab rollback_online:commit_id=5b86826ce4c68c39ad69c29d135e028dc5a3c227
+#+END_SRC
+
+
+** 定义任务 @task
+旧版 Fabric 有个问题，那就是定义在 fabfile.py 里的函数，都被当做是命令。当
+我们想 *抽取逻辑定义单独的函数* 时，这样会带来混乱。于是新版 Fabirc 引入了
+task 这个概念，一旦用户将某个函数定义为 task，则它升级为命令，而这个
+fabfile.py 里的其他所有没被定义为 task 的函数都不会被认为是命令。
+
+参考：
+- [[http://docs.fabfile.org/en/1.10/usage/tasks.html]]
+* Supervisor
+Supervisor: A Process Control System
+- [[http://supervisord.org/][Supervisor Docs]]
+
+** 当 Supervisor 运行的程序依赖一堆环境变量时
+我们一般会将这些环境变量写到一个文件（例如叫 xxx 文件）中，然后执行 source xxx 来设置
+它们。而当使用 Supervisor 时，在启动参数中执行 source xxx 总是失败，这时我想到了一个
+临时的解决方法，就是先执行 source xxx，再启动 supervisord。这时，通过 Supervisor 启动
+的进程就会拥有 xxx 文件中的环境变量了。

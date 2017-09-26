@@ -1,0 +1,46 @@
+#+TITLE: Cocos2d
+#+DATE: 2014-02-14
+
+* 前言
+在知乎上看到[[http://www.zhihu.com/question/22715390#answer-4149207][关于 Flappy Bird 的讨论]]，燃起了我对手游开发的兴趣。我决定尝试一下用来开
+发手游的著名框架：Cocos2D。。
+
+* 各种分支介绍
+** Cocos2D
+专注于 iOS，语言是 Objective-C，插件多。
+
+** Cocos2D-x
+跨平台好，语言是 C++。[[http://www.cocos2d-x.org][Cocos2D-x 主页]]
+
+参考：[[http://www.zhihu.com/question/20120112][Cocos2D 和 Cocos2D-X 该如何选择？]]
+
+** Cocos2D-html2
+用 Javascript 开发，基于 Web，部署方便，迭代快（适合原型？）
+
+参考：[[http://www.zhihu.com/question/20559820][ch vs cx]]
+
+* 初试 Cocos2d-x <2014-02-12 三>
+** 环境搭建
+首先，我再官网下载了 [[http://www.cocos2d-x.org/download][Cocos2d-x v2.2.2]]
+
+然后基于 Xcode 来搭建环境。参考[[http://www.raywenderlich.com/33750][这篇被引用很多的指南]]。 结果发现，这篇指南有点过期，2.2.2 版本
+的 Cocos2D-x 不再提供 install-templates-xcode.sh 脚本。
+
+还好有[[http://stackoverflow.com/questions/19570677/how-can-i-include-cocos2d-x-templates-in-xcode][Stack Overflow 上的这个帖子]]，我了解到，新版 Cocos2D-x 的使用方式是使用
+tool/project-creator 目录下的 create_project.py 脚本。示例如下：
+#+BEGIN_SRC sh
+python create_project.py -project MyGame -package com.MyCompany.AwesomeGame -language cpp
+#+END_SRC
+
+然后打开 proj.mac 下的 MyGame.xcodeproj，执行编译，然后失败，原因是少很多项目文件
+
+我想先尝试一下 v2.2.1，今天很晚了， +改天再试吧+ 。目前的感受是，Cocos2D-x 是个比较
+坑的玩意。我下载了 v2.2.1，发现这版的 *项目文件是完整的* 。也就是说，v2.2.2 是带
+bug 的版本，真囧。
+
+编译运行成功！
+
+[[../static/imgs/cocos2d/1.png]]
+
+
+

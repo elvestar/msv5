@@ -1,0 +1,228 @@
+#+TITLE: 前端技术
+#+DATE: 2014-02-02
+#+KEYWORDS: 前端
+
+* 表格
+** 避免换行导致难看
+#+BEGIN_SRC html
+white-space:nowrap; 
+#+END_SRC
+
+参考： [[http://stackoverflow.com/questions/1893751/how-to-prevent-line-break-in-a-column-of-a-table-cell-not-a-single-cell][How to prevent line-break in a column of a table cell (not a
+single cell)?]]
+
+** 给 td 赋值
+#+BEGIN_SRC javascript
+ $('#base_time').text('haha');
+#+END_SRC
+* 布局
+** padding
+padding 是指某个元素的边界到这个元素的实际内容之间的距离。
+** boarder 与分隔线
+boarder 属性可以为区块加入边框。除此之外，还可以利用它来为区块与区块之
+间加入分隔线。例如：
+#+BEGIN_SRC css
+div#content {
+border-left: 1px solid #bbb;                                                                    
+border-right: 1px solid #bbb; 
+}
+#+END_SRC
+这样的话，content 与左边的 TOC 就有了一条分隔线，于右边的浏览器边界也有一
+个分隔线。如图：
+
+[[../static/imgs/html/1.png]]
+
+* 元素
+** 如何隐藏元素
+假设我们想让一个 table 在页面上不可见，我们可以通过在 table 标签中的 style
+属性来实现这一点。设置 style 就相当于设置 css，下面的 display 属性可以决定
+该元素是隐藏，设置 =display:none;= 表示隐藏元素。
+#+BEGIN_SRC html
+<table class="table" style="display:none;"> 
+...
+</table>
+#+END_SRC
+
+* Javascript（暂时放在这里）
+** 如何判断是否在 iframe 里面
++ [[http://stackoverflow.com/questions/9996304/how-to-judge-a-page-is-in-a-iframe-use-javascript][how to judge a page is in a iframe use javascript?]]
+判断原理是根据 DOM 的层级结构，this 可以获取到 iframe 的 DOM 的根节点，而
+iframe 的 DOM 是属于整个 HTML 页面的 DOM 的某节点的，所以可以通过 this 取的 DOM 根节点
+并判断它是否是整个 HTML 页面的 DOM 根节点来判断是否在 iframe 里面。代码如下：
+#+BEGIN_SRC js
+if (self != top) {
+    alert("true");
+}
+#+END_SRC
+注意是 self，不是 top，self 就是 document。
+** 内置函数
+1. 调用 length 时不能加括号！
+   
+* JQuery
+** 使用 JQuery 隐藏元素
+使用 css 方法。
+#+BEGIN_SRC js
+ $('#datatablizer').css('display', 'none');
+#+END_SRC
+** 通过 jsonp 跨站访问
+为了安全性，Ajax 无法跨站访问资源。但是通过 jsonp 可以做到支持跨站。
+#+BEGIN_SRC javascript
+var url = "http://xxx.xxxx.xxxxx.com?serviceName=" + bns_name;
+ $.ajax({
+     url: url,
+     async: false,
+     type: 'GET',
+     dataType: 'jsonp',
+     jsonp: 'callback',
+     jsonpCallback: 'callback',
+     success: function(json) {
+         alert(json);
+     }
+ })
+#+END_SRC
+
+想通过上面方法，利用 ajax 和 jsonp 来跨站访问获取 BNS 信息，结果失败！失败原因应该是数
+据格式导致的，Noah 的 API 返回的数据格式是 json 的，而不是 jsonp 格式的。
++ [[http://stackoverflow.com/questions/19165925/jsonp-call-showing-uncaught-syntaxerror-unexpected-token][JSONP call showing “Uncaught SyntaxError: Unexpected token : ”]]
+  
+最后，我不得不通过自己的服务器端间接实现这个逻辑了（也好，我可以先查自己的数据
+库，如果没有，再访问 Noah 的 API）
+
+** 增加/删除属性
+相关方法：attr()/removeAttr()。下面代码演示了下面两个功能：
+1. placeholder 就是 input 元素的一个属性，通过 attr()可以为为 input 元素设置占位提示语。
+2. required 也是 input 元素的一个属性，增加后，该输入框不能为空。
+
+#+BEGIN_SRC javascript
+$('#product_and_id_of_pb').removeClass('hidden');
+ $('#name').attr('placeholder', 'PB 日志产品线，日志模块名，日志 Id 三者需一一对应');
+ $('#log_module_id').attr('required', '');
+ $('#product').attr('required', '');
+#+END_SRC
+
+* 如何在前端获取 Cookie
+Javascript 获取 Cookie 中某字段的方式极其原始，我们可以使用 jquery.cookie.js 这个库，让获
+取更为简洁。
++ [[https://github.com/carhartl/jquery-cookie]]
+
+下面代码实现了将 Cookie 中的 'minos_uid' 字段获取出来，并写到 HTML 的功能。
+#+BEGIN_SRC html
+<script type="text/javascript">
+    $('#minos_uid').html($.cookie("minos_uid"));
+</script>
+#+END_SRC
+
+* 属性
+** 如何抹掉 css 属性
+在 css 文件中置为 none 即可。
+例如：
+#+BEGIN_SRC css
+table.dataTable thead .sorting, table.dataTable thead .sorting_asc {
+	background: none!important;
+}
+#+END_SRC
+
+* 表单
+** 单选框 radio
+一定要将两个 radio 的 name 设为同样的值，才能保证 radio 为单选。
+** 在 JQuery 中获取 input 字段的值
+使用 value 或者 innerHTML 都不行，只能使用 val()。如下：
+#+BEGIN_SRC javascript
+bns_name = $('#bns_name').val();
+#+END_SRC
+
+** checkbox 如何向服务器传 off
++ [[http://stackoverflow.com/questions/1809494/post-the-checkboxes-that-are-unchecked?rq%3D1][http://stackoverflow.com/questions/1809494/post-the-checkboxes-that-are-unchecked?rq=1]]
+
+具体做法是：在每个需要 uncheck 时返回 off 的 checkbox 都附加一个 name 与原 checkbox，但是
+type 为 hidden 的 checkbox。
+
+** 如何在前端判断 checkbox 是否被 checked
+我使用了这种方法：
+#+BEGIN_SRC javascript
+if ($('#is_open_alarm_gsm').is(':checked')) {
+    $('#alarm_gsm_receiver').removeAttr('readonly');
+} else {
+    $('#alarm_gsm_receiver').attr('readonly', '');
+}
+#+END_SRC
+
++ [[http://www.oschina.net/code/snippet_54100_2968][几种用来检查 checkbox 是否选中的方法]]
+
+** select 如何在 disabled 的状态下也给后端发送值？
++ [[http://stackoverflow.com/questions/1191113/disable-select-form-field-but-still-send-the-value]]
+#+BEGIN_SRC javascript
+$('#notify_interval').attr('disabled', '');
+$('#form_add_log').bind('submit', function() {
+    $('#notify_interval').removeAttr('disabled');
+});
+#+END_SRC
+** 提交表单前，手工加入字段
+#+BEGIN_SRC javascript
+ $('#edit_form').submit(function() {
+    var post_data = $(this).serialize();
+    post_data += '&edit_comparison=' + encodeURIComponent(window.edit_comparison);
+    $.ajax({
+        type: 'POST',
+        url: '/edit/{{ log_config.log_module_id }}',
+        data: post_data,
+        success: function(data) {
+            alert(data + '\n\n 点击 "确定" 刷新页面 ...');
+            location.reload();
+        },
+        error: function(e) {
+            alert('请求失败：' + JSON.stringify(e));
+        }
+    })
+    return false;
+})
+#+END_SRC
+要点：
+1. 将表单 POST 到后台的数据格式是 k1=v1&k2=v2&....，通过 serialize() 函数可以转换
+2. 各字段需要进行 URL encode，JS 的相关函数是：encodeURIComponent()
+
+* window
+** 简单地实现 confirm dialog <2016-08-20 六 23:52>
+当用户点击一个按钮时，有时候需要提供给用户一个确认对话框。这个确认对话框可
+以通过第三方库实现，也可以通过Bootstrap的Modal手工实现，不过感觉这些方式都
+略显麻烦。
+
+有一种一行代码实现确认对话框的魔法，那就是使用windows.confirm。示例如下：
+#+BEGIN_SRC js
+if (window.confirm('确定取消申购图书【' + book_title + '】？')) {
+    $.post('{% url 'book:order_abandon' %}', {
+        'order_id': order_id
+    }, function(data) {
+        alert(data.msg);
+    });
+}
+#+END_SRC
+
+* 问题记录
+** href, button, type="submit" and POST
+当我们想通过$.ajax()或$.post()等方式来向后端发起请求时，要保证发起该 JS 函数的元素
+拥有 submit 的能力， +否则，浏览器会报出 *post canceled* 的错误。+
+
+Wait，我想复现该场景时，发现不成功，即使用<a>元素，也能发起 POST/GET 成功。经过深
+入的调查，发现 *罪魁祸首不是 submit 或 button，而是 href！* 
+#+BEGIN_SRC html
+<a href="" class="btn btn-danger btn-xs" onclick="DeleteLog({{ apply_log.id }})">删除</a></td>
+<script type="text/javascript">
+        function DeleteLog(id) {
+            $.post("/log/delete", {'id': id}, function(result) {
+            });
+ }
+ </script>
+#+END_SRC
+
+只要去掉 href=""，就能 POST/GET 成功。而浏览器报的 ~post canceled~ 的错误其实因为
+这个 href，导致了 POST/GET 被取消掉了。
+
+** JQuery 库文件加载不全问题
+网站新上线一版后，发现部分依赖 JQuery 的功能不可用了，通过浏览器排查，发现是
+jquery.js 加载不全，只加载到 3146 行就中断了，报的错误是 *Unexpected end of input*
+。我 Google N 久，换了 N 个关键字都不管用。最后，我在 [[http://blog.163.com/wys8211@126/blog/static/3615333520105251450190/][解决 jQuery 无法在 Apache 上加载的
+问题]] 一文中发现 ~然后清空所有浏览器缓存~ 这个词，给了我灵感，于是我按住 control 强
+制刷新了页面，发现 jquery.js 终于能加载完成，问题解决。
+
+问题原因： *浏览器缓存！！！*

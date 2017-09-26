@@ -1,0 +1,78 @@
+#+TITLE: Omni 家造的工具
+#+DATE: 2014-09-28
+#+KEYWORDS: 工具
+
+* OmniGraffle
++ [[http://www.yixieshi.com/it/16323.html][加速原型设计--哪个才是最好的原型绘制工具呢?]]
+** 快捷键
+ 用户可以通过快捷键来实现 OmniGraffle 的常用操作，来替代鼠标的拖拽。鼠标意味着低效，
+ 所以多用快捷键是多多益善的行为。
+
+*** 图形绘制
+| 快捷键 | 功能           |
+|--------+----------------|
+| v      |  选择            |
+| s      | 绘制形状       |
+| c      | 绘制线         |
+| t      | 绘制文字       |
+| e      | 绘制自定义形状 |
+
+*** 基本操作
+| 快捷键                      | 功能                         | 说明                                                |
+|-----------------------------+------------------------------+-----------------------------------------------------|
+| Option + 拖拽               | 拷贝图形                     |                                                     |
+| Command + 拖拽              | 旋转                         | 按住 Command 时，鼠标放在边角的 handle 点上         |
+| Option + 缩放               | 中心位置不变的缩放           |                                                     |
+| Shift + 缩放                | 长宽比率不变的缩放           |                                                     |
+| Option + Shift + 缩放       | 中心位置和长宽比率不变的缩放 |                                                     |
+| Shift + Command + g         | 加组                         | 即 groupk                                           |
+| Shift + Command + u         | 拆组/拆表                    | 即 ungroup。注：table 是特殊的组                    |
+| Shift + Command + t         | Make table                   | 用于快速绘制那种重复的图形（例如一台机器多个 Node） |
+| Arrange ▸ Group as Subgraph | 子图                         | 子图是特殊的组，可以展开折叠                        |
+| Control + Click             | 双击                         | 取代双指点 🈯️                                        |
+| Shift + 画线                | 45 度线                      |                                                     |
+|                             |                              |                                                     |
+
+*** 界面相关
+| 快捷键                 | 功能                                                    | 说明                              |
+|------------------------+---------------------------------------------------------+-----------------------------------|
+| Shift + Command + i    | 显示/隐藏 Inspectors（即右侧边栏）                      |                                   |
+| Shift + Command + 左击 | 全部展开/全部折叠某个 Inspector 组的所有 Inspector      | 需要鼠标放到任意一个 Inspector 上 |
+| Option + Command + 1   | 显示/隐藏左侧边栏                                       |                                   |
+| Option + Command + 2   | 在左侧边栏中以 ~列表~ 的方式显示 Canvas 中的 Objects    |                                   |
+| Option + Command + 3   | 在左侧边栏中以 ~Outline~ 的方式显示 Canvas 中的 Objects | 可用于快速编辑文本，以及查看图的结构 |
+| Option + Command + 4   | 在左侧边栏中以 ~Matrix~ 的方式显示 Canvas 中的 Objects  |按照 Style 进行更细致的分组                    |
+|                        |                                                         |                                   |
+
+** 常用操作
+带有快捷键的常用操作在快捷键一节里，这里列出在菜单里面的常用操作。
+
+- 统一图形大小 :: 选择一个基准图形，然后再选择其他图形，再点击 Arrange ->
+                  Size，选择想要的操作。也可以在图形上 Control + Click，弹
+                  出菜单里也有 Size
+- 为线附上文字 :: 在线上按 t，或者将文本拖拽到线上
+- 新建额外的 Guides :: 点击左侧边栏 Canvas 右边的粉红色的 Guides icon，新建
+     水平或垂直的 Guides，并设定坐标
+- 将 Layer 设置为多 Canvas 共享 :: 右击 Layer，在 Layer Settings 里选中
+     Shared Layer（一旦选中，这个 Layer 就变橙色了）
+
+** 制作自己的 Stencil <2015-06-20 六>
+智力活动的最高奥义在于可复用性，程序开发是如此，作图也是如此。OmniGraffle
+提供了机制让我们能够复用以前积累的图形，也能够复用别人积累的图形，它将这些
+可复用的图形组称作 Stencil。
+
+点击 File -> New Resource -> New Stencil，然后将自己积累的图形粘贴进去，最
+后为 Stencil 取名并保存，由此我们得到了自己的 Stencil，在右侧的 Stencils
+Library 一栏可以看到。
+
+前天，我描了一组样式和元素，制作了一个 Stencil，取名为架构图 -> 知乎风格。
+下次我画软件架构图时，可以直接把这些设计好的元素拖进来，以达到更快的高质量
+产出和交付。这些图形如下：
+
+#+CAPTION: ./imgs/omni-apps/20150620020829.png
+[[../static/imgs/omni-apps/20150620020829.png]]
+
+* 回顾
+** 使用 OmniGraffle 描出了一个还不错的图 <2015-01-10 六>
++ [[http://www.zhihu.com/question/27384928][知乎李申申在 ArchSummit 北京 2014 大会上演讲使用的幻灯片上的项目架构图是用啥软件画出来的]]
+

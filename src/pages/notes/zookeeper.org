@@ -1,0 +1,75 @@
+#+TITLE: ZooKeeper
+#+DATE: 2014-02-14
+#+KEYWORDS: Hadoop
+
+* 前言
++ [[http://zookeeper.apache.org/doc/trunk/][ZooKeeper Documentation（最新）]]
+* 适用场景以及与其他存储系统的比较
+- 高可用
+- 高并发
+- 多读少写
+* 基础知识
+** ZooKeeper Watches
+ZK 的 Watch 具有下面特性：
+1. One-time triger. 即：一次 Watch 最会触发一个 Watch event，若想多次触发，
+   只能多次 Watch。
+2. 
+ 
+* Apache Curator <2017-09-19 二 16:58>
+#+BEGIN_EXAMPLE
+"Guava is to Java what Curator is to ZooKeeper"
+                        Patrick Hunt, ZooKeeper committer
+#+END_EXAMPLE
+- [[http://curator.apache.org/][Apache Curator]]
+- [[http://blog.csdn.net/dc_726/article/details/46475633][Apache Curator入门实战 - CSDN博客]]
+
+
+* 使用问题记录
+** ZNode 数据过大导致出 core
+Zookeeper 一般被用来存储系统的核心元数据，而不该被用来作为一个普通的分布式存储系统。
+我在做 Minos 系统时，为了简便，把每个业务的各个节点的当前状态信息一并写入到一个 ZK 节
+点里。一开始没发现问题，直到有一天，某个业务的状态信息超过了 1M，然后导致模块出
+core。
+
+默认情况下，ZK 的 ZNode 存储的数据的限制是 1M 之内。虽然，这个限额是可配置的，但是官方
+文档极度不推荐将限额改大。见此链接：[[http://zookeeper.apache.org/doc/r3.3.3/zookeeperAdmin.html#Unsafe%2BOptions][Zookeeper 的 jute.maxbuffer 配置项说明]]
+
+为了解决这个问题，我有如下的选择：
+1. 改大 Zookeeper Server 的 jute.maxbuffer 配置项，同时改大 client 的相关配置项（暂时未知）
+2. 对状态信息数据进行压缩后再写入 ZK
+3. 不要将状态信息写到 ZK，写到另外的分布式存储上面！ZK 只存系统的关键性的元数据。
+
+方法 1 直接否定，太龌蹉，而且要找 OP 改配置重启，麻烦。方法 2 可行，根据测试，用 Google
+的 Snappy 能将这些数据压缩 4 倍，能支撑一会。方法 3 是真正的解决之道，但是升级需要时间。
+
+** 超时参数设得太小（可能）会导致访问失败
+
+* 回顾
+** 看一眼 ZK 官方文档 <2014-03-08 六>
+发现文档不够通顺，可能是非英语国家人士撰写的。
+** 使用 Kazoo 操作 ZooKeeper <2016-04-11 一>
+- [[https://kazoo.readthedocs.org/en/latest/index.html][Kazoo Docs]]
+
+今天 OP 告诉我系统的 ZK 的 Snaoshot 超过 1G，让我清理一下。于是我找了一个
+叫做 Kazoo 的 Python 库进行操作。
+
+Kazoo 的用法很简单：
+#+BEGIN_SRC python
+from kazoo.client import KazooClient
+
+# Connection Handling
+zk = KazooClient(hosts='127.0.0.1:2181')
+zk.start()
+
+# Reading Data
+if zk.exists("/my/favorite"):
+    # Do something
+data, stat = zk.get("/my/favorite")
+children = zk.get_children("/my/favorite")
+
+# Updating Data
+zk.set("/my/favorite", b"some data")
+
+# Deleting Nodes
+zk.delete("/my/favorite/node", recursive=True)
+#+END_SRC

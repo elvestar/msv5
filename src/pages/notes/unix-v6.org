@@ -1,0 +1,108 @@
+#+TITLE: 阅读 Unix v6 代码
+#+DATE: 2014-04-13
+
+* 准备工作
+** 书籍
++ John.Lions.Unix.v6.Commentary.Typescript.1977
++ John Lions 的书的附带源码
+
+** 源码
+我从网上下载了名为 unix.v6.v7.src 的压缩包，解压后 cd 到 v6/usr/sys 下面，然
+后使用 gnu global 来生成带交叉引用的 html 源码阅读页面。
+#+begin_src sh
+gtags .
+htags -sanohitvft "unix v6 源码" 
+#+END_SRC
+然后上传到公司的 fe.xxxxx.com 上。
+
+* 学习计划
+Unix 有 9099 行，但是。。。（见回顾）
+
+* malloc
+内存资源分为两种：
++ main memory（单位是 64 比特）
++ disk swap area（单位是 512 比特）
+
+两种内存资源都用一个叫做 *map* 的 struct 来存储：
+#+BEGIN_SRC cpp
+struct map
+{
+  char *m_size;
+  char *m_addr;
+}
+#+END_SRC
+
+它们都用 systm.h 中定义了两个全局变量来保存这两组 map：
+#+BEGIN_SRC cpp
+0203 int  coremap[CMAPSIZ];  /* space for core allocation */
+0204 int  swapmap[SMAPSIZ];  /* space for swap allocation */
+#+END_SRC
+
+malloc 函数的注意点：
+1. 依次遍历各个 map，选择第一个符合的 map（First Fit 策略）。
+2. 选择好后，如果该 map 的 m_size 为 0，则将它与下一个 map 合并（通过遍历该
+   map 之后的所有 map，修改这些 map 的 m_size 和 m_addr）。
+   
+* TODO mfree
+
+* printf
+函数内部会对格式化串 fmt 进行遍历：
+1. 如果遇到'\0'，则函数退出。
+2. 如果遇到整型(%d, %l, %o)，则调用 printn 打印。
+3. 如果遇到字符串(%s)，则调用 putchar 将字符串挨个字符打印。
+
+该函数原型是：
+#+BEGIN_SRC cpp
+printf(fmt,x1,x2,x3,x4,x5,x6,x7,x8,x9,xa,xb,xc)
+#+END_SRC
+
+函数压栈顺序是从右到左，故 fmt 在栈顶。由于变量是不固定的，故在遍历格式化
+串 fmt 时，一个变量 adx 记住函数参数地址，最开始是 x1 的地址，然后每当在 fmt
+中遇到一个%，则使 adx++，这样 adx 就指向了下一个参数。在 PDP11 硬件上，从栈
+底到栈顶地址依次下降，故第一次调用 adx++，会试 adx 从指向 x1 到指向 x2，然后
+依次类推，直到处理完所有参数。
+
+* printn
+被 printf 调用来打印整型变量，支持十进制和八进制。将数值加上'0'，即可得
+到该数值的字符串形式。最终调用的是 putchar(c)。
+
+* putchar
+要点：
++ 通过写 KL(address 0177560)的 xbr 成员来显示到终端上。
++ 如果 KL->xsr&0200 等于 0，则阻塞住（推测 xsr 可以用来判断字符是否真正输出
+  到终端上）。
++ 如果是 putchar('\n')，则会递归调用 putchar 打印'\r'和两个 0177。
+
+* panic
+panic 函数的实现非常简单：
+ #+BEGIN_SRC cpp
+2416 panic(s)
+2417 char *s;
+2418 {
+2419    panicstr = s;
+2420    update();     // 写完所有的大块 buffer
+2421    printf("panic: %s\n", s);
+2422    for(;;)       // 无限调用 idle()
+2423        idle();
+2424 }
+ #+END_SRC
+
+让 Unix 从 panic 中恢复的方法只有一个： *重新初始化系统* （伴随着一个
+coredump）。
+
+Unix 并非一个 "错误容忍" 或 "软性错误" 的系统，当 Unix 将要进入
+*undesirable* 的异常状态钱，它会调用 panic 函数，然后就进入啥都不做，等
+用户来处理的 panic 状态。Unix 的这种设计很符合它的 *保持简单* 的风格。
+
+
+
+* 回顾
+** 40 年的玩意儿真炫酷啊 <2014-04-13 Sun>
+真炫酷啊真炫酷。
+
+跟文锋交流，他对 OS 也很感兴趣，并且深入研究过。
+
+** 中止，转向 xv6
+当我在准备制定学习计划时，我在网上搜到了 xv6：一个根据 Unix v6 修改出来的，
+能运行在 x86 硬件上，用 ANSIC c 重写过的，用于教学目的的操作系统。于是，我
+动摇了，我准备先补学Unix v6，转而学习 [[./xv6.org][xv6]] 。

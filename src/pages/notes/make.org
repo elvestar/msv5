@@ -1,0 +1,9 @@
+#+TITLE: GNU Make
+#+DATE: 2015-05-17
+#+KEYWORDS: GNU, 构建系统
+
+* 问题记录
+** configure.ac:84: error: possibly undefined macro: AC_PROG_LIBTOOL
+原因：缺少 GNU Libtool
+
+解决： ~brew install libtool~

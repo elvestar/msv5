@@ -1,0 +1,30 @@
+#+TITLE: MediaWiki
+#+DATE: 2016-02-04
+
+* 资料收集
+- [[https://github.com/wikimedia/mediawiki]]
+- https://gerrit.wikimedia.org/
+
+** 样例
+- [[http://zh.moegirl.org/zh/Mainpage][萌娘百科]]   
+- [[http://www.pokemon.name/wiki/%25E9%25A6%2596%25E9%25A1%25B5][口袋百科]]
+
+* 插件
+
+- [[https://www.mediawiki.org/wiki/Category:Graph_extensions][MediaWiki Graph extensions]]
+- [[https://www.mediawiki.org/wiki/Extension:Gchart4mw][Extension:Gchart4mw（利用 Google Chart 使 Wiki 中的数据可视化）]]
+
+- [[http://www.codecogs.com/latex/eqneditor.php][在线 Latex 公式编辑器]]
+  
+* 安装
+#+BEGIN_SRC sh
+yum install nginx
+yum install php
+yum install mediawiki
+#+END_SRC  
+
+* 回顾
+** 真复杂。。中止 <2016-02-04 四>
+还是先继续使用现有的基于 Emacs Org-Mode 的方案吧。
+
+我要的其实只是在 Web 上编辑的功能。

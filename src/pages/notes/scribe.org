@@ -1,0 +1,48 @@
+#+TITLE: Scribe 日志收集系统
+#+DATE: 2013-01-21
+#+KEYWORDS: 日志收集
+
+* Scribe 代码初窥
+周五晚上，Kypo 给我们分享了一些文档，其中包括 scribe 的代码。我看了一下，感
+觉 store 的设计很值得借鉴。此外感觉代码好单纯，没怎么考虑异常。
+
+列一下各个文件中各个类的功能：
+
+*File.h* ： 包 含了 FileInterface 类和 StdFile 类。FileInterface 是个接口类，提
+供了文件的接口，如 open/read/write/flush/close。而 StdFile 继承自
+FileInterface，实现了本地文件的各个接口。
+
+*HdfsFile.h* ：包含了 HdfsFile 类。如同 StdFile，该类也继承自 FileInterface，
+它实现了 HDFS 文件的各个接口。
+
+*Store.h* ：包含了一个 Store 基类，以及派生自该基类的 FileStore，
+ThriftFileStore，BufferStore，NetworkStore，BucketStore，NullStore，
+MultiStore，CategoryStore，MultiFileStore，ThriftMultiFileStore
+
+*Store_queue.h* ：包含了 StoreQueue 类，该类提供了 addMessage 接口来向队列上写
+日志，此外还会额外开一个线程，定期把队列上的日志写到 store 里。
+
+*conf.h* ：包含 StoreConf 类，负责配置的解析，string，int 甚至是 store 等类型
+配置项的取出。注意，store 配置项本身就是一个 StoreConf 的指针，这表明配置中
+存在嵌套关系。
+
+*Conn_pool.h* ：包含 scribeConn 类和 ConnPool 类。scribeConn 类用来管理网络连
+接，被 NetworkStore 使用。而 ConnPool 里面用 map 存了若干 scribeConn，并进行
+统一管理，它被用来保证从一个 Scribe Server 到一个 IP/Port 或 Service 只有一
+个连接（这个 pool 看起来很怪异，不是用来重用，而是用来防止重复的连接），有
+一个该类型的全局变量 g_connPool 来实现上述特性。
+
+*Dynamic_bucket_updater.h* ：包含 DynamicBucketUpdater 类。该类被 BucketStore
+使用，它通过 thirft 接口来定期地对 BucketStore 里的 bucket id 到 ip:port 的
+映射进行更新（先不做研究了）
+
+*Env_default.h* ：包含了打日志的宏，Hash 类，还有 startServer()和 stopServer()
+函数，来供 main 函数来启动和停止 Scribe 服务。
+
+*Network_dynamic_config.h* ：顾名思义，该类被用来动态配置网络。
+
+*Scribe_server.h* ：包含了 scribeHandler 类。该类主要提供了：ResultCode
+scribeHandler::Log(const vector<LogEntry>& messages)，来供 client 通过 RPC
+来远程打日志。
+
+*LogEntry* 代表一行日志。

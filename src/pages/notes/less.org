@@ -1,0 +1,55 @@
+#+TITLE: Less：一个 CSS 预处理框架
+#+DATE: 2015-03-29
+#+KEYWORDS: CSS, 
+#+DESCRIPTION: 样式的可重用性，前端技术的积淀载体，为 CSS 引入可编程的特性。
+
+* 资料收集
+- http://lesscss.org/
+
+** 文档
+- http://lesscss.org/
+- [[http://www.bootcss.com/p/lesscss/]]
+
+** 文章
+- [[http://www.oschina.net/question/12_44255][为您详细比较三个 CSS 预处理器（框架）：Sass、LESS 和 Stylus]]
+- [[http://www.helloerik.com/bootstrap-3-less-workflow-tutorial][Bootstrap 3 Less Workflow Tutorial]]
+
+** 工具
+- https://github.com/groenewege/vim-less
+
+* 颜色
+
+** HSL 色彩空间
+CSS3 使用 HSL，而 Mac OS 的颜色选择器使用 HSV（我摔）。
+
+#+BEGIN_QUOTE
+HSL 和 HSV 都是一种将 RGB 色彩模型中的点在圆柱坐标系中的表示法。这两种表示
+法试图做到比 RGB 基于笛卡尔坐标系的几何结构更加直观。
+
+HSL 即色相、饱和度、亮度（英语：Hue, Saturation, Lightness），又称 HSL。HSV
+即色相、饱和度、明度（英语：Hue, Saturation, Value），又称 HSB，其中 B 即英
+语：Brightness。
+#+END_QUOTE
+
+http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Hsl-hsv_models.svg/800px-Hsl-hsv_models.svg.png
+
+- [[http://zh.wikipedia.org/wiki/HSL%25E5%2592%258CHSV%25E8%2589%25B2%25E5%25BD%25A9%25E7%25A9%25BA%25E9%2597%25B4][HSL 和 HSV 色彩空间]]
+
+* 回顾
+** 学习并首次使用了 Less <2015-03-29 日>
+主要是看了 [[http://www.helloerik.com/bootstrap-3-less-workflow-tutorial][这篇文章]] ，学习其 Less 工作流，然后进行了初步尝试。我的 Less 目录
+如下：
+#+BEGIN_SRC sh
+➜  minosweb git:(master) ✗ tree -L 1 less/
+less/
+├── bootstrap3
+├── font-awesome
+├── generate_css.sh
+├── main.less
+├── minos.css
+└── minos.less
+#+END_SRC
+
+此外，我还第一次了解了 *HSL 色彩空间* 。在此之前，我是使用 RGB 色彩空间的，感
+觉很麻烦，而这种 HSL（色相，饱和度，亮度）色彩空间感觉很符合直觉，并且应该
+更易于学习和编程。

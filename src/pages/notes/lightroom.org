@@ -1,0 +1,21 @@
+#+TITLE: Lightroom
+#+DATE: 2015-02-27
+
+* 快捷键
+| 快捷键 |                 |   |
+|--------+-----------------+---|
+| \      | 显示/隐藏过滤器 |   |
+|        |                 |   |
+|        |                 |   |
+|        |                 |   |
+|        |                 |   |
+|        |                 |   |
+|        |                 |   |
+|        |                 |   |
+|        |                 |   |
+
+* 发布
+尝试通过LR将照片发布到500px，但是提示需要设置Title、Category和三个关键字，
+尝试N久未果，先放放。
+
+参考：http://static.500px.net/downloads/500px_Lightoom_Publisher_User_Guide.pdf

@@ -1,0 +1,49 @@
+#+TITLE: 2013 年 Q4
+#+DATE: 2013-10-01
+
+* 入手铁三角 ATH-C770 耳塞<2013-10-09 三>
+听谁说铁味很足？
+#+CAPTION: 铁三角ATH-C770
+[[../static/imgs/13Q4/P31009-165054.jpg]]
+
+* 首次参加公司体检 <2013-10-14 一>
+去年我没有去。
+
+#+CAPTION: 爱康国宾西直门门店
+[[../static/imgs/13Q4/P31014-115727.jpg]]
+
+* 入手Razer 炼狱蝰蛇 <2013-10-25 五>
+昨天晚上23点下的单子，今天下午17点到了。
+- [[http://item.jd.com/179784.html][【雷蛇DeathAdder】雷蛇（Razer）炼狱蝰蛇 DeathAdder 游戏鼠标 升级版-京东]]
+
+#+CAPTION: 炼狱蝰蛇包装盒
+[[../static/imgs/13Q4/P31025-172110.jpg]]
+#+CAPTION: 周五下班路上的回龙观华联
+[[../static/imgs/13Q4/P31025-203254.jpg]]
+
+
+* 开始用iPhotos管理照片 <2013-11-20 三>
+这几天在整理照片，准备把从西电大一以来的照片（一共约50G）都给弄到Mac上，让
+iPhoto来管理。我要删除一些拍得不好的照片，因为mac的容量有限，但是所有照片
+（包括在iPhoto上删除的照片）我都会在百度云上备份。
+
+我准备使用iMovie将阿飞王凯来北京这段时间的照片和视频做成一个短篇。
+
+截止目前，iPhoto里面已经有41个事件了。
+
+* 学习 potion 语言 <2013-12-17 二>
+被 http://learnvimscriptthehardway.stevelosh.com/chapters/41.html 忽悠，学了
+一下 potion 语言。 
+1. git clone git@github.com:perl11/potion.git
+2. make（失败，缺少 automake 和 libtool）
+3. brew install automake
+4. brew install libtool
+5. make
+6. make test
+7. 成功！
+
+   
+* 入手魅族 EP-30 耳塞 <2013-12-26 四>
+之前买的铁三角ATH-C770找不到了，所以买一个魅族EP-30来搭配我的MX。
+#+CAPTION: Meizu EP-30包装盒
+[[../static/imgs/13Q4/P31226-172023.jpg]]

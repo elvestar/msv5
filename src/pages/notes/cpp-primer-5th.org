@@ -1,0 +1,142 @@
+#+TITLE: C++ Primer 第 5 版
+#+DATE: 2015-08-19
+
+* 前言
+2009 年的夏天囫囵吞枣式地读完了 C++ Primer 的第 4 版，现在回想起来，在那种
+实践经验缺乏的情况下读这本号称 ~面向 Primer 的书~ ，收效是非常匮乏的，所以
+决定找时间重读一遍。六年后，本书第 5 版出了，而且附带了 C++ 11 的特性，所以
+就读决定读它了。
+
+* 读书计划
+重点：
+- C++ 11 的新内容
+- 引用，数组等基础知识
+- 类的 Copy Control
+- 顺序容器和关联容器提供的函数接口
+- IO Library 相关
+- Generic Algorithms
+- C++ 的异常
+
+* Chapter 3. Strings, Vectors, and Arrays
+** 使用 auto  遍历 string
+#+BEGIN_SRC cpp
+string str("some string");
+// print the characters in str one character to a line
+for (auto c : str) // for every char in str
+  cout << c << endl; // print the current character followed by a newline
+#+END_SRC
+* Part II: The C++ Library
+* Chapter 8. The IO Library
+* Chapter 9. Sequential Containers
+** 
+*** 使用下标访问元素
+string/vector/deque 不仅支持使用 at 来做随机访问，还支持用下标来做随机访问。
+但是，两者之间是有区别的，当发生越界时，at 会抛出 ~out_of_range~ 异常，而使
+用下标则直接是内存越界。 使用 at 更加安全一些。
+#+BEGIN_SRC cpp
+vector<string> svec; // empty vector
+cout << svec[0]; // run-time error: there are no elements in svec! 
+cout << svec.at(0); // throws an out_of_range exception
+#+END_SRC
+
+** DONE 9.4. How a vector Grows
+*** vector 和 string 的 capacity 和 reserve 函数
+#+BEGIN_QUOTE
+The capacity operation tells us how many elements the container can hold
+before it must allocate more space. The reserve operation lets us tell the
+container how many elements it should be prepared to hold
+#+END_QUOTE
+
+*** reserve 和 resize 的区别
+reserve 只改变 capacity，不改变元素本身，而 resize 恰好相反。
+
+#+BEGIN_QUOTE
+As a result, a call to reserve will never reduce the amount of space that
+the container uses. Similarly, the resize members (§ 9.3.5, p. 352) change
+only the number of elements in the container, not its capacity. We cannot
+use resize to reduce the memory a container holds in reserve.
+#+END_QUOTE
+    
+*** shrink_to_fit 并不确保有效
+#+BEGIN_QUOTE
+We can call shrink_to_fit to ask that memory beyond what is needed for the
+current size be returned to the system.
+
+Calling shrink_to_fit is only a request; there is no guarantee that the
+library will return the memory.
+#+END_QUOTE
+
+** DONE 9.5. Additional string Operations
+除了顺序型容器的通用操作外，string 还提供了大量额外的操作。
+
+*** string 的 out_of_range 异常
+string 在执行构造函数或者 substr 函数时，如果参数不当，会抛出
+~out_of_range~ 这种类型的异常。例如：
+#+BEGIN_SRC cpp
+string s("hello world");
+string s5 = s.substr(12); // throws an out_of_range exception
+#+END_SRC
+
+*** Change a string 
+| 函数                 | 说明                                              |
+|----------------------+---------------------------------------------------|
+| insert(pos, args)    |                                                   |
+| erase(pos, len)      |                                                   |
+| assign(args)         | 支持 C-style 字符数组，但是要注意会在 '\0' 处截断 |
+| append(args)         |                                                   |
+| replace(range, args) |                                                   |
+
+*** string 的搜索
+string 支持 6 种不同的搜索函数，每种函数都有 4 个重载版本。
+- s.find(args) :: 
+- s.rfind(args) :: 寻找最后一次出现
+- s.find_first_of(args) :: args 里的任意一个字符
+- s.find_last_of(args) :: 
+- s.find_first_not_of(args) ::
+- s.find_last_not_of(args) ::
+     
+*** string compare
+类似于 C 库里的 strcmp。
+
+*** 数值转换
+C 库里有一堆数值型和字符串之间互转的函数，现在 C++ 也提供了类似的设施。
+
+#+BEGIN_SRC cpp
+string s2 = "pi = 3.14";
+// convert the first substring in s that starts with a digit, d = 3.14
+double d = stod(s2.substr(s2.find_first_of("+-.0123456789")));
+#+END_SRC
+
+注意：
+- 如果 string 不能转换为 number，则这些函数会抛出一个 ~invalid_argument~ 类型
+的异常。
+- 如果数值超出限制，则会抛出 ~out_of_range~ 这样的异常。
+** TODO 9.6. Container Adaptors
+*** 什么是 Container Adaptors？
+#+BEGIN_QUOTE
+An adaptor is a general concept in the library. There are container,
+iterator, and function adaptors. Essentially, an adaptor is a mechanism for
+making one thing act like another. A container adaptor takes an existing
+container type and makes it act like a different type.
+#+END_QUOTE
+    
+举个例子：stack adaptor 使用一个顺序型容器（除了 array 和 forward_list），并
+使自己表现得向一个栈。默认情况下，stack 使用 deque，但我们可以换做其他顺序
+型容器。如下：
+#+BEGIN_SRC cpp
+// empty stack implemented on top of vector
+stack<string, vector<string>> str_stk;
+#+END_SRC
+
+*** 对于一个指定 Adaptors，什么容器可以被使用？
+#+BEGIN_QUOTE
+A stack requires only push_back, pop_back, and back operations, so we can
+use any of the remaining container types for a stack. The queue adaptor
+requires back, push_back, front, and push_front, so it can be built on a
+list or deque but not on a vector. A priority_queue requires random access
+in addition to the front, push_back, and pop_back operations; it can be
+built on a vector or a deque but not on a list.
+#+END_QUOTE
+
+** 总结
+string 的搜索貌似不支持正则

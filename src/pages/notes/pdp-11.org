@@ -1,0 +1,16 @@
+#+TITLE: PDP-11
+#+DATE: 2014-04-01
+#+KEYWORDS: Unix
+
+为了更好地阅读 UNIX v6 的代码，我掏出了 1979 年发布的一份 PDP-11 的手册进行学习。
+
+PDP-11 系列最显著的特点就是： *UNIBUS* 。
+
+* 资料搜集
++ [[http://zh.wikipedia.org/wiki/PDP-11][PDP-11 (wiki)]]
+
+* PDP-11 的结构图
+[[../static/imgs/pdp-11/1.png]]
+
+* 回顾
+PDP-11 这种纯硬件的东西看起来真没意思啊。

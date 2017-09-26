@@ -1,0 +1,55 @@
+#+TITLE: SQLite
+#+DATE: 2014-03-31
+#+KEYWORDS: 数据库
+
+* 前言
+SQLite 是我使用过的第一个数据库，是在魅族 M8 的 WinCE 系统上开发应用时用到的。
+
+* 总体架构
++ [[http://sqlite.org/arch.html][The Architecture Of SQLite]]
+
+| Block Diagram Of SQLite |
+|-------------------------|
+| [[../static/imgs/sqlite/1.png]]      |
+
+* Interface（接口层）
+** 综述
++ [[http://www.sqlite.org/quickstart.html][SQLite Quickstart]]
++ [[http://www.sqlite.org/cintro.html][An Introduction To The SQLite C/C++ Interface]]
++ [[http://www.cnblogs.com/hustcat/archive/2009/02/26/1398896.html][SQLite Version3.3.6 源代码文件结构（国人总结的，很赞）]]
+
+#+BEGIN_EXAMPLE
+所有以 sqlite3_为前缀的函数都是 sqlite3 的接口函数（API），反之亦然。
+#+END_EXAMPLE
+
+** 核心接口
+| 接口                                      | 位置      |   |
+|-------------------------------------------+-----------+---|
+| sqlite3_open()                            | main.c    |   |
+| sqlite3_prepare_v2()                      | prepare.c |   |
+| int sqlite3_step(sqlite3_stmt *pStmt)     | vdbeapi.c |   |
+| sqlite3_column_xxx()                      | vdbeapi.c |   |
+| int sqlite3_finalize(sqlite3_stmt *pStmt) | vdbeapi.c |   |
+| sqlite3_close()                           | main.c    |   |
+*说明* ：很明显，定义在 vdbeapi.c 里的几个接口都是直接跟 SQLite 虚拟机打交道的，而不需要
+再跟分词器、解析器、代码生成器打交道。
+
+** Convenience Wrapper
+| 接口                 | 位置     |   |
+|----------------------+----------+---|
+| sqlite3_exec()       | legacy.c |   |
+| sqlite3_get_table()  | table.c  |   |
+| sqlite3_free_table() | table.c  |   |
+
+* Tokenizer and Parser
++ [[http://www.sqlite.org/src/doc/trunk/doc/lemon.html][The Lemon Parser Generator]]
+
+** 
+  
+* 回顾
+** 了解架构，源码结构以及接口层 <2014-03-30 日>
+通过 [[http://sqlite.org/arch.html][The Architecture Of SQLite]] 了解 SQLite 的架构，发现它的架构非常的赞，层次非常
+的清晰，堪称典范。
+
+我大概阅读了 SQLite 的几个核心接口函数，并认为没必要在接口层耽搁太久。接下来计划阅
+读 Tokenizer 和 Parser，这两块值得多花点功夫。

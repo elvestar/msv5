@@ -1,0 +1,59 @@
+#+TITLE: 我的工作流
+#+DATE: 2015-03-01
+#+KEYWORDS: 工具, 工作流
+
+* 临时存放
+1. 在 Mac 上通过 samba 连接公司的云开发机
+
+* Linux
+** Alias
+
+#+BEGIN_SRC sh
+alias grep="grep --color=auto"
+alias egrep="egrep --color=auto"
+alias vih='vim *.h'
+alias hgrep='history | grep'
+
+alias bb='blade build'
+alias bt='blade test'
+alias br='blade run'
+alias btf='blade test --full-test'
+#+END_SRC
+* File Watcher
+- [[https://github.com/thomasfl/filewatcher]]
+
+用法：
+#+BEGIN_SRC sh
+cd /Users/elvestar/github/pkm/less
+filewatcher '*.less' "sh generate_css.sh"
+#+END_SRC
+
+* Sequel 
+- http://www.sequelpro.com/
+  
+* 在 Mac 下使用 crontab <2015-12-01 二>
+在 Mac 下使用 Crontab 需要一定的折腾：
+1. 需要 *export EDITOR=vim* ，否则，会抛出 ~crontab: "/usr/bin/vi" exited
+   with status 1~ 这样的错误
+2. 需要配置 .vimrc，加上 *autocmd FileType crontab setlocal nobackup
+   nowritebackup* ，否则，会抛出 ~crontab: temp file must be edited in
+   place~ 这样的错误
+   
+参考：
+1. [[http://superuser.com/questions/359580/error-adding-cronjobs-in-mac-os-x-lion]]
+2. [[http://calebthompson.io/crontab-and-vim-sitting-in-a-tree/]]
+* 命令行中使用 Mac 剪贴板 - pbcopy
+例如，下面 命令会生成 pip 依赖列表，并直接导出到 Mac 的剪贴板中，免去了
+Command - C 的手动粘贴之苦。
+#+BEGIN_SRC sh
+pip freeze | pbcopy
+#+END_SRC
+
+* 下载公司内网开发机上的文件
+可以使用 Python 的内置 HTTP Sever。具体方法就是在文件所在目录通过命令行启动
+HTTP Server，如下：
+#+BEGIN_SRC sh
+python -m SimpleHTTPServer 8000
+#+END_SRC
+
+然后在浏览器上访问 ~your.hostname:8000~ ，鼠标点击即可下载。

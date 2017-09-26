@@ -1,0 +1,45 @@
+#+TITLE: grep
+#+DATE: 2015-01-03
+#+KEYWORDS: 正则
+
+* Introduction
+grep 是一个基于正则表达式的多用途文件搜索工具，它起源于 ed 编辑器的 g/re/p
+命令，即 ~global-regular expression-print~ ，由此看到来 grep 可以看做 sed 的一
+个功能子集。
+
+* 常用参数
+| 参数    | 作用                                              |
+|---------+---------------------------------------------------|
+| -i      | 匹配时大小写不敏感                                |
+| -w      | 只匹配完整的单词                                  |
+| -l      | 只列出含有匹配行的文件列表，而不列出具体的行      |
+| -r      | 递归对指定目录下的所有文件进行匹配                             |
+| -n      | 打印行号                                          |
+| -v      | 反向匹配，即列出所有不匹配的行                    |
+| -c      | 列出各文件匹配的行数，相当于 SQL 的 group by 功能 |
+| --color |高亮匹配到的文本                                           |
+
+* egrep
+相当于 grep -E
+* fgrep
+即 fast grep，使用文本的方式而不是正则表达式的方式来匹配，能加快匹配速度，
+相关于 grep -F。
+* pgrep
+** pgrep 后面跟的进程名不能超过 15 个字符 <2016-01-19 二>
+如果超过 15 个字符，我们可以加上 ~-f~ 参数。
+
+参考 ~man pgrep~ 的解释：
+#+BEGIN_EXAMPLE
+NOTES
+       The process name used for matching is limited to the 15 characters present in the output of /proc/pid/stat.  Use the -f option to match
+       against the complete command line, /proc/pid/cmdline.
+
+       The running pgrep or pkill process will never report itself as a match.
+#+END_EXAMPLE
+* egrep
+- [[http://www.cs.columbia.edu/~tal/3261/fall07/handout/egrep_mini-tutorial.htm][About regular expressions in egrep]]
+
+* 回顾
+** 系统地学习下 grep 的常用参数 <2015-01-04 Sun>
+以前常用 grep 的-v, -r 和 -a 参数，现在系统地学习下，发现了-n, -c 等参数也很
+有用。

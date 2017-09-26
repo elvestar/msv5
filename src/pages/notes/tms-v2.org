@@ -1,0 +1,175 @@
+#+TITLE: TMS V2 设计和开发
+#+DATE: 2016-01-01 
+
+* 前言
+15 年年初我基于 Emacs Org-mode 设计了我的时间管理系统（称之为 TMS V1 吧），
+自 15 年 3 月开始实施，到今天已经是 8 个多月了。现在看来，它完全达到了我预
+期的效果，我对时间的把控和利用能力，以及做事情的规划能力都有了显著的提升，
+并且这 8 个月我每时每刻做了什么，以及耗时分布都记录在这些 org 文件里面了，
+五十年后这些记录仍然存在，它们将会持续地体现出大数据的价值。
+
+现在，我要开始做 TMS V2。TMS V2 要达成的目标的包括：
+1. 将每日规划和 TODO 管理从 Evernote 上彻底迁移到 org 上：
+   - Mac 上的 Evernote 越来越慢了，并且全无改进的希望，我不想再多依赖它了
+2. 自动导出每周的周报和耗时分布：
+   - 我再也不想完全手工写周报了
+3. 自动导出每月和每年的时间报表和项目进展
+   - 我再也不想完全手工写年度自评和半年自评了
+4. 每日时间统计（实时）：
+   - 每当我害怕今日虚度时，我都可以立刻通过打开一个页面，获知我今日的时间
+     开销统计
+   - 本日已工作 xx 小时，学习 xx 小时，当前在做 xx 事已持续 xx 小时
+   - 最近数月每日时间利用情况（模仿 github 个人主页，用颜色深浅不一的小方格
+     和平滑的曲线来展示）
+5. 提升项目排期能力，将时间预估作为核心要素纳入到 V2 中
+6. 不仅纳入时间预估，并且能做好每日每周每月的时间开销分布做好规划，作为 KPI
+7. 定期归档，提升 V2 的运行速度
+8. 重构我的事情体系
+9. 通过网页或者 App 实现外出时的计时
+
+* 资料搜集
+- [[http://pandas.pydata.org/][Pandas: Python Data Analysis Library]]  
+- [[https://github.com/rasbt/pattern_classification/blob/master/resources/python_data_libraries.md][Useful libraries for data science in Python]]
+
+* 归档
+要点：
+- 主文件名：time.org
+- 每年一个归档文件，以年份作为命名，如 2015.org
+- 每月 Review 时手动做一次归档，将已经完成的二级事情或者三级事情移动到当年
+  的文件里（如 2015.org）
+
+参考：
+- http://orgmode.org/manual/Archiving.html#Archiving
+- http://doc.norang.ca/org-mode.html#Archiving
+
+* 统计分析
+要实现多样的统计分析需求，需要一个强大的中间数据集，这时我（再次）想到了数
+据库。那就掏出 Python/Flask/SQLAlchemy/... 等物，开撸吧！
+
+#+BEGIN_SRC python
+# 核心 Model：计时项
+class ClockItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    start_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False)
+    start_hour = db.Column(db.Integer, nullable=False)
+    date = db.Column(db.DateTime, nullable=False, index=True)
+    year = db.Column(db.Integer, nullable=False)
+    month = db.Column(db.Integer, nullable=False)
+    iso_year = db.Column(db.Integer, nullable=False)
+    week = db.Column(db.Integer, nullable=False)
+    weekday = db.Column(db.Integer, nullable=False)
+
+    thing = db.Column(db.String(1024), nullable=False)
+    time_cost = db.Column(db.Integer, nullable=False)  # In minute unites
+    level = db.Column(db.Integer, nullable=False, default=-1)
+    category = db.Column(db.String(1024), nullable=False)
+    project = db.Column(db.String(1024), nullable=False)
+#+END_SRC
+
+#+BEGIN_SRC sql
+# 按月统计耗时
+select year, month, sum(time_cost)/60 from clock_item group by year, month;
+# 按周统计耗时
+select iso_year, week_num, sum(time_cost)/60 from clock_item group by iso_year, week_num;
+#+END_SRC
+
+* 日报/周报/月报/年报自动生成
+本周尝试从 TMS 导出本周周报，发现效果不好。改进思路：
+- 运维这块比重太大，且是黑盒子，需要细化为各个具体问题排查
+- 各个问题排查的排查结果和 Jira 跟进没有记录在 TMS 里面
+- 一些事情耗时很低但是值得记录再周报里，但是它们没有在 TMS 里（看来确实的要
+  一个工作计划了）
+- 特别地：需要每周开始前，拟定本周计划，先计划再按计划工作，而不是先工作再
+  梳理做了啥
+  
+** 自动生成16年第24周周报 <2016-06-15 三>
+周报中需要体现的内容：
+1. 参与的项目列表，在各个项目中投入的时间以及占比。
+2. 各个项目下各个事件的列表以及耗时
+3. 按天给出各个项目的耗时，绘制曲线图
+
+* 前端开发
+
+* 基本统计
+我想将TMS打造成一个强大的时间统计分析工具，但是万事从头起。第一步，我想从最
+基本的需求开始。那么基本统计需求有哪些呢？思考一下我使用Emacs Org-mode的方式：
+1. 我今天都干了些啥事？
+2. 我今天/本周/本月在各类别各项目上花费的时间总和和分布如何？
+   
+我需要逐个开发如下功能：
+- 整理一下需要开发的页面列表
+- 拟定TMS数据的格式，
+- 后端开发按日期导出计时项的功能
+- UI开发一个指定展示指定日期范围计时项的功能
+
+** SQL和图表
+按月/按周统计各类型各项目的耗时和计时项：
+#+BEGIN_SRC sql
+select category, project, count(time_cost), sum(time_cost) from clock_item where year = 2016 and month = 5 group by category, project;
+select category, project, count(time_cost), sum(time_cost) from clock_item where iso_year = 2016 and week = 5 group by category, project;
+#+END_SRC
+
+*** 图表：展示一周用时分布的带环饼状图
+#+CAPTION: ./imgs/tms-v2/20160513170610.png
+#+ATTR_HTML: style="width: 500px"
+[[../static/imgs/tms-v2/20160513170610.png]]
+
+1. 展示一天用时分布的带环饼状图
+1. 展示一月用时分布的带环饼状图
+1. 展示一年用时分布的带环饼状图
+
+* 高级可视化
+** Time Usage Calendar <2016-05-28 六>
+GitHub的 [[https://github.com/blog/1360-introducing-contributions][Contributions Calendar]] 很炫很实用，看起来像是用D3画出来的，我也想
+用D3画一个 Time Usage Calendar，不过后来我发现有个叫做 [[https://github.com/wa0x6e/cal-heatmap][cal-heatmap]] 的JS模块
+能实现类似的效果。
+
+#+BEGIN_SRC sh
+npm install d3 --save
+npm install cal-heatmap --save
+#+END_SRC
+
+#+CAPTION: 最终结果
+[[../static/imgs/tms-v2/20160529160907.png]]
+
+* 回顾
+** Back To MVC <2016-05-21 六>
+上周末团队去黄山游玩，回来后的第一个周末想用来赶工作的事情。上周部门图书馆
+挂了，找人修，得知对内bae的旧版无人维护，3.0新版接入貌似也很麻烦。想想之前
+在旧版bae上线那么费精力，我萌生了重做一个的想法，粗略估计一天就够了。在重做
+部门图书馆的时候，发现现在的Django比去年这个时候好用多了，尤其是升级到1.9版
+后，Admin页面比去年1.8版更精致优雅。突然，我脑中来了个灵光闪现， *为啥我之
+前一定要将TMS做成静态化呢？？？* （以静态JSON作为后端存储的开发成本真的很
+大）。不这样做会死人吗？为啥我不可以使用传统的MVC架构？我不是有个阿里云ECS
+吗？于是，我做出了如下决定：
+- 整个TMS的clock_item使用数据库来维护，放在阿里云上。
+- 从org文件到clock_item表的过程尽量做到一次搞定以后不用问，即保持数据层的稳
+  定，将精力放到表现层。
+- 其他的org转化为的html还是使用静态化的方案，这样容易维护。它们是主体，要保
+  证它们的安全。
+** 从 "记录和统计" 到 "反馈和驱动"  <2016-07-31 日 02:21>
+今天感受到的我的时间管理系统（TMS V2）对我的工作学习生活的反馈和驱动，应该
+说该系统已经跨过了记录和统计的阶段。
+
+下表中的 *分时图* 使用了 [[http://omnipotent.net/jquery.sparkline/][jQuery Sparklines]] ，它是一个常被用来绘制行内图表的
+JS库。从分时图可以看出每天每小时的具体耗时分布，红色是工作，蓝色是学习（出
+CP），绿色是生活，黑色是其他。这几种颜色的对比还是相当鲜明的，这也使得很多
+信息更容易一眼看出来。
+
+#+CAPTION: ./imgs/tms-v2/20160731022329.png
+[[../static/imgs/tms-v2/20160731022329.png]]
+
+
+** 改进了日报页面，已经可以彻底替换Emacs Org mode自带的Clock Report功能了 <2016-10-23 日 20:23>
+实现的功能包括：
+1. 界面优化。
+2. 分栏展示。左侧为本日统计，右侧为具体计时项。
+3. Clocking gap展示（空闲了xx分钟）。
+4. 鼠标悬浮显示事情所属的项目和类别。
+   
+TODO：
+1. 左侧本日统计继续完善，加上工作学习生活耗时的图表显示。
+
+#+CAPTION: ./imgs/tms-v2/20161023202436.jpg
+[[../static/imgs/tms-v2/20161023202436.jpg]]

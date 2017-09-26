@@ -1,0 +1,251 @@
+#+TITLE: Vim 插件
+#+DATE: 2015-01-02
+#+KEYWORDS: Vim
+
+* Vundle
++ [[https://github.com/gmarik/Vundle.vim]]
+#+BEGIN_QUOTE
+Vundle is short for Vim bundle and is a Vim plugin manager.
+#+END_QUOTE
+** 安装
+git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+** 配置
+安装官方文档进行配置，有几个要点：
+1. call vundle#begin() 和 call vundle#end() 必须要有
+2. call vundle 之前需要关掉 filetype，call vundle 之后需要再次开启 filetype
+** 记录一个 Vundle 相关的坑爹问题 <2015-03-01 日>
+公司有个 Jumbo 包管理工具，我使用它来方便地安装 Vim74。但是它有个不好的地方，
+就是会自己附带一些乱七八糟的 Vim 脚本，其中包括 Vundle。而 Vundle 可能具有
+排他性，一旦加载了 Jumbo 的 Vundle，就会导致我自己的 Vundle 失效，从而产生
+这样的错误：
+#+BEGIN_SRC sh
+E117 Unknown function: vundle#begin
+#+END_SRC
+
+解决方法是删除 Jumbo 附带的 Vundle，而使用我自己的 Vunvle。
+
+排查思路：
+1. 通过 :set rtp 查看我自己的 ~set rtp+=~/.vim/bundle/Vundle.vim~ 命令是否
+   生效
+2. 通过 :scriptnames 查看加载了那些 Vim 脚本，揪出可疑的！
+3. 貌似 Vim 问题排查方法就这三板斧了。
+* 基础插件
+** CtrlP
+这个插件非常赞，甚至比 Emacs 下的 Helm 还要好用，很好地解决了 Vim 下的文件查找问
+题。CtrlP 的快捷键很多，详细见它的文档。
+| 快捷键 | 功能                     | 使用频度 |
+|--------+--------------------------+----------|
+| C-j/k  | 上下移动                 |       10 |
+| C-d    | 切换是否只搜索文件       |        8 |
+| C-z    | 选中文件（以作批量操作） |        5 |
+
++ https://github.com/kien/ctrlp.vim
++ http://happycasts.net/episodes/64
+
+** Undo Tree: gundo.vim
+- [[https://github.com/sjl/gundo.vim]]
+- [[http://sjl.bitbucket.org/gundo.vim/][Gundo: Graph your Vim undo tree in style]]
+
+用法：[[http://sjl.bitbucket.org/gundo.vim/#usage]]
+
+ ~:GundoToggle~
+
+配置：[[http://sjl.bitbucket.org/gundo.vim/#configuration]]
+
+** TODO fugitive
+- https://github.com/tpope/vim-fugitive
+- [[http://vimcasts.org/episodes/fugitive-vim---a-complement-to-command-line-git/][Fugitive.vim - a complement to command line git (movie)]]
+
+看了一下简介视频，感觉这个插件做的很庞大，看起来比 Emacs 下的 magit 还要给力。  
+
+| 功能  | 快捷键 | 使用频率 |
+|-------+--------+----------|
+| Blame | Gblame |          |
+|       |        |          |
+|       |        |          |
+|       |        |          |
+
+** TODO vim-virtualenv
+- https://github.com/jmcantrell/vim-virtualenv
+
+* 程序开发
+** YouCompleteMe
++ https://github.com/Valloric/YouCompleteMe
++ [[http://valloric.github.io/YouCompleteMe/][YouCompleteMe 官网]]
+Google 员工写的快速的，支持模糊搜索的代码补全引擎。
+
+*** 安装
+1. 在 ~.vimrc 中加入 Plugin 'Valloric/YouCompleteMe'，并执行 :VundleInstall
+2. cd ~/.vim/bundle/YouCompleteMe，执行 sh install.sh --clang-completer，静
+   待其安装完成（要等很久）
+3. 从网上借用一份别人的一份 .ycm_extra_conf.py，放到某目录下，并在~/.vimrc
+   里加入 let g:ycm_global_ycm_extra_conf='/path/to/.ycm_extra_conf.py'（我
+   使用了 [[https://gist.github.com/cpradog/aad88d51001ea83ecfc6][cpradog / .ycm_extra_conf.py]]）
+4. 打开一个 C++文件开始感受吧！
+   
+*** Python 支持
+** TODO syntasic
+- [[https://github.com/scrooloose/syntastic]]
+
+* snipmate.vim
+之前代码模板的插件一直使用 code_complete，现在发现 snipmate 看起来更好用，
+所以想升级一下。
+
+由于使用了 Vundle，所以安装过程非常轻松。装好后，发现 snipmate 预装了包含各
+种常用语言非常多的 snippets，初步尝试一下，发现它确实要比 code_complete 要
+好。
+1. 模板展开的快捷键是 tab，和 code_complete 一致，且速度也是飞快
+2. 支持多重编辑（如写 namespace 时同步编辑注释，写 class 名时同步编辑构造函
+   数和析构函数的名字），看来功能要比 code_complete 强的
+3. 自带一批常用的 snippets，让用户更易了解其语法和技巧
+4. 各语言都有单独的文件
+   
+后来又发现 snipmate 的一个新分支： [[https://github.com/garbas/vim-snipmate]] ，
+可能是由于原版 5 年多没更新了，所以有人有再开一个分支继续开发了吧。我先试一
+下这个新的分支。
+
+** 阅读文档
+| 按键             | 功能                                |
+|------------------+-------------------------------------|
+| <c-r><tab>       | 显示所有可用的 snippets             |
+| <前缀><c-r><tab> | 显示指定前缀下的所有可用的 snippets |
+|                  |                                     |
+|                  |                                     |
+|                  |                                     |
+** snippets
+- https://github.com/robhudson/snipmate_for_django
+
+* ctags/cscope/gtags
+- [[http://stackoverflow.com/questions/563616/vim-and-ctags-tips-and-tricks][Vim and Ctags tips and tricks (StackOverflow)]]
+** ctags
+*** 安装
+Mac 自带的 ctags 不好用，一般推荐使用 exuberant ctags。安装方法：
+#+BEGIN_SRC sh
+brew install ctags-exuberant
+#+END_SRC
+
+安装完后，通过 which ctags 确认自己使用的是否是刚刚安装的 ctags，如果不是，
+则修改 PATH 环境变量。
+
+*** 使用
+| 快捷键       | 作用                        | 使用率 |
+|--------------+-----------------------------+--------|
+| C-]          | 跳转到定义处                |     10 |
+| C-t          | 从上次跳转处返回            |     10 |
+| C-w C-]      | 在（垂直）新窗口打开定义    |      9 |
+| :ts[elect]   | 显示匹配上的 tag list       |      9 |
+| :tn[ect]     | 跳转到下一个匹配到的 tag 处 |      8 |
+| :tp[revious] | 跳转到上一个匹配到的 tag 处 |      7 |
+|              |                             |        |
+
+** gtags
+我使用 Emacs 时发现了 Gtags，现在想将之引入到 Vim。
+- [[http://wittyfox.me/p/use-gtags-for-source-code-navigation-in-vim][在 Vim 中使用 Gtags 进行代码导航]]
+* 界面美化
+** vim-colors-solarized
++ https://github.com/altercation/vim-colors-solarized
+从截图上看这个配色和我口味！但实际使用时，感觉太亮了，不过 desert 护眼。暂
+舍弃之！
+
+** molokai
++ https://github.com/tomasr/molokai
+非常有名的配色，实际使用确实也不错，色彩搭配相当合理。但是，但是，光标你怎
+么了？我找不到你了！由于光标不好辨别，故也暂舍弃之！
+
+** vim-airline
++ https://github.com/bling/vim-airline
+还是很炫酷的，不过默认情况下，黑乎乎的一块状态栏不好看，solarized 主题下的
+airline 很美观，但是 solarized 主题太亮了，暂时受不了。看我以后能不能适应
+solarized 主题吧！
+* C/C++ 开发
+** clighter
+- https://github.com/bbchung/clighter
+
+* Go 开发
+** Go 开发
+* Python 开发
+- [[http://www.jeffknupp.com/blog/2013/12/04/my-development-environment-for-python/][My Development Environment For Python]]
+- https://github.com/mbrochh/mbrochh-dotfiles
+** python-mode
+- https://github.com/klen/python-mode   
+- :help python-mode
+*** 跳转和移动
+| 功能         | 快捷键 |   |
+|--------------+--------+---|
+| 跳转到定义处 | C-c g  |   |
+*** 自动补全（rope）
+python-mode 使用 rope 来进行自动补全，感觉速度不够快。
+
+| 功能        | 快捷键            |   |
+|-------------+-------------------+---|
+| 列出类成员  | 输入 . 后自动列出 |   |
+| import 补全 | C-SPC             |   |
+| 列表变量    | C-SPC             |   |
+
+*** 代码调试（ipdb）
+通过 <leader> b 在代码里加断点。加断点的原理其实就是插入下面语句：
+#+BEGIN_SRC python
+import pdb; pdb.set_trace()  # XXX BREAKPOINT 
+#+END_SRC
+
+可以看出，这里使用 [[https://pypi.python.org/pypi/ipdb][ipdb]] 作为代码调试的库。一旦代码执行到断点处，就会弹出类
+似于 gdb 的调试界面，这里叫做 pdb。pdb 支持全部的 gdb 快捷键，例如：n/c/l/p
+等等，也可以当做 Python 解释器来使用，非常方便。
+
+*** 代码重构（rope）
+| 功能               | 快捷键  | 使用频率 |
+|--------------------+---------+----------|
+| 重构变量/方法/类名 | C-c rr  | 很高     |
+| 重构模块名         | C-c r1r | 高     |
+| 整理 import        | C-c ro  | 中等     |
+|                    |         |          |
+
+** Django
+- [[https://code.djangoproject.com/wiki/UsingVimWithDjango][Using Vim with Django]]
+* 前端
+** Emmet (Zen Coding)
+一个快速写 HTML 文件的 Vim 插件，前身叫做 Zen Coding
+
+这篇文章翻译的不错：
+- [[http://www.qianduan.net/zen-coding-a-new-way-to-write-html-code.html][Zen Coding: 一种快速编写 HTML/CSS 代码的方法]]
+  
+#+BEGIN_EXAMPLE
+这里是一个支持的属性和操作符的列表：
+
+E
+元素名称(div, p);
+E#id
+使用 id 的元素(div#content, p#intro, span#error);
+E.class
+使用类的元素(div.header, p.error.critial). 你也可以联合使用 class 和 idID:
+div#content.column.width;
+E>N
+子代元素(div>p, div#footer>p>span);
+E+N
+兄弟元素(h1+p, div#header+div#content+div#footer);
+E*N
+元素倍增(ul#nav>li*5>a);
+E$*N
+条目编号 (ul#nav>li.item-$*5);
+#+END_EXAMPLE
+
+展开的快捷键是 
+#+BEGIN_EXAMPLE
+C-y ,
+#+END_EXAMPLE
+** vim-surround  
+- https://github.com/tpope/vim-surround
+
+基本用法：
+- cst: 改变指定文本的 tag，而不是挨个改
+
+* 回顾
+** 我的 Vim 插件列表里新增了 CtrlP 和 Emmet 两个好用插件 <2015-01-11 日>
+在用上了 Vundle 之后，我发现 Vim 的社区其实不比 Emacs 差。
+
+** 学习了 ipdb，rope 等，看来用 Vim 替代 PyCharm 做 Python 开发指日可待了 <2015-03-22 日>
+这些工具很强大，我对 Vim 社区更加刮目相看了。
+** Gundo，fugitive，以及一个用空格作为 folding 快捷键的技巧 <2015-03-23 一>
+自从 13 年 10 月后，我再也没有像这样大规模地学习 Vim 了，今天的集中学习让我
+受益匪浅啊。Vim 确实是一个理想的工具。

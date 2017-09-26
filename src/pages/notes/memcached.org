@@ -1,0 +1,201 @@
+#+TITLE: Memcached
+#+DATE: 2012-11-25
+#+KEYWORDS: 存储系统
+
+* 前言
+先在内网 Wiki 上看见这段介绍，感觉写得不错。 该介绍将 Memcached 称为快取系
+统。而后端数据库被它称为较慢的系统。
+#+BEGIN_QUOTE
+Memcached 是一套分布式的高速缓存系统，由 LiveJournal 的 Brad Fitzpatrick 开
+发，但目前被许多网站使用。这是一套开放源代码软件，以 BSD license 授权释出。
+memcached 缺乏认证以及安全管制，这代表应该将 memcached 服务器放置在防火墙后。
+memcached 的 API 使用三十二位元的循环冗余校验（CRC-32）计算键值后，将资料分
+散在不同的机器上。当表格满了以后，接下来新增的资料会以 LRU 机制替换掉。由于
+memcached 通常只是当作快取系统使用，所以使用 memcached 的应用程式在写回较慢
+的系统时（像是后端的数据库）需要 额外的程式码更新 memcached 内的资料。
+#+END_QUOTE
+
+* 初识 Memcached
+之后看了日本人写的 Memcached 全面剖析一文，该文章讲得非常简明易懂，很值得国
+内的技术文章作者学习。 略回忆一下，该文章的内容包括：
+1. Memcached 的作用和特点；
+2. 安装 Memcached 并启动，包括在启动参数中指定端口和内存；
+3. Memcached 的客户端的接口（用 perl 为例），stat 指令；
+4. Memcached 使用基于文本的协议，故易用性好（以后可能会改成二进制带 header）；
+5. 分布式原理。各个 Memcached 之间是无法互相感知的，它们只知道 client，而哈希算法也在 client 里搞定（CRC32 哈希以及一致性哈希）；
+6. malloc/free 会导致内存碎片，故使用 Slab 内存分配器。先申请块大内存，再在里面切割成各种 class 的小内存块。从小内存块中选一个最接近的来分配给申请者；
+7. LRU 机制来分配空间（-M 参数）。即当 Slab 分配器发现没有合适的小内存块后，它会删除“最近最少使用”的记录，然后将它的空间分配给新的记录；
+8. Memcached 客户端提供的接口。包括三种保存接口（add, replace, set），两种获取接口（get, get_multi），删除接口（delete），增一和减一接口；
+9. Memcached 的特点：
+   + 协议简单
+   + 基于 libevent 的事件处理
+   + 内置内存存储方式
+   + Memcached 不互相通信的分布式
+
+* 略读了一下 Memcached 的源码 <2012-12-06 四 02:30>
+我从 main 函数开始读起，main 函数位于 memcached.c 文件内。一开始，它先定义了一堆变量并赋以默认值，比如说 lock_memory, max_core 等，然后，它解析命令行参数，来对上述的一堆变量进行设置。当然，最主要的还是对全局变量 settings 进行设置。这些细节咱们先略过不表，直接到 5125 行，来了行眼熟的代码：
+#+BEGIN_SRC cpp
+  main_base = event_init();
+#+END_SRC
+
+接着，初始化 stat/assoc/conn/slabs，并忽略 SIGPIPE，之后在 5142 行，进行工作线程的初始化：
+#+BEGIN_SRC cpp
+  thread_init(settings.num_threads, main_base);
+#+END_SRC
+
+接着进行 assoc 和 slab 相关线程的初始化。之后，通过 server_sockets 函数创建了 UDP 监听 socket 并且绑定它。然后，放弃了权限：
+#+BEGIN_SRC cpp
+  drop_privileges(); // 此行之后，进程将无权限进行 fork(), exec()等
+#+END_SRC
+
+最后，在 5228 行进入了事件的无限循环：
+#+BEGIN_SRC cpp
+  if (event_base_loop(main_base, 0) != 0) {
+       retval = EXIT_FAILURE;
+  }
+#+END_SRC
+
+下面的代码是 Memcached 进程结束的善后工作，略过不表。贴出我对 Memcached 代码的初步印象：
+
+[[../static/imgs/memcached/1.png]]
+
+
+** 研究下线程初始化函数
+初始化函数原型为：
+#+BEGIN_SRC cpp
+thread_init(int nthreads, struct event_base* main_base) //参数分别为线程数以及主事件 base。
+#+END_SRC
+
+首先，函数内部新建了几把线程锁，cache_lock，stats_locks（供 stat 指令用），
+init_lock（供工作线程初始化用），cqi_freelist_lock（供连接队列项的释放链表
+用），以及 init_cond。然后，根据线程数，来去取 power 值，然后根据 power 值，
+调用 hashsize 函数来获得 item_lock_count 锁的数目，随之新建了这些
+item_locks。hashsize 是一个宏：
+#+BEGIN_SRC cpp
+  #define hashsize(n) ((unsigned long int)1<<(n))
+#+END_SRC
+
+注意，5 工作线程以上时，power 恒定为 13，而 item_lock_count 为 26。这代表了
+锁的粒度，粒度越细，并发性能就越高，但是这不是一次函数，锁个数达到一定数目
+后，并发性能的提升将不明显，而且锁的开销将变大，故以 26 为极限。
+
+此外还为 items 新建了个全局锁 item_global_lock。值得注意的是，还通过
+pthread_key_create 来创建了 TSD（线程私有数据）。
+     
+新建完各个线程锁之后，设置了分发线程的 event base 和线程 id
+#+BEGIN_SRC cpp
+  dispatcher_thread.base = main_base;
+  dispatcher_thread.thread_id = pthread_self();
+#+END_SRC
+
+然后，为各工作线程新建管道，并为将 fd 复制给各线程：
+#+BEGIN_SRC cpp
+  threads[i].notify_receive_fd = fds[0];
+  threads[i].notify_send_fd = fds[1];
+#+END_SRC
+
+同时对通过 setup_thread(&threads[i]) 来对各线程进行详细设置，包括各线程的
+event base 的初始化，并在 base 中加入针对 threads[i].notify_receive_fd 的监
+听事件。
+#+BEGIN_SRC cpp
+  event_set(&me->notify_event, me->notify_receive_fd, EV_READ | EV_PERSIST, thread_libevent_process, me);
+
+#+END_SRC
+
+然后为各线程新建连接队列 conn_queue 并初始化，
+#+BEGIN_SRC cpp
+  cq_init(me->new_conn_queue);
+#+END_SRC
+
+之后新建 stats_mutex 锁，以及 suffix_cache（后缀缓存）。
+
+设置好工作线程后，开始启动这些线程了，如下：
+#+BEGIN_SRC cpp
+  for (i = 0; i < nthreads; i++) {
+       create_worker(worker_libevent, &threads[i]);
+  }
+#+END_SRC
+
+然后，锁住 init_lock，一直等到上述各线程都成功运作后，才放锁：
+#+BEGIN_SRC cpp
+  static void wait_for_thread_registration(int nthreads) {
+       while (init_count < nthreads) {
+       pthread_cond_wait(&init_cond, &init_lock);
+       }
+  }
+#+END_SRC
+
+至此，线程初始化函数运行完毕。
+
+
+** 主线程的研究
+Memcached 的线程可以分为主线程和工作线程，主线程负责将连接分发到各工作线程，
+让它们来处理连接。分发函数如下（位于 thread.c 的 393 行）：
+#+BEGIN_SRC cpp
+  void dispatch_conn_new(int sfd, enum conn_states init_state, int event_flags, int read_buffer_size, enum network_transport transport) 
+#+END_SRC
+
+该函数先新建一个 item：
+#+BEGIN_SRC cpp
+  CQ_ITEM *item = cqi_new();
+#+END_SRC
+
+再根据输入的参数设置好这个 item，并将它 push 到 conn queue 中。然后通过“加
+一取余”这种算法来选一个工作线程，并通过向通向该线程的单向管道写入一个'c'的
+方式来通知它处理这个 item。
+
+分发函数如何被触发？ 在 main 函数，5184 行，通过调用 server_sockets 来监听
+socket 并绑定端口
+#+BEGIN_SRC cpp
+  server_sockets(settings.port, tcp_transport, portnumber_file);
+#+END_SRC
+
+** 项目中的各文件
+- assoc.c: 该模块提供了根据 key 找 item，item 的插入和删除等功能。内部维护
+  着一个 primary_hashtable 和一个 old_hashtable，当调用 assoc_expand 时，将
+  会 calloc 新的哈希表，地址赋给 primary_table,而把老的 primary_hashtable
+  记作 old_hashtable。
+
+- cache.c: 该模块提供了 cache 的创建（完全线程安全），cache 的销毁，cache
+  元素（object）的分配和释放。值得注意的是 cache_t 结构体，它的字段包括
+  cache 锁，cache 名字，cache 缓冲区的二维指针，cache 中每个元素的 size，元
+  素列表的容量，剩下的自由元素量。此外，还包括一个构造器和析构器：
+  cache_constructor_t，cache_destructor_t，因为 cache 中的元素是 object，而
+  不是普通的字节流。
+
+- daemon.c: 这一块比较简单，它提供了 daemonize 函数，能够把一个进程变成守护
+  进程。代码略像 APUE 里面守护进程一章的示例代码。
+
+- hash.c: 
+     主要提供了一个哈希函数，接口为 uint32_t hash( const void *key, size_t length, const uint32_t initval)，该 hash 函数针对大端和小端各有不同的实现。此外，还提供了三个宏：rot，mix，final。在 hash 函数中，会对 key 进行三位三位的 mix(a,b,c)操作，再见过一系列复杂的工序后，执行 final(a,b,c)，将结果混杂到 c，最后输出 c。
+     该 hash 函数被谁调用？
+
+- items.c: 
+     提供了对 items 的各种底层操作接口，如 alloc/free/link/unlink/remove/update/replace/stats/get/touch 等等。所谓 item，指的就是缓存在内存中的 k-v 对，memcached 维护者它们。从内存中获取 k-v 对，比从磁盘中通过 sql 查询速度快，这就是 memcached 存在的意义。
+     LRU？
+
+- memcached.c: 主模块，man 函数就在此，代码里也最多，5000 多行。该模块的函
+  数可以分为几大类：
+  1. 连接处理的接口，处理与 client 的连接。包括：连接新建/初始化，连接释放/关闭/清理/shrink 等。
+  2. binary 形式的通信接口，binary 与文本型的协议相对
+  3. 处理 server 端指令的函数，如 stat，delete token，slabs automove
+  4. 服务端监听 socket 的建立和端口的绑定，即 server_socket 相关函数
+  5. event 相关函数，包括连接事件的更新和 clock event 的添加
+
+- protocol_binary.h
+- sasl_defs.c
+- sizes.c
+- slabs.c
+- solaris_priv.c
+- stats.c
+
+- thread.c: 该模块的函数可以分为几大类：
+  1. item 的操作接口集，是对 items.c 中底层接口的封装，其中有获取 hv 的操作，并据此来确定该锁那把 item 锁
+  2. 连接队列的操作集，包括连接队列的初始化，压入/弹出元素，新建/释放元素
+  3. 线程相关函数
+  4. event 的回调函数
+
+- timedrun.c
+- trace.h
+- util.c
+

@@ -1,0 +1,193 @@
+#+TITLE: MySSG
+#+DATE: 2016-03-14
+
+* 前言
+用了 Nanoc 一年多了，发现它有一些让我不满意的地方：
+- 是 Ruby，不是 Python，我用得不够利索。
+- Nanoc 使用 ERB 作为模板引擎，感觉 erb 挺难管理的，主要原因是不支持模板继
+  承，我很怀念 Python 下的 Jinja2。
+- Rules 文件可以更简单一些，如果能做到像 Google Blaze 的 BUILD 文件一样简单
+  就好了。
+  
+但是让我折回使用一些普通的 SSG，如 Jekyll/Pelican 等，又担心它们的
+Hackablity 不够。于是，干脆自己尝试搞一套，略估算一下，代价不算高。
+
+我想短时间内搞一个简单版，现将 Nanoc 给彻底替换掉。之后继续完善。我想要的高
+级特性包括：
+- 实时监听文件的变化，自动分析依赖，并在浏览器上自动刷新页面。
+- 摆脱对 Emacs Org mode 的内置 org-publish 的依赖，引入完善的 Org->HTML 的
+  工具。如果开源界不好用，则自己实现一个。
+- 基于 Org 的时间管理，包括一个 Org 计时信息->HTML 的 Filter，一批对汇集后
+  的计时信息进行统计分析的函数，一个更快的方便分析的数据集（目前想基于
+  SQLAlchemy + SQlite in Memory 来实现）。我想让我对时间管理的任何操作，都
+  能实时展示到页面上。
+
+* 资料收集
+** SSG
+- https://github.com/nanoc/nanoc
+- https://github.com/jekyll/jekyll
+- https://github.com/getpelican/pelican
+- https://github.com/hexojs/hexo
+
+** 事件监听
+- [[https://github.com/lepture/python-livereload]]  - 基于 pyinotify
+- https://github.com/gevent/gevent  - 基于 libev
+
+** 数据分析
+- [[http://docs.sqlalchemy.org/en/rel_1_0/dialects/sqlite.html][SQLAlchemy Sqlite3 in Memory]]
+
+* 设计
+** 设计简述
+首先，需要一个 *Item* ，它是 SSG 中最重要的实体，它的基本属性包括 uri，
+extension， ~update_time~ ，content 等，还有一些扩展的属性。还需要一个
+*Reader* ，它负责监听一个或者多个目录，将文件从磁盘加载到内存里，构造 Item，
+并 set 好各属性。
+
+对于一个加载到内存里的 Item，我们需要根据它的 extension 和 uri 对它进行做不
+同的处理，所以我们引入了 *Filter* 这个概念。例如，对于 org 文件，我们需要将
+它转化为 HTML，这时就需要一个 OrgFilter，它将 Item 的 content 由 Org 格式转
+化为 HTML 格式，同时，还要从 Org 文件中抽取出 ~create_time~ ，tags，title
+等扩展属性。一个 Item 可以经过任意多次的 Filter。
+
+经过 Filter 之后，Item 算是处理完毕，这时，我们要通过模板引擎将它转化为真正
+的网页并写到某处，这个过程叫做 *Layout* ，这个组件叫做 *Writer* 。
+
+最后的问题，就是这些 Items 中的每个 Item，该执行那些 Filters，通过哪个模板
+进行 Layout，最终生成的网页的 url 是啥，这些行为通过一个叫做 *Router* 的模
+块来控制。
+
+** 路由
+所谓路由，就是为每个 Item 寻找一个模板，寻找一组 Filters，并且输出为跟其
+uri 相关联的某个路径的一组文件。
+
+* 自动刷新
+调研了一下 Flask 是如何实现自动刷新的，发现它依赖 werkzeug 的 serving.py。
+详细了解了一下，werkzeug 会判断是否有 pyinotify。如果有则使用它，如果没有，
+则粗暴地使用遍历代码目录，通过文件 mtime 来判断是否有变化，有变化，则直接重
+启服务器。
+
+pyinotify 在 Mac 下不可用，我找到了 watchdog：
+- https://github.com/gorakhargosh/watchdog
+  
+** 第一版实现
+第一版我做了简单实现，原理和 Flask 类似，就是暴力轮询判断数据源文件的 mtime。
+代码很简单，如下：
+#+BEGIN_SRC python
+class MySSG(object):
+    def __init__(self, settings=None):
+        self.settiongs = settings
+        self.all_items = None
+
+    def run(self):
+        # 代码省略
+
+    def watch_items(self):
+        while True:
+            for item in self.all_items:
+                new_mtime = get_modify_datetime(item.path)
+                if new_mtime != item.mtime:
+                    logging.warning(' * Detected change in %r, reloading' % item.path)
+                    return
+            time.sleep(1)
+
+
+if __name__ == '__main__':
+    while True:
+        my_ssg = MySSG()
+        my_ssg.run()
+        my_ssg.watch_items()
+#+END_SRC
+
+* 模板
+** 全局变量
+有些变量希望所有的模板都能访问到，即使没有在render函数里传入它们。这些变量
+包括Item全集，各种类型的Item全集（如读书笔记全集，照片全集等等）。所以需要
+能够自定义一些全局变量。
+
+* 核心 Filters
+** add_toc
+
+* 全文搜索  <#fullsearch>
+可以了解一下 Sphinx 是如何实现的。
+- [[http://www.sphinx-doc.org/en/stable/web/quickstart.html#performing-searches][Sphinx Performing Searches]]
+- [[http://www.sphinx-doc.org/en/stable/web/searchadapters.html][Sphinx Search Adapters]]
+  
+经过了解，很遗憾，Sphinx 并非基于静态网页和 Javascript 实现全文搜索，而是通
+过后端起一个 Web 服务来实现全文搜索。
+
+- [[http://blog.caoyue.me/post/whoosh-search][Whoosh 全文搜索]]
+  
+#+BEGIN_SRC python
+# -*- coding: utf-8 -*-
+
+import logging
+
+from whoosh import index
+from whoosh.fields import Schema, ID, TEXT
+from whoosh.analysis import StemmingAnalyzer
+from whoosh.qparser import QueryParser
+
+
+class Searcher(object):
+    schema = Schema(path=ID(stored=True, unique=True),
+                    title=TEXT(field_boost=2.0, stored=True),
+                    text=TEXT(analyzer=StemmingAnalyzer(), stored=True))
+
+    def __init__(self):
+        self.index_path = '.index'
+        if index.exists_in(self.index_path):
+            self.index = index.open_dir(self.index_path)
+        else:
+            self.index = index.create_in(self.index_path, schema=self.schema)
+        self.qparser = QueryParser('text', self.schema)
+        self.index_writer = self.index.writer()
+        self.index_searcher = self.index.searcher()
+
+    def add_document(self, item):
+        self.index_writer.add_document(title=unicode(item.title), 
+                                       text=unicode(item.content), path=unicode(item.uri))
+        logging.warning('%s is indexed' % (str(item)))
+
+    def commit(self):
+        self.index_writer.commit()
+
+    def search(self, q):
+        results = self.index_searcher.search(self.qparser.parse(q))
+        return results
+
+if __name__ == '__main__':
+    searcher = Searcher()
+    q = 'test'
+    results = searcher.search(q)
+    for result in results:
+        print(result)
+#+END_SRC
+
+* 问题记录
+** TODO 如何将项目根目录加入 PYTHONPATH
+临时解法：
+#+BEGIN_SRC python
+import sys
+sys.path.append('./')
+#+END_SRC
+
+** TODO 中文处理
+#+BEGIN_SRC python
+reload(sys)
+sys.setdefaultencoding('utf-8')
+#+END_SRC   
+** DONE highlight.js未生效
+已经引入，函数确认调用。但是代码并未如期高亮。了解了了一下，发现可能是需要
+到官方是定制一个程序包。
+
+后来，确认确实是npm install的东西是未打包的，需要额外到官网下载一个。这点的
+确挺坑的。
+
+** TODO URL中存在中文时转化有问题
+下面第一行为原URL，第二行为转化后的URL。   
+#+BEGIN_SRC sh
+https://zh.wikipedia.org/wiki/%E8%AB%96%E5%8B%95%E9%AB%94%E7%9A%84%E9%9B%BB%E5%8B%95%E5%8A%9B%E5%AD%B8
+https://zh.wikipedia.org/wiki/%25E8%25AB%2596%25E5%258B%2595%25E9%25AB%2594%25E7%259A%2584%25E9%259B%25BB%25E5%258B%2595%25E5%258A%259B%25E5%25AD%25B8
+#+END_SRC
+
+** TODO 通过BEGIN_HTML嵌入<iframe>会导致用BS4抽取h1~h6出现问题

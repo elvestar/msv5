@@ -1,0 +1,81 @@
+#+TITLE: Google gflags
+#+DATE: 2015-12-16
+
+* 代码实现
+** DEFINE_string
+#+BEGIN_SRC cpp
+#define DEFINE_string(name, val, txt)                                       \
+  namespace fLS {                                                           \
+    using ::fLS::clstring;                                                  \
+    static union { void* align; char s[sizeof(clstring)]; } s_##name[2];    \
+    clstring* const FLAGS_no##name = ::fLS::                                \
+                                   dont_pass0toDEFINE_string(s_##name[0].s, \
+                                                             val);          \
+    static gflags::FlagRegisterer o_##name(                       \
+        #name, "string", MAYBE_STRIPPED_HELP(txt), __FILE__,                \
+        s_##name[0].s, new (s_##name[1].s) clstring(*FLAGS_no##name));      \
+    extern GFLAGS_DLL_DEFINE_FLAG clstring& FLAGS_##name;                   \
+    using fLS::FLAGS_##name;                                                \
+    clstring& FLAGS_##name = *FLAGS_no##name;                               \
+  }                                                                         \
+  using fLS::FLAGS_##name
+#+END_SRC
+
+要点：
+1. 目前，clstring 默认就是 std::string。代码： ~typedef std::string clstring;~
+   
+** DEFINE_bool/DEFINE_int32 ...
+#+BEGIN_SRC cpp
+#define DEFINE_bool(name, val, txt)                                     \
+  namespace fLB {                                                       \
+    typedef ::fLB::CompileAssert FLAG_##name##_value_is_not_a_bool[     \
+            (sizeof(::fLB::IsBoolFlag(val)) != sizeof(double)) ? 1 : -1]; \
+  }                                                                     \
+  DEFINE_VARIABLE(bool, B, name, val, txt)
+
+#define DEFINE_int32(name, val, txt) \
+   DEFINE_VARIABLE(gflags::int32, I, \
+                   name, val, txt)
+#+END_SRC
+
+#+BEGIN_SRC cpp
+#define DEFINE_VARIABLE(type, shorttype, name, value, help)             \
+  namespace fL##shorttype {                                             \
+    static const type FLAGS_nono##name = value;                         \
+    /* We always want to export defined variables, dll or no */         \
+    GFLAGS_DLL_DEFINE_FLAG type FLAGS_##name = FLAGS_nono##name;        \
+    type FLAGS_no##name = FLAGS_nono##name;                             \
+    static gflags::FlagRegisterer o_##name( \
+      #name, #type, MAYBE_STRIPPED_HELP(help), __FILE__,                \
+      &FLAGS_##name, &FLAGS_no##name);                                  \
+  }                                                                     \
+  using fL##shorttype::FLAGS_##name
+#+END_SRC
+   
+** FlagRegisterer
+
+#+BEGIN_SRC cpp
+FlagRegisterer::FlagRegisterer(const char* name, const char* type,
+                               const char* help, const char* filename,
+                               void* current_storage, void* defvalue_storage) {
+  if (help == NULL)
+    help = "";
+  // FlagValue expects the type-name to not include any namespace
+  // components, so we get rid of those, if any.
+  if (strchr(type, ':'))
+    type = strrchr(type, ':') + 1; 
+  FlagValue* current = new FlagValue(current_storage, type, false);
+  FlagValue* defvalue = new FlagValue(defvalue_storage, type, false);
+  // Importantly, flag_ will never be deleted, so storage is always good.
+  CommandLineFlag* flag = new CommandLineFlag(name, help, filename,
+                                              current, defvalue);
+  FlagRegistry::GlobalRegistry()->RegisterFlag(flag);   // default registry
+}
+#+END_SRC
+
+要点：
+1. 两个 ~FlagValu~ e，一个存储当前值，一个存储默认值
+2. 使用这两个 FlagValue 来构造 ~CommandLineFlag~
+3. 调用 ~RegisterFlag()~ 来将这个 flag 注册，注册后，flag 的指针将被接管
+
+** RegisterFlagValidator

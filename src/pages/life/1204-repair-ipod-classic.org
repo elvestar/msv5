@@ -1,0 +1,61 @@
+#+TITLE: 自己动手修理 IPC
+#+DATE: 2012-04-24
+
+2012 年 4 月 24 日 10 点多，我在回龙观站等地铁的时候，我的IPC被我不小心连着
+摔了两次，捡起来后发现它在重启，重启后出现了红叉和网址。两年来，我的IPC摔了
+无数次，但是都没摔坏，而这次，陪伴我两年的IPC终于坏掉了。
+#+CAPTION: IPC摔坏了
+[[../static/imgs/1204-repair-ipod-classic/IMG_20120424_222751.jpg]]
+
+但是我舍不得扔掉它，我在寻求挽救的方法。几年前我就听人说过IPC可以换CF卡，这
+样比硬盘稳定，续航还高，音质不变。所以我准备给它换成 CF 卡。
+
+于是我在网上到处搜集文章，在淘宝上找相应的配件以及IPC拆机工具。
+- [[http://bbs.imp3.net/thread-831406-1-1.html][IPOD classic 换CF卡成功！！！陆续更新测试成功的CF卡 - 苹果 Apple - iMP3随身影音]]
+- [[http://www.erji.net/read.php?tid=1143952][IPC改CF卡的疑问]]
+- [[http://tieba.baidu.com/f?kz=651035751][动手贴 ipod video 30g 硬盘自己改cf闪存卡&刷rockbox 图片更新_ipod吧_百度贴吧]]
+- [[http://bbs.imp3.net/thread-10236737-1-1.html][白菜哥出品。。。ipc拆解详细过程。。。。。 - 随身听 - iMP3随身影音]]
+  
+到了5月11日，我预先买的拆机工具到货了，当晚我就开始拆IPC先看看内部。在拆卸
+的过程中，由于我不懂后壳倒钩的构造，导致屏幕被我用刮片顶坏了。那天晚上，我
+望着IPC的尸体，万念俱灰，我觉得它已经没救了，死透了。
+#+CAPTION: IPC屏幕被我弄坏了
+[[../static/imgs/1204-repair-ipod-classic/IMG_20120512_004140.jpg]]
+
+第二天起床后，我又摆弄起我的IPC，我不甘心就这么把用了两年的 MP3 给抛弃了。
+我继续往下拆，发现屏幕很容易取下来，这就意味着，坏掉的屏幕是可以更换的！于
+是我去淘宝搜下，看有没有卖屏幕的，结果找到了（万能的淘宝）。此时我心中萌发
+了一种意念，那就是：我一定要把我的 IPC 给救活！于是我逛了一圈淘宝，依次购买
+了 CF 转 CE 转接卡，16G 133x CF 卡，IPC液晶屏幕。等它们到齐时，我会开启我的
+IPC的涅槃之路，届时我一定要小心！
+#+CAPTION: IPC屏幕是可更换的
+[[../static/imgs/1204-repair-ipod-classic/IMG_20120512_134511.jpg]]
+
+5月14日，所有东西都到到齐了。晚上回家后我对 IPC 施放了复活术（等级 1），
+BOSS 喊道："复活嘛我的勇士"。
+#+CAPTION: CF卡，CF转CE转接卡，IPC液晶屏幕
+[[../static/imgs/1204-repair-ipod-classic/IMG_20120514_172624.jpg]]
+
+换屏幕和换CF卡不是很难，最难的步骤实际上是拆卸，IPC被设计为很难拆卸的，甚至
+加装了不可逆的倒钩，这个前天我已经体验过了。
+#+CAPTION: ../static/imgs/1204-repair-ipod-classic/IMG_20120514_214857.jpg
+[[../static/imgs/1204-repair-ipod-classic/IMG_20120514_214857.jpg]]
+
+CF卡和屏幕都装好后，我忐忑地将IPC插上电脑，打开iTunes，尝试为它恢复系统。
+#+CAPTION: 通过iTunes来恢复IPC系统
+[[../static/imgs/1204-repair-ipod-classic/IMG_20120514_215932.jpg]]
+
+之后一路很顺利，我的IPC重现了久违的界面！插上耳机，发现音质没有下降，换了CF
+卡之后，推力感觉甚至更强了。
+#+CAPTION: 复活的IPC
+[[../static/imgs/1204-repair-ipod-classic/IMG_20120514_231309.jpg]]
+
+至此，我修好了我的IPC，我又可以愉快地听着它上下班了！之前，我的IPC上有好几
+千首歌，换了CF卡之后，IPC存储容量从120G骤减到16G，里面只放了几百首歌。但是
+毫无影响，因为之前的几千首歌之中，绝大部分我都是不怎们听的。
+
+数日之后，我买的创新HD50音箱到了，我购买它的主要原因之一是它附送了一个iPod
+底座和遥控，这很好玩。
+#+CAPTION: 创新HD50音箱
+[[../static/imgs/1204-repair-ipod-classic/IMG_20120516_220828.jpg]]
+          

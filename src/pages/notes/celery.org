@@ -1,0 +1,19 @@
+#+TITLE: Celery: 分布式任务队列
+#+DATE: 2015-05-23
+
+* 前言
+Celery 是一个简单，灵活和可靠的分布式任务队列系统，面向大规模消息的实时处理，
+同时也支持任务调度。
+
+简单地说，Celely 就是用来运行和管理大量长耗时（Time-consuming）的 Python 函
+数的框架。处理这种长耗时任务的策略，一种是选用异步的客户端，还有一种是使用
+Celery 这样的任务队列系统。
+
+** 什么是任务队列？
+
+* 资料收集
+** 文档
+- http://celery.readthedocs.org/en/latest/
+-
+  [[http://celery.readthedocs.org/en/latest/django/first-steps-with-django.html]]
+ （与 Django 集成）

@@ -1,0 +1,291 @@
+#+TITLE: AngularUI
+#+DATE: 2015-04-19
+#+KEYWORDS: Angular
+
+AngularUI 据说是 AngularJS 社区的精品，但是它的文档极不健全，就像很多其他
+AngularJS 第三方库一样。
+- [[https://github.com/angular-ui]]
+
+* 资料收集
+** 文档
+- [[https://angular-ui.github.io/]]
+- 
+
+** 文章
+- [[https://scotch.io/tutorials/angularjs-multi-step-form-using-ui-router][AngularJS Multi-Step Form Using UI Router]]
+
+* 安装
+安装 AngularJS 和 AngularUI 一个户口本。
+#+BEGIN_SRC sh
+bower install angular
+bower install angular-animate        
+bower install angular-ui-utils
+bower install angular-ui-router
+bower install angular-bootstrap # 不是 angular-ui-bootstrap
+#+END_SRC
+
+* UI-Router 
+- [[https://scotch.io/tutorials/angular-routing-using-ui-router][AngularJS Routing Using UI-Router]]
+
+** URL Parameters
+注意，ui-router 注入的是 ~$stateParams~ ，而 ng-route 注入的是
+~$routeParams~ ，不要弄混了！
+
+** ui-router VS ng-route
+AngularJS 本身附带一个 Route 的模块，叫做 angular-route，而 AngularUI 也提
+供了一个第三个的 Route 模块，也就是 ui-router。它们两个的有啥差别呢？
+StackOverflow 有个回答看起来不错：
+#+BEGIN_QUOTE
+Here are some common reason ui-router is chosen over ngRoute:
+
+ui-router allows for nested views and multiple named views. This is very
+useful with larger app where you may have pages that inherit from other
+sections.
+
+ui-router allows for you to have strong-type linking between states based
+on state names. Change the url in one place will update every link to that
+state when you build your links with ui-sref. Very useful for larger
+projects where URLs might change.
+
+There is also the concept of the decorator which could be used to allow
+your routes to be dynamically created based on the URL that is trying to be
+accessed. This could mean that you will not need to specify all of your
+routes before hand.
+
+states allow you to map and access different information about different
+states and you can easily pass information between states via $stateParams.
+
+You can easily determine if you are in a state or parent of a state to
+adjust UI element (highlighting the navigation of the current state) within
+your templates via $state provided by ui-router which you can expose via
+setting it in $rootScope on run.
+
+In essence, ui-router is ngRouter with more features, under the sheets it
+is quite different. These additional features are very useful for larger
+applications.
+#+END_QUOTE
+- [[http://stackoverflow.com/questions/21023763/difference-between-angular-route-and-angular-ui-router][Difference between angular-route and angular-ui-router]]
+  
+** Multiple Named Views
+- [[https://github.com/angular-ui/ui-router/wiki/Multiple-Named-Views]]
+  
+简单地说，就是一个一个模板里面可以有多个 ui-view，每个 ui-view 都有自己的模
+板的 Controller。
+
+** ui-sref 相关
+
+拼接参数：
+#+BEGIN_SRC html
+ <a ui-sref=".({cluster_path: clusterPath + '/' + hdfsFile['Name']})">
+    {{ hdfsFile['Name'] }}
+</a>
+#+END_SRC
+
+** 进入某状态时自动跳转到它的某个子状态，且 URL 不变 
+实现起来，要点有两个：
+1. 子状态 url 设置为 null
+2. 父状态将一个 $watch，当其加载成功后，跳转到子状态
+
+示例如下：
+
+#+BEGIN_SRC js
+    .state('minos.log', {
+        url: '/log/{log_module_id:int}',
+
+            ...
+            $scope.state = $state;
+            $scope.$watch('state.current', function(v) {
+                if(v.name=='minos.log') {
+                    $state.go('minos.log.flow_status');
+                };
+            }, true);
+        }
+    })
+    .state('minos.log.flow_status', {
+        url: null,
+        templateUrl: minos_base_url + 'flow_status.html'
+    })
+#+END_SRC
+
+参考： 
+- http://stackoverflow.com/questions/24960288/angular-js-ui-router-how-to-redirect-to-a-child-state-from-a-parent
+
+** 监控 state 的变化
+#+BEGIN_SRC js
+.run(function($rootScope, $http, $log) {
+    $rootScope.$on('$stateChangeSuccess',
+        function(event, toState, toParams, fromState, fromParams){
+            var postData = {
+                'action': 'visit',
+                'url': window.location.href
+            };
+            // 记录用户访问信息
+            $http.post('/api/v3.0/user_behavior/', postData)
+                .success(function(data, status) {
+                })
+                .error(function(data, status) {
+                    $log.error('记录用户行为失败，后端返回：' + data)
+                });
+        })
+})
+#+END_SRC
+   
+注意：
+- 需要再 run 里面加上监控。如果加在某个 Controller 上时，在刷新或者首次进入
+  应用时，不会触发 ~$stateChangeSuccess~ 
+
+* UI-Bootstrap
+- http://angular-ui.github.io/bootstrap/
+
+** Pagination 分页
+- [[https://angular-ui.github.io/bootstrap/#/pagination]]
+  
+HTML 代码：
+#+BEGIN_SRC html
+<table>
+...
+<tr ng-repeat="logConfig in pagedLogConfigs">
+</tr>
+...
+<table>
+
+<pagination ng-model="currentPage"
+            total-items="logConfigs.length"
+            max-size="maxSize"
+            boundary-links="true">
+</pagination>
+#+END_SRC
+
+JS 代码：
+#+BEGIN_SRC javascript
+.controller('productCtrl', function($scope, $stateParams, $http) {
+     var noah_node_id = $stateParams.xxx_id;
+     $http.get('/api/log_configs?noah_node_id=' + noah_node_id)
+         .success(function(data, status) {
+             $scope.logConfigs = data;
+
+             // 分页在这里
+             $scope.pagedLogConfigs = [];
+             $scope.currentPage = 1;
+             $scope.numPerPage = 10;
+             $scope.maxSize = 5;
+             $scope.$watch("currentPage + numPerPage", function() {
+                 var begin = (($scope.currentPage - 1) * $scope.numPerPage);
+                 var end = begin + $scope.numPerPage;
+
+                 $scope.pagedLogConfigs = $scope.logConfigs.slice(begin, end);
+             });
+         });
+
+ })
+#+END_SRC
+
+得到的分页效果如下：
+
+#+CAPTION: ./imgs/angular-ui/20150425170313.png
+[[../static/imgs/angular-ui/20150425170313.png]]
+** 问题：tooltip 组建和 Angular-Strap 冲突
+解法：弃用 ui-bootstrap。
+
+** 问题：$modal.open is not a function
+被折腾了很久，最后查明，原来又是 ui-bootsctrap 和 angular-strap 冲突导致的。
+augular-strap 这个库不靠谱啊，我决定弃用它了。
+
+** Modal 的用法
+按照 angular-ui 官网介绍的 Modal 用法，我们需要定义两个 Controller。我觉得
+没必要，所以将 Modal Instance 的 Controller 直接当场定义了，如下：
+
+#+BEGIN_SRC js
+    .controller('logConfigModalCtrl', function ($scope, $modal, $log) {
+        $scope.open = function () {
+            var modalInstance = $modal.open({
+                animation: true,
+                templateUrl: 'log_config_modal.html',
+                scope: $scope,
+                controller: function($scope, $modalInstance) {
+                    $scope.ok = function () {
+                        $modalInstance.dismiss('cancel');
+                    };
+                }
+            });
+        };
+    })
+#+END_SRC
+
+** progressbar
+注意点：只有当确保 modal 初始化好后，再传入 progressbar。可以借助 ng-if。例
+如：
+#+BEGIN_SRC html
+<div class="row" ng-if="tailProgress">
+    <progress>
+        <bar value="tailProgress.begin" type="success"><i>{{ tailProgress.begin }}% 未被 Tail</i></bar>
+        <bar value="tailProgress.end - tailProgress.begin" class="progress-striped active" type="primary"><i>{{ tailProgress.tailing }}% 正在被 Tail</i></bar>
+        <bar value="100 - tailProgress.end" type="info"></bar>
+    </progress>
+</div>
+#+END_SRC
+* UI-Select
+关于如何使用这个组件：仔细阅读它的 Wiki：
+- [[https://github.com/angular-ui/ui-select/wiki]]
+  
+有个注意点，即只写 <ui-select>...</ui-select> 的话，AngularJS 会报错，需要
+把 <ui-select-match> 和 <ui-select-choices> 一起补全。例如：
+#+BEGIN_SRC html
+    <label>产品线</label>
+    <ui-select ng-model="logConfig.product_line" theme="bootstrap">
+        <ui-select-match placeholder="选择产品线">
+            {{ $select.selected.path }}
+        </ui-select-match>
+        <ui-select-choices repeat="productLine in productLines | filter: $select.search">
+            <div ng-bind-html="productLine.name | highlight: $select.search"></div>
+            <div ng-bind-html="productLine.path | highlight: $select.search"></div>
+        </ui-select-choices>
+    </ui-select>
+#+END_SRC
+
+它拥有三个主题：
+- Bootstrap 风格
+- Select2 风格（就是把输入用框 "夹" 起来）
+- Selectize 风格（挺漂亮的，[[http://brianreavis.github.io/selectize.js/][官网在此]] ）
+
+** ui-select 与大数据集 <2015-05-06 三>
+我发现当数据集很大时（超过 2000），ui-select 会表现的特别慢。Google 一下，没有
+找到好的解法。我的临时决定是：只在数据量小的时候使用它，数据量大时，尝试其
+它的比如 ui-bootsrap 里的 Typeahead 这样的组件。
+
+我看了下 [[http://angular-ui.github.io/bootstrap/#/typeahead][ui-bootstrap Typeahead 的官方文档]] ，改了一版实现：
+
+#+BEGIN_SRC html
+    <label>产品线</label>
+    <input type="text"
+           ng-model="logConfig.noah_node_id"
+           typeahead="productLine for productLine in productLines | limitTo:8"
+           class="form-control"
+            />
+#+END_SRC
+
+发现速度非常快，赞。 ~但是~ ，我注意到 typeahead 后面有个 ~limitTo:8~ 的过
+滤器，我怀疑是它让 Typeahead 快的！我尝试将它加到 ui-select 的
+ui-select-choices 后面，如下：
+
+#+BEGIN_SRC html
+    <label>产品线</label>
+    <ui-select ng-model="logConfig.product_line" theme="bootstrap">
+        <ui-select-match placeholder="选择产品线">
+            {{ $select.selected.path }}
+        </ui-select-match>
+        <ui-select-choices repeat="productLine in productLines | filter: $select.search | limitTo:20">
+            <div>
+                <span ng-bind-html="productLine.name | highlight: $select.search"></span>
+                <small ng-bind-html="'node id: ' + productLine.noah_node_id | highlight: $select.search" class="pull-right"></small>
+            </div>
+            <div ng-bind-html="productLine.path | highlight: $select.search"></div>
+        </ui-select-choices>
+    </ui-select>
+#+END_SRC
+
+发现速度也非常快！至此，较大数据集下 ui-select 的性能问题已经解决，同时，我
+觉得 ui-select 是个不错的东西，是个精品，再赞之。最后附上效果图：
+
+#+CAPTION: ./imgs/angular-ui/20150506213524.png
+[[../static/imgs/angular-ui/20150506213524.png]]

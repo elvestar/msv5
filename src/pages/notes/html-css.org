@@ -1,0 +1,70 @@
+#+TITLE: HTML 和 CSS
+#+DATE: 2015-01-18
+#+KEYWORDS: HTML, CSS, 前端
+
+* Tips: 设置 height: 100% 导致 body 与屏幕等高而不是和全部页面等高
+解法：去掉 height: 100%
+
+* CSS 选择
+- div > a 选择的是 div 子节点中的 a 节点
+- div a 选择的是 div 的后代节点中的 a 节点
+- div, a 选择的 div 节点和 a 节点
+
+** 兄弟选择器
+- + 是选择相邻兄弟
+- ~ 是选择通用兄弟（不需要相邻）
+* img
+** 在浏览器端将图片链接转化为BASE64形式并传递到后端 <2016-08-16 二 15:19>
+要点：
+1. 先通过img的url来构造canvas，再通过canvas的 ~toDataURL~ 生成BASE64编码。
+2. img必须将 ~crossOrigin~ 设置为Anonymous，否则会报 ~tainted canvases may not be
+   exported~ 这样的错误。
+3. 提供img的远端服务器必须在返回img时在header设置
+   ~Access-Control-Allow-Origin~ 。
+
+#+BEGIN_SRC html
+<div class="form-group">
+    <label class="col-md-2 control-label">封面</label>
+    <div class="col-md-6">
+        <img id="bookCover" crossOrigin="Anonymous" src="" alt=""/>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label">封面（base64）</label>
+    <div class="col-md-6">
+        <img id="bookCoverBase64" src="" alt=""/>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        <button id="downloadImage" type="button" class="btn btn-info">下载图片</button>
+    </div>
+</div>
+#+END_SRC
+
+#+BEGIN_SRC js
+function getBase64Image(img) {
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    var dataURL = canvas.toDataURL("image/png");
+    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+}
+$('#downloadImage').click(function() {
+    var img = document.getElementById("bookCover")
+    var base64 = getBase64Image(img);
+    $('#bookCoverBase64').attr('src', base64)
+
+});
+#+END_SRC   
+
+参考：
+1. [[http://stackoverflow.com/questions/20424279/canvas-todataurl-securityerror][javascript - canvas.toDataURL() SecurityError - Stack Overflow]]
+
+* 问题记录
+** 使用flex特性后，pre标签的宽度过大，挤压同列元素 <2016-08-06 六 15:41>
+解决方法：为pre标签设置 ~white-space: pre-wrap;~ ，然后就恢复正常了。原因还
+不知道。

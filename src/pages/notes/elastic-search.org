@@ -1,0 +1,122 @@
+#+TITLE: Elastic Search
+#+DATE: 2016-09-19
+
+* 前言
+我的个人知识管理系统需要全文搜索功能，之前我使用了Python下的Whoosh来实现的，
+用着用着发现它有点简陋，这时我将目标瞄向了更强大的Elasticsearch。这种行为无
+异于杀鸡焉用宰牛刀，我就有一个同事装个WordPress都要折腾一番HHVM，这种行为非
+常炫酷，曽让我艳羡不已。
+
+#+BEGIN_QUOTE
+Elasticsearch所涉及到的每一项技术都不是创新或者革命性的，全文搜索，分析系统
+以及分布式数据库这些早就已经存在了。它的革命性在于将这些独立且有用的技术整
+合成一个一体化的、实时的应用。它对新用户的门槛很低，当然它也会跟上你技能和
+需求增长的步伐。
+
+如果你打算看这本书，说明你已经有数据了，但光有数据是不够的，除非你能对这些
+数据做些什么事情。
+
+很不幸，现在大部分数据库在提取可用知识方面显得异常无能。的确，它们能够通过
+时间戳或者精确匹配做过滤，但是它们能够进行全文搜索，处理同义词和根据相关性
+给文档打分吗？它们能根据同一份数据生成分析和聚合的结果吗？最重要的是，它们
+在没有大量工作进程（线程）的情况下能做到对数据的实时处理吗？
+这就是Elasticsearch存在的理由：Elasticsearch鼓励你浏览并利用你的数据，而不
+是让它烂在数据库里，因为在数据库里实在太难查询了。
+Elasticsearch是你新认识的最好的朋友。
+#+END_QUOTE
+
+摘自：[[http://es.xiaoleilu.com/010_Intro/00_README.html][Elasticsearch权威指南（中文版）]]
+
+* 资料收集
+- [[https://www.gitbook.com/book/looly/elasticsearch-the-definitive-guide-cn/details][Elasticsearch权威指南（中文版） · GitBook]]
+- [[https://www.gitbook.com/book/chenryn/elk-stack-guide-cn/details][ELKstack 中文指南 · GitBook]]
+- https://github.com/elastic/kibana
+- [[https://www.elastic.co/blog/building-real-time-dashboard-applications-with-apache-flink-elasticsearch-and-kibana][Building real-time dashboard applications with Apache Flink, Elasticsearch, and Kibana | Elastic]]
+ 
+* 安装ES
+** 以守护进程的方式启动
+#+BEGIN_SRC sh
+./bin/elasticsearch -d
+#+END_SRC 
+参考： [[https://www.elastic.co/guide/en/elasticsearch/guide/current/running-elasticsearch.html][Installing and Running Elasticsearch | Elasticsearch: The Definitive Guide]]
+
+* elasticsearch-py
+- [[https://www.elastic.co/guide/en/elasticsearch/client/python-api/current/index.html][elasticsearch-py | Elastic]]
+- [[https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-highlighting.html][Highlighting | Elasticsearch Reference 2.4 | Elastic]]
+- [[http://xiaorui.cc/2014/09/16/%E4%BD%BF%E7%94%A8python%E6%93%8D%E4%BD%9Celasticsearch%E5%AE%9E%E7%8E%B0%E7%9B%91%E6%8E%A7%E6%95%B0%E6%8D%AE%E5%8F%8Akibana%E5%88%86%E6%9E%90/][使用python操作elasticsearch实现监控数据及kibana分析 | 峰云就她了]]
+
+#+BEGIN_SRC py
+class Searcher(object):
+
+    def __init__(self):
+        self.es = Elasticsearch()
+    ...
+    ...
+    ...
+    def search(self, q):
+        return self.es.search(index='pkm', doc_type='item', body={
+            'query': {
+                'match': {
+                    'content': q
+                },
+            },
+            'highlight': {
+                'pre_tags': ['<b>'],
+                'post_tags': ['</b>'],
+                'fields': {
+                    'content': {}
+                }
+            }
+        })
+#+END_SRC
+* ES with Nginx
+- [[https://www.elastic.co/blog/playing-http-tricks-nginx][Playing HTTP Tricks with Nginx | Elastic]]
+要点：
+1. 使用Nginx做ES的反向代理和负载均衡。
+2. upstream中设置keepalive来维持Nginx和ES的长连接，减少连接打开/关闭的消耗。
+
+* Index & Type in ES
+- [[https://www.elastic.co/blog/index-vs-type][Index vs. Type | Elastic]]
+要点：
+1. An index is stored in a set of shards, which are themselves Lucene
+   indices.
+2. 一个Index的各个Type中的字段需要具有一致性，即不同Type中的同名字段需要具
+   有相同的类型（string, data）。
+* Kibana
+- [[https://www.elastic.co/webinars/getting-started-kibana?baymax=default&elektra=docs&storm=top-video][Getting Started with Kibana | Elastic]]
+
+* Mapping
+- [[https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html][Mapping | Elasticsearch Reference | Elastic]]
+* 查询
+- [[http://www.cnblogs.com/yjf512/p/4897294.html][elasticsearch 查询（match和term） - 轩脉刃 - 博客园]]
+
+* 聚集
+An aggregation is a combination of buckets and metrics.（聚集就是分桶和指标
+的集合）
+- [[https://www.elastic.co/guide/en/elasticsearch/guide/current/aggs-high-level.html][High-Level Concepts | Elasticsearch: The Definitive Guide 2.x | Elastic]]
+
+Buckets: 符合某特性标准的文档集合
+#+BEGIN_EXAMPLE
+A bucket is simply a collection of documents that meet certain criteria:
+
+An employee would land in either the male or female bucket.
+The city of Albany would land in the New York state bucket.
+The date 2014-10-28 would land within the October bucket.
+#+END_EXAMPLE
+
+2. Metrics: 针对一个bucket上文档们的统计计算
+   
+** 聚集结果中的 doc_count_error_upper_bound 和 sum_other_doc_count 是什么含义？ <2017-06-07 三>
+
+
+#+BEGIN_EXAMPLE
+doc_count_error_upper_bound: an upper bound of the error on the document counts for each term.
+
+sum_other_doc_count: when there are lots of unique terms, elasticsearch only returns the top terms; this number is the sum of the document counts for all buckets that are not part of the response
+#+END_EXAMPLE
+
+- [[https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html][Terms Aggregation | Elasticsearch Reference 5.4 | Elastic]]
+* 问题收集
+** Kill elasticsearch进程失败 <2017-07-17 一 14:41>
+strace -p 一下，发现是阻塞在futex这个系统调用上面。多次执行killall -9仍然不
+行。胡乱操作了几十分钟后，发现es进程终于死掉了，原因不明。

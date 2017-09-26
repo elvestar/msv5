@@ -1,0 +1,203 @@
+#+TITLE: Pyorg: A org parser and conventor in Python
+#+DATE: 2016-03-19
+
+* 调研
+网上搜一下，发现还没有现成的 Org->HTML 的库，看来得要自己实现一个。下面项目
+可供参考：
+- https://github.com/lepture/mistune
+- https://github.com/bjonnh/PyOrgMode
+- https://github.com/google/protobuf
+  
+研究了一下 *mistune* ，感觉很容易理解，主要就是一堆针对各种块级元素和行内元
+素的处理规则，包括如何使用正则将这些元素从 Markdown 文档中解析出来构造 item，
+以及如何将 item 转化为 HTML。
+
+本库使用暴力循环遍历的方式来对当前文本执行预设的针对各种元素的正则匹配，匹
+配上了， *则从当前文本中将其截取出来并处理，然后对剩下文本进行下一次暴力匹
+配* 。给我的第一感觉是可能有很多额外开销，不过细想一下，问题不大。
+
+本库的可改进点：
+1. 冗余代码多。对于每种元素，都有一个正则表达式，一个 parse_xxx，一个
+   render_xxx，一个 output_xxx。
+
+* 设计
+设计目标：
+- 性能 :: 尽量快。
+- 全面兼容 :: 全面支持 Org 的各种语法和配置，和 Org mode 自带的 Publisher 完
+              全兼容。
+- 可扩展性 :: 包括两点需求：一是发现格式转化有瑕疵时容易修复；二是横向扩展，
+              即可以以更低代价来支持 Org 的特性。这样在开发过程中，可以先完
+              成核心元素的格式转化（如标题和段落），然后逐步支持 Org 的剩下
+              特性；三是纵向扩展，基于它来支持更多需求。例如，基于它构建一
+              个 Org Agenda 的时间分析工具。
+
+Org 作为一种轻量级标记文本， 其元素可以分为三类：
+1. 块级元素
+2. 行内元素
+3. 其他元素
+
+* 开发
+在 GitHub 上建立项目，名字叫做 *pyorg* 。如下：
+- https://github.com/elvestar/pyorg.git
+
+* 块级元素
+** 代码
+#+BEGIN_SRC python
+source = re.compile(
+    r'^ *#\+(?:BEGIN_SRC|begin_src) +([\S]*) *\n'
+    r'([\s\S]+?)\s*'
+    r' *#\+(?:END_SRC|end_src) *(?:\n+|$)'
+)
+#+END_SRC
+
+** QUOTE/EXAMPLE/CENTER ...
+#+BEGIN_EXAMPLE
+I am an example.
+#+END_EXAMPLE
+
+#+BEGIN_QUOTE
+我是引用！
+#+END_QUOTE
+
+搞了个生成正则的函数：
+#+BEGIN_SRC python
+def _gen_org_re_for_begin_end(key):
+    return (r'^ *#\+(?:BEGIN_%s|begin_%s) *\n'
+            r'([\s\S]+?)\s*'
+            r' *#\+(?:END_%s|end_%s) *(?:\n+|$)'
+            %
+            (key.upper(), key, key.upper(), key))
+#+END_SRC
+
+** 列表
+#+BEGIN_SRC python
+list_block = re.compile(
+    r'^( *)([+-]|\d+\.) [\s\S]+?'
+    r'(?:'
+    r'\n+(?=\1?(?:[-*_] *){3,}(?:\n+|$))'
+    r'|\n{2,}(?! )(?!\1(?:[+-]|\d+\.) )\n*'
+    r'|\n+(?=[^ +\-\d])'
+    r'|\s*$'
+    r')'
+)
+list_item = re.compile(
+    r'^(( *)([+-]|\d+\.) ([^\n]*'
+    r'(?:\n(?!\2(?:[+-]|\d+\.) )[^\n]*)*))',
+    flags=re.M
+)
+#+END_SRC
+** 表格
+Org 的表格模式和 Markdown 几乎一样，就是表头和表体的分隔线和各列交叉部分用
+~+~ ，而不是 ~-~ 。  
+#+BEGIN_SRC org
+| th 1 | th 2 |
+|------+------|
+| td1  | td2  |
+#+END_SRC
+  
+* 行内元素
+确保每个块级元素的每个文本部分都经过行内元素规则的解析和转化，例如表格的每
+个 td，列表的每一列，段落那就更不用说了，那是用刑的主体。
+
+但是不包括下面文本：
+1. 链接 URL 
+2. 代码/引用等
+   
+** link
+#+BEGIN_SRC py
+link = re.compile(
+    r'^(#\+(?:CAPTION|ATTR_HTML): .*\n)*'
+    r'\['
+    r'\[([^\]]+)\]'
+    r'(\[([^\]]+)\])?'
+    r'\]\n?'
+)
+#+END_SRC
+   
+说明：
+1. link包括图片，URL链接，org内链等一切[[]]这种样式的行内元素。
+2. 如果link是图片，则会尝试解析其CAPTION/ATTR_HTML，这些标签记录了图片的标题和自
+   定义样式（如宽度、漂浮等）。
+3. 尾部的 ~\n?~ 用来解决相邻无换行的多个link的解析问题，因为它们会被解析到
+   同一个块级元素：段落里面，如果不匹配到末尾的 \n ，会导致下一个link的
+   CAPTION和ATTR_HTML无法被匹配到。
+   
+* 代码高亮
+使用 Pygments：
+- [[http://pygments.org/]]
+- https://github.com/richleland/pygments-css
+  
+命令行下生成 css 文件：
+#+BEGIN_SRC sh
+pygmentize -S colorful -f html -a .codehilite > colorful.css
+#+END_SRC
+
+用法如下：
+#+BEGIN_SRC python
+from pygments import highlight
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters import get_formatter_by_name
+
+formatter = get_formatter_by_name('html', cssclass='codehilite')
+try:
+    lexer = get_lexer_by_name(lang)
+except ValueError:
+    lexer = get_lexer_by_name('text')
+result = highlight(code, lexer, formatter)
+#+END_SRC
+
+* 元素修饰：CAPTION和ATTR_HTML
+规则：
+1. 以 ~#+ATTR_HRML:~ 或 ~#+CAPTION:~ 作为开始。
+2. 以空行或者标题行或者下一个 ~#+ATTR_HRML:~ 或 ~#+CAPTION:~ 作为结束标志。
+3. 可以修饰任何块级元素。
+
+* 问题记录
+** 使用 BS4 为 BEGIN_HTML 生成节点时，部分文字会变成乱码
+例如， ~目录~ 会生成乱码，而 ~目录啊~ 则不会。
+#+BEGIN_HTML
+<p style="font-size:25px" class="center"><strong>目录</strong></p>
+#+END_HTML
+
+** DONE 如何匹配位于块级元素头部或者末尾的 bold/italic/_underlined 等行内元素
+存在问题：
+1. 行首或者行末的 emphasis 缺少空格
+2. 当前的先细切再匹配的方式导致行首和行末没有特殊的标志。
+
+** 如何匹配位于 \n 后面的 bold/italic/_underlined 等行内元素
+
+** 嵌套列表和 dl/dt 的支持
+尚未实现
+
+** 引入 pygments 导致速度变慢一倍
+从 1.56 秒变为 3.89 秒，不能忍！
+
+** DONE BEGIN_HTML/和 BEGIN_SRC 解析后生成的 HTML 代码中含有<html>和<body> 标签
+虽然暂时没有带来可见负面影响，但是必须要去除他们！
+
+找到解法，只需要加上 ~'html.parser'~ 参数。参考：
+- [[http://stackoverflow.com/questions/26984933/append-markup-string-to-a-tag-in-beautifulsoup][Append markup string to a tag in BeautifulSoup]]
+
+** 解析 org meta 时，没有处理好没有 #+ 时的情况
+** <pre> 标签生成太慢
+海量的 clock_item 想使用 <pre> 展示，发现正则解析挺快，构造 HTML 树也挺快，就
+是导出为 HTML 特别慢，从不到 1.8 秒涨到 8.4 秒。 而换成 <p> 或者 <table> 就不会
+那么慢。说明：我使用 BeautifulSoup 来构造 HTML。
+
+附上解析使用的正则表达式：
+#+BEGIN_SRC python
+clock_block = re.compile(
+    r'^( *CLOCK: +[\[<].*\n)+'
+)
+clock_item = re.compile(
+    r'^ *CLOCK: +[\[<]([^\]]+)[\]>](?:--[\[<]([^\]]+)[\]>] +=> +([\d:]+) *)?\n?'
+)
+#+END_SRC
+** 
+* 回顾
+** 完成了列表和表格的解析和转化，块级元素基本齐备，转出来的网页基本能看了 <2016-03-27 日>
+学习了很多正则的知识，很有收获，以前对于正则的应用是不需要这么深入。毕竟要
+实现一个全功能的 Org Parser，还是有些难度的。
+
+一想到不久后，我就可以完全摆脱缓慢且定制性弱的 Emacs org-publish 以及 Ruby
+生态下的 Nanoc，全面切换到 ~纯粹 Python~ 的环境，我就感到很刺激。

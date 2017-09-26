@@ -1,0 +1,42 @@
+#+TITLE: GitBook
+#+DATE: 2014-04-10
+#+KEYWORDS: SSG, CMS, Git
+
+今天无意中逛到了 [[http://www.gitbook.io/][GitBook 的主页]] ，被下图震撼到了。虽然我不喜欢 Markdown，但
+是搭配上 Github，以及漂亮的模板，我不得不承认我也想试一下啊。
+[[../static/imgs/gitbook/1.png]]
+
+但是我还是对 Org 念念不忘，Emacs 下的 Org 提供了一个完美的写作环境。或许有一
+天我会搞出一个 OrgBook 也说不定。
+
+* GitBook 的设计
+GitBook 的设计很简单，一本书对应这一个 Git 仓库，而 GitBook 的玄机在于编写这
+个 Git 仓库下的 *SUMMARY.md* 文件。整个图书的目录编排，以及如何将各个章节
+链接到 Git 仓库的各个 Markdown 文件就是由 *SUMMARY.md* 决定的。
+
+* 一次简单的尝试
+在 Mac 下，使用 GitBook 是如此的简单。步骤如下：
+** 安装 npm
+npm 是 Javascript 的一个包管理器，如果你的机器上没有安装，需要用下面指令安装：
+#+BEGIN_SRC sh
+brew install npm
+#+END_SRC
+
+** 安装 gitbook
+通过 npm 安装 GitBook
+#+BEGIN_SRC sh
+npm install gitbook -g
+#+END_SRC
+
+** 建立一个 Git 仓库，并在下面新建 README.md 和 SUMMARY.md
+** 查看预览
+#+BEGIN_SRC sh
+gitbook serve ./your_repo
+#+END_SRC
+
+** 专心写作
+
+* 回顾
+** 自从用熟了 Nanoc，觉得 Jekyll/Sphinx/GitBook 都可以不用学了 <2015-01-20 二>
+需要啥，自己用 Nanoc 顺手捏出来一个就行了，不再依赖别人，任何种类的静态网站
+都可以自己 Hack 出来。

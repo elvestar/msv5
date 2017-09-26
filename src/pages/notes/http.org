@@ -1,0 +1,41 @@
+#+TITLE: HTTP 协议
+#+DATE: 2015-06-01
+#+KEYWORDS: HTTP, TCP
+
+* HTTP: The Definitive Guide
+** Overview of HTTP
+*** Messages
+HTTP request 和 HTTP response 的格式很相似，都分为三块：
+- Start line
+- Header fields
+- Body
+  
+例子如下图。可以看出，Start line 和 Header fields 之间用换行相隔，而 Header
+fields 和 Body 之间用两个换行相隔，而 Header fields 的各个 header field 之
+间用单个换行符相隔。
+  
+#+CAPTION: HTTP messages have a simple, line-oriented text structure
+[[../static/imgs/http/20150601150524.png]]
+
+*** Architectural Components of the Web
+- Caches（Cache 是一种特殊的 Proxy） ::   A web cache or caching proxy is a special type of HTTP proxy
+            server that keeps cop- ies of popular documents that pass
+            through the proxy.
+
+** URLs and Resources
+本章比较简单。主要关注 URL Syntax 一节，URL 的通用 Scheme 如下：
+#+BEGIN_SRC sh
+<scheme>://<user>:<password>@<host>:<port>/<path>;<params>?<query>#<frag>
+#+END_SRC
+
+注意其中的 <params>，它虽然被称为 URL Parameters，但是不是我们通常认为的
+?xx=yy 的格式，而是 ;xx=yy 格式，而这个格式已经很少使用的。
+
+再看 <query> ，它才是我们通常认为的 URL 参数，跟在 ? 后面，以 & 隔开。
+
+最后看 <frag> ，它就是 URL Fragments（片段），其实就是我们平时所说的 Anchor
+（锚点）。
+
+** HTTP Messages
+*** Status Codes
+HTTP 状态码其实很有限的

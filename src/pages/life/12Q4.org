@@ -1,0 +1,190 @@
+#+TITLE: 2012 年 Q4
+#+DATE: 2012-10-01
+
+* 淘宝入手古河线 <2012-10-10 三>
+国庆节期间在淘宝找了一家换线的，将我的天龙C710换成古河线，今天终于邮寄回来
+了。
+#+CAPTION: 崭新的线材
+[[../static/imgs/12Q4/IMG_20121010_123615.jpg]]
+
+* 笔记本合影 <2012-10-20 六>
+今天同学来访，大家把笔记本摆到我的桌子上搞了个合影。
+#+CAPTION: 本子略多
+[[../static/imgs/12Q4/IMG_20121020_202601.jpg]]
+
+* 和三毛逛天安门和北海公园 <2012-10-27 六>
+#+CAPTION: 天安门
+[[../static/imgs/12Q4/20121027262.jpg]]
+#+CAPTION: 北海公园俯瞰
+[[../static/imgs/12Q4/IMG_20121027_164522.jpg]]
+
+
+* 清晨骑行回龙观 <2012-11-02 五>
+今天早上早起去邮局交电费，排队等候的时候学了一下Libevent。顺便在周围乱骑一
+通，体验了一下清晨的回龙观。
+#+CAPTION: 清晨的太阳
+[[../static/imgs/12Q4/IMG_20121102_084522.jpg]]
+#+CAPTION: 荒凉的马路
+[[../static/imgs/12Q4/IMG_20121102_084752.jpg]]
+
+* 突然而来的大雪 <2012-11-04 日>
+现在才是11月，就下起了大雪，傍晚绕着小区转了一圈，发现积雪严重。第二天早上
+上班时发现小区满目疮痍。
+#+CAPTION: 积雪的街道
+[[../static/imgs/12Q4/IMG_20121104_172256.jpg]]
+#+CAPTION: 积雪的小区
+[[../static/imgs/12Q4/IMG_20121104_175015.jpg]]
+#+CAPTION: 清早满目疮痍
+[[../static/imgs/12Q4/IMG_20121105_100541.jpg]]
+
+* 今天爬香山，晚上摸黑下山狂风呼啸 <2012-11-18 日>
+今天去爬香山，出门较晚，四点半才赶到山脚，路上在看Boost库。下山的时候，天色
+已经黑了，我沿着北路摸黑下山，周围空无一人，只有狂风呼啸，内心有点害怕。下
+到半山腰时，发北京城灯火通明，相当漂亮。
+#+CAPTION: 抵达香山路路口
+[[../static/imgs/12Q4/IMG_20121118_161926.jpg]]
+#+CAPTION: 抹黑下山时北京城灯火通明
+[[../static/imgs/12Q4/IMG_20121118_173930.jpg]]
+
+* 通宵加班解决紧急问题 <2012-11-22 四>
+最近忙得四脚朝天，各种diff、日志格式问题。晚上下班时，被耀洲叫住，让我帮忙
+解决一个重要报表的diff问题，国强也在。最后到凌晨四点才解决，我们三人出了大
+厦打车回家。呼吸着凌晨的空气，感觉有点特殊，有股烟味。
+#+CAPTION: 三人打车中
+[[../static/imgs/12Q4/IMG_20121122_043102.jpg]]
+
+* 下午龙观骑行到西大街 <2012-11-25 日 20:00>
+周日沿着同成街向西骑行，骑到了尽头又转向北，然后骑到了一处繁华的地方（后来才知
+道这里是回龙观西大街），最后骑回了家。回家后继续学习Memcached。
+#+CAPTION: 骑行到了回龙观西大街
+[[../static/imgs/12Q4/IMG_20121125_161306.jpg]]
+#+CAPTION: 骑行到了13号线回龙观站
+[[../static/imgs/12Q4/IMG_20121125_162702.jpg]]
+
+* Rhapsody: Agony is My Name - 燃燃燃！ <2012-11-25 日>
+燃燃燃！
+#+BEGIN_EXAMPLE
+Agony is My Name
+痛苦是我的名字
+
+One for the pain and two for my name 
+一献给伤痛，二献给我的名字
+three for my wonderful kingdom 
+三献给我美丽的祖国
+Four for my king, five for my queen 
+四献给我的国王，五献给我的皇后
+Six for the fall of my wisdom... 
+六献给我所有的智慧
+Earth's calling me! 
+世界在召唤我！
+VITA, MORTE, GLORIA, ONOREVITA, MORTE, GLORIA, ONORE... ... 
+
+Airin, Arwald, Tharos in my painful dreams 
+Airin, Arwald, Tharos 在我伤感的梦中
+Horror and death crossing my way 
+死亡与战栗横行于我的梦中
+paint all the unreal landscape 
+构成了所有海市蜃楼般的梦魇
+Villages burn, the black fire runs... 
+大火席卷村庄，无情的烈焰吞噬一切
+runs through the heart of the forest... 
+烧过森林的心脏
+killing my trees! 
+毁了我所有的树！
+rhapsody 
+狂想曲
+VITA, MORTE, GLORIA, ONORE... 
+VITA, MORTE, GLORIA, ONORE... 
+Spazio e tempo play the rhymes of human lies!
+Spazio e（非英语，不翻译）的拍子奏出人类谎言的韵律
+ALGALORD'S CALLING FOR HOLY REVENGE 
+安拉正在召唤神圣的复仇
+THE RAGE OF THE HEROES IN MY HANDS 
+我手中的英雄们已义愤填膺
+THE FURY WILL RISE AND SOON 
+狂怒不会止息
+THEY WILL TASTE MY SILVER BLADE 
+他们会尝到我银刀的寒冷
+AND THEY WILL FACE THE PROPHECY 
+他们会面对这预言
+'CAUSE AGONY IS... MY NAME! 
+因为痛苦是……我的名字！
+Black is the rose that's now in my hand
+黑色玫瑰在我手中绽放 
+black for the blood of the fallen
+凝重的黑是滴血的色泽 
+symbol of death will soon be reborn 
+死亡的象征即将重生
+into the life of my tears' fall... 
+进入我泪滴中的芸芸众生
+reborn and grow! 
+重生，滋长！
+VITA, MORTE, GLORIA, ONORE... 
+VITA, MORTE, GLORIA, ONORE... 
+Silent cries of children in my painful dreams 
+孩子们寂静的哭泣充溢我伤感的梦中
+ALGALORD'S CALLING FOR HOLY REVENGE 
+安拉正在召唤神圣的复仇
+THE RAGE OF THE HEROES IN MY HANDS 
+我手中的英雄们已义愤填膺
+THE FURY WILL RISE AND SOON 
+狂怒不会止息
+THEY WILL TASTE MY SILVER BLADE 
+他们会尝到我银刀的寒冷
+AND THEY WILL FACE THE PROPHECY 
+他们会面对这预言
+'CAUSE AGONY IS... MY NAME! 
+因为痛苦是……我的名字！
+Quantus tremor est futurus, 
+quando judex est venturus... 
+quantus tremor est futurus, 
+...est venturus! 
+（非英语，不翻译）
+Spazio e tempo play the rhymes of human lies!
+Spazio e（非英语，不翻译）的拍子奏出人类谎言的韵律
+ALGALORD'S CALLING FOR HOLY REVENGE 
+安拉正在召唤神圣的复仇
+THE RAGE OF THE HEROES IN MY HANDS 
+我手中的英雄们已义愤填膺
+THE FURY WILL RISE AND SOON 
+狂怒不会止息
+THEY WILL TASTE MY SILVER BLADE 
+他们会尝到我银刀的寒冷
+AND THEY WILL FACE THE PROPHECY 
+他们会面对这预言
+'CAUSE AGONY IS... MY NAME! 
+因为痛苦是……我的名字！
+#+END_EXAMPLE
+
+
+* 和栗涛学军逛动物园一带吃新疆办事处 <2012-12-01 六>
+栗涛说新疆办事处的馕包肉特别好吃，于是周末我们三人一起大老远跑去吃它们。我
+们坐地铁到北京动物园，路过了动物园服装店、北京天文馆、北京古动物馆、印钞中
+心（疑似），最后抵达新疆饭店，进去后找了一家店，点了几样特色菜，发现味道确
+实很赞。饭后我们四处闲逛，有一家商场卖数码设备。
+#+CAPTION: 新疆办事处的特色菜
+[[../static/imgs/12Q4/IMG_20121201_144702.jpg]]
+#+CAPTION: 穿过天桥前往方圆大厦
+[[../static/imgs/12Q4/IMG_20121201_153635.jpg]]
+
+* 又是大雪纷飞 <2012-12-12 三>
+今天起床上班，发现外面又下大雪了。
+#+CAPTION: 龙腾四小区内
+[[../static/imgs/12Q4/IMG_20121212_100420.jpg]]
+#+CAPTION: 抵达公司门口
+[[../static/imgs/12Q4/IMG_20121212_103025.jpg]]
+
+* 末日前夕的大雪 <2012-12-20 四>
+和海南和国强三人下班出了公司门，发现外面大雪纷飞。明天就是传说中的世界末日，
+这也意味着新版本要开服了，所以现在是末日前夕。
+#+CAPTION: 西二旗地铁站
+[[../static/imgs/12Q4/DSC00606.jpg]]
+#+CAPTION: 龙腾苑小区
+[[../static/imgs/12Q4/DSC00619.jpg]]
+
+* 13年元旦前夕  <2012-12-28 五>
+明天我要去无锡玩，今天下班回家，路上还在下雪。今年的冬天特别冷。
+#+CAPTION: 公司篮球场
+[[../static/imgs/12Q4/DSC00958.jpg]]
+#+CAPTION: 小区外的公交站
+[[../static/imgs/12Q4/DSC00965.jpg]]

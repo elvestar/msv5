@@ -1,0 +1,274 @@
+#+TITLE: Chromium 项目的 base 库
+#+DATE: 2014-02-18
+#+KEYWORDS: C++
+
+* 前言
+在晓明的介绍下，我再次开始研究了 Chromium 的 base 库，结果发现下面的东西又
+全又好，弥补了我对 toft 库的缺憾。我怀疑这个 base 库跟 Google 内部的 base
+库相差无几。
+
++ [[http://src.chromium.org/viewvc/chrome/trunk/src/base/][Chromium base 库]]
++ [[http://src.chromium.org/viewvc/chrome/trunk/src/net/][Chromium net 库]]
+
+到目前为止，我在 base & net 库中找到的好东西有：
+1. 完整的 stack_trace，跟踪函数调用
+2. logging，从此不需要再额外依赖 glog
+3. message_loop，我得好好研究，看能够借助它实现一个事件循环
+4. stringprintf 支持将 std::string 直接传给%s
+5. file_util 中有 ReadFileToString，还有一系列处理软硬链的函数
+6. 还有一个生成 GUID 的函数！
+7. 比 C 下面的原生 rand 函数好用 N 多的 RandXxx 系列函数
+8. 获取系统信息的系列函数，在 sys_info.h 里面
+9. 自带 json 库，接口和 jsoncpp 类似，但是功能强大。其中 Value 定义在 base 下面，更通
+10. 用化，而不是 base/json 下面
+11. 专门用来将文件 map 到内存的 MemoryMappedFile（位于 base/file 里面）
+12. 专门用来处理 request url 的库，位于 net/url_request 下面
+
+* Checkout base 库源码
+整个 Chrominum 项目的 Git 库列表[[https://chromium.googlesource.com/][在这里]] ，单独检出 base 库的代码的的指令是：
+#+BEGIN_SRC sh
+git clone https://chromium.googlesource.com/chromium/src/base 
+#+END_SRC
+
+* base 的各模块简介
+** at_exit.h
+| 类/方法       | 功能                                       | 应用                            |
+|---------------+--------------------------------------------+---------------------------------|
+| AtExitManager | 可以注册回调函数，当该对象离开作用域时调用 | 可用于 Singleton 模式的内存回收。 |
+
+** rand_util.h
+| 方法     | 功能                     | 应用 |
+|-----------+--------------------------+------|
+| RandInt   | 生成指定范围内的随机整数 |      |
+| RandBytes | 用随机 bit 填充一段 buffer  |      |
+
+** json 目录与 values.h
+| 类         | 功能                                      | 应用 |
+|------------+-------------------------------------------+------|
+| JSONWriter | JSON 序列化为字符串                       |      |
+| JSONReader | 字符串反序列化为 JSON                     |      |
+| Values     | 一个树形递归的数据结构，可以用来表示 JSON |      |
+
+说明：json 目录提供的功能类似于流行的 jsoncpp。但根据我的使用经验，base 库下的 json 用
+法比 jsoncpp 复杂。
+
+* TODO base 库总览
+为了分析 base 库的外部依赖，我用下面指令把源码中 include 语句 grep 出来。
+#+begin_src sh
+grep "#include" -R base > include.txt
+#+end_src
+
+然后用 vim 打开 include.txt，并通过 *include "[^b]* 来搜索所有非 base 库的头文件。初步
+观察，发现 base 库的外部依赖很少，这点很好，减少了我的构建难度。
+
+#+begin_src sh
+git clone https://chromium.googlesource.com/chromium/src/build
+git clone https://chromium.googlesource.com/chromium/testing/gtest
+#+end_src
+
+** 初步裁剪
+我根据 base 库的外部依赖，来对 base 进行初步裁剪。裁掉多余自子目录后，base 库的外部依赖将会大量减少。
+| 子目录             | 作用           |
+|--------------------+----------------|
+| base/i18n          | 国际化相关     |
+| base/android       | Android OS 相关 |
+| base/ios           | iOS 相关        |
+| base/x11           | X Window 相关   |
+| base/mac           | Mac OS 相关     |
+| base/win           | Windows OS 相关 |
+| base/power_monitor | 电源管理       |
+
+还有一些相关文件要删除掉：
++ base_paths_win.cc
++ base_paths_android.cc
++ debug/debugger_win.cc
++ debug/stack_trace_win.cc
++ debug/stack_trace_android.cc
++ debug/trace_event_android.cc
++ debug/trace_event_win.cc
++ debug/debug_on_start_win.cc
++ file_util_win.cc
++ file_version_info_win.cc
++ file_version_info_mac.mm
++ files/file_enumerator_win.cc
++ files/file_path_watcher_kqueue.cc
++ files/file_path_watcher_win.cc
++ files/file_win.cc
++ guid_win.cc
++ files/memory_mapped_file_win.cc
++ logging_win.cc
++ memory/discardable_memory_android.cc
++ memory/discardable_memory_allocator_android.cc
++ memory/discardable_memory_mac.cc
++ memory/discardable_memory_win.cc
++ memory/shared_memory_android.cc
++ memory/shared_memory_win.cc
++ message_loop/message_pump_android.cc
++ message_loop/message_pump_io_ios.cc
++ message_loop/message_pump_win.cc
++ message_loop/message_pump_x11.cc
++ message_loop/message_pump_gtk.cc
++ message_loop/message_pump_glib.cc
++ message_loop/message_pump_ozone.cc
++ native_library_win.cc
++ os_compat_android.cc
++ platform_file_win.cc
++ process/kill_mac.cc
++ process/kill_win.cc
++ openbsd/freebsd ......
++ nacl (rand_util_nacl.cc)
++ timer/hi_res_timer_manager_posix.cc（电源管理相关）
+
+
+有一些临时删除掉：
++ base64.cc
++ files/file_path_watcher_linux.cc
++ message_loop/message_pump_libevent.cc
++ logging.cc
++ cpu.cc
++ metrics/stats_table.cc
++ posix/file_descriptor_shuffle.y（这个是什么东东？）
++ synchronization/condition_variable_posix.cc
++ vlog.cc
++ at_exit.cc
+
+** 进一步裁剪，以干净地入库
+*** 删掉所有 gyp 文件
+GYP 是 Chromium 的项目构建工具，而 gyp 文件则是 GYP 的构建脚本，相当于 Blade 的 BUILD 文件。
+我要删掉它。[[http://blog.xiaogaozi.org/2011/10/29/introduction-to-gyp/][GYP 简介]]
+#+begin_src sh
+find base/ -name "*.gyp" | xargs rm
+#+end_src
+*** 将 build/build_config.h 替换为 build_config.h
+首先，用 find 和 sed -n 来查看哪些文件带有 *build/build_config.h* ：
+#+begin_src sh
+find . -type f | xargs sed -n "/build\/build_config.h/p"
+#+end_src
+
+然后，再用 find 和 sed -i 对这些文件进行替换：
+#+begin_src sh
+find . -type f | xargs sed -i "s/build\/build_config.h/base\/build_config.h/"
+#+end_src
+
+* 兼容问题
+** 缺少 linux/magic.h
+解法：从网上拷贝一个下来用。https://raw.github.com/josteink/twrp_kernel_asus_tf101/master/include/linux/magic.h
+** 公司内核版本过低没有 inotify
+先不编译 *base/files/file_path_watcher_linux.cc*
+** logging.cc 与 glog 库冲突
+不编译 *base/logging.cc* ，并把 logging.h 重定向到 thirdparty/glog/logging.h
+** glog 库不支持 DPLOG/NOTREACHED/NOTIMPLEMENTED 等宏
+用 Chromium base 库中的 logging.h 替代我们 thirdparty 下面的 logging.h
+** 找不到_xgetbv 函数
+这个函数是 [[http://software.intel.com/sites/products/documentation/studio/composer/en-us/2011Update/compiler_c/intref_cls/common/intref_manextxgetbv.htm][Intel]] 提供的获取 CPU 信息的函数，我暂时不编译 *cpu.cc* 来跳过这个错误。
+** base/metrics/stats_table.cc:20:33: ipc/ipc_descriptors.h: No such file or directory
+临时删掉 *base/metrics/stats_table.cc*
+** base/process/process_linux.cc:116: error: `RLIMIT_NICE' was not declared in this scope
+原因：公司版本的 Linux 内核的 bits/resource.h 中没有 nice 值相关的定义。
+解法：注释掉 *process/process_linux.cc* 文件中的相关语句并让其直接返回 true。如下：
+#+begin_src cpp
+CheckForNicePermission() : can_reraise_priority(false) {
+    // We won't be able to raise the priority if we don't have the right rlimit.
+    // The limit may be adjusted in /etc/security/limits.conf for PAM systems.
+    // struct rlimit rlim;
+    // if ((getrlimit(RLIMIT_NICE, &rlim) == 0) &&
+        // (20 - kForegroundPriority) <= static_cast<int>(rlim.rlim_cur)) {
+        // can_reraise_priority = true;
+    // }
+    can_reraise_priority = true;
+}
+#+end_src
+** base/synchronization/condition_variable_posix.cc:33: error: `pthread_condattr_setclock' was not declared in this scope
+原因：公司的 pthread.h 里面没有 pthread_condattr_setclock 接口。解法：直接使用 pthread_cond_init()。如下：
+#+begin_src cpp
+// #if !defined(OS_MACOSX) && !defined(OS_NACL) && !defined(OS_ANDROID)
+#if !defined(OS_MACOSX) && !defined(OS_NACL) && !defined(OS_ANDROID) && !defined(OS_LINUX)
+  pthread_condattr_t attrs;
+  rv = pthread_condattr_init(&attrs);
+  DCHECK_EQ(0, rv);
+  pthread_condattr_setclock(&attrs, CLOCK_MONOTONIC);
+  rv = pthread_cond_init(&condition_, &attrs);
+  pthread_condattr_destroy(&attrs);
+#else
+  rv = pthread_cond_init(&condition_, NULL);
+#endif
+#+end_src
+
+*synchronization/condition_variable_posix.cc*
+** RAW_CHECK 接口与 glog 冲突
+解法：RAW_CHECK 改成 CHECK。
+#+begin_src sh
+sed -i 's/RAW_CHECK/CHECK/g' `grep CHECK -Rrl .`
+#+end_src
+** DPLOG 与 PLOG
+解法：为了快速解决，先全部改成 LOG。
+#+begin_src sh
+sed -i 's/DPLOG/PLOG/g' `grep DPLOG -Rrl .`
+sed -i 's/DLOG/LOG/g' `grep DLOG -Rrl .`
+sed -i 's/DPCHECK/PCHECK/g' `grep CHECK -Rrl .`
+#+end_src
+** process/launch_posix.cc 165 行报错：无法将函数指针转化为 void*
+解法：用 C 风格的强转
+#+begin_src cpp
+// act.k_sa_handler = reinterpret_cast<void*>(SIG_DFL);
+act.k_sa_handler = (void*)(SIG_DFL);
+#+end_src
+** variable `std::istringstream iss' has initializer but incomplete type
+解法：#include <sstream>。[[http://stackoverflow.com/questions/13428164/c-compile-error-has-initializer-but-incomplete-type][参考]]
+
+** base/threading/platform_thread_linux.cc:64: error: `PR_SET_NAME' was not declared in this scope
+原因：公司版本的 *linux/prctl.h* 里面没有 PR_SET_NAME。解法：先注释掉
+*threading/platform_thread_linux.cc* 三行代码（这样 Thread 的 SetName 无法生效了）
+#+begin_src cpp
+  int err = prctl(PR_SET_NAME, name);
+  // We expect EPERM failures in sandboxed processes, just ignore those.
+  if (err < 0 && errno != EPERM)
+    LOG(ERROR) << "prctl(PR_SET_NAME)";
+#+end_src
+
+附正常的 [[http://lxr.free-electrons.com/source/include/uapi/linux/prctl.h][linux/prctl.h]]。
+
+** threading/sequenced_worker_pool.h 中的私有变量被访问
+解法：将 137 行的 private 改成 public。
+
+** threading/thread_restrictions.h 的私有变量备份访问
+解法：在 230 行的 ScopedAllowWait 类的定义前面加上 public:
+
+** DCHECK 不支持<<
+#+begin_src cpp
+// DCHECK(IsStringASCII(wide)) << wide;
+DCHECK(IsStringASCII(wide));
+#+end_src
+
+** glog 不支持 LOG_ERRNO
+#+begin_src cpp
+// LOG_ERRNO(ERROR) << "Call to gettimeofday failed.";
+LOG(ERROR) << "Call to gettimeofday failed.";
+#+end_src
+
+* 学习回顾
+** 这个活不好干，鉴定完毕 <2014-02-23 日>
+关机睡觉
+** 第一次构建成功 <2014-02-23 日 23:00>
+改得伤痕累累，但至少能把 libbase.a 给编译粗来了。
+#+begin_src sh
+[zhongyi@cq01-xxxx-xxxx71.cq01 base]$ ll
+drwxrwxr-x  20 zhongyi01 zhongyi01     4096 Feb 23 17:07 base.objs
+-rw-rw-r--   1 zhongyi01 zhongyi01 47712618 Feb 23 17:07 libbase.a
+#+end_src
+
+#+BEGIN_SRC swift
+if assumedString {
+    println(assumedString)
+}
+// 输出 "An implicitly unwrapped optional string."
+#+END_SRC
+
+#+BEGIN_SRC js
+addEventListener('load', function() {
+  var code = document.querySelector('#code');
+  var worker = new Worker('worker.js');
+  worker.onmessage = function(event) { code.innerHTML = event.data; }
+  worker.postMessage(code.textContent);
+})
+#+END_SRC

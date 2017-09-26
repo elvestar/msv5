@@ -1,0 +1,95 @@
+#+TITLE: Hadoop
+#+DATE: 2014-06-02
+#+KEYWORDS: Hadoop
+
+* HAR (Hadoop Archives)
+HAR 可将众多文件打包为一个 .har 文件，这样对于 HDFS 的命名空间来说，只是一个文件，
+所以能够缓解 namenode 的压力。同时，HAR 还提供了透明访问的功能，用户可以指定 HAR
+中的某些文件作为 MarReduce 的输入。
+
+[[../static/imgs/hadoop/1.png]]
+
+参考：
++ [[http://hadoop.apache.org/docs/r1.2.1/hadoop_archives.html][Hadoop Archives Guide]]
++ [[http://hadoop.apache.org/docs/r0.19.0/hadoop_archives.html][Hadoop Archives]]
++ [[http://c.hocobo.net/2010/08/05/har/][Hadoop Archive 解决海量小文件存储]]
+  
+** 如何定位 HAR 下的某个文件（URI）
+HAR 管理的文件的 URI 的模式如下：
+#+BEGIN_EXAMPLE
+har://scheme-hostname:port/archivepath/fileinarchive
+#+END_EXAMPLE
+
+其中，schema 是 HAR 寄生于的文件系统的类型，例如 hdfs。下面是一个实际的例子：
+#+BEGIN_EXAMPLE
+har://hdfs-xxx-xxx-hdfs.xxx.baidu.com:5431x/app/log/xxxe_click/20140514.har/app/
+#+END_EXAMPLE
+
+该 URI 代表的文件是：位于 *xxx-xxx* HDFS 的 */app/log/xxxe_click/20140514.har*
+HAR 下的 */app* 目录。
+
+* Hadoop Streaming
+
+** 如何分发和打包（V2）<2015-01-21 三>
+公司的 Hadoop 版本可能比较落后，带目录结构的文件的分发方法在网上不好搜索到，
+后来我在公司内部的一篇《Hadoop-v2 Streaming 使用手册》里找到了详细解释。摘
+要如下：
+| 参数            | 作用                                                                                                              | 备注                                                                                                |
+|-----------------+-------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------|
+| -file           | 将本地文件传到集群上让 MR 程序使用，mapper 和 reducer 程序就是通过它来传输到集群的（可能需要对它们执行 chmod +x） | 不支持目录结构。                                                                                    |
+| -cacheFile      | 让预先传到集群上的文件可以在 MR 程序内部使用                                                                      | 不支持目录结构。例如 MR 程序想使用./lib/liblzo.so 的文件，是无法通过-cacheFile 暴露给 MR 程序使用的 |
+| -cacheArchive   | 将预先传到集群上的文件解包，让 MR 程序内部使用                                                                    | 支持目录结构！                                                                                      |
+
+* 集群间拷贝 - distcp
+** update 与
+** distcp 任务提交/执行过程中突然失败，客户端错误码为 137 <2015-03-15 日>
++原因可能是执行 MR 任务的某台机器内存爆了+ ，可能提交的任务太多了。参考：
+- [[http://zorro.blog.51cto.com/2139862/1078586]]
+  
+后来尝试向第二个集群提交任务，发现出现同样的问题，并且两个集群的任务会互相
+影响。 *这时候怀疑不是集群的问题，而是提交任务的集群有问题* 。我提交任务的
+集群是公司的云开发机，资源是受限的。于是我换用一台物理机，然后提交 200 个
+distcp，发现没有出现错误码 137 的了。果然，是我的提交任务的机器的问题。
+
+
+* 问题搜集
+** Streaming 的 Reducer 运行失败，提示：java.lang.NullPointerException
+我用 Python 写了一个 MapReduce 脚本，但是在 reduce 阶段，任务总是失败。失败
+信息如下：
+#+BEGIN_SRC java
+java.lang.NullPointerException
+	at org.apache.hadoop.streaming.PipeMapRed.getContext(PipeMapRed.java:744)
+	at org.apache.hadoop.streaming.PipeMapRed.logFailure(PipeMapRed.java:775)
+	at org.apache.hadoop.streaming.PipeReducer.reduce(PipeReducer.java:133)
+	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:816)
+	at org.apache.hadoop.mapred.Child.main(Child.java:212)
+#+END_SRC
+
+一开始，错误信息看不出头绪，我以为我使用的集群（百度内部的 IDLE 集群，用公司的空
+闲资源来提供高量低质的计算力的集群）不行，准备借一个其他好点的集群的队列。亏好我
+多点了几下，进入到任务的 stderr 页面，在最下面看到了如下信息：
+#+BEGIN_SRC python
+Traceback (most recent call last):
+  File "/home/disk6/infidle/local/normal/job_20140321151543_439979-vertex1-reduce_20140430062926-1072/appSlave/job_20140321151543_439979/attempt_20140321151543_439979_r001_000000_1002/work/./merge_pid.py", line 4, in ?
+    from operator import itemgetter
+ImportError: cannot import name itemgetter
+#+END_SRC
+
+这样，reduce 失败的原因就很明显了，是集群的 Python 版本太低，没有内置
+itemgetter 模块导致的。这么是我的 reducer 脚本。
+#+BEGIN_SRC python
+from operator import itemgetter
+
+pid_counts = {}
+...
+...
+for pid, count in sorted(pid_counts.items(), key=itemgetter(1), reverse=True):
+  print "pid:", pid, count
+#+END_SRC
+
+我修改了一下，不用 itemgetter 和 sorted 实现排序，而是只用用 dict 的原生遍历
+方法来输出 reduce 结果后，问题解决。
+#+BEGIN_SRC python
+for pid in pid_counts:
+  print pid, pid_counts[pid]
+#+END_SRC

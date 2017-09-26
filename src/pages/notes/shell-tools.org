@@ -1,0 +1,19 @@
+#+TITLE: Shell 下的工具
+#+DATE: 2015-12-21
+#+KEYWORDS: Shell
+
+* fzf: A command-line fuzzy finder written in Go
+- https://github.com/junegunn/fzf
+
+用法：
+| 命令          |   |   |
+|---------------+---+---|
+| git log \vert fzf |   |   |
+|               |   |   |
+|               |   |   |
+|               |   |   |
+*
+* percol
+- https://github.com/mooz/percol
+* httpie
+- [[https://github.com/jkbrzt/httpie]]

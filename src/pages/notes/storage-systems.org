@@ -1,0 +1,10 @@
+#+TITLE: 存储系统
+#+DATE: 2016-04-24
+
+* LevelDB
+[[../notes/leveldb.org]]
+** MemTable
+
+* Kafka
+[[../notes/kafka.org]]
+** 重要概念

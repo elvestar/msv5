@@ -1,0 +1,96 @@
+#+TITLE: Mac
+#+DATE: 2015-09-03
+
+记录一下 Mac 的使用经验和常用软件
+
+* OmniDiskSweeper - 磁盘空间占用分析
+- https://www.omnigroup.com/more
+  
+
+#+CAPTION: ./imgs/mac/20150903100245.png
+[[../static/imgs/mac/20150903100245.png]]
+* 截图
+修改截图文件的后缀，从png改为jpg：
+#+BEGIN_SRC sh
+defaults write com.apple.screencapture type jpg && killall SystemUIServer
+#+END_SRC
+
+参考：
+- [[http://www.ifanr.com/app/546621][一篇文章，解决 Mac 截图的所有问题 | 领 客专栏·Mac 玩儿法 | 爱范儿]]
+- [[https://my.oschina.net/moooofly/blog/300384][【转载】为什么软件界面截图不存为jpg 而推荐png？ - 摩云飞的个人页面 - 开源中国社区]]
+* 在终端中打开Finder
+#+BEGIN_SRC sh
+open .
+#+END_SRC
+参考：[[http://osxdaily.com/2009/11/30/open-current-folder-in-finder-from-the-terminal/][Open Current Folder in Finder from Terminal of Mac OS X]]
+
+* 在Finder中打开终端 <2016-11-05 六 10:26>
+在此设置：
+#+BEGIN_SRC sh
+System Preferences > Keyboard > Shortcuts > Services
+#+END_SRC
+参考：[[http://stackoverflow.com/questions/420456/open-terminal-here-in-mac-os-finder][osx - Open terminal here in Mac OS finder - Stack Overflow]]
+* Mac下通过smb经过vpn连接公司内网机器无法断开并重连的bug以及解决 <2016-11-10 四 00:03>
+产生方式：
+1. 连接公司vpn
+2. 在Finder下使用smb连接公司内网开发机。
+3. 开发开发开发，持续了N小时。
+4. 公司vpn超时自动断开。
+5. 重连公司vpn。
+6. 发现无法通过smb连接内网开发机了，报 ~不能找到原始项目~ 错误。
+
+解决方法：
+1. 断开公司vp。
+2. 在Finder的 "共享的" 中选中内网机器的smb连接，主动断开连接，直到显示断开
+   连接。
+3. 重连公司vpn。
+4. 重新使用smb连接内网开发机。 
+* 照片.App
+  
+** 尝试使用AppleScript操作照片应用实现批量导出 <2016-11-19 六 22:22> 
+- [[https://photosautomation.com/scripting/script-library-01.html][Photos & AppleScript: Photos Utility Suite]]
+- [[https://photosautomation.com/scripting/script-library-02.html][Photos & AppleScript: Photos Export Suite]]
+  
+可惜，需要升级到至少10.11，而我的Mac还是Yosemite，不敢贸然升级。等我下周弄
+好时间机器后再尝试吧。
+
+** 导出照片时报 "无法载入图像"
+问题原因是我关掉了iCloud的同步，导致Mac害怕引发冲突，不准我导出照片。
+** 照片的备份
+尝试通过rsync将整个照片库同步到内网机器，然后通过rsync将整个照片库从内网机
+器同步到另外一台Mac上。
+#+BEGIN_SRC sh
+rsync -av ~/Pictures/照片\ 图库.photoslibrary/ /Volumes/work-8/opdir/Photos.app
+#+END_SRC
+
+* 使用Javascript和OSX交互（JSA）
+- [[https://photosautomation.com/scripting/script-library-01.html][Photos & AppleScript: Photos Utility Suite]]
+- [[https://photosautomation.com/scripting/script-library-02.html][Photos & AppleScript: Photos Export Suite]]
+- [[https://www.macstories.net/tutorials/getting-started-with-javascript-for-automation-on-yosemite/][Getting Started with JavaScript for Automation on Yosemite – MacStories]]
+- [[https://www.macstories.net/mac/extensibility-and-automation-changes-in-os-x-yosemite:/][Extensibility and Automation Changes in OS X Yosemite – MacStories]]
+#+BEGIN_QUOTE
+JXA is not focused on interacting with a DOM or building web apps. Rather,
+it extends the JavaScript core language to integrate it with the Open
+Scripting Architecture (OSA) of OS X.
+
+OSA is a mechanism for inter-app communication between Mac apps, and it is
+what AppleScript and JXA are built on. The communication occurs by sending
+“Apple Events” – messages which include commands or data – back and forth
+between apps. OSA allow Mac developers to create scriptable applications,
+and it allows any user who knows AppleScript (or, now, JXA) to automate
+these applications.
+#+END_QUOTE
+
+* Automator
+- [[https://photosautomation.com/index.html][Photos and Automator]]
+* Mac下的特殊按键符号及其Unicode <2017-09-20 三 16:35>
+粘贴下来，方便后续粘贴：
+- ⌘ – &#x2318; – &#8984; – the Command Key symbol
+- ⌥ – &#x2325; – &#8997; – the Option Key symbol
+- ⇧ – &#x21E7; – &#8679; – the Shift Key symbol
+- ⎋ – &#x238B; – &#9099; – the ESC Key symbol
+- ⇪ – &#x21ea; – &#8682; – the Capslock symbol
+- ⏎ – &#x23ce; – &#9166; – the Return symbol
+- ⌫ – &#x232b; – &#9003; – the Delete / Backspace symbol
+  
+参考：[[http://tech.karbassi.com/2009/05/27/command-option-shift-symbols-in-unicode/][Command, Option, & Shift Symbols in Unicode]]

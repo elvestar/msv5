@@ -1,0 +1,471 @@
+#+TITLE: AugularJS
+#+DATE: 2015-02-16
+#+KEYWORDS: 前端框架, Angular
+#+DESCRIPTION: 全能的前端框架，一门操控 HTML 的技术，用于构建现代的交互式应用
+
+* 前言
+之前我 Web 开发一直都使用 Flask，主要功能（包括页面拼装，表单验证）都放在服
+务器端来进行。Flask 的技术栈还算完善，开发起来还是很得心应手的。除了表单验
+证，我一直使用 WTForms，我感觉它不是很好用，我想探究一下，业界是否有更好的
+实践，用以继续完善我的 Web 开发技术栈。于是我想到了 Google 的 AngularJS。当
+然，AngularJS 在前端开发方面肯定还有很多其他的优秀实践，这些我都会汲取一下。
+
+* 资料搜集
+** 文档
+- [[http://docs.angularjs.cn/api][AngularJS API Docs（国内镜像站）]]  
+- [[http://www.ngnice.com/showcase/#/home/home][Angular showcase（内含各种基本页面元素的 Angular 实现）]]  
+- [[https://github.com/jmcunningham/AngularJS-Learning]]
+
+Angular 绘图：
+- https://github.com/krispo/angular-nvd3/
+- [[http://krispo.github.io/angular-nvd3/#/][Angular-nvD3]]
+- [[http://www.codeproject.com/Articles/709340/Implementing-a-Flowchart-with-SVG-and-AngularJS][Implementing a Flowchart with SVG and AngularJS]] 
+
+#+CAPTION: ./imgs/angularjs/20150506143219.png
+[[../static/imgs/angularjs/20150506143219.png]]
+
+** 项目
+- [[https://github.com/angular/angular.js/wiki/Projects-using-AngularJS][Projects using AngularJS]]
+- [[http://www.ng-newsletter.com/posts/building-2048-in-angularjs.html][Building the 2048 game in AngularJS]]
+- [[https://github.com/morlay/angular-mobile-ui][morlay/angular-mobile-ui (UI Kits for PhoneGap or Mobile Web App)]]
+  
+一些库：
+- [[http://mgcrea.github.io/angular-strap/][AngularStrap（AnaularJS 整合 Bootstrap）]]
+- [[http://jtblin.github.io/angular-chart.js/][Angular Chart（交互式图表绘制，基于 Chart.js）]]
+- [[https://github.com/marcorinck/angular-growl][marcorinck/angular-growl（消息通知）]]
+- https://github.com/angular-ui/ui-router
+- [[https://github.com/michaelbromley/angularUtils]] （有分页，面包屑，终端模拟
+  等组件）
+- [[https://github.com/esvit/ng-table]] （表格强化，例如分页，过滤，排序等）
+- https://github.com/chieffancypants/angular-loading-bar  （无痛地加入加载
+  进度条）
+
+Seed 项目：
+- https://github.com/angular/angular-seed
+- https://github.com/DaftMonk/generator-angular-fullstack
+- [[https://github.com/ngbp/ngbp]]
+- https://github.com/tnajdek/angular-requirejs-seed
+
+** 文章
+- [[http://www.zhihu.com/question/21170137][同作为 JavaScript MVC 框架，Backbone 和 AngularJS 各有什么优缺点？]]
+- [[https://www.airpair.com/js/javascript-framework-comparison][AngularJS vs. Backbone.js vs. Ember.js]] （从数据可以看出 AngularJS 完胜其
+  他两家）
+- [[http://segmentfault.com/q/1010000000615220][协同工具 Worktile 全站都是用的 JS 实现，具体是什么样的架构？]]
+- [[http://stackoverflow.com/questions/14994391/thinking-in-angularjs-if-i-have-a-jquery-background][“Thinking in AngularJS” if I have a jQuery background?]]
+- [[http://www.infoq.com/cn/news/2013/02/angular-web-app][使用 AngularJS 构建大型 Web 应用（模块划分，目录结构等）]]
+- [[https://github.com/atian25/blog/issues/5][AngularJS 性能优化心得（atian25/blog）]]
+- [[https://medium.com/@chriscordle/why-angular-2-4-is-too-little-too-late-ea86d7fa0bae][Why Angular 2/4 Is Too Little, Too Late – Chris Cordle – Medium]]
+  
+教程
+- [[https://scotch.io/tutorials/angularjs-multi-step-form-using-ui-router][AngularJS Multi-Step Form Using UI Router]]
+
+布局相关：
+- [[http://stackoverflow.com/questions/12863663/complex-nesting-of-partials-and-templates][Complex nesting of partials and templates]]
+
+** 视频
+- [[http://www.imooc.com/video/3940][AngularJS 中的表单验证]]
+- [[http://www.imooc.com/video/3979][基于 AngularJS 的复杂业务系统的复杂业务系统的代码框架探索]]
+
+* 学习 AngularJS Tutorial
+- http://docs.angularjs.cn/tutorial
+- [[https://github.com/angular/angular-seed]]
+  
+** directive 是什么？
+*** ngRepeat directive
+#+BEGIN_SRC html
+<ul>
+  <li ng-repeat="phone in phones">
+    <span>{{phone.name}}</span>
+    <p>{{phone.snippet}}</p>
+  </li>
+</ul>
+#+END_SRC
+
+*** ngController directive
+#+BEGIN_SRC html
+<body ng-controller="PhoneListCtrl">
+  <ul>
+    <li ng-repeat="phone in phones">
+      <span>{{phone.name}}</span>
+      <p>{{phone.snippet}}</p>
+    </li>
+  </ul>
+</body>
+#+END_SRC
+    
+*** ngApp directive
+#+BEGIN_SRC html
+<html ng-app="phonecatApp">
+<head>
+  ...
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="js/controllers.js"></script>
+</head>
+<body ng-controller="PhoneListCtrl">
+
+  <ul>
+    <li ng-repeat="phone in phones">
+      <span>{{phone.name}}</span>
+      <p>{{phone.snippet}}</p>
+    </li>
+  </ul>
+
+</body>
+</html>
+#+END_SRC
+
+** Controller
+Contrller 定义在 app/js/controllers.js 文件里，并且注册到某个 module 上。
+Controller 在 Model 和 Views 之间建立了 *数据绑定* 。
+
+*** 定义和注册 Controller
+下面的 JS 代码定义了 Controller，并将之注册到 module 上，注意 $scope 这个传
+入参数是该 Controller 的作用域，它是 *root scope* 的后代，Controller 做的工
+作可以认为是将数据 attach 到 $scope 上。
+#+BEGIN_SRC js
+var phonecatApp = angular.module('phonecatApp', []);
+
+phonecatApp.controller('PhoneListCtrl', function($scope) {
+  $scope.phones = [
+    {'name': 'Nexus S',
+     'snippet': 'Fast just got faster with Nexus S.'},
+    {'name': 'Motorola XOOM™ with Wi-Fi',
+     'snippet': 'The Next, Next Generation tablet.'},
+    {'name': 'MOTOROLA XOOM™',
+     'snippet': 'The Next, Next Generation tablet.'}
+  ];
+});
+#+END_SRC
+
+*** 为 Controller 写单元测试
+#+BEGIN_SRC js
+/* jasmine specs for controllers go here */
+describe('PhoneCat controllers', function() {
+  describe('PhoneListCtrl', function(){
+    beforeEach(module('phonecatApp'));
+    it('should create "phones" model with 3 phones', inject(function($controller) {
+      var scope = {},
+          ctrl = $controller('PhoneListCtrl', {$scope:scope});
+
+      expect(scope.phones.length).toBe(3);
+    }));
+  });
+});
+#+END_SRC
+
+注意点：
+- 单测函数运行前，先加载 module（通过 beforeEach）
+- 通过 inject，将 Controller 注入到单测函数中
+- 创建 Controller 的实例，通过其 scope 测试其正确性
+
+** Filter and Sort
+AngularJS 实现 Filter 和 Sort 的方式刷新了我的视界，以前我是通过
+tablersorter 或 datatables 来实现这两个功能的，它们既慢，且代码冗长，显得弱
+爆了。
+#+BEGIN_SRC html
+<body ng-controller="PhoneListCtrl">
+...
+Search: <input ng-model="query">
+Sort by:
+<select ng-model="orderProp">
+  <option value="name">Alphabetical</option>
+  <option value="age">Newest</option>
+</select>
+
+<ul class="phones">
+  <li ng-repeat="phone in phones | filter:query | orderBy:orderProp">
+    <span>{{phone.name}}</span>
+    <p>{{phone.snippet}}</p>
+  </li>
+</ul>
+...
+</body>
+#+END_SRC
+   
+注意点：
+- ng-model 在 input 定义的 query 变量位于 Controler 的 scope 内
+- select 定义了两种排序规则：根据 name 和根据 age，通过 orderBy 起作用。
+  phone 变量拥有 name 和 age 这两个 key
+
+* AngularJS Form
+使用前端的 form 时，经常遇到下面几个问题：
+1. 表单验证。WTForms 是在后端验证的，不灵活
+2. input 之间的联动，即某个 input 被填写或填写错误时，其他的 input 或者其他
+   元素的展现发生变化
+3. 点击某个按钮，调用某个函数需要的参数来自于该按钮相关的某个元素。是通过
+   DOM 获取，还是通过 AngularJS 提供的某种便利措施？
+4. 表单提交。如何调用 submit，如何向用户返回结果？
+
+** input
+
+* 内置指令
+** ng-select
+要点：
+1. 使用 ~ng-options~ 来自动生成选择项
+2. 利用 ~as xxx.yyy~ 来指定选择项的 value
+3. 使用 括号 + 单引号 来格式化选择项的文本显示
+
+#+BEGIN_SRC html
+<div class="form-group">
+    <label>目的集群名</label>
+    <select class="form-control" name="cluster_name" ng-model="logConfig.cluster_name"
+            ng-options="clusterConfig.cluster_name as
+            (clusterConfig.cluster_name + '（' + clusterConfig.description + '）')
+            for clusterConfig in clusterConfigs">
+        <option value="">选择集群</option>
+    </select>
+</div>
+#+END_SRC
+   
+** ng-repeat
+*ng-repeat* 为每个元素都创建了新的子作用域。
+* 过滤器
+** 内置过滤器
+| 过滤器 | 用法                            | 备注                    |                                                         |
+|--------+---------------------------------+-------------------------+---------------------------------------------------------|
+| date   | nodeStatus.synced_log_time * 1000 | date:'yyyy-MM-dd HH:mm' | 要求精确到微秒，如果传入的是 UNIX 时间戳，则需要乘 1000 |
+|        |                                 |                         |                                                         |
+|        |                                 |                         |                                                         |
+|        |                                 |                         |                                                         |
+
+** 使用 $filter('date') 解决 Javascript 内置 Date 对象的格式化功能薄弱的问题 <2015-06-28 日>
+假设，我们后端返回的时间是标准的类似于 ~1970-01-01T08:00:00~ 这样的格式，我
+们可以借用 ~date~ 这个过滤器来格式化输出时间信息。如下：
+
+#+BEGIN_SRC js
+var base_time = $filter('date')(new Date(Date.parse(slice.base_time)), 'yyyy-MM-dd HH:mm');
+#+END_SRC
+
+参考：
+- http://stackoverflow.com/questions/12920892/format-date-time-in-angular-js
+
+* 自定义指令
+
+要点：
+1. 在 scope 配置项中里通过 ~=~ 来实现与父作用域的某模型进行双向绑定
+2. 双向绑定时，不需要 {{ }}，直接在双引号指定模型的名字
+3. 在 controller 里通过 $scope 访问模型，而不是通过 @attrs，@attrs 另有它用
+   
+注意：通过 attr 从指令中取值，不过取出来的貌似是字符串，而不是模型。
+
+* Angular 动画
+** 使用 Animate.css 实现动画 <2015-05-05 二>
+一开始，我学习 AngularJS 权威教程的动画一章后，根据示例来实现动画，但未果！
+后来又模仿 [[https://scotch.io/tutorials/angularjs-multi-step-form-using-ui-router][AngularJS Multi-Step Form Using UI Router]] 一文中的动画实现部分来
+搞，又未果！最后在 [[https://scotch.io/tutorials/animating-angular-apps-ngshow-and-nghide][Animating Angular Apps: ngShow and ngHide]] 一文里找到了
+Animate.css 这个动画库，去了其 [[http://daneden.github.io/animate.css/][官网]] ，感觉不错。Google 了一下，找到了 [[http://www.jvandemo.com/how-to-create-cool-animations-with-angularjs-1-2-and-animate-css/][How
+to create cool animations with AngularJS 1.2 and Animate.css]] 一文，学习之，
+遂得逞！简单的几行 CSS 代码，实现了各种动画。
+
+#+BEGIN_SRC css
+.fixed-aside-right.ng-hide-remove {
+    -webkit-animation: slideInRight 0.5s;
+    -moz-animation: slideInRight 0.5s;
+    -ms-animation: slideInRight 0.5s;
+    animation: slideInRight 0.5s;
+}
+
+.fixed-aside-right.ng-hide-add {
+  -webkit-animation: slideOutRight 0.5s;
+  -moz-animation: slideOutRight 0.5s;
+  -ms-animation: slideOutRight 0.5s;
+  animation: slideOutRight 0.5s;
+}
+#+END_SRC
+
+* angular-resource
+- [[http://www.sitepoint.com/creating-crud-app-minutes-angulars-resource/][Creating a CRUD App in Minutes with Angular’s $resource]]
+
+** paramDefaults, @ 与动态设值 <2015-05-21 四>
+
+定义 $resource 服务时，第一个配置是 url，第二个配置是默认参数。如果指定的参
+数未定在 url 里，则以 ?= 的形式附在 url 的后面。该配置也支持动态设置参数，
+就是利用@ ，例如：
+
+#+BEGIN_SRC js
+angular.module('myApp.services').factory('Entry', function($resource) {
+  return $resource('/api/entries/:id', { id: '@_id' }, {
+    update: {
+      method: 'PUT' // this method issues a PUT request
+    }
+  });
+});
+#+END_SRC
+
+angular-resource 会自动将 _id 设置为 id 的值，传到后端（联想到 MongoDB 的主
+键就是 _id）
+
+** 使用 update (PUT)
+在 angular-source 中，get 方法不需要定义，并且直接通过类似 User.get() 的方
+式调用。而 update 则需要定义，并且通过 User.$update() 的方式调用。
+
+#+BEGIN_SRC js
+  .factory('LogConfig', function($resource) {
+      return $resource('/api/log_config/:log_module_id', {}, {
+          update: {
+              method: 'PUT'
+          }
+      });
+  })
+#+END_SRC
+
+注意：第二个参数是 paramDefaults，即使它为空，也不能省略不填，否则会发生错
+误。
+
+* Angular 高级
+** 在自定义的 directive 中使用 $watch 来实现监听 <2015-06-24 三>
+
+假设我们自定义了一个指令（directive），想在指令的 Controller 里执行一些命令，
+这些命令依赖着外部传入的某个 Model，我们在这之前已经通过 ~=~ 来将这个 Model
+来让指令调用者可以双向绑定。
+
+现在的问题是，在该指令的 Controller 开始执行时，这个 Model 还未初始化，值为
+undefined，故执行失败。而当该 Model 初始化后， ~我们已经错过了时机，无法再
+次执行该 Controller 了~ ！
+
+我们需要一种机制，能让我们能监控这个 Model，当它发生变化时（如从 undefined
+变为具体某个值），能触发执行我们定义在 scope 里的函数。这个机制就是 $watch。
+在定义指令时，我们可以在 link 里自定义我们的 $watch。
+
+示例代码如下：
+#+BEGIN_SRC js
+   ...
+   link: function(scope, elm, attr) {
+       scope.$watch('sourcePath', function(newValue, oldValue) {
+           if (newValue !== oldValue) {
+               console.log("I got the new value! ", newValue);
+               scope.gotoDir(scope.hostname, scope.sourcePath);
+           }
+       }, true);
+   },
+   ...
+#+END_SRC
+
+补充（2015-06-25 23:30:29），刚才使用 ~directive model undefined~ 作为关键
+词 Google 了一下，发现了一个不用 $watch 就能解决此问题的方法。那就是利用
+~ng-if~ 在 Model 为 undefined 的情况下，不渲染元素的特性。按此思路，我们可
+以这样使用我们定义的指令：
+
+#+BEGIN_SRC html
+<minos-fs-browser ng-if="nodeStatusInMaster.source_path" source-path="nodeStatusInMaster.source_path">
+</minos-fs-browser>
+#+END_SRC
+
+** 在 ui-router 使用中 resolve <2015-06-26 五>
+resolve 是 AngularJS 里难理解，难使用的东西。
+
+#+BEGIN_SRC js
+    .state('minos.log', {
+        url: '/log/{log_module_id:int}',
+        templateUrl: minos_base_url + 'log.html',
+        resolve: {
+            logConfig: function($stateParams, LogConfig) {
+                return LogConfig.get({ log_module_id: $stateParams.log_module_id}).$promise;
+            }
+        },
+        controller: function($scope, $stateParams, $http, logTaggingService, logConfig) {
+#+END_SRC
+
+参考：
+- https://github.com/angular-ui/ui-router/wiki
+- https://github.com/angular-ui/ui-router/wiki/Nested-States-%26-Nested-Views
+
+* 工作流
+** AngularJS 与 Requirejs 的集成，以及使用 ECharts 画图 <2015-06-27 六>
+为了在 AngularJS 更方便地使用 ECharts，我用 Requirejs 改造了我的 JS 文件引
+用方式。这两件事相当耗费精力，还好最后我将它搞定了，耗费掉了我周六约半天的
+时间。
+#+CAPTION: ./imgs/angularjs/20150627180627.png
+[[../static/imgs/angularjs/20150627180627.png]]
+
+说几个要点吧：
+1. 要好好理解 Requirejs 中 ~模块~ 这一概念，不理解它，就无法弄明白 Requirejs
+   的机制。
+2. 好好地阅读 Requirejs 的文档（建议阅读 [[http://www.requirejs.cn/][中文翻译版]] ）
+3. 我厂出产的 ECharts 文档很好，并且提供了许多 [[http://echarts.baidu.com/doc/example.html][贴近现实开发的例子]] ，项目本
+   身也是高质量。值得你拥有，赞一记。
+
+* 问题记录
+** 阻止 Chrome 缓存 HTML 模板 <2015-06-28 日 13:00>
+最近不知道改了啥参数，我的子页面的总是被 Chrome 缓存住，修改了内容也不会在
+页面上看到。非常让人恼火。
+
+由于项目工期紧，我先用了临时的解法，就是在 HTML 加了 meta，指明不缓存。
+
+#+BEGIN_SRC html
+<meta http-equiv="Expires" CONTENT="0">
+<meta http-equiv="Cache-Control" CONTENT="no-cache">
+<meta http-equiv="Pragma" CONTENT="no-cache">
+#+END_SRC
+
+后记（2015-07-07 18:15:15）：此法不灵！
+
+** Uncaught Error: [$injector:modulerr] 的解法 <2015-07-07 二>
+   
+我为我的 Angular app 加入一个 module 后，一运行浏览器就报这样的错误：
+#+BEGIN_SRC sh
+Uncaught Error: [$injector:modulerr] http://errors.angularjs.org/1.3.15/$injector/modulerr?p0=minosApp&p1=Error
+#+END_SRC
+
+看到 AngularJS 给我返回的错误信息，我完全不知道在说啥，只能摸黑排查。我先怀
+疑是 Requirejs 引入包的依赖关系没弄好，于是各种修改尝试，未果。然后怀疑这个
+路径名起的不漂亮，改了一个名字后，仍然未果。
+
+最后，我使用了 ~经典的短路排错法~ ，当我发现将所有 router 相关的代码删除
+后，发现不报错了。于是疑点落到这部分代码上了。我对这部分代码不断地部分注释，
+部分解注释，终于发现问题的原因了，原来是我定义了两个相同的 ui-router state！
+修改之，问题解决。
+
+经验教训：
+1. 顺风靠单测，逆风靠日志，绝境时还是得靠短路法。
+2. AngularJS 的错误提示真特么坑爹！我从未见过有如此难于排查问题的开发框架。
+
+* 回顾
+** 看完了 AugularJS 1.3 Tutorial <2015-02-17 二>
+本 Tutorial 以一个简单的展示手机的应用为例子，循序渐进地介绍 AngularJS，每
+个新特性都对应着一个 git commit，用户可以 checkout 每个 commit 来渐进式地学
+习，而不需要茫然地面对代码最终形态。 这种教学方式很好，值得我学习。
+#+BEGIN_EXAMPLE
+ * fb0deab - (HEAD, tag: step-12, origin/master, origin/HEAD, master) step-12 animations (8 weeks ago) <Peter Bacon Darwin>
+ * 0b5bb30 - (tag: step-11) step-11 custom service and $resource (8 weeks ago) <Peter Bacon Darwin>
+ * ed4c127 - (tag: step-10) step-10 image swapping with ng:click (8 weeks ago) <Igor Minar>
+ * 4147d18 - (tag: step-9) step-9 checkmark filter (8 weeks ago) <Igor Minar>
+ * 8564fb4 - (tag: step-8) step-8 phone details view (8 weeks ago) <Peter Bacon Darwin>
+ * 2fe56e1 - (tag: step-7) step-7 $route and app partitioning (8 weeks ago) <Peter Bacon Darwin>
+ * fb1b540 - (tag: step-6) step-6 phone images and links (8 weeks ago) <Peter Bacon Darwin>
+ * 1d084d3 - (tag: step-5) step-5 XHR and dependency injection (8 weeks ago) <Peter Bacon Darwin>
+ * 2d7b654 - (tag: step-4) step-4 phone ordering (8 weeks ago) <Peter Bacon Darwin>
+ * 117af67 - (tag: step-3) step-3 interactive search (8 weeks ago) <Peter Bacon Darwin>
+ * ca46e1f - (tag: step-2) step-2 angular template with repeater (8 weeks ago) <Peter Bacon Darwin>
+ * 9d49dd9 - (tag: step-1) step-1 static phone list (8 weeks ago) <Peter Bacon Darwin>
+ * 96a9b5b - (tag: step-0) step-0 bootstrap angular app (8 weeks ago) <Igor Minar>
+ * c6ac3f3 - (grafted) chore(bower): update jquery dependency to ~2.1.1 (8 weeks ago) <Peter Bacon Darwin>
+#+END_EXAMPLE
+
+AngularJS 最让我欣慰的特性是 *数据的双向绑定* ，使用它后就几乎不再需要使用
+不那么优雅的 JQuery 方式来选中并修改元素特性了。当然这种双向绑定是以其 MVC
+分层设计为前提的，AngularJS 是前端的 MVC 框架。而在我之前使用的 Flask 和
+Tornado 里，整个前端是作为后端 MVC 的 View 的一部分，交给 Jinja 以及零碎的
+JS 代码 来做。随着我的使用的深入，我越来越觉得前端代码乱成一团（尤其是表单）。
+AngularJS 为我指了一条明路。
+
+虽然 AngularJS 如此吸引人，并能为我的开发效率带来大幅提升，但是我决定先暂停
+学习。原因如下：
+1. AngularJS 相当庞大，深入学习要投入大量精力
+2. 近期我要补完之前计划的几篇文章
+3. AngularJS 2.0 今年可能会发布，改动幅度相当大，我不如等待其发布，直接学它
+** AnguljarJS 是一门操纵 HTML 的技术 <2015-05-11 一>
+一个月前，由于项目需求，我再次拾起 AngularJS。这一个月里，我不断地学习，不断
+地尝试用 AngularJS 解决业务开发上的问题，做出更加具有交互性的应用。今天，我
+为了解决一个困扰我好几天的复杂页面复用以及子页面调用（以 Modal 和 Aside 的
+方式）的问题时，学习并尝试自定义 directive，了解到了一些例如通过 transclude
+来构建 HTML 的技术。感受到了 AngularJS 的强大，以及作为一个前端框架的全能，
+并且产生感受：AnguljarJS 是一门操纵 HTML 的技术 。
+
+** AngularJS 的缺点总结 <2016-02-16 二>
+1. 太容易碰到性能问题了。
+2. 运行出错很难排查。
+3. 要同时地在不同文件里编写 HTML/JS/CSS，构建一个可复用的对象（如 directive）
+   时会感到厌烦。
+4. 自成一体，和其他前端社区几乎完全割裂。例如很多基于JQuery的优秀组件难以在
+   AngularJS下使用。这几年下来，AngularJS的社区发展让我很失望。

@@ -1,0 +1,42 @@
+#+TITLE: Thrift
+#+DATE: 2014-04-18
+#+KEYWORDS: C++, RPC
+
+Thrift 的用途跟 Protobuf 一样，但是各方面都很丑陋。
+
+* 判断字段是否存在
+Thrift 的每个符合字段都有一个__isset 的子字段，该子字段记录了复合字段的
+各个字段有没有被设过值。
+* 打印 DebugString
+函数是：ThriftDebugString，相关示例如下：
+#+BEGIN_SRC cpp
+#include "thirdparty/thrift/protocol/TDebugProtocol.h" 
+
+VLOG(20) << "begin to add data slice. << ", Input_AddSlice: " 
+    << apache::thrift::ThriftDebugString(input);
+#+END_SRC
+
+返回的 DebugString 如下：
+#+BEGIN_EXAMPLE
+{
+ 01: _in_slice (struct) = Slice {
+    01: indexkeyvalues (map) = map<string,string>[2] {
+      "event_day" -> "20140722",
+      "event_hour" -> "15",
+    },
+    02: dependkeyvalues (map) = map<string,string>[1] {
+      "event_time" -> "1406015400,1406015700",
+    },
+    03: uri (string) = "/pblog/dianxin_master/dianxin_general_online",
+    04: bitMap (map) = map<string,bool>[0] {
+    },
+    05: location (struct) = Location {
+      01: cluster (struct) = ClusterInfo {
+        01: clusterName (string) = "WG-ECOMON",
+        02: status (i32) = 0,
+        03: nameNode (string) = "hdfs://szwg-xxxxxx-xxxx.xxxx.xxxxx.com:54310",
+        04: type (i32) = 1,
+      },
+...
+...
+#+END_EXAMPLE

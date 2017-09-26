@@ -1,0 +1,7 @@
+#+TITLE: Clang
+#+DATE: 2014-04-30
+#+KEYWORDS: 编译器
+
+* 静态代码分析
++ [[http://stackoverflow.com/questions/5373714/generate-calling-graph-for-c-code][Generate calling graph for C++ code]]
++ [[http://clang.llvm.org/doxygen/dir_2e52301972a475b8eb59cbc5994fff95.html][Clang lib Directory Reference (自动绘制依赖图)]]

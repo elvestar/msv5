@@ -1,0 +1,43 @@
+#+TITLE: Nanoc
+#+DATE: 2014-11-13
+#+KEYWORDS: Ruby, SSG
+
+* 资料收集
+** 文档
++ [[http://nanoc.ws/docs/tutorial/][Nanoc Tutorial]]
++ [[https://github.com/nanoc/nanoc/wiki][Nanoc Wiki]]
+** 文章
++ [[http://www.xiaohanyu.me/2014/05/04/build-static-site-with-nanoc-1/][Build Static Site With Nanoc]]
++ [[http://zameermanji.com/blog/2012/6/15/rocking-and-rolling-with-nanoc/][Rocking and Rolling with Nanoc]]
+
+** 参考
++ [[https://github.com/doitian/iany.me]]
++ [[https://github.com/h3rald/h3rald]]
+* 扩展
+** nanoc-toolbox
+本想用它的为 h1/h2/h3/h4/.. 套上 div section 的功能的，但是发现貌似和当前版
+本的 Nanoc 不兼容，而且这个库的文档也非常不健全，再看一眼 AddSections 的代
+码，发现已经有两年没更新了，估计是荒废了。所以不使用这个库。
++ [[https://github.com/aadlani/nanoc-toolbox]]
+
+* 站内搜索
+- [[http://www.budparr.com/article/search/2014/08/24/search-options-for-static-websites/][Search Options for Static Websites（介绍流行的搜索插件）]]
+** Swiftype
+- [[https://swiftype.com/documentation/crawler_quick_start][Swiftype quick start]]
+
+这个是第三方的站内搜索引擎，用起来很方便，并且样式也挺漂亮的。但貌似免费账
+号限制挺多的，能索引的文档和每月可调用搜索的次数都有限额。
+#+CAPTION: ./imgs/nanoc/20150406210140.png
+[[../static/imgs/nanoc/20150406210140.png]]
+
+* 回顾
+** 可以说已经掌握了 Nanoc 这个工具了 <2015-01-12 一>
+经过周末两天的折腾，终于有了拨开云雾见青天的感觉。我搞定了：
+1. 将就能用的网站样式（以 norang.ca 网站的 org.css 为基础）
+2. 通过完善的 Org publisher 将 org 文件件转化为基础 HTML，再通过 Nanoc 将其
+   处理组织为静态网站
+3. Tags 页面和新的 Archives 页面都良好地工作了
+4. 抛弃了 Pandoc，我对它的 Org Reader 不再抱有很高的期望
+5. 对 Ruby 和 Nanoc 的了解多了一点，可以说已经掌握了 Nanoc 这个工具
+
+

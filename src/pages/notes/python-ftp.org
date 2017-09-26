@@ -1,0 +1,20 @@
+#+TITLE: Python FTP
+#+DATE: 2014-11-25
+#+KEYWORDS: Python, FTP
+
+* Introduction
+ 
+* 资料收集
+** 文档
++ [[https://docs.python.org/2/library/ftplib.html][20.8. ftplib — FTP protocol client]]
++ [[https://hg.python.org/cpython/file/2.7/Lib/ftplib.py][lib/ftplib.py]]
+  
++ [[http://blog.csdn.net/linda1000/article/details/8255771][python 的学习（十三）---- ftplib 模块]]
+* Mac FTP
+启动方式：
+#+BEGIN_SRC sh
+sudo -s launchctl load -w /System/Library/LaunchDaemons/ftp.plist
+#+END_SRC 
+* 通过 ftplib 来实现线上机器目录情况的排查工具
+
+* TODO 回顾 

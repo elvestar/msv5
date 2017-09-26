@@ -1,0 +1,95 @@
+#+TITLE: 个人网站 V2
+#+DATE: 2016-02-14
+
+* 图片
+** 悬浮（文字包围）
+
+#+CAPTION: Chaconne in D minor - Hélène Grimaud
+#+ATTR_HTML: class="half-left-float"
+[[../static/imgs/my-site-v2/20160214124908.png]]
+
+#+BEGIN_HTML
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=45% height=52 src="http://music.163.com/outchain/player?type=2&id=2745513&auto=0&height=32"></iframe>
+#+END_HTML
+
+恰空是巴赫第二无伴奏小提琴帕蒂塔（古组曲）的第五乐章，是小提琴艺术发展史上
+不可多得的珍宝。巴赫无伴奏弦乐作品包括三首小提琴奏鸣曲和三首小提琴组曲（也
+称“帕提塔”）和六首无伴奏大提琴组曲，都是他任职克滕时所作，在这个时期他创
+作了许多器乐曲，这跟那时环境有关，因为当时并没有合唱团供他使用，他也不必创
+作宗教性质的音乐。这些作品的创作顺序并没有历史文献可以考证，如果单纯以推论
+方式来说，似乎六首为无伴奏小提琴所作的这些曲子在先，这是因为无伴奏小提琴写
+作在这之前已有许多先例，而整套无伴奏大提琴作品则以巴赫首开先河。就乐曲组成
+来看，为独奏小提琴而作的这些组曲型式非常不统一，而大提琴组曲型式十分一致，
+似乎是他先在小提琴上熟悉无伴奏弦乐曲写作后，再应用于大提琴的。
+
+无伴奏小提琴奏鸣曲及组曲的出版顺序是：奏鸣曲第一号，组曲第一号，奏鸣曲第二
+号组曲第二号，奏鸣曲第三号，组曲第二号…...如是交错出版。为何如此呢?三首组
+曲的形成为不规则，但三首奏鸣曲却很明显的为一个统一架构，是自成一套系统的作
+品。是因为调性安排的关系吗?这六首确实可以找到调性的关联，但却是组曲，奏鸣曲
+自成系统。因此这样的出版顺序可以推论为：巴赫意欲将这六首统一为一组作品，避
+免明显的分为组曲和奏鸣曲两组，而且如是交错出版，也使这六首的安排不致太单调。
+
+** 图片轮播
+使用 Fancybox
+
+百望山山高海拔 210 米，是太行山余脉进入京城的最后一道山梁。《长安夜话》有
+云：”百望山南阻西湖，北通燕平。背而去者，百里犹见其峰，故曰‘百望’”。百
+望山属太行山余脉，是太行山延伸到华北平原最东端的山峰，故有“太行前哨第一峰”的
+美称。百望山森林公园草木种类繁多，空气中富含的负氧离子，游于其间，可以享受
+到森林浴的保健功能；并且百望山环境清幽，适宜各年龄段和不同身体条件的人攀爬
+锻炼，是距京城最近的登山乐园，从公主坟向北驱车 15 公里就可到达。
+
+* 表格
+** 文字包围
+#+ATTR_HTML: :class half-left-float
+#+CAPTION: Time Report of 2016W6
+| File     | Headline         |      Time |
+|----------+------------------+-----------|
+| time.org | *File time*      | *1d 1:03* |
+|          | [[file:/Users/elvestar/github/pkm/time/time.org::%E6%9C%AA%E5%BD%92%E7%B1%BB][未归类]]           |      2:02 |
+|          | [[file:/Users/elvestar/github/pkm/time/time.org::%E5%AD%A6%E4%B9%A0][学习]]             |     21:57 |
+|          | [[file:/Users/elvestar/github/pkm/time/time.org::%E7%94%9F%E6%B4%BB][生活]]             |      1:04 |
+
+A table is re-aligned automatically each time you press <TAB> or <RET> or
+C-c C-c inside the table. <TAB> also moves to the next field (<RET> to the
+next row) and creates new table rows at the end of the table or before
+horizontal lines. The indentation of the table is set by the first
+line. Any line starting with ‘|-’ is considered as a horizontal separator
+line and will be expanded on the next re-align to span the whole table
+width. So, to create the above table, you would only type
+
+When typing text into a field, Org treats <DEL>, <Backspace>, and all
+character keys in a special way, so that inserting and deleting avoids
+shifting other fields. Also, when typing immediately after the cursor was
+moved into a new field with <TAB>, S-<TAB> or <RET>, the field is
+automatically made blank. If this behavior is too unpredictable for you,
+configure the options org-enable-table-editor and org-table-auto-blank-field.
+* 子页面
+** 普通模态页面
+#+BEGIN_HTML
+<a class="fancybox btn btn-default" data-fancybox-type="iframe" href="/notes/music-theory/" type="button">笔记: 乐理学习</a>
+#+END_HTML
+** PDF
+MapReduce: Simplified Data Processing on Large Clusters
+#+BEGIN_HTML
+<a class="fancybox btn btn-default" data-fancybox-type="iframe" href="http://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf" type="button">PDF: MapReduce</a>
+#+END_HTML
+
+** 内嵌视频
+使用 [[http://videojs.com/][video.js]]
+#+BEGIN_HTML
+<video id="really-cool-video" class="video-js vjs-default-skin" controls
+ preload="auto" width="720" height="480" poster="/notes/my-site-v2/imgs/my-site-v2_20160214123601.png"
+ data-setup='{}'>
+  <source src="/videos/IMG_3604.mp4" type="video/mp4">
+  <p class="vjs-no-js">
+    To view this video please enable JavaScript, and consider upgrading to a web browser
+    that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+  </p>
+</video>
+#+END_HTML
+
+** 模态视频
+#+BEGIN_HTML
+<a class="fancybox btn btn-default" data-fancybox-type="iframe" href="/videos/IMG_3604.mp4" type="button">吉他演奏: 天空之城</a>
+#+END_HTML

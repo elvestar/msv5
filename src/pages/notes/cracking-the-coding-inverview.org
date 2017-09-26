@@ -1,0 +1,66 @@
+#+TITLE: Cracking the Coding Interview
+#+DATE: 2014-02-11
+#+KEYWORDS: C++, 算法
+
+* 前言
+把本书当成算法书来看吧，能加强我面试别人的能力。
+
+本书的分类做得很好，我先尝试以它的分类为基础来重构一下我的算法知识。
+
+* 学习计划
+** 题目统计
+|   序号 | 章节名                            |    题目数 | 价值 |
+|--------+-----------------------------------+-----------+------|
+| Part 1 | *Data Structures*                 |  共 31 题 |      |
+|      1 | Arrays and Strings                |         8 |      |
+|      2 | Linked Lists                      |         7 |      |
+|      3 | Stacks and Queues                 |         7 |      |
+|      4 | Trees and Graphs                  |         9 |      |
+| Part 2 | *Concepts and Algorithm*          |  共 63 题 |      |
+|      5 | Bit Manipulation                  |         8 |      |
+|      6 | Brain Teasers                     |         6 |      |
+|      7 | Mathematics and Probability       |         7 |      |
+|      8 | Object-Oriented Design            |        10 |      |
+|      9 | Recursion and Dynamic Programming |        11 |      |
+|     10 | Scalability and Memory Limits     |         7 |      |
+|     11 | Sorting and Searching             |         8 |      |
+|     12 | Testing                           |         6 |      |
+| Part 3 | *Knowledge Based*                 |  共 29 题 |      |
+|     13 | C and C++                         |        10 |      |
+|     14 | Java                              |         6 |      |
+|     15 | Databases                         |         7 |      |
+|     16 | Threads and Locks                 |         6 |      |
+| Part 4 | *Additional Review Problems*      |  共 27 题 |      |
+|     17 | Moderate                          |        14 |      |
+|     18 | Hard                              |        13 |      |
+|   合计 | *                                 | 共 150 题 |      |
+  
+** 初步计划 <2015-03-05 四> 
+1. 我的时间很有限，我不是学生，我能够抽出的时间主要是平时下班后以及周末
+2. 本书中每题的吃透都要有一定的工时
+3. 好在本书的 150 题里面目测有不少水题，尤其是 Part 3 和 Part 2 的一部分
+4. 我给自己的时间是 5 个月
+
+我将本书的题目分为 A 型题（非水题）和 B 型题（水题），比例差不多在 4:3 的样
+子，我每周要搞定 4 道 A 型题和 3 道 B 型题，共 7 题，故这 150 题可以在 5 个
+月后搞定。
+
+* Part 1: Data Structures
+** Arrays and Strings 数组与字符串
+*** StringBuffer / StringBuilder
+本节提到 String 的 append 方法有个 整体 copy 的步骤，看来它说的是 Java，C++
+的 append 我记得是没有 copy 这一步的，而 C++的 + 则是有整体 copy 的。
++ [[http://blog.csdn.net/rmn190/article/details/1492013][String,StringBuffer 与 StringBuilder 的区别?]]
+** Linked Lists 链表
+本节实现了一个 Linked List，感觉有点蹩脚，类名叫 Node，但是提供了便
+利的功能，所以可以构造一个名叫 head 的 Node 对象，来代表整个 Linked List。
+
+#+BEGIN_QUOTE
+NOTE: When you’re discussing a linked list in an interview, make sure to under- stand whether it is a single linked list or a doubly linked list.
+#+END_QUOTE
+
+** Stacks and Queues 栈与队列
+** Trees and Graphs 树与图
+
+* Part 2: Concepts and Algorithms
+** 先把前面给看完再接着写

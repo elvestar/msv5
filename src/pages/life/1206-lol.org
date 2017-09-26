@@ -1,0 +1,1010 @@
+#+TITLE: 我的英雄联盟之旅 
+#+DATE: 2012-06-06
+
+#+BEGIN_HTML
+<b><font
+        color="#AD0000">2012年6月6日第一次玩撸阿撸，选的英雄是寒冰射手：</font></b>
+<div>
+    <hr/>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img style="display: inline"
+            src="/static/imgs/1206-lol/9D24A2FD-D915-48E4-8DB3-1BC77BFD43FE.png"
+            height="67" width="391"/></div>
+    <div><br/></div>
+    <div>到目前（2012-6-8 22:07:18）为止，我玩过的英雄有寒冰射手，风暴之怒，流浪法师，熔岩巨兽，德玛西亚之力。</div>
+    <div><br/></div>
+    <div>了解到麦林炮手和寒冰射手都会出加45攻击的大剑。从阿振那里学到，如果一个英雄的工具带特效，那么它优先出加攻速和暴击的黄叉，然后出红叉。</div>
+    <div><br/></div>
+#+END_HTML
+
+* 第一次玩对战，使用了麦林炮手 <2012-06-10 日 13:34>
+#+BEGIN_HTML
+    <div><b><font color="#AD0000">第一次玩对战，使用了麦林炮手，战绩为25/5/1。 - 2012-6-10 13:34:51</font></b></div>
+    <div>
+        <hr/>
+        <img style="display: inline" src="/static/imgs/1206-lol/%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%89%93%E5%AF%B9%E6%88%98.jpg"
+             height="700" width="801"/></div>
+    <div><br/></div>
+#+END_HTML
+
+* 不祥之刃
+#+BEGIN_HTML
+<div style="border: 2px solid #ccc; padding: 5px; background-color: yellow">
+    <div><b><font color="#AD0000">不祥之刃</font></b></div>
+    <div>
+        <hr/>
+        近战型法师英雄，比较难用好。
+    </div>
+</div>
+    <div><br/></div>
+#+END_HTML
+
+* 光辉女郎拉克丝
+#+BEGIN_HTML
+    <div><b><font color="#AD0000">光辉女郎 - 2012-6-10 23:19:37</font></b></div>
+    <div>
+        <hr/>
+    </div>
+    <div>出装：先出蓝水晶，再催化神石，再时光之杖。</div>
+    <div>技能：先点Q，再主升E，4级时点个W，之后E/Q互点，有大点大，最后W。</div>
+    <div><img style="display: inline"
+            src="/static/imgs/1206-lol/ECB39B49-1287-4C98-BCFB-2EA3760BB9ED.png"
+            height="68" width="782"/></div>
+    <div>E用来刷兵，点2下E能引爆。</div>
+    <div><br/></div>
+#+END_HTML
+  
+* 流浪法师瑞兹
+#+BEGIN_HTML
+    <div><b><font color="#AD0000">流浪法师 - 2012-6-11 13:56:25</font></b></div>
+    <div>
+        <hr/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和张宏/阿振中路solo，发现了冥火和女妖这两个装备不错，女妖加魔抗和血蓝，而且每45秒能抵挡一次法术。冥火加法强和法术冷却，而且有个强力的主动技能，能够造成目标当前生命值25%++的魔法伤害。
+    </div>
+    <div><img style="display: inline"
+            src="/static/imgs/1206-lol/895186AD-BEE8-41EA-9396-59505F4F6F00.png"
+            height="79" width="792"/></div>
+    <div><br/></div>
+    <div><img style="display: inline"
+            src="/static/imgs/1206-lol/864A7E6B-0AA2-4514-8092-90C4D327C97E.png"
+            height="50" width="788"/></div>
+    <div><br/></div>
+#+END_HTML
+  
+* 海洋之灾普朗克 <2012-06-12 二 18:46>
+#+BEGIN_HTML
+    <div><b><font color="#AD0000">今天用仅有的3200块买了个船长 - 2012-6-12 18:46:47</font></b></div>
+    <div>
+        <hr/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;船长的被动是dot+减速三秒，Q能+G和减速，R能够全图释放！
+    </div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是我第一局的战绩，先出灯笼和无尽，发现生存很成问题。</div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img style="display: inline"
+            src="/static/imgs/1206-lol/70277F4A-4F93-4A3C-B2EE-8251CD596F24.png"
+            height="111" width="382"/></div>
+    <div><br/></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;刚才玩了把船长，受阿振指导，向坦方向发展。当我出了个450血的腰带是，他让我出45护甲的衣服，这两件装备是用来配狂徒和反伤甲的，虽然延迟了狂徒的出炉，但是使我当前的耐抗能力大增。后来又出了那把加魔抗，攻速的智慧末刃，准备出自然之力。</div>
+    <div><br/></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;看了JY的船长上单视频，深受启发。船长出门可以用回血牌和血瓶，之后第一时间出贤者之石，然后出草鞋，布甲，防御鞋（船长不是很需要水银鞋），灯笼。第一个大件出狂徒（因为灯笼和防御鞋提供了很多护甲），之后船长就可以出山和人火拼了。第二大件出无尽，接着出负极斗篷，自然之力，最后出阿塔玛之戟（加攻击还加护甲，还能补充暴击的不足）。</div>
+    <div><br/></div>
+#+END_HTML
+
+* 审判天使
+#+BEGIN_HTML
+    <div><b><font color="#AD0000">这一期的免费英雄 - 审判天使 - 2012-6-15 15:30:11</font></b></div>
+    <hr/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E技能可以变成远程溅射伤害，Q能减速和加伤害，大招是无敌，但是是那种针对目标施放的同W一样。
+    <div><br/></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出门配个梅吉坠饰 <a href="http://db.178.com/lol/item-1005"><img style="display: inline"
+            src="/static/imgs/1206-lol/C7459B25-77E0-4EB4-8B34-3FF6F7B63A28.gif"
+            height="64" width="64"/></a>，+7MP5，基本上就不会缺魔了。然后出狂暴之力<a href="http://db.178.com/lol/item-3134"><img style="display: inline"
+            src="/static/imgs/1206-lol/379CFEBE-0725-41EE-A511-8782F94BEAFE.gif"
+            height="64" width="64"/></a>和蜂刺<a href="http://db.178.com/lol/item-3101"><img style="display: inline"
+            src="/static/imgs/1206-lol/852DC018-2246-47E3-AADF-26CF55B57CE6.gif"
+            height="64" width="64"/></a>，配合减冷却的天赋，就可以使E无间隙施放了。
+    </div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;刚才用审判天使赢了一局:</div>
+    <div><img style="display: inline"
+            src="/static/imgs/1206-lol/917B1345-807D-4C69-AE73-63734EDD6625.png"
+            height="77" width="788"/></div>
+    <div><br/></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;反思：可以不用先升级纳什之牙 <a href="http://db.178.com/lol/item-3115"><img style="display: inline"
+            src="/static/imgs/1206-lol/F8A69553-E7AD-4143-847E-7ED7E0CD110B.gif"
+            height="64" width="64"/></a>，或者不用先升级噩梦之灵<a href="http://db.178.com/lol/item-3142"><img style="display: inline"
+            src="/static/imgs/1206-lol/CED58CD0-2232-47F6-8629-81ACE54D2858.gif"
+            height="64" width="64"/></a>。优先把基克的使徒<a href="http://db.178.com/lol/item-3050"><img style="display: inline"
+            src="/static/imgs/1206-lol/2B3D7306-FA7A-49AD-A5E0-1F4967A83F75.gif"
+            height="64" width="64"/></a>出了，又或者先出吸血鬼权杖，优先把黑切<a href="http://db.178.com/lol/item-3071"><img style="display: inline"
+            src="/static/imgs/1206-lol/C65FD09F-6DBF-4D27-B772-D0C87395937F.gif"
+            height="64" width="64"/></a>给出了。
+    </div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;噩梦之灵的特效持续时间好像是只有近战攻击才能延长的。</div>
+    <div><br/></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;刚才学了一招，对付喜欢躲草丛里的盖伦等人，就是在草丛里扔个眼。当然盖伦可以带真眼来应对。</div>
+    <div><br/></div>
+#+END_HTML
+  
+* 赏金猎人
+#+BEGIN_HTML
+    <div><b><font color="#AD0000">今天玩了赏金猎人 - 2012-6-18 19:39:51</font></b></div>
+    <div>
+        <hr/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出门装，草鞋+3血瓶，前期回家补了两多兰，再攻速鞋，然后就是狂热再红叉，接着出吸血鬼权杖。
+    </div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;技能学习：1级学W，2/3级学Q，4级学E，之后就是Q副W，有大点大，E最后升。</div>
+    <div><br/></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Q可以攻击两目标，而且优先英雄，使用它来弹射英雄可以弥补射程。</div>
+    <div><br/></div>
+#+END_HTML
+
+* 堕落天使莫甘娜 <2012-06-18 一 20:22>
+#+BEGIN_HTML
+    <div><b><font color="#AD0000">又玩了堕落天使 - 2012-6-18 20:22:25</font></b></div>
+    <div>
+        <hr/>
+        战绩：
+    </div>
+    <div><img style="display: inline"
+            src="/static/imgs/1206-lol/B44B3889-4168-4415-8345-3C75657D4BE1.png"
+            height="154" width="793"/></div>
+    <div><br/></div>
+    <div><span
+            style="border-collapse: separate; color: rgb(0, 0, 0); font-family: Tahoma; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; font-size: medium;">按照攻略，出门草鞋+3血瓶，然后法师鞋，中娅沙漏，红帽子，感觉魔非常不够用，出了大天使之后感觉好点。</span>
+    </div>
+    <div><span
+            style="border-collapse: separate; color: rgb(0, 0, 0); font-family: Tahoma; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; font-size: medium;">技能路线：1级学Q，2/3级学W，4级学E，之后主W副Q，有大点大，最后升E。</span>
+    </div>
+    <div>按照这个攻略：</div>
+    <div><a href="http://lol.178.com/201108/107551831845_5.html">http://lol.178.com/201108/107551831845_5.html</a></div>
+    <div>的介绍，莫甘娜出门装应该是梅吉坠饰或者蓝宝石或者多兰戒。</div>
+    <div><br/></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;刚才打了一局堕落天使，对面那队比较弱，出了中娅沙漏发现起不到作用，这时我可以考虑先出帽子。另外中路和我对线的女枪跟前几局的女枪相比，有点弱，她一点都无法压制我。总结原因：</div>
+    <div>
+        <ol>
+            <li>不会躲我的Q；</li>
+            <li>她总是用E，而不是Q和平射来打我，完全磨不了我的血；</li>
+            <li>没穿靴子，无法利用移动速度的优势来追点我；</li>
+        </ol>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;莫甘娜面对追杀时的反杀招数：先边走边用E套盾，再回身Q，接着W，再R大招，再D点燃，等到敌人晕结束后，大招的第二波伤害和晕会来临（听说高手的连招是R->Q->W）。</div>
+    </div>
+    <div><br/></div>
+    <div><br/></div>
+#+END_HTML
+  
+* 祖安狂人
+#+BEGIN_HTML
+<div style="border: 2px solid #ccc; padding: 5px; background-color: yellow">
+    <div><b><font color="#AD0000">玩了一把祖安狂人 - 2012-6-19 19:17:17</font></b></div>
+    <div>
+        <hr/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;技能路线：先W，再E，再W，再Q，之后按照W->E->Q的顺序升级，有大升大。
+    </div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;装备路线：出门布甲+5红，之后忍者足具，再出黄金之心（乌龟壳），再小冰锤大冰锤，再日炎斗篷，再振奋盔甲（特效是加强回血和治疗效果）。</div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;召唤师技能： <img style="display: inline"
+            src="/static/imgs/1206-lol/DF1693E6-ACB2-4B56-9821-4A12EE8DE08B.jpg"
+            height="30" width="30"/>&nbsp;&nbsp;+&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/0C28C961-BD57-4374-8731-31B65A707C0D.jpg"
+            height="30" width="30"/></div>
+    <div><br/></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;看了178的攻略，推荐的蒙多装备路线为：布甲，忍者足具，黄金之心，40%攻速弓，智慧末刃，冰锤，兰顿，狂徒，自然之力。
+    </div>
+</div>
+    <div><br/></div>
+#+END_HTML
+
+* 狂野女猎手 <2012-06-21 四 01:04>
+#+BEGIN_HTML
+    <div><span
+            style="border-collapse: separate; color: rgb(0, 0, 0); font-family: Tahoma; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-border-horizontal-spacing: 0px; -webkit-border-vertical-spacing: 0px; -webkit-text-decorations-in-effect: none; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; font-size: medium;"><b><font
+            color="#AD0000">玩了一把狂野女猎手 - 2012-6-21 1:04:15</font></b></span></div>
+    <div>
+        <hr/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;该英雄很像WOW中的德鲁伊，但是与之不同的是，她是人形/猫形双修的。人形可以Q扔标枪（伤害奇高），放陷阱，治疗，猫形可以Q单体主动技，W猛扑突进技，E群伤技。
+    </div>
+    <div>第一场：</div>
+    <div><img style="display: inline"
+            src="/static/imgs/1206-lol/56EDFAD0-5DDF-4F5D-B07D-4AD25B731F5A.png"
+            height="51" width="383"/></div>
+    <div>第二场：</div>
+    <div><img style="display: inline"
+            src="/static/imgs/1206-lol/979BADCF-2B66-420F-B985-BFFCC1292653.png"
+            height="74" width="785"/></div>
+    <div><br/></div>
+    <div><br/></div>
+#+END_HTML
+
+* 蒸汽机器人
+#+BEGIN_HTML
+    <div><b><font color="#AD0000">刚才玩了一把蒸汽机器人 - 2012-6-21 3:20:50</font></b></div>
+    <div>
+        <hr/>
+        <img style="display: inline" src="/static/imgs/1206-lol/9ACF680E-06B6-46AA-9C77-AF87C87D126E.png"
+             height="76" width="791"/></div>
+    <div><br/></div>
+    <div>技能路线：先Q抓人，再E击飞，3级W加速，之后W/E交替加，有大加大，最后升Q。</div>
+    <div>装备路线：<img style="display: inline"
+            src="/static/imgs/1206-lol/A9A17BCF-77FE-40B4-9EE9-C66A31DD400F.gif"
+            height="30" width="30"/>&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/76C7EFFC-5842-47E4-94B1-8D606EA8C4AF.gif"
+            height="30" width="30"/>&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/A24A7691-1491-4E75-9B0B-99BCAA75FFF7.jpg"
+            height="30" width="30"/>&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/DC22A4A6-8511-4EF7-9C07-D50ACA6F8E79.gif"
+            height="30" width="30"/>&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/3350E415-0991-453B-B0C6-ED616FA6488F.gif"
+            height="30" width="30"/>&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/C9D8F5E5-3A6E-4869-920D-B1C9CF7DD8EA.gif"
+            height="30" width="30"/>&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/669125A4-284E-40B6-8865-2F4A6A6C366B.gif"
+            height="30" width="30"/>&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/04E934C7-8088-4036-8201-645D24212F91.gif"
+            height="30" width="30"/></div>
+    <div><br/></div>
+    <div><br/></div>
+#+END_HTML
+
+* 曙光女神
+#+BEGIN_HTML
+    <div><b><font color="#AD0000">曙光女神 - 2012-6-21 13:29:23</font></b></div>
+    <div>
+        <hr/>
+        <img style="display: inline" src="/static/imgs/1206-lol/5AA00949-5131-468D-9805-0CD53C80CF7A.png"
+             height="76" width="790"/></div>
+    <div>这局打电脑没获得任何金币和经验奖励。</div>
+    <div><br/></div>
+    <div>技能路线，主W日蚀，副Q破晓之盾击晕，4级时升1点天顶之刃来突进和追杀。</div>
+    <div>装备选择：出门&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/B4B1C72D-05A2-481A-9406-DA0305EBC222.jpg"
+            height="30" width="30"/>&nbsp;&nbsp;+&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/5A1664F3-92FB-441D-8A13-E8E633438A76.jpg"
+            height="30" width="30"/>，尽快出&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/F800D455-A119-491C-A07D-1C66DF23EC1D.jpg"
+            height="30" width="30"/>&nbsp;&nbsp;来增强线上回复能力。早期装备&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/01698E0C-B245-40FB-9DD0-981CB278B930.jpg"
+            height="30" width="30"/>&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/F800D455-A119-491C-A07D-1C66DF23EC1D.jpg"
+            height="30" width="30"/>&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/ACD7A365-6A24-40FA-BB65-0999932B4A4C.jpg"
+            height="30" width="30"/>。
+    </div>
+    <div><br/></div>
+    <div>打人模式：预先开W，上去平砍+Q，敌人后退则E追杀，看好时机用R来终结。</div>
+    <div><br/></div>
+    <div><br/></div>
+#+END_HTML
+  
+* 诅咒巨魔
+#+BEGIN_HTML
+    <div><b><font color="#AD0000">诅咒巨魔 - 2012-6-21 14:04:39</font></b></div>
+    <div>
+        <hr/>
+        <img style="display: inline" src="/static/imgs/1206-lol/9E106AC9-12B9-4BC4-9C40-6136C10A8ED9.png"
+             height="73" width="787"/></div>
+    <div>这局打电脑仍然没有获得任何金币和经验奖励。</div>
+    <div><br/></div>
+    <div>技能路线：主Q咬人，副E减速，2级点一点W诅咒感染。</div>
+    <div>装备选择：出门布甲+5红，然后出鞋子灯笼。</div>
+    <div><br/></div>
+    <div>打人模式：用W来布置战场，E来控制，冲上去R之咬之。</div>
+    <div><br/></div>
+    <div><br/></div>
+#+END_HTML
+  
+* 深渊巨口
+#+BEGIN_HTML
+    <div><b><font color="#AD0000">深渊巨口 - 2012-6-21 22:07:32</font></b></div>
+    <div>
+        <hr/>
+        <img style="display: inline" src="/static/imgs/1206-lol/95241D47-EEF6-478B-A932-29BC46197AFA.png"
+             height="85" width="402"/></div>
+    <div><br/></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;技能路线：主W副Q，4级加1点E。W开启后配合绿爪，伤害很给力，还能加射程（不是被动增加）。Q能被动地加攻速，主动技射程比普攻近。</div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;大嘴的E用的好是很强力的群体限制技。大嘴的被动技是自暴。</div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;装备选择：多兰出门，然后出鞋子，<img style="display: inline"
+            src="/static/imgs/1206-lol/B8A969DD-D487-4630-B50D-34B917C5DBE8.jpg"
+            height="30" width="30"/>&nbsp;&nbsp;<a href="http://db.178.com/lol/item-3114"><img style="display: inline"
+            src="/static/imgs/1206-lol/9A60FE1C-48CF-4C91-8876-BFB5F9034CCE.gif"
+            height="64" width="64"/></a>&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/47DF4CF1-B796-4FEB-BDE4-BB60E2A2C218.jpg"
+            height="30" width="30"/>&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/57D2D875-B832-44A0-A209-29D2008EC639.jpg"
+            height="30" width="30"/>，期间可以买个<img style="display: inline"
+            src="/static/imgs/1206-lol/0E3D40FE-7A3B-4FBE-8E83-B42BD4E7B217.jpg"
+            height="30" width="30"/>。另外大冰锤&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/A1CC33B2-20C5-4459-89F9-9E45D7FB32A4.jpg"
+            height="30" width="30"/>&nbsp;&nbsp;也是件可以考虑的装备，如果对方法师强力，可以用<img style="display: inline"
+            src="/static/imgs/1206-lol/4461925A-C5A2-4DBA-A4D2-A917F3F6E10B.jpg"
+            height="30" width="30"/>&nbsp;&nbsp;来代替腐蚀之刃。
+    </div>
+    <div>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;大嘴的弱点是团战是完全没有自保能力，这是它不如小炮的地方，<b>可以选择&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/70AAA9F7-DD36-4266-ACC8-63A37BC4A9C5.jpg"
+            height="30" width="30"/>&nbsp;&nbsp;+&nbsp;&nbsp;<img style="display: inline"
+            src="/static/imgs/1206-lol/A38B1820-7EBE-4137-A1F3-3A9570FC7104.jpg"
+            height="30" width="30"/></b>。
+    </div>
+</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 武器大师
+#+BEGIN_HTML
+<div><b><font color="#AD0000">武器大师 - 2012-6-22 17:12:48</font></b></div>
+<div>
+    <hr/>
+    第一场：<img style="display: inline"
+        src="/static/imgs/1206-lol/894700EB-E206-4D67-B2EF-8F4ED544CF67.png"
+        height="86" width="403"/></div>
+<div>第二场：<img style="display: inline"
+        src="/static/imgs/1206-lol/3705C40E-0168-489C-AA4B-9D98AC1B2898.png"
+        height="83" width="402"/></div>
+<div><br/></div>
+<div>技能路线：1级加Q跳斩，2级加W蓄力一击，3级加E反击风暴，之后主W副Q，最后升E。</div>
+<div>装备选择：布甲5红出门，然后出防御鞋，灯笼，科技枪刃，三相。JAX出三相的步骤是先<img style="display: inline"
+        src="/static/imgs/1206-lol/DC22A4A6-8511-4EF7-9C07-D50ACA6F8E79.gif"
+        height="30" width="30"/>提高伤害，再<img style="display: inline"
+        src="/static/imgs/1206-lol/C9D8F5E5-3A6E-4869-920D-B1C9CF7DD8EA.gif"
+        height="30" width="30"/>堆血，最后出<img style="display: inline"
+        src="/static/imgs/1206-lol/72518F0C-0FCF-4C79-8CFC-D4BC17624C61.gif"
+        height="30" width="30"/>。
+</div>
+<div><br/></div>
+<div>灯笼对于贾克斯来说很重要，因为它可以用来插眼+Q来逃命。</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 扭曲树精
+#+BEGIN_HTML
+<div><b><font color="#AD0000">玩了几局扭曲树精 - 2012-6-22 23:02:05</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/2997B3D8-D9AA-4970-BBF6-F11DEC721711.png"
+         height="75" width="789"/></div>
+<div>技能路线：1级E小树苗，2级Q奥术重击，3级E，4级W突刺击晕，5级Q，之后主Q副W，最后升E。</div>
+<div>装备选择：出门<img style="display: inline"
+        src="/static/imgs/1206-lol/512D3878-527B-4282-BFCF-887CE9D953C4.jpg"
+        height="64" width="64"/>，之后<img style="display: inline"
+        src="/static/imgs/1206-lol/CF31CB07-A560-43F2-8345-8704372C6037.jpg"
+        height="64" width="64"/>&nbsp;&nbsp;<img style="display: inline"
+        src="/static/imgs/1206-lol/C09A028A-71FB-4085-BBD1-F2B58EC0CC5E.jpg"
+        height="64" width="64"/>&nbsp;&nbsp;<img style="display: inline"
+        src="/static/imgs/1206-lol/2D0CA649-7442-4E0F-9060-64F77DBA2178.jpg"
+        height="64" width="64"/>&nbsp;&nbsp;<img style="display: inline"
+        src="/static/imgs/1206-lol/26FF4A68-DEE0-44BF-A656-476FCD36DE3D.jpg"
+        height="64" width="64"/>&nbsp;&nbsp;<img style="display: inline"
+        src="/static/imgs/1206-lol/DE74EFF7-FBAB-47EE-AEF3-E64D2B7B700B.jpg"
+        height="64" width="64"/>&nbsp;&nbsp;<img style="display: inline"
+        src="/static/imgs/1206-lol/4AF3DCD5-ADF9-4BCC-BCE4-9246F9D5511B.jpg"
+        height="64" width="64"/>&nbsp;&nbsp;<img style="display: inline"
+        src="/static/imgs/1206-lol/E3002AC6-5535-4321-ADBD-6F6194EA0E57.jpg"
+        height="64" width="64"/></div>
+<div><br/></div>
+<div>Q技能伤害很给力，W技能可以突进击晕，这个我忘记运用了。我开战时，我应该先W和Q来控制住地方的ADC，并吸引火力。</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 暗影之拳 <2012-06-24 日 00:32>
+#+BEGIN_HTML
+<div><b><font color="#AD0000">暗影之拳 - 2012-6-24 0:32:01</font></b></div>
+<div>
+    <hr/>
+</div>
+<div><img style="display: inline"
+        src="/static/imgs/1206-lol/64F26F20-3716-4D32-BBC4-01F2AAC461CE.png"
+        height="66" width="786"/></div>
+<div><br/></div>
+<div><img style="display: inline"
+        src="/static/imgs/1206-lol/DA313A29-E7A5-47ED-98B2-C5D797F556C1.png"
+        height="153" width="788"/></div>
+<div><br/></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;技能路线：主Q，副W的话偏肉，副E的话刷兵快。</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;装备选择：出门鞋子（或布甲）加血瓶，先出吸血枪，鞋子看情况升级为防御鞋或水银鞋，再出吸血书，冰杖，红帽。如果走半肉路线的话，可以草鞋或布甲（看对方AD强还是AP强）5红出门，然后出防御鞋，再出锁甲和黄金之心，再出吸血枪，再出兰顿和负极斗篷，再出吸血书，半肉阿卡丽就基本成型了。之后，可以选择再出科技枪，负极斗篷而已合成深渊权杖或者水银饰带。</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;也可以多兰剑出门，这样就可以亮一只手，可以法术吸血了。</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;阿卡丽打法：</div>
+<div>
+    <ol>
+        <li>前期AQA的小爆发，用来磨血和补兵都不错；</li>
+        <li>W是非常优秀的保命技能；</li>
+        <li>W的释放位置，可以再一轮爆发后，立马开W躲起来，等待下一轮爆发；</li>
+        <li>R和闪现配合来击杀英雄（特别是在前期R的冷却较长的情况）；</li>
+        <li>Q，E，A三者相配合来补兵（特别是塔下补兵）；</li>
+    </ol>
+</div>
+<div><br/></div>
+#+END_HTML
+  
+* 邪恶小法师
+#+BEGIN_HTML
+<div><font color="#AD0000"><b>邪恶小法师 - 2012-6-26 13:04:46</b></font></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/54F89DDC-B219-4ACF-9951-AA99E3437EE4.png"
+         height="45" width="398"/></div>
+<div>小法缺蓝，前期可以出多兰戒指。</div>
+<div><br/></div>
+<div>1级学Q，2级应该学E</div>
+<div><br/></div>
+#+END_HTML
+  
+* 末日使者
+#+BEGIN_HTML
+<div style="border: 2px solid #ccc; padding: 5px; background-color: yellow">
+<div><b><font color="#AD0000">末日使者 - 2012-6-26 13:05:03</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/0AD78CB5-AED8-4DBC-9AEE-2CC4FF1FAD70.png"
+         height="144" width="785"/></div>
+<div><br/></div>
+<div>装备路线：稻草人有魔就有血，故完全不用带血瓶，出门可以带个多兰戒。中娅沙漏是第一个大件。</div>
+<div>技能路线：主W副Q，2级时学1级E沉默。</div>
+</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 荒漠屠夫
+#+BEGIN_HTML
+<div><b><font color="#AD0000">荒漠屠夫 - 2012-6-26 19:30:45</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/97BF0FFA-3CAF-4F91-96C5-3EB44DA4EB33.png"
+         height="110" width="787"/></div>
+<div><br/></div>
+<div>技能路线：主Q副W，3级（或4级）时学1级E，1级可以学Q。</div>
+<div>装备选择：可以选择回血牌+红出门。减CD的装备对鳄鱼用处很大。</div>
+<div>
+    <ol>
+        <li>E是两段式突进，一个常用连招就是，E过去，W晕住，平砍+Q，再E回来（注意第一段E不消耗怒气）。如果装备黑切的话，可以保证Q的时候，可以叠三层45的破甲；</li>
+        <li>Q可以回血，故小绿甲对鳄鱼有所帮助；</li>
+        <li>R可以增加怒气和生命上限，可以在开战前提前开，以增加开战时的爆发力；</li>
+    </ol>
+    <div>用鳄鱼打匹配 - 2012-6-27 11:46:05</div>
+</div>
+<div><img style="display: inline"
+        src="/static/imgs/1206-lol/2FFF0A4B-529A-4D1A-9F99-4965A135DA99.png"
+        height="72" width="785"/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 潮汐海灵
+#+BEGIN_HTML
+<div><b><font color="#AD0000">潮汐海灵 - 2012-6-26 21:47:28</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/8370DADD-F4A1-4266-A48E-4E8C755A754C.png"
+         height="111" width="787"/></div>
+<div><br/></div>
+#+END_HTML
+* LOL经验教训和总结 <2012-06-28 四 03:01>
+小炮：
+1. 团战时和近战对点时，应该及时地跳走或闪现；
+2. 被打时，应该下意识地跳或者闪；
+3. 需要出吸血剑，光靠多兰这点吸血，完全无团战价值；
+   
+莫甘娜：
+1. 团战开大前，先给自己套个盾；
+2. 使用闪现来获得一个最佳的放大位置；
+3. 团战时要活到最后，可以出时光，女妖等，吸血书的话，可能没什么必要；
+
+瑞兹：
+1. 对付稻草人，最好的方法就是推他的线，因为稻草人推线能力很弱；
+
+为莫甘娜配出一套符文：
+- 印记：法穿x7 = 410x7 = 2870
+- 雕文：成长魔抗x7 = 205x7 = 1435
+- 符印：固定护甲x3 = 205x3 = 615     固定法力回复x4 = 205x4 = 820     共1435
+- 精华：法强x3 = 1025x3 = 3075
+
+价格 = 2870 + 2870 +3075 =  5740 + 3075 = 8815
+
+#+BEGIN_QUOTE
+4.坦克速成守则：你需要一件740的斗篷，一件700的护甲，一件1110的腰带，然后你
+才有资格当坦克。然后你才有资格当坦克合装备，然后你才有资格合装备，然后你才
+有资格合装备。
+#+END_QUOTE
+
+小技巧：
+1. 被人追杀，就绕着塔转，敌人一会就得撤退了。
+2. 兰顿可以用来对付近战扎堆的情况。
+3. 盖伦在可以考虑先出个残暴之力。
+4. 牛头酋长，先Q晕住对手，再走位将对手用W推到我方人群中。
+5. 如果感觉阿卡利起了，团战时应该买真视药水。
+
+* 牛头酋长和战争女神
+#+BEGIN_HTML
+<div><b><font color="#AD0000">牛头酋长和战争女神 - 2012-6-29 2:33:06</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/73CB69CC-8DBC-4923-9228-1CCB29CEF9B5.png"
+         height="50" width="390"/></div>
+<div>闪现进人群把一个玩家顶出去。</div>
+<div><br/></div>
+<div><img style="display: inline"
+        src="/static/imgs/1206-lol/23FE2EBA-542E-4FEF-806E-8182C0E9CDA9.png"
+        height="46" width="388"/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 刀锋意志
+#+BEGIN_HTML
+<div><b><font color="#AD0000">刀锋意志 - 2012-6-29 13:01:19</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/A4A49B52-F70A-4619-8A3D-850C5628F5EC.png"
+         height="46" width="379"/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 龙血武姬
+#+BEGIN_HTML
+<div><b><font color="#AD0000">龙血武姬 - 2012-6-29 23:49:43</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/DACFBE6B-8FE7-476B-BBA2-948213561335.png"
+         height="44" width="377"/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 荣耀行刑官
+#+BEGIN_HTML
+<div><b><font color="#AD0000">荣耀行刑官 - 2012-6-30 0:29:29</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/2D8B8DAD-D7A4-41CF-A01C-A1195CE21F9C.png"
+         height="113" width="787"/></div>
+<div><br/></div>
+<div>技能路线：主学W加速，副学E开道利斧，2级时学1级Q飞斧。</div>
+<div>Q飞斧能在普攻上增加伤害，而且接到后能刷新W的CD。</div>
+<div><br/></div>
+#+END_HTML
+  
+* 复仇焰魂
+#+BEGIN_HTML
+<div><b><font color="#AD0000">复仇焰魂 - 2012-6-30 1:10:12</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/16C4128A-A43F-43BA-B26D-C87FEF337640.png"
+         height="186" width="784"/></div>
+<div><br/></div>
+<div>火人的爆发力惊人，连招是先E，再Q晕住，再W放火柱，如果没秒掉，就R。</div>
+<div>技能路线：主W副E，1级学E，2级学W，3级学Q，这时已经有连招了。</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 黑暗之女 <2012-06-30 六 19:42>
+#+BEGIN_HTML
+<div><b><font color="#AD0000">黑暗之女 - 2012-6-30 19:42:40</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/EE28305E-990D-41CE-884A-2D89CF526BB7.png"
+         height="72" width="787"/></div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 殇之木乃伊 <2012-07-02 一 23:10>
+#+BEGIN_HTML
+<div><b><font color="#AD0000">殇之木乃伊 - 2012-7-2 23:10:15</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/FEA25CBD-8A3F-4B37-8854-165451193854.png"
+         height="71" width="787"/></div>
+<div><br/></div>
+<div>玩的是AP流的阿木木</div>
+<div>技能路线：主E副W，2级时升1级Q。</div>
+<div>装备选择：初期出女神之泪和科技枪，来增加回蓝和回血。</div>
+<div>阿木木的Q是投掷绷带，把自己拉到敌人那里。W是绝望光环，群体按最大生命比例掉血。E是强力AOE技能。R是强力定身和AOE技能。</div>
+<div><br/></div>
+#+END_HTML
+  
+* 披甲龙龟
+#+BEGIN_HTML
+<div><b><font color="#AD0000">披甲龙龟 - 2012-7-2 23:53:01</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/7CD1B0B5-00FB-48AC-9CC2-2E58B32EAB95.png"
+         height="73" width="785"/></div>
+<div><br/></div>
+<div>Q技能：变成滚轮，加速，扎到敌人后会还原，并伤害、击退和减速敌人。</div>
+<div>W技能：增加大量的护甲和魔抗。</div>
+<div>E技能：嘲讽敌人（最高级持续3s），同时减低敌人护甲。可以先E，再Q拉着敌人跑。</div>
+<div>R技能：8s内对敌人和建筑造成持续伤害。</div>
+<div>被动：护甲的25%转化为攻击力。</div>
+<div><br/></div>
+#+END_HTML
+  
+* 这局牛了，玩小法逼得对面堆魔抗，出女妖，出水银饰带 <2012-07-04 三 11:01>
+#+BEGIN_HTML
+<div><b><font color="#AD0000">这局牛了，玩小法逼得对面堆魔抗，出女妖，出水银饰带 - 2012-7-4 11:01:21</font></b></div>
+<div>
+    <hr/>
+</div>
+<div><img style="display: inline"
+        src="/static/imgs/1206-lol/04F116B1-42B1-4622-9E13-B6119DACA326.png"
+        height="456" width="791"/></div>
+<div><br/></div>
+<div>还收到了对面的称赞：</div>
+<div><img style="display: inline"
+        src="/static/imgs/1206-lol/AC4E492A-A7EF-4758-8D10-B12FC71537D3.png"
+        height="297" width="374"/></div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 熔岩巨兽
+#+BEGIN_HTML
+<div><b><font color="#AD0000">熔岩巨兽 - 2012-7-4 12:45:16</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/56FFA41E-79BC-41A6-BEFA-418251CC65E7.png"
+         height="70" width="786"/></div>
+<div><br/></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前期可以出贤者之石，关键装备是冰霜之心和兰顿。备选装备有日炎斗篷（血，护甲，AOE），深渊权杖（法伤，法抗，减抗）。贤者之石可以合成皇冠，团战时，先开皇冠，再R进去，方便队友跟进，而且皇冠能减CD。</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;主Q的话，增加伤害和速度偷取。当减CD到40%左右后，追杀敌人时，可以一直保持敌人的减速。</div>
+<div><br/></div>
+#+END_HTML
+  
+* 仙灵女巫
+#+BEGIN_HTML
+<div><b><font color="#AD0000">仙灵女巫 - 2012-7-4 21:49:14</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/76779130-48E7-4393-895A-42AA53AC1622.png"
+         height="73" width="787"/></div>
+<div><br/></div>
+<div>我玩的是AD流璐璐，先出黄叉，再吸血权杖，发现伤害真不给力。</div>
+<div><br/></div>
+#+END_HTML
+  
+* 无极剑圣
+#+BEGIN_HTML
+<div><b><font color="#AD0000">无极剑圣 - 2012-7-5 22:01:37</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/B0682917-DD5C-4EF2-86E0-00E61595B191.png"
+         height="110" width="787"/></div>
+<div><br/></div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Q有两秒无敌时间，Q后不要马上就回跑，可以开W砍敌人几下，因为敌人选择剑圣需要时间。Q的返回地是第一个Q的敌人，如果它死了且不是你杀的，那么会返回原地。Q是打野主升技能。</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W是加血，同时附加海量双抗。如果混线艰难的话，可以多升几级。</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R增加攻速和移速，杀人或者助攻后会减少CD时间。</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Q的一个小技巧是，对面如果只有3个或更少的小兵以及对方英雄时，Q最近的小兵，可以安全地磨对方英雄的血。</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 德邦总管
+#+BEGIN_HTML
+<div><b><font color="#AD0000">德邦总管 - 2012-7-6 11:09:09</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/31AEEFB8-CAC9-4991-B41A-68A0598B3608.png"
+         height="73" width="786"/></div>
+<div><br/></div>
+<div>技能路线：1级Q三重击，2级E冲锋，3级W加攻速，之后主Q副E。</div>
+<div>装备选择：先出攻速鞋，再出黑切，再出小冰锤并合成三相。</div>
+<div>注意R是根据目标当前生命值来算伤害的，故要优先使用。</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 探险家
+#+BEGIN_HTML
+<div><b><font color="#AD0000">探险家 - 2012-7-6 11:57:32</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/8A3E424A-63CE-4F6D-B205-ACAE2801037D.png"
+         height="71" width="787"/></div>
+<div><br/></div>
+<div>技能路线：AD EZ主Q副E，可以加一级W。</div>
+<div>装备选择：先出耀光。</div>
+<div><br/></div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 无双剑姬
+#+BEGIN_HTML
+<div><b><font color="#AD0000">无双剑姬 - 2012-7-6 15:40:56</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/61326916-FE34-4990-BE21-239545EAEEB4.png"
+         height="74" width="786"/></div>
+<div><br/></div>
+<div>大招期间是无敌的，Q是两段式突进，加点是主W副E。</div>
+<div><br/></div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 迅捷斥候
+#+BEGIN_HTML
+<div><b><font color="#AD0000">迅捷斥候 - 2012-7-6 16:27:33</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/880E4FA3-8D79-4A39-9B88-987FB96D2530.png"
+         height="113" width="787"/></div>
+<div><br/></div>
+<div>主升E副升W，Q致盲一级就可以。</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 亡灵勇士
+#+BEGIN_HTML
+<div><b><font color="#AD0000">亡灵勇士 - 2012-7-6 21:04:23</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/26166FEB-A60F-441C-AA4F-90021CDCB3D0.png"
+         height="73" width="787"/></div>
+<div><br/></div>
+<div>AP塞恩：主升W，副升Q，E只加一级，为了获得那个被动。</div>
+<div>装备选择：多兰戒过度，然后出帽子。也可以先出个耀光，加点魔法，后期合成巫妖之祸。后期可以出个沙漏。</div>
+<div><br/></div>
+<div>1级的W吸收伤害能力很低，如果这时塞恩朝你扑过来，可以直接打掉盾，这样就避免了爆炸伤害。</div>
+<div>Q和W的AP加成都非常高，达到了0.9，其中W的加成有两次，一次是吸收伤害的加成，一次是爆炸的加成。</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 虚空先知
+#+BEGIN_HTML
+<div><b><font color="#AD0000">虚空先知 - 2012-7-7 17:39:41</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/362425EC-DBE6-488B-B7CA-405B4C80E405.png"
+         height="74" width="787"/></div>
+<div><br/></div>
+<div>主升E，副W。该英雄单挑能力极强，遇到人先E放DOT，再W铺地，接R晕住。</div>
+<div>装备的话，前期多兰过度，直接奔帽子，因为法伤对他最重要。</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 英勇投弹手
+#+BEGIN_HTML
+<div><b><font color="#AD0000">英勇投弹手 - 2012-7-12 22:30:18</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/8D799EEB-7FBD-4DA3-9A5A-B7D302134398.png"
+         height="72" width="786"/></div>
+<div><br/></div>
+<div>技能：主E副E，2级加1级的W。</div>
+<div>装备：出门鞋子3血，再出2个多兰剑，再出小冰锤，耀光，三相，无尽，轻语，饮血，水银饰带。</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 蛮族之王
+#+BEGIN_HTML
+<div><b><font color="#AD0000">蛮族之王 - 2012-7-14 0:16:34</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/D79A18CE-0ECE-4890-A114-AF71754785C2.png"
+         height="75" width="785"/></div>
+<div><br/></div>
+<div>技能：主Q（Q附带2个被动，1个主动），副W（减速减攻击），1级时升1点E（E随等级提高提升的伤害不明显）；</div>
+<div>装备：由于是打电脑，所以我出门带了个吸血权杖；</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 永恒梦魇
+#+BEGIN_HTML
+<div><b><font color="#AD0000">永恒梦魇 - 2012-7-14 13:44:34</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/05F088C9-C2D7-4415-9417-B1F0EB1EA1E2.png"
+         height="71" width="787"/></div>
+<div><br/></div>
+<div>技能：主Q副E，2级时学1级W；</div>
+<div>装备：出门布甲5红，出灯笼，残暴，小大冰锤；</div>
+<div><br/></div>
+#+END_HTML
+  
+* 冰晶凤凰
+#+BEGIN_HTML
+<div><b><font color="#AD0000">冰晶凤凰 - 2012-7-14 15:05:48</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/C83F575A-39B4-490F-8539-2DA3B3F10A71.png"
+         height="74" width="787"/></div>
+<div><br/></div>
+<div>技能：主E副Q，1级学Q，4级学W；</div>
+<div><br/></div>
+#+END_HTML
+  
+* 狂战士奥拉夫 <2012-08-04 六 12:48>
+#+BEGIN_HTML
+<div><b><font color="#AD0000">狂战士奥拉夫 - 2012-8-4 12:48:02</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/FCAAFAC9-0C51-4614-A07B-9BAD795241D4.png"
+         height="50" width="386"/></div>
+<div>主E或者主Q，1级W，出龟壳，贤者，前期可以现出2个多兰盾。</div>
+<div>出兰顿，皇冠之后，可以考虑出冰锤，如果对方AP强，则出自然甲或系带。</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 远古巫灵
+#+BEGIN_HTML
+<div><b><font color="#AD0000">远古巫灵 - 2012-8-4 17:15:54</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/8D838E4C-5AD2-435A-99F8-07FF168C8879.png"
+         height="112" width="790"/></div>
+<div><br/></div>
+<div>特点：短CD，高距离（特别是开了W之后），晕人后狂R；</div>
+<div>技能：主Q副E，1级W；</div>
+<div>装备：该法师很缺魔；</div>
+<div><br/></div>
+#+END_HTML
+  
+* 虚空行者
+#+BEGIN_HTML
+<div><b><font color="#AD0000">虚空行者 - 2012-8-5 11:05:53</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/FCCF84B9-F439-487F-83C9-EB5FFD37E016.png"
+         height="73" width="785"/></div>
+<div><br/></div>
+<div>主E副Q，1级W。</div>
+<div>比较缺魔的英雄，可以考虑出点多兰。出装是先出饭盒，再出时光，之后出帽子。</div>
+<div><br/></div>
+#+END_HTML
+  
+* 钢铁大使
+#+BEGIN_HTML
+<div><b><font color="#AD0000">钢铁大使 - 2012-8-5 13:13:31</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/36C02A96-0756-4A30-8C0F-4F341C4AEE1F.png"
+         height="74" width="784"/></div>
+<div><br/></div>
+<div>主Q副E，1级W，Q的伤害很强大，E可以推敌人，撞墙还能晕人和双倍伤害；</div>
+<div>装备：耀光是前期的核心装；</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 野兽之灵
+#+BEGIN_HTML
+<div><b><font color="#AD0000">野兽之灵 - 2012-8-9 0:57:59</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/1C6B8D81-B312-4FCF-9397-19D98DA5F32D.png"
+         height="72" width="789"/></div>
+<div><br/></div>
+<div><br/></div>
+<div>主Q副E，1级W，然后按照Q-&gt;E-&gt;W-&gt;R的顺序加点。</div>
+<div>打人方式，开E，追上敌人，击晕后，开Q猛砍，6秒后切E晕人，马上再Q猛砍。可以。利用三项来增加伤害。</div>
+<div><br/></div>
+#+END_HTML
+  
+* 雪人骑士
+#+BEGIN_HTML
+<div><b><font color="#AD0000">雪人骑士 - 2012-8-9 22:54:38</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/A32CB8C8-A09A-4281-9761-C06996F70092.png"
+         height="71" width="785"/></div>
+<div><br/></div>
+<div><br/></div>
+<div>技能：主E副W，1级升1级Q。</div>
+<div>雪人的伤害真心猛，特别是用来抢人头。</div>
+<div><br/></div>
+#+END_HTML
+  
+* 魔蛇之拥
+#+BEGIN_HTML
+<div><b><font color="#AD0000">魔蛇之拥 - 2012-8-11 1:51:50</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/E3285E28-BCC5-486F-ADB6-8EA4A6D810B0.png"
+         height="73" width="786"/></div>
+<div><br/></div>
+<div>主Q副E，4级学1级W。要点是一定要保证Q或者W中了后再E，否则没输出。</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 炼金术士
+#+BEGIN_HTML
+<div><b><font color="#AD0000">炼金术士 - 2012-8-11 2:35:12</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/E05AA0F3-9C9F-4D56-97AF-C9D2D3489A7C.png"
+         height="75" width="787"/></div>
+<div><br/></div>
+<div>主Q放毒，副E过肩摔，4级学1级W粘人。由于被动是将蓝转血，故可出时光和冰杖。</div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML
+  
+* 放逐之刃
+#+BEGIN_HTML
+<div><b><font color="#AD0000">放逐之刃 - 2012-9-8 0:20:07</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/39E676B3-9C03-49C4-BA58-E2DADE335FB5.png"
+         height="73" width="784"/></div>
+<div><br/></div>
+<div>技能：主W副E，1级学1级Q。</div>
+<div>装备：残暴冰锤水银鞋</div>
+<div>特定：爆发力强。</div>
+<div><br/></div>
+#+END_HTML
+  
+* 傲之追猎者 <2012-10-03 三 14:03>
+#+BEGIN_HTML
+<div><b><font color="#AD0000">傲之追猎者 - 2012-10-3 14:03:15</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/0F2F424E-E71C-4280-8C1A-384E7A713DDD.png"
+         height="234" width="817"/></div>
+<div><br/></div>
+<div>主Q副W，4级学1级E</div>
+<div><br/></div>
+<div>装备：小冰锤，小饮魔刀</div>
+<div><br/></div>
+#+END_HTML
+  
+* 唤潮鲛姬
+#+BEGIN_HTML
+<div><b><font color="#AD0000">唤潮鲛姬 - 2013-6-2 16:57:53</font></b></div>
+<div>
+    <hr/>
+</div>
+<div><img style="display: inline"
+        src="/static/imgs/1206-lol/A5340DA1-477A-46FC-A885-DB01D26E0F48.png"
+        height="79" width="723"/></div>
+<div><br/></div>
+<div>当辅助还是有一手的，Q定人，W加血兼伤害，E的buff能加攻击和减速，R群控+伤害</div>
+<div><br/></div>
+#+END_HTML
+  
+* 荆棘之兴 <2013-06-02 日 20:10>
+#+BEGIN_HTML
+<div><b><font color="#AD0000">荆棘之兴 - 2013-6-2 20:10:03</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/1002E27E-B4FC-454F-8D51-2D2D916E0DF4.png"
+         height="83" width="752"/></div>
+<div><br/></div>
+<div>Q是范围爆破，E是一条线上捆人，W是放种子，R是群体伤害+控制。QER都可以和W何用，以增强爆发力。</div>
+<div><br/></div>
+#+END_HTML
+  
+* 男枪和扇子妈
+#+BEGIN_HTML
+<div><b><font color="#AD0000">S3 男枪和扇子妈 - 2013-6-10 11:48:22</font></b></div>
+<div>
+    <hr/>
+</div>
+<div><img style="display: inline"
+        src="/static/imgs/1206-lol/3989AC30-39A5-45C9-8779-B536310646E0.png"
+        height="158" width="855"/></div>
+<div><br/></div>
+<div>男枪：先出饮血，再电刀，再飓风</div>
+<div>扇妈：圣杯，减CD靴，帽子，大圣杯，小面具，大面具。扇子妈的爆发真心给力啊，R+Q就是半行血。</div>
+<div><br/></div>
+#+END_HTML
+  
+* 玩小炮，在极端劣势下，带领队友大逆转 <2013-06-11 二 22:38>
+#+BEGIN_HTML
+<div><b><font color="#AD0000">玩小炮，在极端劣势下，带领队友大逆转 - 2013-6-11 22:38:09</font></b></div>
+<div>
+    <hr/>
+    <img style="display: inline" src="/static/imgs/1206-lol/90DA66C2-3E4A-41CF-85CF-BA4CF0A5CEA7.png"
+         height="734" width="837"/></div>
+<div><br/></div>
+<div><br/></div>
+<div><br/></div>
+<div><br/></div>
+<div><br/></div>
+<div><br/></div>
+#+END_HTML

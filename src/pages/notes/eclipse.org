@@ -1,0 +1,165 @@
+#+TITLE: Eclipse：一个强力的 IDE
+#+DATE: 2014-02-15
+#+KEYWORDS: IDE
+
+* 前言
+大学时，上 Java 课时用过 Eclipse，研究 Android 和写声韵输入法也是在 Eclipse 上进行的，但迄
+今为止，我对 Eclipse 的了解仍不够系统。恰好近期我要研究 HDFS 的代码，我决定以此为契机，
+重新学习一次 Eclipse。
+
+* 上手
+在 [[http://www.eclipse.org/downloads/][Eclipse 官网]] 下载 Eclipse Standard 4.3.1(196 MB)，解压并打开，按照帮助文档新建了
+HelloWorld 项目，并新建了 HelloWorld 的类（注意：不是文件），然后运行，发现成功。
+
+初步感受：
+#+begin_example
+Mac 下面的 Eclipse 的界面真不错，特别是全屏之后，非常之简洁。作为一个 Unix 环境下在终端中用 Vim 编程的程序员，我感到有一些羡慕。
+#+end_example
+
+** 在 Eclipse 上搭建 Hadoop 项目
+首先，下载 hadoop-1.0.0 的源码：
+#+begin_example
+svn co http://svn.apache.org/repos/asf/hadoop/common/tags/release-1.0.0 hadoop-1.0.0
+#+end_example
+
+然后，cd 到源码目录，执行 *ant eclipse* ，利用源码中的 build.xml 来生成 hadoop-1.0.0
+的 Eclipse 项目配置文件。这个过程比较漫长。
+
+关于 ant 和 ivy 的介绍：
+#+begin_example
+ant: Apache 下的一种跨平台，可扩展，基于 XML 的 Java 构建工具。
+ivy: 一种用来管理项目外部依赖的工具。它是 Apache Ant 的子项目。
+#+end_example
+
+然后，在 Eclipse 中新建项目，起名叫做 hadoop-1.0.0，项目目录设定为 hadoop-1.0.0 的源码
+目录，Eclipse 会自动找到上一步中生成的项目配置。这样，hadoop-1.0.0 的 Eclipse 项目就
+建好了。
+
+最后，我们在 Eclipse 的 Package Explorer 中找到 hadoop-1.0.0 的 *build.xml* ，右击它，
+点击"Run As" -> "Ant Build"，开始编译 hadoop-1.0.0。然后就是漫长的编译，我的机器
+花了 4 分半才把它编译好。编译的产出物放在源码目录下的 *build* 目录。
+
+更多的关于 Hadoop 的笔记：[[file:./hadoop-hdfs.org][Hadoop HDFS]]
+* 编辑器改进
+默认情况下，Eclipse 的编辑器的功能是很弱的。还好，Eclipse 提供了 Emacs 风格的按键绑定，
+这个设置项位于 Preferences->General->Key 里面。我们将 Schema 设为 Emacs 之后，Eclipse 仿
+佛被 Emacs 灵魂半附体（我的氪金左小指又要遭罪了。。）
+
+在 Emacs Schema 下，Eclipse 提供了一个很人性化的特性。按下 control + x，一小会后
+它会弹出一个快捷键清单。如下：
+
+[[../static/imgs/eclipse/1.png]]
+
+* Eclipse 常用操作及其快捷键
+** 位置跳转
+| 位置               | 快捷键      |
+|--------------------+-------------|
+| 向前跳转           | command + [ |
+| 向后跳转           | command + ] |
+| 最近一次编辑的位置 | control + q |
+
+这里可以与 Vim 做一个类比。Vim 的的向前/向后跳转的快捷键是 control + o/i。
+
+** 查看类/方法的定义
+在类/方法名上右击，点击 *Open Declaration* ，即可跳转到其定义处。该操作的快捷键是
+*F3* 。
+
+跳转并查看完毕后，想要跳转回去的话，可以点击工具栏上的向右的箭头 *Back* 。快捷键
+是 *command + [* 。
+
+** 根据类名查找类
+点击"Navigate" -> "Open Type"，可以打开 *Open Type* 窗口，输入类名搜索即可（支持
+Glob 通配符，如*或?）。该操作的快捷键是 *command + shift + t* 。
+
+[[../static/imgs/eclipse/2.png]]
+
+** 查看类的层次结构
+在类名上右击，再点 *Open Type Hierarchy* ，就可在左侧新建窗口查看该类的层次结构，
+比如说它继承自那个类，被那些类继承。如果它是接口类的话，还可以查看它被那些类实现。
+快捷键是 *F4* 。
+
+可以点 *Quick Type Hierarchy* ，来打开小型悬浮窗口来查看类的层次结构。快捷键是
+*command + t* 。
+
+** 查看类的成员
+在类名上右击，再点 *Quick Outline* 。即可打开悬浮窗口，查看该类的成员变量和方
+法。快捷键是 *command + o* 。
+
+悬浮窗口带有搜索功能（也支持通配），可以方便地找到我们想要的方法和变量。如图：
+
+[[../static/imgs/eclipse/3.png]]
+
+** 查看方法的调用关系
+在类名上右击，再点 *Open Call Hierarchy* ，就可查看方法的调用关系。快捷键是
+*control + alt + h* 。
+* 安装 CDT 插件
+Eclipse 提供了 *Marketplace* 来让用户方便地安装插件，类似于苹果的 App Store。
+
+点击"Help" -> "Eclipse Marketplace"，然后以 cdt 为关键词搜索到了 CTD 插件，安装它。
+
+[[../static/imgs/eclipse/4.png]]
+
+然后是新建个简单的 C++工程，建好后，Run 之，报错，错误提示：
+
+[[../static/imgs/eclipse/5.png]]
+
+搜索一下，找到了解法：
+1. [[http://www.scottdstrader.com/blog/ether_archives/000921.html][Resolving spurious project errors in Eclipse]]
+2. [[http://stackoverflow.com/questions/3632632/the-project-cannot-be-built-until-the-build-path-errors-are-resolved][the-project-cannot-be-built(Stackoverflow)]]
+
+** 在 CDT 基础上建立 Redis 项目
+我选择了建立 Redis 项目来试一下 CDT 的威力。Redis 的代码是在 Github 上，我 clone 了它最新的 unstable 分支：
+#+begin_src sh
+git clone https://github.com/antirez/redis.git
+#+end_src
+
+然后新建名为 redis 的 C 工程。注意，Redis 有着自己的 Makefile，新建的工程类型必须为
+*Makefile Project* 。否则，Eclipse 会自己生成 makefile，进而可能会导致各种编译问题。
+就拿 Redis 来说吧，Eclipse 自己生成的 makefile 会强制编译 *ae_epoll.c* ，而我的 Mac OS
+上只有 kqueue，没有 epoll，这必然导致编译错误。
+
+建好后，点击"Build All"（快捷键 *command + b* ），然后 Eclipse 会调用 Redis 自己的
+Makefile 来编译。
+
+阅读 Redis 代码时，发现一些系统的头文件（如 sys/time.h）找不到，通过 F3 也无法跳转。这
+个问题很好解决，打开本项目的 Properties，设置 C/C++ Build -> Tool Chain Editor
+->Current toolchain 为你的系统支持的构建工具链。由于我的系统是 Mac OS X，所以我选择
+了 MacOSX GCC。设置好后， *需要重启 Eclipse* （这点是 Eclipse 做得不好，一个优秀的
+Mac OS X 程序需要做到动态更新配置）
+
+准备妥当之后，就可以在 Eclipse 下欢快地阅读代码了，一些技巧列在本笔记的"Eclipse 常用
+操作及其快捷键"章节。
+
+更多的关于 Redis 的笔记：[[file:./redis.org][Redis]]
+
+* Eclipse 与版本管理
+右击文件，"Compare With" -> "History.."，然后可以选择将该文件与其任一历史版本进行
+diff。Eclipse 的 diff 窗口也是挺别致的。
+
+[[../static/imgs/eclipse/6.png]]
+
+* Eclipse 实践经验收集
++ [[http://wiki.apache.org/hadoop/Hbase/EclipseEnvironment][Working with HBase under Eclipse]]
++ [[http://xbgd.iteye.com/blog/1259544][利用 Eclipse CDT 阅读 C/C++代码]]
+
+* 小贴土
+** 修改字体
+依次点开 Preferences -> General -> Appearance -> Colors and Fonts -> Basic ->
+Text Font，点 Edit...，然后就可以设置字体了。我使用的是深受码农喜爱的 Monaco 字体，
+字号是 13。
+
+* 学习回顾
+** 初步感受 Eclipse <2014-02-15 六>
+今天我通过搭建 Hadoop 项目来熟悉 Eclipse，并通过《Hadoop 技术内幕 - Common&HDFS》一书
+来了解 Eclipse 的常用操作。在习惯了拿 Vim 当 IDE 使这么久之后，Mac 下面的 Eclipse 给我带来
+一种清风拂面的感觉，Java 的 *生态环境* 确实比 C++好太多了。
+
+下一步我会：
+1. 继续拿 Vim 作为我的 IDE，但我要汲取 Eclipse 的优点来继续改造 Vim，更深地挖掘 Vim 的潜力；
+2. 探寻如何用 Eclipse + CDT 作为 C/C++代码阅读工具；
+
+** 成功地使用 CDT 编译 Redis <2014-02-18 二>
+本来是准备周末搞一下 CDT 插件的，但是忍不住给弄了，因为我需要一个良好的 C++代码阅读
+环境了。今天我可以用 Eclipse 编译 Redis，并能很好地阅读了 Redis 的代码了。但是还遗留一
+个问题： +系统头文件无法识别，也无法跳转。看来是没有 include 进去+ （Fixed）
+

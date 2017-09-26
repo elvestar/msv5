@@ -1,0 +1,66 @@
+#+TITLE: Webpack
+#+DATE: 2016-03-12
+
+* 资料收集
+- [[http://webpack.github.io/]]
+
+- [[https://webpack.js.org/][webpack new docs page]]
+
+- [[http://jslog.com/2014/10/02/react-with-webpack-part-1/][React with webpack - part 1]] 
+- [[http://zhuanlan.zhihu.com/FrontendMagazine/20367175][Webpack 傻瓜式指南（一）]]
+- [[-%20%5B%5Bhttp://www.infoq.com/cn/articles/react-and-webpack%5D%5B%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%20React%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9AReact%20%E5%BC%80%E5%8F%91%E7%A5%9E%E5%99%A8%20Webpack%5D%5D%0A][Antd webpack.config.js 配置举例]]
+  
+* 阅读官方文档
+- [[http://webpack.github.io/docs/motivation.html][motivation]]
+- [[https://webpack.js.org/concepts/][Concepts]]
+
+#+BEGIN_EXAMPLE
+Loaders in webpack transform these files into modules as they are added to your dependency graph.
+#+END_EXAMPLE
+* Loader
+#+BEGIN_QUOTE
+Webpack 本身只能处理 JavaScript 模块，如果要处理其他类型的文件，就需要使用
+loader 进行转换。
+
+Loader 可以理解为是模块和资源的转换器，它本身是一个函数，接受源文件作为参数，
+返回转换的结果。这样，我们就可以通过 require 来加载任何类型的模块或文件，比
+如 CoffeeScript、 JSX、 LESS 或图片。
+#+END_QUOTE
+* CSS
+** 使用Webpack管理样式 <2017-01-12 四 12:02>
+要点：
+1. 在入口文件里引入样式文件，如 ~require("./css/styles.scss")~
+2. webpack配置文件中配置好test/loader等。
+3. 安装好css-loader/style-loader/sass-loader。
+
+* 问题记录
+** Uncaught ReferenceError: ReactDOM is not defined <2016-03-12 六 14:17>
+#+CAPTION: ./imgs/webpack/20160312141759.png
+[[../static/imgs/webpack/20160312141759.png]]
+
+出错分析：未引入 ~react-dom~ 
+
+解决方法：
+1. 安装 react-dom，在项目根目录执行 ~npm install --save-dev react-dom~
+2. 依赖 react-dom，在 js 文件里加上 ~var ReactDOM = require('react-dom')~ 
+
+** Only a ReactOwner can have refs. You might be adding a ref to a component ...
+#+BEGIN_SRC sh
+Uncaught Invariant Violation: addComponentAsRefTo(...): Only a ReactOwner can have refs. You might be adding a ref to a component that was not created inside a component's `render` method, or you have multiple copies of React loaded (details: https://fb.me/react-refs-must-have-owner).
+#+END_SRC
+
+我怀疑，是由于我通过 require 来引入组件，并将之传入到 render 方法里导致的。
+#+BEGIN_SRC js
+// import { DatePicker } from 'antd';
+var DatePicker = require('antd/lib/date-picker')
+ReactDOM.render(<DatePicker />, document.getElementById('content'));
+#+END_SRC
+挺烦的，先不搞 Webpack 吧。
+
+** Module build failed: Error: Parse Error: Line 4: Illegal import declaration
+挺烦的，先不搞 Webpack 吧。
+** Uncaught TypeError: t is not a function
+这个错误很奇怪，最后我依赖了js原来，发现报错变成了：
+#+BEGIN_SRC sh
+Uncaught TypeError: $ is not a function
+#+END_SRC

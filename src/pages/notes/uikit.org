@@ -1,0 +1,27 @@
+#+TITLE: UIKit: 一个轻量级，模块化的前端框架
+#+DATE: 2015-04-08
+#+KEYWORDS: 前端框架
+
+* 资料收集
+** 文章
+- [[http://www.eugenesivokon.com/why-uikit-is-better-than-twitter-bootstrap][Why UIKit is better than Twitter Bootstrap]]
+- [[http://www.sitepoint.com/5-most-popular-frontend-frameworks-compared/][The 5 Most Popular Frontend Frameworks of 2014 Compared]]
+  
+* 回顾
+** 暂停学习，继续使用 Bootstrap  <2015-04-08 三>
+初步了解一下，发现 UIKit 提供了东西要比 Bootstrap 得多。使用了一下，发现不
+理想。通过分析 [[http://www.getuikit.net/docs/article.html][UIKit 中文文档]] ，发现了一种让字体更漂亮的方法，那就是
+~font-smoothing~ 属性。下面一张是设置了该属性为 antialiased 的图，一张是没
+有设置该属性的图，两者的差别一目了然。
+#+CAPTION: 设置-webkit-font-smoothing 为 antialiased
+[[../static/imgs/uikit/20150408234945.png]]
+
+#+CAPTION: 未设置-webkit-font-smoothing
+[[../static/imgs/uikit/20150408235350.png]]
+
+参考：
+- [[http://ued.ctrip.com/webkitcss/prop/font-smoothing.html][-webkit-font-smoothing 属性]]
+- [[http://ued.ctrip.com/blog/p%3D3665][字体渲染（ctrip ued）]]
+
+
+

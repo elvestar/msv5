@@ -1,0 +1,23 @@
+#+TITLE: jq - JSON 数据的命令行处理工具
+#+DATE: 2014-04-23
+#+KEYWORDS: Unix 工具
+
++ [[http://stedolan.github.io/jq/][jq 主页]]
+
+#+BEGIN_QUOTE
+jq is like sed for JSON data – you can use it to slice and filter and
+map and transform structured data with the same ease that sed, awk,
+grep and friends let you play with text.
+#+END_QUOTE
+
+* 用法
+** 截取 BNS
+JSON 数据结构描述：
+#+BEGIN_SRC json
+{"content":[{"bns_name":"test.all"},{"bns_name":"test1.all"}]}。
+#+END_SRC
+
+通过 jq，我使用下面方法来截取"content"字段中的所有元素的"bns_name"字段。
+#+BEGIN_SRC sh
+cat cq01-xxxxxxx-ecom327.cq01.xxxxx.com | jq ".content[].bns_name"  > ecom327.txt
+#+END_SRC

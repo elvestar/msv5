@@ -1,0 +1,15 @@
+#+TITLE: Atom
+#+DATE: 2014-03-06
+#+KEYWORDS: IDE
+
+* 前言
+在 tinyfool 的坛子上听说了 Github 正在搞 Atom 编辑器，现在处于内测阶段。我的兴趣来了，
+我觉得 Github 做的东西靠谱，另外将编辑器与 Github 相结合能给我美好的想象。于是我开始
+了新一轮的折腾。
+
+[[http://www.zhihu.com/question/22867204][如何评价 Github 刚刚发布的文本编辑器 Atom？]]
+
+* 测试版之尝试
+根据 [[http://www.zhihu.com/question/22882940][如何能弄到一个 GitHub Atom 的邀请码?]] 一文，下载了 Atom。安装启动，发现速度很慢，
+command + , 打开配置页面，感觉图形化做得不错，容易配置，这点比 Sublime 好。
+

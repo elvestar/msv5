@@ -1,0 +1,79 @@
+#+TITLE: Libev
+#+DATE: 2013-09-27
+#+KEYWORDS: C++, 网络编程
+
+Libev 是 Libevent 的替代品，自称用少得多的代码量实现了比 Libevent 更高的性
+能，更全面的功能。
+
+* 资料收集
+官方文档：
+http://pod.tst.eu/http://cvs.schmorp.de/libev/ev.pod
+
+libev ev_io 源码分析：
+http://rdc.taobao.com/blog/cs/?p=1604 
+
+Libev 源码分析 -- 整体设计
+http://codingcat.net/blog/2012/10/09/libev-framework/ 
+
+* 三个核心概念 - 2013-9-27 0:58:03
+- 事件（event）
+- watcher
+- loop
+
+*事件* 包括 fd 的 io 操作，定时器到期，信号等。libev 定义的事件非常丰富，甚至
+包括进程 fork，文件状态改变等。
+
+*watcher* 是事件的监视器。每一类事件都有其对应的 watcher。
+
+*loop* 上注册着这些 watcher，当某事件被触发后，loop 会调用该事件对应的
+watcher 的回调函数。
+
+貌似，libev 最核心的地方介绍完了。
+
+* 简单使用方法 - 2013-9-27 1:35:02
+loop 的初始化：
+#+BEGIN_SRC cpp
+struct ev_loop* loop = EV_DEFAULT;
+#+END_SRC
+
+watcher 的初始化（拿 io_watcher 为例，监视标准输入的读操作，stdin_cb 是预设
+的回调函数）：
+#+BEGIN_SRC cpp
+ev_io stdin_watcher; 
+ev_io_init(&stdin_watcher, stdin_cb, 0, EV_READ);
+#+END_SRC
+
+将 watcher 注册到 loop 上：
+#+BEGIN_SRC cpp
+ev_io_start(loop, &stdin_watcher);
+#+END_SRC
+
+启动 loop：
+#+BEGIN_SRC cpp
+ev_run(loop, 0);
+#+END_SRC
+
+停止 watcher（必须手工停止）：
+#+BEGIN_SRC cpp
+ev_io_stop(EV_A_ w);
+#+END_SRC
+
+停止 loop（启动 loop 后，会进入无限循环。ev_break 其实是在调函数 stdin_cb
+中执行的）：
+#+BEGIN_SRC cpp
+ev_break(EV_A_ EVBREAK_ALL);
+#+END_SRC
+
+说明：
+- EV_DEFAULT 是个宏，展开后是：ev_loop_new (EVBACKEND_EPOLL |
+  EVFLAG_NOENV);
+- ev_run()的第二个参数是个 flag，0 代表一直循环，EVRUN_ONCE 代表只运行一次
+- EV_A_也是一个宏，加入用户配置为支持多 loop 的话，展开后是 loop。如果是单
+  loop，
+- 那么展开后是空。（不知道 libev 是如何支持多 loop 的）
+
+libev 设计得确实很好好，简洁之美！
+
+* 用 libev 实现 http server - 2013-9-27 2:06:39
+
+

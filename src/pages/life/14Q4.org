@@ -1,0 +1,124 @@
+#+TITLE: 2014 年 Q4
+#+DATE: 2014-10-01
+
+* 入手一个iPad支架和一个移动电源 <2014-10-10 五>
+#+CAPTION: iPad支架
+[[../static/imgs/14Q4/DSC08105.jpg]]
+
+* 晚上和同事吃了辉煌国际下面的金家韩国料理 <2014-10-13 一>
+#+CAPTION: 等饭就绪
+[[../static/imgs/14Q4/IMG_20141013_183847.jpg]]
+#+CAPTION: 同事点了一个让我艳羡的饭
+[[../static/imgs/14Q4/IMG_20141013_184801.jpg]]
+
+* 同事过生日请吃蛋糕 <2014-10-15 三>
+地点在九头鸟。
+#+CAPTION: 切蛋糕
+[[../static/imgs/14Q4/IMG_20141015_184213.jpg]]
+
+* 今日去西直门体检 <2014-10-21 二>
+#+CAPTION: 爱康西直门门店
+[[../static/imgs/14Q4/IMG_0119.jpg]]
+
+* 公司发福利 <2014-10-23 四>
+公司内网发了个福利，领到一张 "沱沱工社" 的100元优惠劵，买了一条毛巾和一块手
+工皂，看起来像是高端货。
+#+CAPTION: 毛巾和手工皂
+[[../static/imgs/14Q4/IMG_0132.jpg]]
+
+* 最近看斗鱼，发现两个很有意思的主播 <2014-10-24 五>
+一个叫发姐，一个叫周二珂。
+#+CAPTION: 二珂唱歌很好听
+[[../static/imgs/14Q4/IMG_0032.jpg]]
+#+CAPTION: 发姐人比较有意思
+[[../static/imgs/14Q4/IMG_0303.jpg]]
+* 周末回龙观骑行 <2014-10-26 日>
+#+CAPTION: 深秋的龙腾四中轴路
+[[../static/imgs/14Q4/IMG_0163.jpg]]
+#+CAPTION: 骑行至回龙观华联
+[[../static/imgs/14Q4/IMG_0168.jpg]]
+#+CAPTION: 回龙观城北市场
+[[../static/imgs/14Q4/IMG_0169.jpg]]
+#+CAPTION: 回南北路的夕阳
+[[../static/imgs/14Q4/IMG_0171.jpg]]
+#+CAPTION: 文华路北口的新月
+[[../static/imgs/14Q4/IMG_0172.jpg]]
+#+CAPTION: 返回龙腾四
+[[../static/imgs/14Q4/IMG_0173.jpg]]
+
+
+
+* 周末送晓阳去新住处 <2014-11-02 日>
+
+#+CAPTION: 这个时候的秋天最美
+[[../static/imgs/14Q4/IMG_0219.jpg]]
+#+CAPTION: 这家东北菜馆相当实惠
+[[../static/imgs/14Q4/IMG_0224.jpg]]
+#+CAPTION: 龙腾四南门的双树
+[[../static/imgs/14Q4/IMG_0229.jpg]]
+#+CAPTION: 左拐进小区
+[[../static/imgs/14Q4/IMG_0234.jpg]]
+
+* 感受APEC蓝 <2014-11-06 四> 
+#+CAPTION: 午饭后的大厦南门：蓝天、白云、银杏树
+[[../static/imgs/14Q4/IMG_0277.jpg]]
+
+* 周末小记 <2014-11-09 日>
+这周末做了如下事情：
+1. 支持编辑历史保存，支持webhdfs，集群信息管理等。
+2. 安装OS X 10.10 Yosemite。
+3. 周六和晓阳爬了香山，回来路上到栗涛那里玩了街机。
+4. 周末三人去华联四层钰花溪吃饭，然后逛了一下超市。
+
+#+CAPTION: 正在安装OS X 10.10
+[[../static/imgs/14Q4/IMG_0295.jpg]]
+#+CAPTION: 正在前往香山
+[[../static/imgs/14Q4/IMG_0300.jpg]]
+#+CAPTION: 香山俯瞰北京
+[[../static/imgs/14Q4/IMG_0305.jpg]]
+#+CAPTION: 到栗涛那玩街机
+[[../static/imgs/14Q4/IMG_0310.jpg]]
+#+CAPTION: 华联四层钰花溪
+[[../static/imgs/14Q4/IMG_0328.jpg]]
+#+CAPTION: 最近特别爱吃的稻香村绿豆饼
+[[../static/imgs/14Q4/IMG_0329.jpg]]
+
+* 双十一购物到货 <2014-11-19 三>
+#+CAPTION: CEMLA 牌钱包
+[[../static/imgs/14Q4/IMG_0362.jpg]]
+#+CAPTION: LUYISI 牌牛仔裤
+[[../static/imgs/14Q4/IMG_0368.jpg]]
+* 玩了一个款叫《瘟疫公司》的手游 <2014-11-22 六>
+之前在A站看过不少这个游戏的PC版的视频。
+#+CAPTION: 李狗蛋即将将人类...
+[[../static/imgs/14Q4/IMG_0375.jpg]]
+#+CAPTION: 回龙观还有幸存人类
+[[../static/imgs/14Q4/IMG_0380.jpg]]
+
+* 晚饭五人组 <2014-11-28 五>
+最近我们组五人的晚饭生活非常丰富多彩。
+#+CAPTION: 辉煌负一层的雅座，这里暖气太特么热了
+[[../static/imgs/14Q4/IMG_0384.jpg]]
+#+CAPTION: 从鞋子看站姿
+[[../static/imgs/14Q4/IMG_0385.jpg]]
+
+* 周末和海南佳捷去西大街吃汉丽轩 <2014-11-29 六>
+路上我和佳捷讨论了啥Docker技术。
+#+CAPTION: 新时代的接头方式
+[[../static/imgs/14Q4/IMG_0388.jpg]]
+#+CAPTION: 附近的上品折扣店
+[[../static/imgs/14Q4/IMG_0390.jpg]]
+#+CAPTION: 生活啊！
+[[../static/imgs/14Q4/IMG_0395.jpg]]
+
+
+
+* 周末和学军爬百望山 <2014-12-14 日>
+#+CAPTION: 从大厦出发
+[[../static/imgs/14Q4/IMG_0448.jpg]]
+#+CAPTION: 干枯河床上的浮木
+[[../static/imgs/14Q4/IMG_0456.jpg]]
+#+CAPTION: 百望山上的夕阳
+[[../static/imgs/14Q4/IMG_0462.jpg]]
+#+CAPTION: 坐公交车回程
+[[../static/imgs/14Q4/IMG_0463.jpg]]

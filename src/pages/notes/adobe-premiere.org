@@ -1,0 +1,102 @@
+#+TITLE: Adobe Premiere
+#+DATE: 2016-10-06
+
+9月份团队去内蒙古乌兰布统草原Team Building，我拍了很多视频需要，想要给剪个
+片子。网上搜了一下，发现有人用Adobe Premiere，我下载了一个，安装时提示试用
+期是七天。我算了一下，我是随意一用，大概一天就能剪完，所以不用买。
+
+* 资料收集
+** 视频教程
+- [[http://doyoudo.com/p/5001052.html][7个提高效率的Premiere剪辑技巧 | doyoudo]]
+** 文章
+- [[http://107cine.com/stream/78794/][为了用Premiere剪辑《死侍》，剪辑师们都做了哪些工作？ - 影视工业网]]
+#+BEGIN_QUOTE
+Q：能不能说一下你剪辑所用到的设备？
+
+克拉克：我们用了六台Mac Pro“垃圾桶”，主机搭配D700显卡（AMD FirePro D700
+graphics card），64或128GB内存（RAM）——取决于有几个内存条卡槽。我的系统是顶
+配。我们还用了180TB的Velocity固态硬盘（Velocity SSD storage），它由Open
+Drive公司的Jeff Brue设计。
+#+END_QUOTE
+
+#+BEGIN_QUOTE
+Q：更详细说明好不...我没听懂
+
+NEDOMANSKY：正常情况下剪辑软件的界面里会有素材源监视器，节目监视器和一条时
+间线。所以，你要做的就是打开第二条时间线，将它重叠在第一条时间线的上方，得
+到两条开放的、上下相邻的时间线。无论激活的是哪一条时间线（也就是显示在你的
+节目监视器中的那条），你都可以从一条时间线里选择一个素材片段，将其直接拖入
+另外一条时间线而不用在两条时间线选项卡之间切换，或者像Avid一样在节目监视器
+的下拉菜单里切换时间线。这允许你在一条时间线里放个十小时那么长的精选素材集
+锦，纵览并选取你想要的片段，将其拖入下方的空白时间线，从而快速建立粗剪，精
+剪，或者一个更“精选”的精选集（select reel）。否则你得点击镜头，将其导入媒
+体浏览器，再把它拖入一条空白时间线。这个功能让你在两条激活的时间线之间更加
+有效率地处理大量素材。
+#+END_QUOTE
+
+#+BEGIN_QUOTE
+Q：跟我说说项目窗口（project window）吧，里面有什么？
+
+NEDOMANSKY：每个项目都是不同的。朱利安那儿只有他当前在剪的东西。他的项目窗
+口一直很简洁，就是当前剪辑、音效、视效、图片，黑场片段...这是每个人都见过的
+东西，没什么不寻常的。我们尽力把项目组织得有规矩可循，朱利安对这点要求严苛
+得像个警察一样。他守着素材疯了似地剪了九、十个月。朱利安总是把素材从各个地
+方拉进项目里，因而每天工作临近结束的时候，马特都要为他整理项目窗口——他要尽
+己所能地保持项目的结构性。这和大部分电影没有什么不同。不过马特的工作会更复
+杂一些，因为他必须把朱利安之前剪辑过的所有版本都整理并归档，以供朱利安和蒂
+姆观看，所以他的项目更复杂和深入
+#+END_QUOTE
+
+- [[https://www.zhihu.com/question/30083379][雷军《Are you OK?》鬼畜是怎样制作的？ - 知乎]]
+
+** 问题
+- http://video.stackexchange.com/questions/10416/how-to-mark-multiple-ins-and-outs-in-adobe-premiere
+- [[https://helpx.adobe.com/premiere-pro/using/creating-playing-clips.html][Creating and playing clips in Premiere Pro]]
+- [[http://www.adobepress.com/articles/article.asp?p=2236041&seqNum=3][Changing speed and duration with time remapping > Retiming Clips in Adobe Premiere Pro Professional CC (2014 release)]]
+- [[http://video.stackexchange.com/questions/16218/how-to-speed-up-slow-down-audio-along-with-video][premiere - How to speed up/slow down audio along with video? - Video Production Stack Exchange]]
+- [[https://helpx.adobe.com/after-effects/using/time-stretching-time-remapping.html][Time-stretching and time-remapping in After Effects]]
+
+* 名词
+- Project Panel: 素材源监视器
+- Program Panel: 节目监视器
+
+- 粗剪 (ROUGH CUT)：在剪辑过程中，将镜头和段落依大概的先后顺序加以接合的影
+  片初样。根据确切剪接点剪接出来的片子，则叫精剪。
+
+* 技巧
+1. Command-l是解除视频和音频链接的快捷键，Command-r是打开速度/持续时间调整
+   窗口的快捷键。
+2. 按照Alt拖动片段可以实现向任意轨道的复制和粘贴。
+3. 选中素材后按Insert(,)可以实现将序列中在标尺处断开并将素材插入到中间。
+4. 整理素材时可以打开Assembly工作区，这样Project仪表盘会占据右侧一半的屏幕，
+   方便操作。
+5. 在Project仪表盘里新建目录的快捷键是Command-b
+6. 选中片段后按住command并拖动，可以实现插入到其他片段之间（可以断开其他轨
+   道的序列或片段），如果同时按住Alt，则不会断开其他轨道。
+7. 按住Alt加Delete在序列上删除片段可以实现后续片段自动附着。
+8. 使用向前(a)可以实现批量选择序列上某点之后所有片段。
+9. 使用剃刀工具(c)可以实现剪开单个轨道上的片段，同时按住Shift的话，可以剪开
+   全部轨道上的片段。
+10. 在序列上操作时，Q键可以切除光标左边素材，W键可以切除光标右边素材。
+
+
+* 还是技巧
+1. 可以直接使用Clip生成Sequence，而不是新新建Sequence，再从原Sequence将Clip
+   粘贴到新Sequence上。后一种方法比较慢。
+2. 如何矩形截取视频画面的一部分？是可以实现的，方法是在导出时，使用右上角的
+   矩形选择框（Crop）来截取。
+3. 锁定单个轨道：锁定之后，全轨切割（包括q/w）、轨道前向/后向选择模式都不会
+   影响到被锁定的轨道了。
+4. 设置图片显示方式：默认情况下图片会占满整个窗口，对于全景图片，会导致图片
+   无法被完全展示。解决方法是在时间线上右击图片素材，选 *Scale to Frame
+   Size* ，这样会自动调整图片长宽，使得图片可以在窗口完全展示。
+5. 淡入淡出：标尺放在序列之间，按 Command-D，可以一键加入淡入淡出，即所谓的
+   CrossOver。
+
+* 值得学习的例子
+- https://www.zhihu.com/question/23247947/answer/101643969
+- [[http://v.youku.com/v_show/id_XMTU2NjE5MzA0NA==.html?from=y1.7-1.2][与我一起造访神秘的贝加尔湖—在线播放—优酷网，视频高清在线观看]]
+特点：风格很暴力，背景音乐不错。
+
+#+BEGIN_QUOTE
+#+END_QUOTE

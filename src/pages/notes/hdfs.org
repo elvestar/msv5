@@ -1,0 +1,129 @@
+#+TITLE: HDFS
+#+DATE: 2012-09-15
+#+KEYWORDS: Hadoop, 存储系统
+
+* 阅读 HDFS 设计文档
+HDFS 是一种拥有高容错性的分布式文件系统，适合部署在通用硬件上。它能提供高吞
+吐的数据访问，非常适合大规模数据集上的应用。
+
+HDFS 的总体架构：采用了 Master-Slave 的架构，其中 Namenode 是系统的 Master，
+Datanode 是系统的 Slave。一个 HDFS 集群只有一个 Namenode，这样使得 HDFS 的设计得到
+大大简化（如何大大简化的？）。Namenode 是 HDFS 上所有元数据的仲裁者和管理者，
+还有，用户数据永远也不会流经 Namenode。
+
+HDFS 的名字空间：就是 HDFS 目录以及各文件的块信息，作为元数据的一部分，由
+Namenode 管理。
+
+HDFS 的副本存放策略：一个副本存放在本地机架的节点上，另一个副本存放在本地机
+架的另外一个节点上，最后一个副本存放在不同机架的节点上。由于同机架的机器间
+的带宽一般比不同机架间的机器要大（因为不会经过交换机），所以这种策略在不损
+害数据的可靠性和读取性能的情况下改进了写的性能。
+
+HDFS 的元数据：HDFS 的元数据保存在 Namenode 的本地，分为两块，Editlog 和 FsImage
+（它们的数据结构？）。每当客户端有请求，Namenode 会先向 Editlog 中插入一条记录，
+然后才进行下一步操作（是否还要写 FsImage？）。Editlog 是一种事务日志，即它支
+持事务（啥叫事务？具体包括哪几种？）
+
+当 Namenode 重新启动时（可能是程序异常导致的），它会先加载 FsImage 到内存，然后
+将 Editlog 中的事务作用到内存中的 FsImage，然后将 FsImage 保存到本地磁盘上，并删
+除旧的 Editlog。这个过程叫做 Checkpoint（跟 Minos 的 Checkpoint 可以做类比，Minos
+是把所有日志某时刻的传输流做了个 Checkpoint 存到 ZK，可供异常恢复），
+Checkpoint 的过程只发生在 Namenode 的启动时，以后会支持周期性的检查点（新版
+Hadoop 的文档中还说以后支持，不知道代码中是否已经支持了？）
+
+HDFS 的元数据是存储在本地磁盘的，而本地磁盘是不可靠的。Namenode 可以配置成支
+持 FsImage/Editlog 多副本，任何修改都会同步到所有副本上。这样会使 Namenode 的性
+能降低一些，但是可以接受，因为 HDFS 是数据密集的，而不是元数据密集的。这样，
+当 Namenode 重启时，会选取最近的完整的 FsImage/Editlog 来做恢复（如何定义完
+整？）。
+
+HDFS 的异常监控：DataNode 周期性地向 Namenode 发送心跳，Namenode 通过心跳来
+感知整个 HDFS 心跳的健康状况（又是跟 Minos 一样）。心跳的信息包括该
+Namenode 的数据块列表等（该心跳信息的具体数据结构？）。当节点磁盘异常，数据
+损坏，与节点发生网络割裂，或者用户增大了数据的副本数时，Namenode 会监控到这
+些异常，并对相应的数据块启动复制操作（复制的过程需要做重点的了解？）。
+
+数据完整性：HDFS 的数据完整性的保证需要 Client 的参与。Client 写入并保存一个文
+件时（以数据块作为粒度），会计算数据块的内容的校验和（Checksum），然后将校
+验和作为一个隐藏文件保存在同一个 HDFS 目录下。当 Client 读取该数据块时，会做
+Checksum 检查，如果不匹配，Client 会从其他的 Datanode 获取该数据块的副本。
+
+数据块写入策略：Client 创建文件并开始写入时，该请求没有立刻发送给 Namenode，
+而是先将数据缓存到本地的一个临时文件里。当临时文件达到一个数据块的大小，
+Client 才会真正联系 Namenode，Namenode 这时才会在元数据中加入这个文件，并分配
+一个数据块，然后把该数据块所在的 Datanode 已经数据块的 id 返回给 Client，接着
+Client 会将本地缓存中的数据块传输到这个 Datanode 的相应数据块上。
+
+此外，如果 Client 主动调用 Close，也会触发上述过程（新版的 HDFS 会支持 Sync，那么
+sync 的过程跟 Close 的过程有何不同？）
+
+当 Client 向 Datanode 传输数据时，由于存在多副本，所以这个过程类似于流水线。
+Client 会一小块一小块地（4KB）将数据传给第一个 Datanode，第一个 Datanode 会在本
+地存一份，同时会把这一小块数据传输给第二个 Datanode……，直到最后一个
+Datanode 数据保存完毕，会一步步地往回回传 ACK（Client 和各个 Datanode 之间的传输
+是异步的吗？）。
+
+* 读 HDFS 的源码 <2013-10-08 二>
+** NameNode 
+源码地址：[[http://svn.apache.org/repos/asf/hadoop/common/trunk/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode][NameNode]]
+ 
+这个目录下面有 Master，Master（即 NameNode）程序入口位于 NameNode.java 的
+1324 行。在 main 函数中启动了 NameNode 类。
+
+NameNode 类是最顶层的类，它的最主要成员是 FSNamesystem 类型的 namesystem，
+它代表整个文件系统。此外还包括 NameNodeHttpServer 类型的 httpServer 以及
+NameNoderpcServer 类型的 rpcServer。
+
+FSNamesystem 是代表整个文件系统，它下面的成员包括 FSDirectory 类型的
+dir（代表文件目录树），blockManager（文件块管理器），snapshotManager（快照
+管理器，是否就是做 editLog 到 FsImage 的？），datanodeStatistics（数据节点
+状态统计，类似于 Minos 的 Node 状态统计）等。整个 FSNamesystem 的初始化过程
+可参考它的构造函数，位于 FSNamesystem.java 的 611 行到 716 行。
+
+我现在主要想关注 HDFS 如何实现 Block 的状态监控的，这部分的代码位于：
+
+** BlockManagerment 
+源码地址：[[http://svn.apache.org/repos/asf/hadoop/common/trunk/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/blockmanagement][BlockManagerment]]
+
+这个目录下面的顶层类是 BlockManager，下面有 DatanodeManager，而
+DatanodeManager 操纵着 HeartbeatManager。DatanodeManager 类似于 Minos 的
+LogFlowManager，它通过 RPC 对外提供了 Register 方法，方法如下：
+#+BEGIN_SRC java
+  public void registerDatanode(DatanodeRegistration nodeReg) throws DisallowedDatanodeException
+#+END_SRC
+其中 DatanodeRegistration 定义在 protocol 目录下面，作为通讯协议。
+
+HeartbeatManager 管理着各个 Datanode 发来的心跳，它提供了 register，
+updateHeartbeat，addDatanode，removeDatanode 等方法。它还会定期检查各个
+DataNode 的心跳状态，如果发现某个 DataNode 过久没更新状态（isStale，陈旧），
+则将它 remove 掉。
+
+HeartbeatManager 类很值得 Minos 学习，Minos 的传输流重构也是类似的模式，即
+各个 Node 定期向 Master 汇报状态，而 Master 开个线程定期检查各个传输流的各
+个 Node 的传输状态，一旦有异常，则将该 Node 迁移到另外一个物理节点，并修改
+传输流的映射，并对该节点以及其上游的节点执行 Fallback。
+
+* libhdfs
+** hdfsFileInfo
+#+begin_src cpp
+typedef struct  {
+    tObjectKind mKind;   /* file or directory */
+    char *mName;         /* the name of the file */
+    tTime mLastMod;      /* the last modification time for the file in seconds */
+    tOffset mSize;       /* the size of the file in bytes */
+    short mReplication;    /* the count of replicas */
+    tOffset mBlockSize;  /* the block size for the file */
+    char *mOwner;        /* the owner of the file */
+    char *mGroup;        /* the group associated with the file */
+    short mPermissions;  /* the permissions associated with the file */
+    tTime mLastAccess;    /* the last access time for the file in seconds */
+} hdfsFileInfo;
+#+end_src
+** 删除文件和目录：hdfsDelete
+#+begin_src cpp
+int hdfsDelete(hdfsFS fs, const char* path)
+#+end_src
+
+hdfsDelete 不仅可以删除文件，当 path 是目录是，它还可以 *递归删除* 整个目录。另外，
+hdfsDelete 是 libhdfs 提供的唯一一个删除相关的接口。
+

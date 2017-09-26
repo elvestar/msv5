@@ -1,0 +1,494 @@
+{
+  "title": "读书列表",
+  "date": "2017-02-21",
+  "books": [
+     {
+         "uri": "1",
+         "date": "",
+         "title": "",
+         "duokanbookid": ""
+     },
+     {
+         "uri": "1701-the-silk-roads",
+         "date": "2017-01-12",
+         "title": "丝绸之路：一部全新的世界史",
+         "duokanbookid": "b4edf2100db54be19fb9863367bf0fa0"
+     } ,
+     {
+         "uri": "1702-a-song-of-ice-and-fire-vol3-pdf",
+         "date": "2017-02-04",
+         "title": "冰与火之歌卷三",
+         "duokanbookid": "sb03g277240e763e7c8g4217f175e6fd"
+     },
+     {
+         "uri": "1701-react-docs-cn",
+         "date": "2017-01-14",
+         "title": "React 中文版",
+         "duokanbookid": "b46967addc644b6c9ca1569ae9c8ee04"
+     },
+     {
+         "uri": "1701-phantom-night",
+         "date": "2017-01-05",
+         "title": "幻夜",
+         "duokanbookid": "f7c27a7e3a704224ad22d2ef7a47dfff"
+     },
+     {
+         "uri": "1311-shi-jie-zhu-ming-shou-qiang-1",
+         "date": "2013-11-20",
+         "title": "轻武器典藏手册：世界著名手枪1",
+         "duokanbookid": "032eb6f9deb14b6ebb1f4bf29d763ef4"
+     },
+     {
+         "uri": "1611-ai-she-ying-2013-s2",
+         "date": "2016-11-21",
+         "title": "爱摄影（第二季）",
+         "duokanbookid": "032fae045cbd4329a045be2df489746b"
+     },
+     {
+         "uri": "1402-the-bible-of-birds",
+         "date": "2014-02-10",
+         "title": "鸟类圣经",
+         "duokanbookid": "37630454ab2241799808e672702eb5c5"
+     }, 
+     {
+         "uri": "1604-the-art-of-photography",
+         "date": "2016-04-13",
+         "title": "摄影的艺术",
+         "duokanbookid": "435ce1eaaafb488790da1b35cdb76de6"
+     }, 
+     {
+         "uri": "1310-hackers-and-painters",
+         "date": "2013-10-05",
+         "title": "黑客与画家",
+         "duokanbookid": "25215787c0574dab9e69a48fa8ea616b"
+     },
+     {
+         "uri": "1611-ai-she-ying-2013-s1",
+         "date": "2016-11-19",
+         "title": "爱摄影（第一季）",
+         "duokanbookid": "e1fcd11336204d5495433c0be02bef85"
+     },
+     {
+         "uri": "1607-pomodoro-technique-illustrated",
+         "date": "2016-07-30",
+         "title": "番茄工作法图解",
+         "duokanbookid": "80acb149f91e4d2282385f0bc86a11d0"
+     },
+     {
+         "uri": "1609-da-xing-wang-zhan-ji-shu-jia-gou",
+         "date": "2016-09-02",
+         "title": "大型网站技术架构：核心原理与案例分析",
+         "duokanbookid": "722db682185b4da2874c106b34105d92"
+     },
+     {
+         "uri": "1608-bootstrap-site-blueprints-cn",
+         "date": "2016-08-15",
+         "title": "Bootstrap实战",
+         "duokanbookid": "ab4175a9fba643cc9cb6921f99bb0718"
+     },
+     {
+         "uri": "1608-zhihu-weekly-201309",
+         "date": "2016-08-03",
+         "title": "知乎周刊·无基础健身",
+         "duokanbookid": "1fbb10799e92433290be7be369a6d97e"
+     },
+     {
+         "uri": "1607-wei-shi-jian-guan-li-shu",
+         "date": "2016-07-27",
+         "title": "微时间管理术（大师轻松读002）",
+         "duokanbookid": "13bcb2b0660511e2bee100163e0123ac"
+     },
+     {
+         "uri": "1607-du-contrat-social-cn",
+         "date": "2016-07-15",
+         "title": "社会契约论",
+         "duokanbookid": "ce0dbbf068014c38a8b183a2bcec2328"
+     },
+     {
+         "uri": "1607-d3-d3-data-driven-documents-pdf",
+         "date": "2016-07-16",
+         "title": "D3: Data-Driven Documents",
+         "duokanbookid": "pbe4119b391fc7d7dfg22edfg5c026eg"
+     },
+     {
+         "uri": "1510-san-ti",
+         "date": "2015-10-03",
+         "title": "三体（全三册）",
+         "duokanbookid": "b64829f41e6d11e2ad8a00163e0123ac"
+     },
+     {
+         "uri": "1507-sheng-ru-li-jie-jvm",
+         "date": "2015-07-26",
+         "title": "深入理解Java虚拟机：JVM高级特性与最佳实践（第2版）",
+         "duokanbookid": "478661cfaf9c4c05860806e6ea087962"
+     },
+     {
+         "uri": "1605-django-documentation-1-9",
+         "date": "2016-05-21",
+         "title": "Django Documentation 1.9",
+         "duokanbookid": "s53128c5ec8065975g785d1c5375532c"
+     },
+     {
+         "uri": "1604-yi-xing-sheng-cun-shou-ce",
+         "date": "2016-04-24",
+         "title": "异形生存手册",
+         "duokanbookid": "57324badf35040d184c227189e7c8cb1"
+     },
+     {
+         "uri": "1310-fu-sheng-liu-ji",
+         "date": "2013-10-12",
+         "title": "浮生六记",
+         "duokanbookid": "40ff88137fdf47f0a7f26053c4276724"
+     },
+     {
+         "uri": "1603-the-smashing-book",
+         "date": "2016-03-19",
+         "title": "众妙之门：网站UI设计之道",
+         "duokanbookid": "7d51802e349711e2953100163e0123ac"
+     },
+     {
+         "uri": "1603-wan-li-shi-wu-nian",
+         "date": "2016-03-29",
+         "title": "万历十五年",
+         "duokanbookid": "74359f8c2cbd45a5a825beffeaf0a172"
+     },
+     {
+         "uri": "1408-out-of-control",
+         "date": "2014-08-29",
+         "title": "失控",
+         "duokanbookid": "961570cf4856437485a9a08525d74428"
+     },
+     {
+         "uri": "1602-sheng-si-pi-lao",
+         "date": "2016-02-06",
+         "title": "生死疲劳",
+         "duokanbookid": "14f328ac144911e2bd8e00163e0123ac"
+     },
+     {
+         "uri": "1602-the-devotion-of-suspect-x",
+         "date": "2016-02-01",
+         "title": "嫌疑人X的献身",
+         "duokanbookid": "850b6be46b8911e28a7d00163e0123ac"
+     },
+     {
+         "uri": "1601-the-great-gatsby",
+         "date": "2016-01-29",
+         "title": "了不起的盖茨比（译林版）",
+         "duokanbookid": "120f8daaf09143f4b6f208a013afa128"
+     },
+     {
+         "uri": "1512-journey-under-the-midnight-sun",
+         "date": "2015-12-31",
+         "title": "白夜行",
+         "duokanbookid": "5d1c484be83b48559970f23b410c814f"
+     },
+     {
+         "uri": "1511-jia-gou-shi-201507",
+         "date": "2015-11-29",
+         "title": "架构师（2015年07月）",
+         "duokanbookid": "c353ed4eba3c43cebd76779b7b8c6a7c"
+     },
+     {
+         "uri": "1511-jia-gou-shi-201508",
+         "date": "2015-11-28",
+         "title": "架构师（2015年08月）",
+         "duokanbookid": "577ff61a43d04dd39b42c73f7bfd3c02"
+     },
+     {
+         "uri": "1502-cheng-xu-yuan-tiao-cao",
+         "date": "2015-02-02",
+         "title": "程序员跳槽全攻略",
+         "duokanbookid": "4c095446a80f41a98d1ecd101cd74ca7"
+     },
+     {
+         "uri": "1312-hadoop-common-hdfs",
+         "date": "2013-12-14",
+         "title": "Hadoop技术内幕：深入解析Hadoop Common和HDFS架构设计与实现原理",
+         "duokanbookid": "6c8436857bf94146954c5453e63ed657"
+     },
+     {
+         "uri": "1510-gu-dian-yin-yue-ru-men",
+         "date": "2015-10-03",
+         "title": "将古典入门进行到底",
+         "duokanbookid": "974b8be2f45b47ad958f320f8ae49e30"
+     },
+     {
+         "uri": "1510-git-magic-pdf",
+         "date": "2015-10-23",
+         "title": "Git Magic",
+         "duokanbookid": "u66g108b235e33372c10911983b8478f"
+     },
+     {
+         "uri": "1309-the-shortest-history-of-europe",
+         "date": "2013-09-07",
+         "title": "极简欧洲史",
+         "duokanbookid": "e9f14f9849fb4972a2287451d1aad98b"
+     },
+     {
+         "uri": "1509-aosa-gdb-pdf",
+         "date": "2015-09-08",
+         "title": "The Architecture of Open Source Applications: GDB",
+         "duokanbookid": "g5505788d04b6b56bc28fec733308f96"
+     },
+     {
+         "uri": "1508-omnigraffle-6-manual-pdf",
+         "date": "2015-08-15",
+         "title": "OmniGraffle-6-Manual",
+         "duokanbookid": "n511b65ee256b464dc740g37bf6909e9"
+     },
+     {
+         "uri": "1508-cpp-primer-5th-pdf",
+         "date": "2015-08-22",
+         "title": "C++ Primer 5th",
+         "duokanbookid": "wb0f909g033dc8c36dd2e41bgg3f4dde"
+     },
+     {
+         "uri": "1505-manage-it-your-guide-to-modern-pragmatic-project-management",
+         "date": "2015-05-20",
+         "title": "项目管理修炼之道",
+         "duokanbookid": "50171006b1fc11e1b8ef00163e0060da"
+     },
+     {
+         "uri": "1504-ng-book-pdf",
+         "date": "2015-04-19",
+         "title": "AngularJS权威教程",
+         "duokanbookid": "h1g791fd5d1g16g4c9d04f2e9d40eb8f"
+     },
+     {
+         "uri": "1506-http-the-definitive-guide-pdf",
+         "date": "2015-06-07",
+         "title": "HTTP: The Definitive Guide",
+         "duokanbookid": "lbdc1c11g91g8e80f4b47e0b31f5gbdc"
+     },
+     {
+         "uri": "1506-tcp-ip-illustrated-vol-1-cn-pdf",
+         "date": "2015-06-04",
+         "title": "TCP-IP详解1",
+         "duokanbookid": "v89g35102d38gb8b13c2b406dfe6026f"
+     },
+     {
+         "uri": "1505-cracking-the-coding-interview-5th-pdf",
+         "date": "2015-05-17",
+         "title": "Cracking the Coding Interview, 5th Edition",
+         "duokanbookid": "uefb4ee581fdfbb342bbg02cg0g31fd3"
+     },
+     {
+         "uri": "1402-1984",
+         "date": "2014-02-18",
+         "title": "一九八四",
+         "duokanbookid": "dba7a481b45f4c9583c60a43ba091acd"
+     },
+     {
+         "uri": "1502-lightroom-5-gao-shou-zhi-dao",
+         "date": "2015-02-27",
+         "title": "Lightroom 5高手之道：数码摄影后期处理完全手册",
+         "duokanbookid": "f9fb099fbc794144a673ab92bcc8dcbf"
+     },
+     {
+         "uri": "1502-redis-she-ji-yu-shi-xian",
+         "date": "2015-02-03",
+         "title": "Redis设计与实现",
+         "duokanbookid": "71d285569f504e4ea3b8d263fff55c75"
+     },
+     {
+         "uri": "1312-dai-ma-de-wei-lai-cn",
+         "date": "2013-12-18",
+         "title": "代码的未来",
+         "duokanbookid": "61c4c3f6cfa348698d15b438634d8b42"
+     },
+     {
+         "uri": "1309-seven-languages-in-seven-weeks",
+         "date": "2013-09-11",
+         "title": "七周七语言",
+         "duokanbookid": "c1ca7576323511e28a9300163e0123ac"
+     },
+     {
+         "uri": "1311-the-non-designer-s-design-book",
+         "date": "2013-11-26",
+         "title": "写给大家看的设计书",
+         "duokanbookid": "fe3c8e4eed0811e19e0a00163e0123ac"
+     },
+     {
+         "uri": "1311-linux-phrasebook-cn",
+         "date": "2013-11-11",
+         "title": "Linux命令速查手册",
+         "duokanbookid": "f5d14a5c320d11e28a9300163e0123ac"
+     },
+     {
+         "uri": "1410-javascript-the-definitive-guide-6th",
+         "date": "2014-10-20",
+         "title": "JavaScript权威指南（第6版）",
+         "duokanbookid": "53745283ccda422d94fdcc74e44b647c"
+     },
+     {
+         "uri": "1406-html-and-css-7th",
+         "date": "2014-06-02",
+         "title": "HTML5与CSS3基础教程（第7版）",
+         "duokanbookid": "9bbefcc1e8d84b909006bb34257b5504"
+     },
+     {
+         "uri": "1410-flask-web-development",
+         "date": "2014-10-02",
+         "title": "Flask Web Development",
+         "duokanbookid": "m52471cd22g52752216849eef2egde87"
+     },
+     {
+         "uri": "1310-shui-hu-zhuan",
+         "date": "2013-10-15",
+         "title": "水浒传",
+         "duokanbookid": "b4f020928e77465490e2ada0274cba67"
+     },
+     {
+         "uri": "1407-go-yu-yan-bian-cheng",
+         "date": "2014-07-12",
+         "title": "Go语言编程",
+         "duokanbookid": "4da43e2207a911e2aae200163e0123ac"
+     },
+     {
+         "uri": "1311-professional-javascript-for-web-developers-3th",
+         "date": "2013-11-09",
+         "title": "JavaScript高级程序设计（第3版）",
+         "duokanbookid": "1fc46cb5c76345cf836060bb6a0a29a3"
+     },
+     {
+         "uri": "1312-hackers-cn",
+         "date": "2013-12-30",
+         "title": "黑客",
+         "duokanbookid": "2b24eac9d0ce4a9b85ade1eff2090659"
+     },
+     {
+         "uri": "1403-gnu-emacs-manual-pdf",
+         "date": "2014-03-30",
+         "title": "GNU Emacs Manual",
+         "duokanbookid": "v685008147b79cd617765f2399e95b90"
+     },
+     {
+         "uri": "1403-becoming-a-writer-cn",
+         "date": "2014-03-25",
+         "title": "成为作家（创意写作书系）",
+         "duokanbookid": "558a175d4a634fe6b105f62f039dd954"
+     },
+     {
+         "uri": "1403-zookeeper-distributed-process-coordination-pdf",
+         "date": "2014-03-08",
+         "title": "Zookeeper: Distributed Process Coordination",
+         "duokanbookid": "mb47f6eb649ffed7g8dgecbcb49gg16e"
+     },
+     {
+         "uri": "1310-learning-the-vi-and-vim-editors-pdf",
+         "date": "2013-10-01",
+         "title": "Learning the vi and Vim Editors-2",
+         "duokanbookid": "j4d04f1d550gd739d0g3gf92819f9639"
+     },
+     {
+         "uri": "1310-practices-of-an-agile-developer-cn",
+         "date": "2013-10-21",
+         "title": "高效程序员的45个习惯",
+         "duokanbookid": "44da6a38fd5811e19c0200163e0123ac"
+     },
+     {
+         "uri": "1312-the-art-of-procrastination-cn",
+         "date": "2013-12-15",
+         "title": "拖拉一点也无妨",
+         "duokanbookid": "18556d064cb34a58bb58049aacd085f7"
+     },
+     {
+         "uri": "1311-the-chrysanthemum-and-the-sword",
+         "date": "2013-11-12",
+         "title": "菊与刀",
+         "duokanbookid": "9c6f934f26ee4dec8e045f992bbc414d"
+     },
+     {
+         "uri": "1311-email-zhe-yang-xie-cai-hao",
+         "date": "2013-11-09",
+         "title": "Email这样写，谁都会赞",
+         "duokanbookid": "2bf0bb2bc28646a5a48d364074a051f3"
+     },
+     {
+         "uri": "1311-ren-sheng-zhi-sheng-ba-gua-le",
+         "date": "2013-11-03",
+         "title": "人生只剩八卦了",
+         "duokanbookid": "e29a9a5f504040c6a1a0aec85c31bbe0"
+     },
+     {
+         "uri": "1310-mactalk-book",
+         "date": "2013-10-25",
+         "title": "MacTalk·人生元编程",
+         "duokanbookid": "de526412c43f4f83a7fc06aa70a56522"
+     },
+     {
+         "uri": "1309-the-passionate-programmer",
+         "date": "2013-09-30",
+         "title": "我编程，我快乐",
+         "duokanbookid": "1909f6eef26811e1b0a700163e0123ac"
+     },
+     {
+         "uri": "1309-php-and-mysql-web-development-4th",
+         "date": "2013-09-30",
+         "title": "PHP and MySQL Web Development 4th Edition",
+         "duokanbookid": "m1d2c563f609f5g9gf531g14de474979"
+     },
+     {
+         "uri": "1308-pro-git-cn",
+         "date": "2013-08-25",
+         "title": "Pro Git中文版",
+         "duokanbookid": "r1fbcef7f488ff74c7d46e9607124fc5"
+     },
+     {
+         "uri": "1310-hadoop-hdfs-practice",
+         "date": "2013-10-06",
+         "title": "高可用性的HDFS：Hadoop分布式文件系统深度实践",
+         "duokanbookid": "ed0864a3bbdb48a3ae22e7f04e6e962b"
+     },
+     {
+         "uri": "1310-hadoop-the-definitive-guide-3th-pdf",
+         "date": "2013-10-03",
+         "title": "Hadoop The Definitive Guide, 3nd Edition",
+         "duokanbookid": "tf37935b30fb827d52cddf8g92d085cb"
+     },
+     {
+         "uri": "1310-hadoop-mr-book-pdf",
+         "date": "2013-10-03",
+         "title": "Hadoop技术内幕：深入解析MapReduce架构设计与实现原理",
+         "duokanbookid": "m9c0c94df73gd7d2b4864fd04ffbbfeb"
+     },
+     {
+         "uri": "1309-liang-zi-wu-li-shi-hua",
+         "date": "2013-09-07",
+         "title": "上帝掷骰子吗：量子物理史话",
+         "duokanbookid": "7baa6850320111e28a9300163e0123ac"
+     },
+     {
+         "uri": "1309-apue-010-pdf",
+         "date": "2013-09-07",
+         "title": "APUE - 010_信号",
+         "duokanbookid": "w82424d83ge5g5065668c0db380cd5d5"
+     },
+     {
+         "uri": "1309-re2-paper-pdf",
+         "date": "2013-09-01",
+         "title": "Regular Expression Matching in the Wild",
+         "duokanbookid": "td3f41cf6917df42d239bgbfb26f1f87"
+     },
+     {
+         "uri": "1308-the-lord-of-the-rings-vol1",
+         "date": "2013-08-25",
+         "title": "The Lord of the Rings: The Fellowship of the Ring",
+         "duokanbookid": "j5b3c49d4d7d42c5024ceb914c61d8g3"
+     },
+     {
+         "uri": "1308-apue-003-pdf",
+         "date": "2013-08-31",
+         "title": "APUE - 003_文件IO",
+         "duokanbookid": "we155gbd721df3bbd876fcdfb1164430"
+     },
+     {
+         "uri": "1308-apue-001-pdf",
+         "date": "2013-08-31",
+         "title": "APUE - 001_基础知识",
+         "duokanbookid": "kdee603d52c2f01883341d720fef0728"
+     }
+  ],
+  "backup": [
+  ]
+}

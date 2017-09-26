@@ -1,0 +1,19 @@
+#+TITLE: Greenplum Database
+#+DATE: 2017-07-19 23:24:09
+
+今天下午出去和其他公司沟通时，发现他们准备用GP（Greenplum），这让我产生了兴
+趣。
+
+* 资料收集
+- [[http://greenplum.org/][GREENPLUM DATABASE]]
+- [[https://github.com/greenplum-db/gpdb][greenplum-db/gpdb: Greenplum Database]]
+
+- [[http://dbaplus.cn/news-21-341-1.html][聊聊Greenplum的那些事- DBAplus社群]]
+
+#+BEGIN_EXAMPLE
+Greenplum最大的特点总结就一句话：基于低成本的开放平台基础上提供强大的并行数据计算性能和海量数据管理能力。这个能力主要指的是并行计算能力，是对大任务、复杂任务的快速高效计算，但如果你指望MPP并行数据库能够像OLTP数据库一样，在极短的时间处理大量的并发小任务，这个并非MPP数据库所长。请牢记，并行和并发是两个完全不同的概念，MPP数据库是为了解决大问题而设计的并行计算技术，而不是大量的小问题的高并发请求。
+
+再通俗点说，Greenplum主要定位在OLAP领域，利用Greenplum MPP数据库做大数据计算或分析平台非常适合，例如:数据仓库系统、ODS系统、ACRM系统、历史数据管理系统、电信流量分析系统、移动信令分析系统、SANDBOX自助分析沙箱、数据集市等等。
+
+而MPP数据库都不擅长做OLTP交易系统，所谓交易系统，就是高频的交易型小规模数据插入、修改、删除，每次事务处理的数据量不大，但每秒钟都会发生几十次甚至几百次以上交易型事务 ，这类系统的衡量指标是TPS，适用的系统是OLTP数据库或类似Gemfire的内存数据库。
+#+END_EXAMPLE

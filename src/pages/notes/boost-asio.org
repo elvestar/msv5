@@ -1,0 +1,62 @@
+#+TITLE: Boost Asio
+#+DATE: 2013-08-27
+#+KEYWORDS: C++
+
+Boost::ASIO 在接口和设计上主要有如下优点：
+1) 轻量级框架，对外接口简单，一般来说，用户只需要关注 io_service、acceptor 和
+   socket 即可；
+2) 同步、异步功能使用上基本一致，只需要简单增加回调函数即可；
+3) 支持 IO 事件和定时器事件的统一处理；
+4) 事件调度器线程安全性，且和线程模型是松耦合关系，既可使用内置的线程模型，
+   也可以外部重新实现；
+
+* 资料收集
+开源网络库 ACE、Boost 的 ASIO、libevent、libev、ZeroMQ - （各个框架的特点和异
+同）
+- http://blog.csdn.net/guowenyan001/article/details/8963408
+
+boost::asio::ip::tcp 实现网络通信的小例子（转载） - （同步异步，核心类
+io_service）
+- http://www.cppblog.com/janvy/archive/2010/03/24/110478.html
+
+如何实现一个简单的 Http Server，并且提供良好的接口。
+- http://www.cplusplus.com/forum/unices/29248/ 
+
+Boost 官方文档中的 asio 的用法 - （特别是关于实现四种模式的 Http Server）
+- http://www.boost.org/doc/libs/1_53_0/doc/html/boost_asio/examples.html
+
+* 简单实现 Http Server
+Boost::asio 范例分析 服务端：
+- http://blog.csdn.net/henreash/article/details/7561886
+
+** 几个关键组件
+- io_service：asio 核心概念
+- signal_set：处理 linux signal 的，例如 ctrl + c
+- acceptor：绑定 ip 和 port，接收 http 访问请求。一个 connection 的起始点是
+  acceptor
+- 接收到了请求。
+- connecton：在一个“连接”中处理 http 请求（注意这里抽象出了 connection 的概
+  念）。
+- request_handler：如何处理请求
+
+- server3 的特点是所有线程都运行在同一个 io_service 对象上面。
+- server2 的特点是有个 io_service 的 pool，每个 io_service 上面运行着一个独立的线
+  程。
+
+** 开始实现
+
+*** 第一步：处理 HTTP 请求的异步框架
+这部分代码在 HttpServer 类里面。构造 io_service，用 io_service 和 ip/port 初始化
+acceptor，用 io_service 构造 socket，用 acceptor 的 async_accept 来注册回调函数，
+执行 io_service 的 run 函数。
+
+注意：
+1. acceptor 和 socket 的构造需要传入 io_service，并且貌似不能使用 new 来构造；
+2. 使用 curl 来调试，免去了我写 client 的繁琐。curl 真神器也。
+
+*** 第二步：处理 HTTP 请求的全过程的抽象
+这里使用了 Connection 类（或者 Session？）来作为这个处理过程的抽象。
+
+*** 第三步：放弃！换用 Libev
+发现我的 boost::asio 与 sofa-pbrpc 的冲突，而且难解决，所以我决定不用了！换用
+libev。

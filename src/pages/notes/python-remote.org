@@ -1,0 +1,109 @@
+#+TITLE: Python 远程执行
+#+DATE: 2014-11-22
+#+KEYWORDS: Python, Shell
+
+* Introduction
+* Python Expect
+** 冗长的样例代码
+#+BEGIN_SRC python
+#!/bin/env python                                                                                      
+# -*- coding: utf-8 -*-                                                                                
+                                                                                                       
+import sys                                                                                             
+import pexpect                                                                                         
+                                                                                                       
+if __name__ == "__main__":                                                                             
+  if len(sys.argv) != 3:                                                                               
+    print "Illegal param number"                                                                       
+    sys.exit(1)                                                                                        
+                                                                                                       
+  user = "zhongyi"                                                                                   
+  passwd = "xxxxxx"
+  hostname = sys.argv[1]                                                                               
+  cmd = sys.argv[2]                                                                                    
+                                                                                                       
+  print hostname,                                                                                      
+  ssh = pexpect.spawn("ssh %s@%s %s" % (user, hostname, cmd))                                          
+  try:                                                                                                 
+    ret = ssh.expect(['password:', 'continue connecting (yes/no)?'], timeout = 5)                      
+    if ret == 0:                                                                                       
+      ssh.sendline(passwd)                                                                             
+    elif ret == 1:                                                                                     
+      ssh.sendline('yes\n')                                                                            
+      ssh.expect('password: ')                                                                         
+      ssh.sendline(passwd)                                                                             
+    ssh.sendline(cmd)                                                                                  
+    r = ssh.read()                                                                                     
+    print r                                                                                            
+  except pexpect.EOF:                                                                                  
+    print "EOF"                                                                                        
+  except pexpect.TIMEOUT:                                                                              
+    print "TIMEOUT"                                                                                    
+                                                                                                       
+  ssh.close()                   
+#+END_SRC
+
+** Fabric 更好用
+自从用了 Fabric/Paramiko，我就再也不用 pexpect 了。如果不出意外，这篇笔记就不再更新
+了（移动到 python-remote.org 里面）
+* Paramiko
++ [[http://docs.paramiko.org/][Paramiko Docs]]
+** SSH agents
+*** 用法：
+#+BEGIN_SRC python
+from paramiko import SSHClient, AutoAddPolicy,
+
+def exec_command_and_print(ssh_client, cmd):
+    std_in, std_out, std_err = ssh_client.exec_command(cmd)
+    print "std out: ", std_out.readlines()
+    print "std err: ", std_err.readlines()
+
+def connect_ssh():
+    ssh_client = SSHClient()
+    ssh_client.set_missing_host_key_policy(AutoAddPolicy())
+    ssh_client.load_system_host_keys()
+    ssh_client.connect('192.168.8.104', username='elvestar', password='xxxx')
+    return ssh_client
+
+client = connect_ssh()
+
+for i in range(1):
+    exec_command_and_print(client, 'ps -ef | grep ssh')
+#+END_SRC
+
+在 shell 中这样调用：
+#+BEGIN_SRC sh
+./ssh_and_exec.py "10.0.123.1" "ps -ef | grep process_name"
+#+END_SRC
+
+*** 要点
++ 如果~/.ssh/known_hosts 里没有想指定的机器的话，需要先调用
+  set_missing_host_key_policy(AutoAddPolicy())。这个是略坑，需要 Google 才能
+  知道为神马报错。
+** 拟定远程执行的命令
+  | 功能                                     | 命令                                                                                       | 说明                     |              |                                                             |
+  |------------------------------------------+--------------------------------------------------------------------------------------------+--------------------------+--------------+-------------------------------------------------------------|
+  | 查看某进程是否存在                       | ps -ef                                                                                     | grep xxx                 | grep -v grep | grep 后数正确进程的数据，注意 -v 可以用来滤掉 grep 进程本身 |
+  | 查看对某目录是否存在以及权限             | stat /path/to/xxx                                                                          | 需要通过返回的文本来判断 |              |                                                             |
+  | （递归）查看某目录下名字符合某规则的文件 | find /home/work/xxxxx/log/ -type f -maxdepth 1 -name "xxxxx.pb.log.[0-9][0-9]" -o -name "xxxxx.pb.log" | -o -name 是追加，相当于 "或"，maxdepth 得要设，不然慢死了 |              |                                                             |
+  |                                          |                                                                                            |                          |              |                                                             |
+  |                                          |                                                                                            |                          |              |                                                             |
+* 远程 ls
+下面代码使用了 Python 的 re 模块实现了将远程 ls 的结果解析为结构化的数据。
+#+BEGIN_SRC python
+    # In order to parse result of 'ls -l --full-time'.                                                           
+    # For example:                                                                                               
+    # drwxrwxr-x   2 zhongyi zhongyi 4096 2014-01-27 00:07:44.000000000 +0800 app                                
+    regex = '^(?P<perm>.{10}) +(?:[^ ]+ +){3}(?P<size>\d+) +'\                                                   
+        '(?P<mtime>.{19})\.\d{9} +(?P<tzone>.{5}) +(?P<name>.*)$'                                                
+    file_items = list()                                                                                          
+    for line in output.split('\\n'):                                                                             
+        m = re.match(regex, line)                                                                                
+        if m is not None:                                                                                        
+            fileds_wanted = ['perm', 'size', 'mtime', 'name']                                                    
+            file_item = dict()                                                                                   
+            for field in fileds_wanted:                                                                          
+                file_item[field] = m.group(field)                                                                
+                file_items.append(file_item)                                                                     
+#+END_SRC
+  

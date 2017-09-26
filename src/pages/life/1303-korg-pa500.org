@@ -1,0 +1,108 @@
+#+TITLE: 入手 Korg PA500 编曲键盘
+#+DATE: 2013-03-09
+#+KEYWORDS: 设备
+
+
+上周末在优酷上听了 [[http://www.tudou.com/programs/view/BYNY8gJVnGA/][天空之城（弦乐版）]] ，感觉很悠扬很悦耳，于是有种想买个电
+子琴的想法。然后我在网上搜索电子琴的信息，听到有人用雅马哈 S650 弹奏 Celtic
+音乐，这秒杀我了。我想用电子琴弹出恩雅的 Fairytale。
+
+于是，我疯狂地流连于各大电子琴论坛，了解电子琴型号和价位，就像当年我痴迷于
+随身听音设备而彻夜逛 iMP3 和耳机大家谈一样。
+
+* 关于电子琴的调研 <2013-03-04 一>
+我这几天在键盘中国和中国电子琴在线论坛彻夜翻帖子，一开始是看雅马哈的入门电
+子琴，然后看了国产的美得理A800。后来胃口逐渐变大，逐渐将目标锁定在雅马哈
+S650、Korg PA500、罗兰 BK-5这三款五千元价位的电子琴上了。
+
+一开始我先关注雅马哈 S650。
+- [[http://www.cnkeyboard.com/bbs/thread-181288-1-3.html][雅马哈 S650 与 S900 对比]]
+- [[http://www.cnkeyboard.com/bbs/thread-181113-1-3.html][S650 优点罗列：作者说 S650 很多高端琴的特色被照搬过来了]]
+- [[http://www.cnkeyboard.com/bbs/thread-181138-1-3.html][S650 音色评价：说它的弦乐不行]]
+- [[http://www.cnkeyboard.com/bbs/thread-177794-1-2.html][键盘中国的 S650 团购，貌似送了架子和包]]
+
+S650 有竞争对手了，PA500！
+- [[http://www.cnkeyboard.com/bbs/thread-138612-1-1.html][PSR-S650（S710）与PA500如何选择之文献综述版]] 
+- [[http://www.cnkeyboard.com/bbs/thread-47066-1-4.html][夫夫 08 年发的，此时 pa500 刚出。回帖认为该琴超越了雅马哈 S900 不少]]
+- [[http://www.cnkeyboard.com/bbs/forum.php?mod%3Dviewthread&tid%3D152036&highlight%3Dpa500][PA500 与 S650 的各类乐器比较]] 
+- [[http://www.cnkeyboard.com/bbs/forum.php?mod%3Dviewthread&tid%3D181491&highlight%3Dpa500][PA500和S650两款乐器比较合辑]]
+- [[http://bbs.cndzq.com/thread-201385-1-1.html][A600 相比 PA500]]
+- [[http://bbs.cndzq.com/forum.php?mod%3Dviewthread&tid%3D150811&highlight%3DPA500][此人贬低了 PA500，赞扬了 BK5]]
+- [[http://bbs.cndzq.com/forum.php?mod%3Dviewthread&tid%3D233356][5 楼称 S650 系统老，PA500 系统强大]]
+- [[http://bbs.cndzq.com/thread-173364-1-10.html][K5 VS PA500，它们貌似各有胜场]]
+- [[http://bbs.cndzq.com/thread-51228-1-22.html][这个是 PA500 的传统意义上的评测]]
+- [[http://www.cnkeyboard.com/bbs/forum.php?mod%3Dviewthread&tid%3D175535][PA500 PK PA600]]
+- [[http://www.cndzq.com/bbs/search.php?mod%3Dforum&searchid%3D291&orderby%3Dlastpost&ascdesc%3Ddesc&searchsubmit%3Dyes&kw%3Ds650][搜索发现发现 PA500 确实存在很多质量问题]]
+- [[http://www.cnkeyboard.com/bbs/forum.php?mod%3Dviewthread&tid%3D46913][夫夫发给我的评测 + 录音]]
+
+后来觉得罗兰 BK-5 也很炫酷。
+- [[http://www.cnkeyboard.com/bbs/forum.php?mod%3Dviewthread&tid%3D175369&extra%3D&highlight%3DBK&page%3D1][文狂赞 BK-5，特别是它的伴奏]]
+- [[http://www.cnkeyboard.com/bbs/thread-166231-1-1.html][该贴称 BK5 中国音色不行，但是其它音色可以与 S950 媲美]]
+- [[http://www.cnkeyboard.com/bbs/thread-161142-1-1.html][该贴先夸了 BK5，然后又喷了它操作太垃圾]]
+
+* 购买
+经过这几天的研究，我准备购买雅马哈 S650，并在3月6日下午一点下单购买，价格是
+4460元。后来又看了一些评测，觉得 S650 专业性不如 PA500，于是第二天早上又加
+了810元换成了 PA500。一共花了5270元。
+#+CAPTION: 先买S650
+[[../static/imgs/1303-korg-pa500/1.png]]
+#+CAPTION: 然后又换成PA500
+[[../static/imgs/1303-korg-pa500/2.png]]
+
+* 开箱
+3月7日下单，3月9日（周六）上午，我的Korg PA500就到了。由于包裹很重，所处快
+递员和我一起将它抬进屋里。
+#+CAPTION: PA500的包装箱
+[[../static/imgs/1303-korg-pa500/DSC04607.jpg]]
+
+然后就是开箱，我逐个拿出电源线、琴谱挡板、说明书（非常厚的一本）、电子琴本
+体。电子琴很大看新，按钮特别多。蓝色烤漆在网上看着感觉一般，但是实际体验相
+当高档。
+#+CAPTION: 取出PA500本体
+[[../static/imgs/1303-korg-pa500/DSC04629.jpg]]
+
+下面是Korg PA500的几处细节的照片：
+#+CAPTION: PA500正面局部
+[[../static/imgs/1303-korg-pa500/DSC04624.jpg]]
+#+CAPTION: PA500左侧
+[[../static/imgs/1303-korg-pa500/DSC04640.jpg]]
+#+CAPTION: P500背面LOGO
+[[../static/imgs/1303-korg-pa500/DSC04647.jpg]]
+#+CAPTION: PA500的弯音轮
+[[../static/imgs/1303-korg-pa500/DSC04672.jpg]]
+
+摆好PA500后，我接上电源，按下开机键，然后键盘中间的屏幕亮起，开始开机。过了
+数秒，开机完毕，此时按下键盘可以发出声音了，我自从小学的音乐课之后就再也没
+有按过这种东西了。PA500的的音箱的效果特别好，标称功率很高，发出的声音很有能
+量感。PA500的按钮特别多，这正和我意，我喜欢复杂的玩具，这样可玩性才能更高。
+我特别喜欢每个按钮上方的指示灯，这让我感觉这是一个专业设备。
+#+CAPTION: 开机
+[[../static/imgs/1303-korg-pa500/DSC04678.jpg]]
+
+我从网上下了几首歌的谱子来试弹。由于不懂五线谱，所以我找到了《小白船》和
+《你的眼神》这两首歌的简谱。为了方便我找到 do（简谱上的1），我还在键盘上贴
+了小纸条。然后我将简谱的图下载到iPad上照着练，弹出了几句歌词，感觉很有意思。
+#+CAPTION: 网上随便搜到一个谱子就开始练
+[[../static/imgs/1303-korg-pa500/DSC04680.jpg]]
+
+总之，我有了一个的强大复杂的新玩具。我想好好地练习一番，我想尽快用它弹出我
+喜爱的音乐。
+
+* 后记 <2013-04-25 四>
+入手Korg PA500之后，我练了一会琴，但是总是感觉好难入门。而且PA500那么多功能，
+比如说编曲、音色合成、自动伴奏等，我完全不会玩，也无从入门。我后来还买了
+《拜厄钢琴基本教程》、《哈农钢琴练指法》、《怎样读五线谱》三本书，照着书练，
+还是觉得既枯燥又难按，毫无进展。当然最关键的还是工作太忙，很难抽出时间练琴，
+即使到了周末，我也闲不下来。
+
+几周之后，我不再练琴了，PA500摆在卧室逐渐成为一种负担。我有点后悔，当时入手
+它是一种一时冲动的行为。于是我在键盘中国和中国电子琴论坛发帖，想要卖掉它。
+- http://bbs.cndzq.com/thread-259715-1-1.html
+- http://www.cnkeyboard.com/bbs/thread-192283-1-1.html
+
+之后几周，有几个人来找我想买我的PA500，但都是外地的，我觉得邮寄太麻烦。直到
+有一天，我突然不想卖了。因为我意识到： *能亲手弹出我喜爱的音乐是我一生的愿
+望* ，我不应该急于一时。虽然这几年工作忙，无暇练琴，但人生长着呢，愿望终有
+一天能实现。
+
+勿忘初心！

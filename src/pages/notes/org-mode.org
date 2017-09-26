@@ -1,0 +1,533 @@
+#+TITLE: Emacs Org Mode
+#+DATE: 2014-02-02
+#+KEYWORDS: Emacs, SSG, Makeup, 知识管理, 时间管理
+#+DESCRIPTION: 知识管理，时间管理
+
+* 资料搜集
+** 相关文章
++ [[http://www.cnblogs.com/bamanzi/archive/2012/05/12/org-mode-so-powerful.html][为什么说 org-mode 是个神器]]
++ [[http://coldnew.github.io/slides/COSCUP2013_org-mode/slide.html#1][Org-mode: Emacs 下的瑞士軍刀（幻灯片）]]
+
+* 学习 Org-mode 的官方手册
+地址是：[[http://orgmode.org/manual/index.html][The Org Manual]]。这份文档制作很精良，而且（显然）是用 Org-mode 写的。
+** Wiki 式的 Inner link
+Org-mode 支持 wiki 式的内部链接，格式为：
+
+#+BEGIN_SRC org
+[[file:org-mode.org][Org Mode - Organize Your Life In Plain Text!]]
+#+END_SRC 
+
+这就让 org-mode 拥有了写 wiki 的能力。
+
+** 语言支持
+Org-mode 支持大量的语言，除了常见的 C++，Java，Python 外，甚至还支持 Graphviz，
+Gnuplot，Plantuml 等复杂的绘图语言，非常的强大。这是[[http://orgmode.org/manual/Languages.html#Languages][Org-Mode 支持的语言列表]]。
+** 宏替换
+*** 原生变量
+获取本文的最新修改时间：
+#+BEGIN_SRC org
+{{{modification-time(%Y-%m-%d %H:%M:%S)}}}
+#+END_SRC
+
+获取本文作者：
+#+BEGIN_SRC org
+{{{author}}}
+#+END_SRC
+
+*** TODO 获取本 org 文件名
+暂时还没有找到从哪里获取。
+   
+*** 自定义 Macro
+用法如下：
+#+BEGIN_SRC org
+#+MACRO: name   replacement text $1, $2 are arguments
+{{{name(text1, text2)}}}
+#+END_SRC
+
+** 列表
+*** 将多行文本转化为列表
+方法：选中多行文本，再执行 C-c - 。C-c - 除了有作用为，还可以转换列表类型，如
+将有序列表转换为无序列表，注意这种转化不需要先选中文本。
+
+*** 描述型列表（等效于 HTML 中的 dl/dt/dd 标签）
+#+BEGIN_EXAMPLE
+我今天吃了好多东西：
+- 花 :: 吃花狂魔
+- 青草 :: 小清新
+- 泥土 :: 芬芳气息
+#+END_EXAMPLE
+
+我今天吃了好多东西：
+- 花 :: 吃花狂魔
+- 青草 :: 小清新
+- 泥土 :: 芬芳气息
+
+** 锚点
+#+BEGIN_SRC org
+:PROPERTIES:
+:ID: id1
+:END:
+#+END_SRC
+
+* HTML 导出
++ [[http://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html][Publishing Org-mode files to HTML]]
++ [[http://orgmode.org/manual/Configuration.html#Configuration][Org-mode publishing configuration]]
+
+** 自动生成 sitemap（站点地图）
+我想要在我的导出文件中加入一个自动生成的笔记列表，Google 一下，发现 Org 的 publish 功
+能支持[[http://orgmode.org/manual/Sitemap.html][自动生成 sitemap.html]] 。我需要在我的导出配置中加入下面两行：
+#+begin_src emacs-lisp
+:auto-sitemap t ; 打开自动生成 sitemap
+:sitemap-sort-folders "last" ; 设定 sitemap 页面的条目的排序方式
+#+end_src
+
+设好后，重新导出为 HTML，得到了我的个人笔记的 sitemap 页面：
+http://elvestar.github.io/notes/sitemap.html
+
+** 自定义 CSS
+我决定在 norang.ca 提供的 org.css 的基础上做修改。关于这个 org.css，我第一个不喜欢的就
+是它把标题的每个单词的首字母的都大写了。我百度一下，发现是 *capitalize* 这个 css 属
+性导致的，于是我在 org.css 上删除了它。
+
+norang.ca 提供的 org.css 最大的不便在于 TOC 不好看，我(我将 TOC 做成 [[http://v3.bootcss.com/customize/][bootstrap 的经典风格]]
+，即动态的，自动展开/折叠的，跟着屏幕走的 TOC。不过看起来改造代价非常大，我需要修
+改 org 的 *org-html-publish-to-html* 函数。我在思考能够一个 JS 脚本在浏览器端自动根据
+Header 来生成 TOC，于是我 Google 了一下，找到了 [[http://projects.jga.me/toc/][TOC jQuery 插件]] ，我想借助它以及
+bootstrap 将我的笔记进行彻底的美化，但这周没时间了，我下次再搞。反正 norang.ca 的
+org.css 用着也挺好的，毕竟得之简朴嘛。
+
+** 附加评论框
+我使用 org 导出为 HTML 来生成我的个人静态站点。静态站点相对于 Wordpress 等专门的博客系
+统的弱点就在于 *评论系统* ，除此之外，只有优势。幸好，市面上有很多 *第三方的评论
+系统* ，并且它们可以很轻易地嵌入到我的静态站点中，它们包括国外的 Disqus，以及国内
+的友言，多说，畅言等。Disqus 加载速度较慢，且不够本土化（无法与国内社交网站的打
+通），故先排除。在国内的这几个产品中，我选择了 *多说* ，因为它的评论框更容易与我
+的站点风格相融合。
+
+我了解了一下 org 的 HTML 导出系统，发现可以很轻易地将多说评论框集成进去，只需要
+在~/.emacs 中加入：
+#+begin_src emacs-lisp
+(setq org-html-postamble t)                                                                            
+(setq org-html-postamble-format                                                                        
+ '(("en"                                                                                               
+    "<!-- Duoshuo Comment BEGIN -->                                                                    
+    <div class='ds-thread'></div>                                                                      
+    <script type='text/javascript'>                                                                    
+    var duoshuoQuery = {short_name:'你的多说账户名'};                                                        
+    (function() {                                                                                      
+                var ds = document.createElement('script');                                             
+                ds.type = 'text/javascript';ds.async = true;                                           
+                ds.src = 'http://static.duoshuo.com/embed.js';                                         
+                ds.charset = 'UTF-8';                                                                  
+                (document.getElementsByTagName('head')[0]                                              
+                  || document.getElementsByTagName('body')[0]).appendChild(ds);                        
+                })();                                                                                  
+    </script>                                                                                          
+    <!-- Duoshuo Comment END -->"                                                                      
+    )))           
+#+end_src
+
+这样，导出的 HTML 将自动在<body>标签的最后面缀上多说评论框。如图：
+
+[[../static/imgs/org-mode/1.png]]
+
+** 附加分享按钮
+我用的是 JiaThis。
+#+BEGIN_SRC emacs-lisp
+  (setq org-html-postamble-format                                                                        
+  '(("en"                                                                                                        
+     "
+      <!-- JiaThis Button BEGIN -->                                                                      
+      <div class='jiathis_style'>                                                                        
+      <span class='jiathis_txt'>分享到：</span>                                                          
+      <a class='jiathis_button_tsina'>新浪微博</a>                                                       
+      <a class='jiathis_button_douban'>豆瓣</a>                                                          
+      <a class='jiathis_button_weixin'>微信</a>                                                          
+      <a class='jiathis_button_evernote'>EverNote</a>                                                    
+      <a class='jiathis_button_googleplus'>Google+</a>                                                   
+                                                                                                         
+      <a href='http://www.jiathis.com/share?uid=1891272'
+      class='jiathis jiathis_txt jiathis_separator jtico
+      jtico_jiathis' target='_blank'>更多</a> <a
+      class='jiathis_counter_style'></a> </div> <script
+      type='text/javascript' > var jiathis_config={
+      data_track_clickback:true, summary:'', shortUrl:false,
+      hideMore:false } </script> <script type='text/javascript'
+      src='http://v3.jiathis.com/code/jia.js?uid=1891272'
+      charset='utf-8'></script> <!-- JiaThis Button END -->
+     ")))
+#+END_SRC
+** 集成 Google Analytics
+这个也很简单，跟 *附加评论框* 的方法几乎一样。我们首先要在 Google Analytics 上注册
+一个账户，获取跟踪 ID，然后将跟踪 JS 代码附加到 *org-html-postamble-format* 上。
+
+#+begin_src emacs-lisp
+(setq org-html-postamble-format                                                                        
+ '(("en"                                                                                               
+    "<!-- Duoshuo Comment BEGIN -->                                                                    
+    <script>                                                                                           
+    略...
+    </script>                                                                                          
+    <!-- Duoshuo Comment END -->                                                                       
+    <!-- Google Analytics BEGIN -->                                                                    
+    <script>                                                                                           
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){                       
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),                   
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)                  
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');                     
+                                                                                                       
+    ga('create', '你的 UA', '你的网址');                                                     
+    ga('send', 'pageview');                                                                            
+                                                                                                       
+    </script>                                                                                          
+    <!-- Google Analytics END -->                                                                      
+    "                                                                                               
+    )))         
+#+end_src
+
+** 强制全部导出 HTML
+默认情况下，org-mode 会根据时间戳来判断一个文件（.org 或.png）是否被修改过，进而决
+定是否对文件执行 *publishing-function* 。这种做法减少了 HTML 导出的开销，但有时候会
+带来不便，特别是在清空过导出目录（ *publishing-directory* ）后，再次导出，将会漏
+掉很多文件。
+
+还好，org 提供了 [[http://orgmode.org/guide/Publishing.html][强制导出]] 的功能，只需要在执行导出函数时，加上一个 [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Prefix-Command-Arguments.html][Prefix Command
+Arguments]] 就可以了。具体做法：
+#+begin_src emacs-lisp
+C-u M-x org-publish
+#+end_src
+然后选择你要导出的 project。由于强制导出并不是频繁执行的命令，所以我就不设
+快捷键了。
+
+** 去掉自动分行带来的讨厌的空格
+Emacs 的自动分行功能很好，但是将 org 文件导出为 HTML 后，会自动在空行出加入空格，对于
+中文玩家来说，这点很讨厌。我用 *org-mode 中文 空格* 为关键词 Google 了一下，找到了
+解法：
++ [[http://fasheng.github.io/blog/2013-09-25-fix-chinese-space-issue-when-exporting-org-mode-to-html.html][org-mode 导出 html 时中文空格问题的临时解决方法]]
+
+按照此文，我在我的~/.emacs 里面加上下面一段 emacs-lisp 代码后，问题解决了。
+#+BEGIN_SRC elisp
+(defadvice org-html-paragraph (before fsh-org-html-paragraph-advice                                    
+                                      (paragraph contents info) activate)                              
+  "Join consecutive Chinese lines into a single long line without                                      
+unwanted space when exporting org-mode to html."                                                       
+  (let ((fixed-contents)                                                                               
+        (orig-contents (ad-get-arg 1))                                                                 
+        (reg-han "[[:multibyte:]]"))                                                                   
+    (setq fixed-contents (replace-regexp-in-string                                                     
+                          (concat "\\(" reg-han "\\) *\n *\\(" reg-han "\\)")                          
+                          "\\1\\2" orig-contents))                                                     
+    (ad-set-arg 1 fixed-contents)                                                                      
+    ))     
+#+END_SRC
+
+** 博客发布
++ [[http://orgmode.org/worg/org-tutorials/org-jekyll.html][Using org to Blog with Jekyll]]
++ [[http://dayigu.github.io/WhyUseOrgModeToWriteBlog.html][为什么用 org-mode 写 blog？]]
+
+发现没有一个支持 Org 的博客发布工具，直到后来我发现了 Nanoc，所以我 DIY 了
+一个。
+
+* 花式 Org 
+** TODO 用 Org 写 PPT
+无意中看到了 [[http://jerrypeng.me/2013/10/remove-org-html-useless-spaces/][此文]] ，声称 Org-mode + Tex Live 能写出很炫酷的 PPT。我先记一下，有空搞
+搞。
+** 在 Org 中绘图
+*** 绘制 Ascii 图
++ [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Picture-Mode.html#Picture-Mode][Emacs Picture Mode]]
++ [[http://www.lysator.liu.se/~tab/artist/][Emacs Artist Mode]]
++ [[http://www.cbi.pku.edu.cn/chinese/documents/csdoc/emacs/chap7.html][图形的编辑（Emacs 使用帮助 - pku）]]
++ [[http://lifegoo.pluskid.org/wiki/EmacsEditPicture.html][在 Emacs 里编辑 Ascii 图片]]
++ [[http://emacser.com/artist-mode.htm][用 artist-mode 画文本图]]
+	   
+*** ditaa	   
+文章搜集	   
++ [[http://emacser.com/emacs-ditaa.htm][Emacs 中绘图 － ditaa 篇]]
++ [[http://orgmode.org/worg/org-contrib/babel/languages/ob-doc-ditaa.html][ob-doc-ditaa - Org-mode]]
+		   
+有两个关键点：	   
+		   
+**** 告诉 Emacs 加载 ditaa 语言的支持：
+#+BEGIN_SRC emacs-lisp
+(org-babel-do-load-languages                                                                        
+  (quote org-babel-load-languages)                                                                   
+  (quote ((ditaa . t) 
+#+END_SRC	   
+ 		   
+**** 告诉 Emacs 在哪里找到 ditaa 的 jar 文件
+#+BEGIN_SRC emacs-lisp
+(setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.9/libexec/ditaa0_9.jar") 
+#+END_SRC	   
+		   
+* 时间管理
+- [[http://jeapostrophe.github.io/2012-09-19-omnifocu-post.html][Switching from OmniFocus to Org-Mode]]
+- [[http://www.osomac.com/2013/07/14/farewell-omnifocus-welcome-org-mode-pt-2/][Farewell OmniFocus, welcome org-mode]]
+
+** 任务计时
+开始或在被打断后继续一个任务之前，执行 C-c C-x C-i 开始任务计时，完成任务或
+者被打断时，执行 C-c C-x C-o 完成任务计时。这时 Org 会在该任务的条目下留下
+日志，计算出任务耗时。
+
+打开 Agenda，输入 a v c，能看到当天各个时段是如何分配给各个任务的，也能清晰
+地看到哪些时段没有被分配做 GTD 系统内任务（小提示：输入 x 即可退出 Agenda
+页面）
+
+进入列视图（C-c C-x C-c）能看出某个节点下的所有子节点的任务耗时情况，不过需
+要预先设定列视图的显示格式（小提示：退出列视图的快捷键是 q）
+
+** 通过 MobileOrg 来实现移动化 <2015-03-06 五>
+Dropbox 在国内已经被封，所以我尝试寻找国内的一个可用的 WebDAV 服务提供商，
+我寻找到了 [[http://jianguoyun.com/][坚果云]] ，发现这家的云服务做的真不错。
+
+然后我开始食用坚果云的 WebDAV，过程略过不表，只记录几个关键点：
+1. 我们要创建 "同步文件夹"，而不是 "文件夹"。后者无法用于 DAV。
+2. 在 MobileOrg 的 Settings 一栏，Username 填写的是注册坚果云时使用的邮箱，
+   Password 填写的是应用密码，而不是坚果云密码。如果没有应用，你可以在 "坚
+   果云-> [[https://jianguoyun.com/d/account#safe][安全选项]]" 里点 "添加应用密码" 建立一个应用（名字随意）。
+3. 貌似没啥其他好说的了，点 MobileOrg 的那个同步按钮即可通过坚果云提供的
+   WebDAV 服务同步。
+4. MobileOrg 提供的功能很有限，看来不堪大用。
+
+** Agenda 导出
+- [[http://orgmode.org/manual/Exporting-Agenda-Views.html][10.7 Exporting Agenda Views]]
+- [[http://orgmode.org/manual/Extracting-agenda-information.html][A.10 Extracting agenda information]]
+
+下面指令能将我的 TODO list 导出到标准输出。
+#+BEGIN_SRC sh
+emacs -batch -l ~/.emacs.d/init.el -eval '(org-batch-agenda "t")' 2> /dev/null
+#+END_SRC
+
+注意两点：
+1. -l 指定 Emacs 的配置文件，默认是 ~/.emacs。我的 Emacs 配置借鉴了别人，入
+   口是 ~/.emacs.d/init.el，故 -l 指定 ~/.emacs.d/init.el。
+2. Emacs 配置中要预先指定好 Agenda 文件。
+   
+~org-batch-agenda~ 也可加参数，下面语句就将最近一个月的日程安排导出到标准输
+出了：
+#+BEGIN_SRC sh
+emacs -batch -l ~/.emacs.d/init.el -eval '(org-batch-agenda "a" org-agenda-span (quote month) )' 2> /dev/null
+#+END_SRC
+
+*** TODO 通过 org-batch-agenda 导出时间管理的关键数据 <2015-04-07 二>
+我想统计出我每周/每月的时间管理的几个关键指标，故想要导出两个东西：
+1. 指定某周/某月的时间花费和各块占用的比例的情况
+2. 指定某周/某月的具体打点情况（即 Agenda 视图的 Clockcheck 功能）
+
+~org-batch-agenda~ 必然提供了接口，不过对于我这样一个不懂 elisp 的玩家来说，
+应该挺复杂。
+
+** Agenda 数据处理
+下面的 Vim 命令可以去掉 Clock Report 中的链接， 使之变简洁。
+#+BEGIN_SRC sh
+%s/\[\[.*\]\[\(.*\)\]\]/\1/g
+#+END_SRC
+* 工作流		   
+** Org-mode 截图工作流 <2015-04-04 六>
+之前我用 Org 写笔记时，截图很费劲。我在水木上找到 [[http://m.newsmth.net/article/Emacs/single/109236/0][一段 elisp 代码]] ，并加以
+修改，得到如下的一键截图并在 Org 里插入图片相对路径的代码。
+#+BEGIN_SRC elisp
+;;; Screenshot
+(defun my-org-screenshot (basename)
+  "Take a screenshot into a time stamped unique-named file in the
+  same directory as the org-buffer and insert a link to this file."
+  (interactive "sScreenshot name: ")
+  (if (equal basename "")
+    (setq basename (format-time-string "%Y%m%d%H%M%S")))
+  (setq fullpath
+        (concat (file-name-directory (buffer-file-name))
+                "imgs/"
+                (file-name-base (buffer-file-name))
+                "/"
+                basename
+                ".png"))
+  (setq relativepath
+        (concat "./imgs/"
+                (file-name-base (buffer-file-name))
+                "/"
+                basename
+                ".png"))
+  ; Make director if not exists 
+  (setq imgs_dir (concat (file-name-directory (buffer-file-name)) "imgs/"))
+  (unless (file-exists-p imgs_dir)
+    (make-directory imgs_dir))
+  (let ((file_imgs_dir (file-name-directory fullpath)))
+    (unless (file-exists-p file_imgs_dir)
+      (make-directory file_imgs_dir)))
+  (call-process "screencapture" nil nil nil "-s" fullpath)
+  (insert "#+CAPTION: ")
+  (insert relativepath)
+  (insert "\n")
+  (insert (concat "[[" relativepath "]]")))
+#+END_SRC
+
+下面就是我调用一键截图获得的代码和图片。
+#+BEGIN_SRC org
+#+CAPTION:./imgs/org-mode_20150404103948.png
+[[../static/imgs/org-mode/20150404103948.png]]
+#+END_SRC
+
+#+CAPTION: ./imgs/org-mode/20150404141801.png
+[[../static/imgs/org-mode/20150404141801.png]]
+
+2016-10-08：升级了脚本一键截图脚本：
+1. 截图文件格式改为这样：./imgs/org-mode/20150404103948.png。
+2. 增加了判断目录不存在则创建的逻辑。
+
+*** 充分利用Mac截图的辅助快捷键 <2016-10-08 六 02:46>
+截图过程中，按住空格可以平移选择框，按住Option可以降锚点从左上角移到中心，
+按住Shift可以锁定高度或宽度。
+
+另外，按下截图快捷键后，按住空格可以实现选中窗口，并且截出的图带有阴影。不
+过，如果使用screencapture命令行截图的话，这个特性不可用。
+
+参考：[[https://support.apple.com/en-us/HT201361][How to take a screenshot on your Mac - Apple Support]]
+
+** 快速插入网页链接 <2016-10-08 六 19:32>
+两年后，我发现这个问题还没有解决，于是继续寻求解法。最后想出了一个思路，那
+就是借助Chrome插件，使得Chrome提供一种新式的复制粘贴，能将网页的url和title
+以org的形式复制到剪贴板上。我本来准备自己写一个的，但是网上一搜，发现有类似
+的插件，调研一下，发现很合用，于是就用上了。这个插件就是：
+- [[https://chrome.google.com/webstore/detail/copy-all-urls/djdmadneanknadilpjiknlnanaolmbfk][Copy All Urls - Chrome 网上应用店]]
+  
+具体设置是：将 ~Copy highlighted tabs only~ 开关项打开，并将 ~Custom format~ 设置为：
+#+BEGIN_EXAMPLE
+[[$url][$title]]
+#+END_EXAMPLE 
+
+该插件复制链接的快捷键是 ~option-c~ 。
+   
+**  自动生成org文件头  <2016-10-08 六 19:42>
+我每新增一篇笔记，过程都是用emacs打开类似xxx.org的文件，然后在头部加
+上这样的文件头：
+#+BEGIN_SRC org
+#+TITLE: 窝是文件标题
+#+DATE: 窝是当前日期
+#+END_SRC
+
+这种事情开销虽然不大，但是做多了会让人感到没效率伤士气，于是我寻求Emacs下的
+自动添加文件头的方法。这件事在Vim下极容易实现，即使用Vimscript的 *autocmd*
+机制。例如：
+#+BEGIN_SRC vimscript
+autocmd BufNewFile * if (&filetype=='cpp')                                                         
+             \| call <SID>GenCppFileHeader() | endif                                                
+autocmd BufNewFile * if (&filetype=='python')                                                      
+             \| call <SID>GenPythonFileHeader() | endif     
+#+END_SRC
+
+而在Emacs下，也有 *add-hook* 机制，不过Emacs还更进了一步，它内建了 Auto 
+Insert Mode，该mode不仅可以根据不同的文件选择执行不同的指令，还支持一种文件
+多种可选模板，甚至支持以 promot 的方式让用户在文件头手动输入内容。Emacs下
+还有更强大的 header2 插件，可以实现保存文件是自动更新文件头的内容。不过我需
+要这个特性，就不继续研究了。
+
+Auto Insert Mode的用法很简单，这是我的Emacs配置文件：
+#+BEGIN_SRC elisp
+(auto-insert-mode) ; 默认打开这个minor mode
+(setq auto-insert-query nil) ; 由于我只使用一种模板，所以关掉模板选择
+(eval-after-load 'autoinsert
+                 '(define-auto-insert
+                    '("\\.org\\'" . "Org skeleton")
+                    '("Input org title: "
+                      "#+TITLE: " str \n
+                      "#+DATE: " 
+                      (format-time-string "%Y-%m-%d %H:%M:%S") \n \n ; 文件开发的时间
+                      > _))) ; 插入完成后，光标落在这里
+#+END_SRC
+
+参考：
+1. [[https://www.emacswiki.org/emacs/AutoInsertMode][EmacsWiki: Auto Insert Mode]]
+2. [[https://www.emacswiki.org/emacs/AutomaticFileHeaders][EmacsWiki: Automatic File Headers]]
+
+* 图片
+** 悬浮
+首先，要通过 ~ATTR_HTML~ 在图片上附加样式。
+#+BEGIN_SRC org
+#+CAPTION: Yamaha DGX-650 and Korg PA500
+#+ATTR_HTML: :class img-left-float
+[[../static/imgs/2015-12-buy-yamaha-dgx-650/20160210185153.png]] 
+#+END_SRC
+
+然后，找到被标记的图片，在其父节点（class 为 figure）上附加样式。
+#+BEGIN_SRC ruby
+  html_doc.xpath('//div[@class="figure"]').each do |node|                                        
+    if node.xpath('./p/img[@class="img-left-float"]').length >= 1                                  
+      node['class'] += ' figure-left-float'                                                      
+    end                                                                                          
+  end        
+#+END_SRC
+
+最后，设定样式（注意：float 和 clear/overflow 总是如影随形）
+#+BEGIN_SRC css
+.figure-left-float {
+  float: left;
+  width: 50%;
+  margin: 10px 20px 10px 0;
+  padding-right: 10px;
+}
+
+.outline-1, .outline-2, .outline-3,
+.outline-4, .outline-5, .outline-6 {
+  clear: both;
+}
+#+END_SRC
+
+* Organize Your Life In Plain Text!
+这篇文章据说非常经典，但确实非常长。地址是：
+[[http://doc.norang.ca/org-mode.html]]
+
+** 前六章读完
+
+第六章讲了如何快速地 *Add New Tasks*, 包括下面几个要点：
+1. 用 Capture Mode 来快速 Add Task
+2. 所有新增的 Tasks 都加入到一个专门的文件中（refile.org）
+4. 为每类 Task（如 Phone，Meeting，普通 Task 等）各预设一个模板
+5. 快速地完成 Task 的添加，不中断手头的工作
+
+** Publish and Exporting
+拷贝了作者的 emacs lisp 脚本，实现了一键批量递归转化为 HTML 并拷贝到 elvestar.com， *
+初步将我的新式的知识管理流程给打通了* ，意义很大！
+   
+** Refile
+看了第七章 Refiling Tasks，了解到作者是 *通过 refile 来将临时放到 refile.org 中的 Task
+给移到合适的位置* 。我实践了一下，暂时还摸不清门道，我目前只是拷贝了作者的配置到
+自己的.emacs。
+*** TODO 有时间，我会深入了解一下 refile
+
+* 问题记录 
+** 升级 Org-mode 版本
+我机器上的 org-mode 版本较低，无法支持批量（Project）地导出为 HTML，所以我尝试将其升级为最新的 *Stable version 8.2.5h (Jan. 2014)*
+
+升级步骤：
+1. git clone git://orgmode.org/org-mode.git
+2. cd org-mode
+3. sudo make 
+4. sudo make install（注意，默认是安装到/usr/share/emacs/site-lisp/org/）
+5. sudo mv \/usr/local/Cellar/emacs/24.3/share/emacs/24.3/lisp/org org_bak（备份老版的 org-mode）
+6. sudo mv \/usr/share/emacs/site-lisp/org/ \/usr/local/Cellar/emacs/24.3/share/emacs/24.3/lisp/ 
+
+** 无法调用 org-clock-in，提示：Symbol's function definition is void
+解法：不仅需要 (require 'org) ，而需要 (require 'org-table) ，然后才能使用
+org-clock 系列函数。Org 这样做可能是想模块化，提升加载速度。
+
+** 代码着色（语法高亮）
+在我的机器上，/usr/local/Cellar/emacs/24.3/share/emacs/24.3/lisp/org 目录下面的
+*htmlize.el* 文件负责做代码的着色。如果没找到，则需要下载并拷贝到这下面。
+
+* 回顾
+** 已经入了门 <2014-02-15 六>
+经过了春节以及前后的集中学习和实践，我已经将 Emacs Org-mode 融入到了我的工作和生活
+中来了，并且已经初步感受到了它的威力（尤其是在写笔记和 GTD 两方面）。我后续学习的重
+点包括：
+1. 快速 capture task - 有点 bug 要解决
+2. Refile 的使用 - 目前还没感受到它的价值
+3. Ditta，Graphviz 等外围工具的学习
+4. 使用一个基于 Org-mode 的静态网站生成器，把我的网站重新搭建起来
+
+我的下一步计划是尝试一下基于 Org-mode 的博客生成器，以及学习如何将已经 Done 的 Task 给归档。
+** 费尽千辛万苦，终于找到了批量导出 Agenda 各项数据和统计的方法了 <2015-06-07 日>
+此刻的我，热泪银矿。。 
+
+警察叔叔，就是它！
+#+BEGIN_SRC sh
+emacs -batch -l ~/.emacs.d/init.el -eval '(org-batch-agenda "a" org-agenda-span (quote week) org-agenda-start-with-log-mode t org-agenda-start-with-clockreport-mode t)'
+#+END_SRC

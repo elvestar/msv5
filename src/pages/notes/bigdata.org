@@ -1,0 +1,6 @@
+#+TITLE: 大数据
+#+DATE: 2016-10-25 17:08:20
+
+* 资料
+最近组里分享的Strata+Hadoop的会议资料。
+-[[http://conferences.oreilly.com/strata/hadoop-big-data-ny/public/schedule/proceedings][Speaker slides: Big data conference: Strata + Hadoop World, September 26 - 29, 2016, New York, NY]]

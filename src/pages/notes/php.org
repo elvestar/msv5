@@ -1,0 +1,14 @@
+#+TITLE: PHP
+#+DATE: 2014-06-01
+#+KEYWORDS: PHP
+
+* mysqli
+
+$row = $result->fetch_array(MYSQLI_ASSOC)
+
+* PHP as a 模板引擎
+** 要点
+同一个文件 php 文件里面，多个<?php xxx ?>之间是共享作用域的！
+* 判断变量类型
+使用 is_array 可以判断一个变量是否是数组。
+

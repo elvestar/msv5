@@ -1,0 +1,136 @@
+#+TITLE: iPad 1 升级 iOS 5（兼有关 iPad 1 的记忆）
+#+DATE: 2013-10-26
+
+今天我将iPad 1升级到了iOS 5。在升级之前，我为它做了全面的截图，来做个纪念，
+因为过几天我就要将它寄走了。
+
+这个iPad 1是2011年10月我在威锋二手区花2000元收来的。这两年间，我和它经历过
+了不少事情，我将通过截图来进行一次回顾。
+
+* iPad 1 升级 iOS 5
+** 升级原因
+我的iPad 1的上的iOS系统一直是4.3.1版本，而现在好多软件都不再支持4.3.1（特别
+是优酷），另外iPad也越来越卡了。我听人说，IOS 5.1.1是iPad 1能用的最后一个版
+本，而且内存占用有改善，于是我准备升级一下。
+
+升级之前，为iPad的各个应用截图，然后保存到电脑里面。
+
+** 升级步骤
+先将iPad 1接上iTunes：
+#+CAPTION: iPad 1的存储用量
+[[../static/imgs/1310-ipad-ios-5/ipad_1.jpg]]
+
+然后点击iTunes上的 "更新"：
+#+CAPTION: 升级前的iPad 1概览
+[[../static/imgs/1310-ipad-ios-5/ipad_2.jpg]]
+
+这时苹果提示了iOS 5.1.1版本的更新内容：
+#+BEGIN_EXAMPLE
+iOS 5.1.1
+
+本更新包括以下功能改进和错误修复：
+
+     •          增强了使用“锁定屏幕 ”快捷键拍照时 HDR 选项的操作稳定性
+     •          解决了可能导致全新 iPad 无法在 2G 和 3G 网络之间切换的问题
+     •          修复了在某些情况下影响 AirPlay 视频回放的问题
+     •          增强了同步 Safari 书签和 “阅读列表” 时的稳定性
+     •          修复了购买成功之后仍可能发出 “无法购买” 提示的问题
+
+如需本更新的安全性内容，请访问此网站：
+
+<http://support.apple.com/kb/HT1222?viewlocale=zh_CN>
+#+END_EXAMPLE
+
+然后iTunes开始为iPad 1更新iOS版本：
+#+CAPTION: 正在下载iOS 5.1.1
+[[../static/imgs/1310-ipad-ios-5/ipad_3.jpg]]
+
+最后升级成功。然后整个清空了老系统，准备从头配置了5.1.1。
+
+** 初步感受
+终于用上了IOS 5！iPad开机后第一眼看到的是iCloud，然后发现系统变流畅了许多。
+
+我安装了多看，发现老书籍还在，这有点出乎意料。另外我终于卸掉了iPad 1上的中
+文手写输入法，这个输入法我从来不用，但是每次切换输入法都要经过它，这几年让
+我很烦。今天终于卸掉它了，感觉神清气爽！
+
+#+CAPTION: iOS 5 之设置界面
+[[../static/imgs/1310-ipad-ios-5/P31026-020734.jpg]]
+
+* 与iPad 1相关的记忆
+这个iPad 1是我在2011年10月份在威锋二手区花2000元收来的，型号是16G WIFI版，
+传说中的 "乞丐机"。这是当时的淘宝交易截图：
+#+CAPTION: 淘宝交易截图
+[[../static/imgs/1310-ipad-ios-5/ipad_4.jpg]]
+
+之后这个iPad一直陪伴着我，至今正好是两年，它给我带来了很多便利。我现在准备
+把它送走，所以下面我通过截图来回忆一下和它这两年来的经历。
+
+#+CAPTION: 11年末时捕鱼达人很火，室友说城里有现场捕鱼游戏机
+[[../static/imgs/1310-ipad-ios-5/IMG_0066.jpg]]
+#+CAPTION: iPad入手后的第一件大益事：我下载了GreenReader，开始在上面阅读《集体智慧编程》，同时学习Python，我的电子书读书笔记的习惯也是在此时养成的
+[[../static/imgs/1310-ipad-ios-5/IMG_0071.jpg]]
+#+CAPTION: 12年春节（大四寒假）在家开始在iPad上阅读《乔布斯传》
+[[../static/imgs/1310-ipad-ios-5/IMG_0172.jpg]]
+#+CAPTION: cnBeta 是我 11~13 年最爱逛的网站之一
+[[../static/imgs/1310-ipad-ios-5/IMG_0075.jpg]]
+#+CAPTION: 格斗游戏《剑魂》让我意识到在平板上也能流畅搓招，同时这款游戏在iPad 1上竟然不卡！
+[[../static/imgs/1310-ipad-ios-5/IMG_0077.jpg]]
+#+CAPTION: 《剑魂》之角色选择界面
+[[../static/imgs/1310-ipad-ios-5/IMG_0167.jpg]]
+#+CAPTION: 13年春节在家里看完了《鹿鼎记》
+[[../static/imgs/1310-ipad-ios-5/IMG_0086.jpg]]
+#+CAPTION: 13年初买了编曲键盘，iPad也下了几个相关的APP
+[[../static/imgs/1310-ipad-ios-5/IMG_0088.jpg]]
+#+CAPTION: iPad1 上的微博
+[[../static/imgs/1310-ipad-ios-5/IMG_0093.jpg]]
+#+CAPTION: 应用市场
+[[../static/imgs/1310-ipad-ios-5/IMG_0098.jpg]]
+#+CAPTION: 设置界面
+[[../static/imgs/1310-ipad-ios-5/IMG_0105.jpg]]
+#+CAPTION: 相簿截图
+[[../static/imgs/1310-ipad-ios-5/IMG_0107.jpg]]
+#+CAPTION: 地图截图：从此我知道我住在同成街上
+[[../static/imgs/1310-ipad-ios-5/IMG_0110.jpg]]
+#+CAPTION: GreenReader下的书籍列表
+[[../static/imgs/1310-ipad-ios-5/IMG_0115.jpg]]
+#+CAPTION: 我拟定的大四课程表
+[[../static/imgs/1310-ipad-ios-5/IMG_0118.jpg]]
+#+CAPTION: 多看阅读下的书籍列表
+[[../static/imgs/1310-ipad-ios-5/IMG_0121.jpg]]
+#+CAPTION: 11年末面试小米时下载的米聊
+[[../static/imgs/1310-ipad-ios-5/IMG_0136.jpg]]
+#+CAPTION: 愤怒的小鸟
+[[../static/imgs/1310-ipad-ios-5/IMG_0141.jpg]]
+#+CAPTION: 11年末在宿舍里经常玩《镜之边缘》，我觉得这种游戏只有平板才能玩出真正的体验
+[[../static/imgs/1310-ipad-ios-5/IMG_0148.jpg]]
+#+CAPTION: 有段时间我特别爱看暴走漫画
+[[../static/imgs/1310-ipad-ios-5/IMG_0151.jpg]]
+#+CAPTION: 12年末我在学Memcached和Libevent，还在iPad上下载一个APP来阅读代码
+[[../static/imgs/1310-ipad-ios-5/IMG_0154.jpg]]
+#+CAPTION: QQ HD上的409宿舍群
+[[../static/imgs/1310-ipad-ios-5/IMG_0156.jpg]]
+#+CAPTION: 13年春练了几天的琴，其中一首就是小白船
+[[../static/imgs/1310-ipad-ios-5/IMG_0159.jpg]]
+#+CAPTION: 11年末下载了Talking Tom，这是iOS上的经典游戏
+[[../static/imgs/1310-ipad-ios-5/IMG_0161.jpg]]
+#+CAPTION: 12年春节在家下载的一个太阳系模拟器应用
+[[../static/imgs/1310-ipad-ios-5/IMG_0165.jpg]]
+#+CAPTION: 11年末下载的切水果游戏，当时全宿舍都喜欢用我的iPad玩这个游戏，最爽的就是切巨型水果的时候
+[[../static/imgs/1310-ipad-ios-5/IMG_0171.jpg]]
+#+CAPTION: 从12年6月开启玩《英雄联盟》，之后就一直在看相关视频，TT和JY是我喜爱的两位游戏解说，其中JY的视频普遍很长，我经常睡前看着看着就睡着了
+[[../static/imgs/1310-ipad-ios-5/IMG_0181.jpg]]
+#+CAPTION: 12年和13年的业余时间我经常看金庸武侠小说，小说的情节和文笔让我深深折服
+[[../static/imgs/1310-ipad-ios-5/IMG_0184.jpg]]
+#+CAPTION: 《神雕侠侣》：第七回 重阳遗篇
+[[../static/imgs/1310-ipad-ios-5/IMG_0188.jpg]]
+#+CAPTION: 《笑傲江湖》：第三十六回 伤逝
+[[../static/imgs/1310-ipad-ios-5/IMG_0194.jpg]]
+#+CAPTION: 《射雕英雄传》：第三十九回 是非善恶
+[[../static/imgs/1310-ipad-ios-5/IMG_0197.jpg]]
+#+CAPTION: 《天空八部》：第四回 崖高人远
+[[../static/imgs/1310-ipad-ios-5/IMG_0199.jpg]]
+#+CAPTION: 《倚天屠龙记》：第一回 天涯思君不可忘
+[[../static/imgs/1310-ipad-ios-5/IMG_0200.jpg]]
+#+CAPTION: 《网易云公开课》据说很有营养，但是回顾这两年，我几乎没有完整看完过一部视频，相信很多人和我一样浮躁
+[[../static/imgs/1310-ipad-ios-5/IMG_0202.jpg]]

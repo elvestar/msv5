@@ -1,0 +1,116 @@
+#+TITLE: 玩巫妖王之怒
+#+DATE: 2011-05-14
+
+四月底拿到了腾讯实习的Offer，然后我开始有点懈怠了，花了不少时间玩DOTA和魔兽
+世界。
+
+* 人类战士：青铜剑
+我建了一个人类战士的小号，来体验一下战士这个职业。我起的名字叫青铜剑，感觉
+这个名字有点古朴，听起来很适合战士。
+
+** 旧大陆
+#+CAPTION: 哀嚎洞穴：自杀出副本交任务
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_051511_010041.jpg]]
+#+CAPTION: 塔纳利斯遇见造型前卫的圣骑士
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_052011_232744.jpg]]
+#+CAPTION: 黑石深渊：击败索瑞森大帝后在帝王之座上合影
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_052211_112245.jpg]]
+#+CAPTION: 燃烧平原上遇见洛萨的雕像
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_052211_144238.jpg]]
+
+** 嚎风峡湾
+#+CAPTION: 嚎风峡湾完成冲浪任务，好拉风啊！
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_052511_135034.jpg]]
+
+** 北风苔原
+#+CAPTION: 北风苔原的企鹅
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_060411_014357.jpg]]
+#+CAPTION: 北风苔原的冬鳞蝌蚪
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_060511_132356.jpg]]
+#+CAPTION: 坐海象人的船穿过冰冻之海去龙骨荒野的莫亚基港口
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_060511_172749.jpg]]
+
+** 龙骨荒原
+#+CAPTION: 前往龙眠神殿
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_060511_221649.jpg]]
+#+CAPTION: 遗忘海岸的往日景象
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_060611_162020.jpg]]
+
+** 风暴峭壁
+#+CAPTION: 在风暴峭壁的布伦希尔达村变成维库人
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_060711_112148.jpg]]
+#+CAPTION: 离开风暴神殿
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_060711_141038.jpg]]
+
+** 满级之后
+#+CAPTION: 在艾卓尼鲁布的纳尔苏深渊升到80级！
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_060811_133843.jpg]]
+#+CAPTION: 加了一个TOC的金团
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_060811_152204.jpg]]
+#+CAPTION: 狂暴战士
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_061111_130541.jpg]]
+#+CAPTION: 时光之穴里的奇异景象
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_062311_123504.jpg]]
+#+CAPTION: 时光之穴的旧希尔斯布莱德里遇到了萨尔和塔蕾莎
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_062311_132707.jpg]]
+
+* 其他角色
+** 人类法师
+我来八区金度的主玩的角色是人类法师冰火羊，08年的国庆期间建立的角色。
+#+CAPTION: 自爆绵羊
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_052911_150935.jpg]]
+
+** 暗夜德鲁伊
+我又练了个暗夜德鲁伊的小号，想好好体验一下暗夜这边的任务。05年公测时我也玩
+过一只暗夜小德，只不过很早就人肉穿越地图跑到人族这边来练级了。
+#+CAPTION: 小德学烹饪
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_053011_161246.jpg]]
+#+CAPTION: 泰达希尔美景
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_053011_194350.jpg]]
+#+CAPTION: 永志不渝：黑海岸的跨越千年的爱情故事
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_053011_222033.jpg]]
+#+CAPTION: 西部荒野的老马布兰契
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_053111_134735.jpg]]
+#+CAPTION: 艾尔文森林美景
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_053111_185340.jpg]]
+#+CAPTION: 在西部荒野坐狮鹫前往暴风城
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_060111_124358.jpg]]
+
+** 人类术士
+还练了一个人类术士的小号，想体验一下术士这个邪恶的职业。
+#+CAPTION: 新练了个人类术士小号
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_061211_201057.jpg]]
+#+CAPTION: 做术士魅魔任务时路过灰谷的夜歌森林
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_061211_214037.jpg]]
+#+CAPTION: 夜色镇的守夜人
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_061211_220726.jpg]]
+#+CAPTION: 在暮色森林的墓穴里打到了一个能召唤地狱犬的尖刺项圈
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_061311_130729.jpg]]
+
+** 删号循环
+这段时间我很纠结，经常玩着玩着就找不到目标了。所以我经常删号，将我的角色一
+个一个都删掉。但是过不了几天，我又手痒，蛋疼地找GM恢复角色。
+#+CAPTION: 经常删号，过了几天又找GM恢复
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_061411_193319.jpg]]
+
+** 亡灵法师
+玩一下亡灵法师Archmage，这个号是2009年国庆后在塞拉摩服务器练的，那时刚装好
+台式机。
+#+CAPTION: "维库人身材高大，也比我们强壮。但！我们比他们长得帅！"
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_061611_002819.jpg]]
+#+CAPTION: 坐船穿越冰冻之海
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_061611_185755.jpg]]
+#+CAPTION: 诺森德全地图
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_061611_185914.jpg]]
+
+** 德莱尼萨满
+这个萨满是在08年时建立的小号，名字叫冰火电，和大号冰火羊很搭配，也很符合职
+业特色。
+#+CAPTION: 仲夏火焰节
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_062211_132339.jpg]]
+
+** 人类盗贼
+又玩了个盗贼小号，全身传家宝加附魔。
+#+CAPTION: 新练了个人类盗贼小号
+[[../static/imgs/1105-wow-wlk/WoWScrnShot_062611_234226.jpg]]
+

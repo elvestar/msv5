@@ -1,0 +1,190 @@
+#+TITLE: Django REST Framework
+#+DATE: 2015-04-15
+#+KEYWORDS: Python, RESTful, Web 框架, HTTP
+
+* 前言
+最近在做项目时，感觉 Web 前端部分的代码很乱，越来越不好维护，新功能开发也不
+爽利，感觉生产力收到了限制，所以想尝试 AngularJS 这个前端框架，看是否能给带
+来改观。而 AngularJS 需要后端提供 RESTful 的接口，所以想尝试将后端从 Flask
+& SQLAlchemy 改造为 Django & Django REST Framework。于是便开始了学习和调研。
+
+* Django REST Framework Tutorial
+[[http://www.django-rest-framework.org/tutorial/quickstart/][DRF 教程]] 写得很像 AngularJS 的教程，都是用一个例子来逐步向用户介绍自己的用
+法和好处。对于每一个用户来说，这个官方教程都是必须精读的。对于一个 Web 熟手
+来说，看一遍 Totorial 后，捧着一本 API Reference 就可以拿来干活了。
+
+** Serialization
+该 Totrial 第一篇介绍了 [[http://www.django-rest-framework.org/tutorial/1-serialization/][Serialization]] ，在 RESTful 风格的应用中 Web 前端和
+后端一般是通过 Json 等格式来传输数据，而 Json 等格式与后端数据库的 Model 互
+相转换的过程就叫做 Serialize 和 Deserialize。本篇先介绍 Serializer 的一个带
+冗余代码的实现，然后又介绍了通过 [[http://www.django-rest-framework.org/tutorial/1-serialization/#using-modelserializers][ModelSerializer]] 来减少冗余代码。
+
+#+BEGIN_SRC python
+class SnippetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Snippet
+        fields = ('id', 'title', 'code', 'linenos', 'language', 'style')
+#+END_SRC
+
+** Requests and Responses
+第二篇介绍了 [[http://www.django-rest-framework.org/tutorial/2-requests-and-responses/][Requests and Responses]] 。对于一个简单的查询/更新/删除的实现，
+一个 Http Request 传过来，DRF 用户需要先获取 Model object，再判断其 method
+(GET/PUT/DELETE...)，然后：
+1. 如果是 GET，则调用对应 Model 的 Serializer，并将序列化后的 data 返回。
+2. 如果是 PUT，表名是个更新请求，还是调用 Serializer，将 request.data 的更
+   新应用，生成新的 serializer 对象并执行其 save() 方法（注意，不是执行
+   Model 的 save() 方法）。
+3. 如果是 DELETE，则直接调用 Model 的 delete() 方法即可。
+   
+** Class Based Views
+第三篇介绍了 [[http://www.django-rest-framework.org/tutorial/3-class-based-views/][Class Based Views]] 。前两篇的 Views 是通过函数来提供的，而这篇
+引入了基于类来组织 Views 的手段。基于类的话，我们可以定义 get_object() 这样
+的方法来获取 Model object，而且可以继承 DRF 提供的被称为 [[http://www.django-rest-framework.org/tutorial/3-class-based-views/#using-mixins][Mixins]] 的东西来进
+一步地减少冗余代码。DRF 内置了 ListModelMixin/CreateModelMixin/
+RetrieveModelMixin/UpdateModelMixin/DestroyModelMixin，通过继承它们以及
+GenericAPIView 类，我们在自己的 View 类中，只需要一行代码就可以实现基本的增
+删改查功能。
+
+#+BEGIN_SRC python
+class SnippetDetail(mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    generics.GenericAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+#+END_SRC
+
+本篇还进一步解释了比使用 Mixins 更节省代码的手法，那就是使用 DRF 框架中已经
+被 ~mixed-in~ 好的 [[http://www.django-rest-framework.org/tutorial/3-class-based-views/#using-generic-class-based-views][Mixed-in Generic Views]]，用户继承它，使用两行代码就可以实
+现自己的 View。如下：
+
+#+BEGIN_SRC python
+class SnippetList(generics.ListCreateAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+
+class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+#+END_SRC
+
+* Serializer
+** Serializer.error: 'This field may not be null.'
+原因：我使用的是 ModelSerializer，这也就意味着 Serializer 的各个 Field 的属
+性（包括 allow_null）均是由原 Model 的各个 Field 决定。我们应该检查该 Model
+的 Field 的定义，看是否是不必要地将一个字段设置为 not null（即 null 设置为
+False 或未设）。
+
+* Filtering 过滤
+
+- [[http://www.django-rest-framework.org/api-guide/filtering/]]
+
+默认情况，DRF 的 generic list views 会返回数据的全集，而大部分时候，我们不
+需要全集（主要是太慢），所以要使用一些过滤机制来限制 API 返回的数据集的规模。
+在 DRF 一般是通过重写 GenericAPIView 的 .get_queryset() 方法来实现这一点的。
+
+#+BEGIN_SRC python
+class LogConfigs(generics.ListAPIView):
+    serializer_class = LogConfigSerializer
+
+    def get_queryset(self):
+        noah_node_id = self.request.QUERY_PARAMS['noah_node_id']
+        return LogConfig.objects.filter(noah_node_id=noah_node_id).all()
+#+END_SRC
+
+** Django-filter： 多重参数过滤和自定义过滤 <2015-05-30 六>
+
+我们想在 URL 参数中制定多个参数来过滤，如果手写 get_queryset() 函数的话，代
+码分支会非常多。所以必须要寻求一个更优雅的解法。
+
+DRF 的 generics.ListAPIView 提供了 ~filter_fields~ 这么一个便捷的东西，指定
+一批字段，然后通过 URL 参数来进行过滤了。代码如下：
+
+#+BEGIN_SRC python
+class LogConfigListCreate(generics.ListCreateAPIView):
+    queryset = LogConfig.objects.all()
+    serializer_class = LogConfigSerializer
+    filter_fields = ('nxxx_node_id', 'log_status', 'log_level')
+    ...
+#+END_SRC
+
+*注意* ，还需要安装 django-filter 并在 setting.py 里指定
+~DEFAULT_FILTER_BACKENDS~ 。如下：
+
+#+BEGIN_SRC sh
+pip install django-filter
+#+END_SRC
+
+#+BEGIN_SRC python
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
+}
+#+END_SRC
+
+访问的 URL 格式如下：
+#+BEGIN_SRC sh
+http://localhost:8000/api/v3.0/log_configs/?nxxx_node_id=1130&log_status=applying
+#+END_SRC
+
+如果对过滤有更高的要求，例如获取某某字段大于某某值的列表这样的，可以使用
+~django-filter~ 来进行高级的定制。具体做饭 [[http://www.django-rest-framework.org/api-guide/filtering/#djangofilterbackend][参考这里]] 
+
+* Response
+
+DRF 返回的不是一般 Django 应用返回的 HttpResponse，而是 Response。例如：
+
+#+BEGIN_SRC python
+def create(self, request):                                                     
+    serializer = LogConfigSerializer(data=request.data)                       
+    if serializer.is_valid():                                                
+        serializer.save()                                                    
+        return Response(json.dumps(serializer.data, status.HTTP_201_CREATED))
+    else:                                                                    
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+#+END_SRC
+
+参考：
+- [[http://www.django-rest-framework.org/api-guide/responses/]]
+- [[https://docs.djangoproject.com/en/1.8/ref/request-response/#httpresponse-objects][Request and response objects (Django 1.8)]]
+
+** 关注 RESTful 应用返回的状态码 <2015-05-24 日>
+注意上面代码中的 Response 的 status code，设计 RESTful 应用时要严谨地对待自
+己返回的状态码，[[http://stackoverflow.com/questions/2342579/http-status-code-for-update-and-delete][这个问答]] 里有张图，叫做 ~HTTP 1.1 decision diagram~ ，可供
+参考。
+
+#+CAPTION: HTTP 1.1 decision diagram
+[[http://i.stack.imgur.com/whhD1.png]]
+
+* Request
+** post
+注意：
+1. post 请求体位于 request.data 里，而不是 request.POST 里！
+
+* Authentication & Permissions
+- [[http://www.django-rest-framework.org/tutorial/4-authentication-and-permissions/#tutorial-4-authentication-permissions][Tutorial 4: Authentication & Permissions]]
+- [[http://www.django-rest-framework.org/api-guide/authentication/][API Guide: Authentication]]
+- [[http://www.django-rest-framework.org/api-guide/permissions/][API Guide: Permissions]]
+
+* 文档自动生成 <2017-01-07 六 18:35>
+DRF官网推荐 [[https://github.com/manosim/django-rest-framework-docs][DRF Docs]] 和 [[https://github.com/marcgibbons/django-rest-swagger][Django REST Swagger]] ，我都试了一下，发现后者功能更
+全面，不仅支持基本的API列表分组和展示，还支持列出各种自定义的filters方便发
+起请求。另外，后者在GitHub上的星星数也更多，所以我选择了它。
+
+* 回顾
+** 读完了 DRF Totrial 的前三篇 <2015-04-16 四>
+[[http://www.django-rest-framework.org/tutorial/quickstart/][文档]] 写得很好，让人想一口气读完。文档中提到了很多减少冗余代码的手法，让我很
+想马上就试试。
+
+补充：一般的 list 和 detail 使用 DRF 提供的 ModelSerializer 加上
+ListCreateAPIView 和 RetrieveUpdateDestroyAPIView 能够很快地实现，但是需求
+复杂一些了以后，这些东西就搞不定了，需要手动实现。如何提高开发效率，还是有
+许多要琢磨的地方。

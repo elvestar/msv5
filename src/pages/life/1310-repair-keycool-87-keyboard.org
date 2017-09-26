@@ -1,0 +1,36 @@
+#+TITLE: 自己修理凯酷 87 机械键盘
+#+DATE: 2013-10-26
+
+前段时间，我发现我的凯酷 87 机械键盘的左Shift键有粘滞感，这很影响我的工作。
+到网上查了一下看能不能自己维修，看到一篇文章说机械键盘的每个按键都是独立的，
+这时我灵机一动，我可以将左Shift键的轴和键盘上的某个不常用的按键的轴给交换一
+下，这样应该就可以让我的左Shift键复原。
+
+于是我拿出我之前为了修天龙C710而购买的电焊套装开始行动了。我选择了右Ctrl键
+来和左Shift键换轴，因为我从来不用它。在开始操作之前，我仔细阅读了这篇文章：
+- [[http://bbs.wstx.com/thread-396187-1-1.html][小DIY一下——我的凯酷87白黑换轴杂谈]]
+
+修理的大概过程如下：
+1. 拆键盘：使用螺丝刀拆开键盘，取出电路板。
+2. 拆卸按键：在电路板的背面用电烙铁将按键的焊锡融化，然后用吸锡器吸掉焊锡，然后取出按键。
+3. 换轴：取下左Shift和右Ctrl两个按键的轴，互相交换位置，注意按键卡扣的安装方法。
+4. 焊接：固定好键轴后，开始焊接。我的电烙铁是30W的，熔化锡需要15秒以上。
+5. 装好键盘，收工。
+
+下面是我修理过程中的一些照片：
+
+#+CAPTION: 拆键盘
+[[../static/imgs/1310-repair-keycool-87-keyboard/DSC06658.jpg]]
+#+CAPTION: 加热电烙铁
+[[../static/imgs/1310-repair-keycool-87-keyboard/DSC06655.jpg]]
+#+CAPTION: 拆卸按键
+[[../static/imgs/1310-repair-keycool-87-keyboard/DSC06662.jpg]]
+#+CAPTION: 吸走焊锡
+[[../static/imgs/1310-repair-keycool-87-keyboard/DSC06663.jpg]]
+#+CAPTION: 取下按键
+[[../static/imgs/1310-repair-keycool-87-keyboard/DSC06664.jpg]]
+#+CAPTION: -swap 右Ctrl键
+[[../static/imgs/1310-repair-keycool-87-keyboard/DSC06665.jpg]]
+#+CAPTION: 大功告成
+[[../static/imgs/1310-repair-keycool-87-keyboard/DSC06666.jpg]]
+

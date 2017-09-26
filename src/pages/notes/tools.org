@@ -1,0 +1,34 @@
+#+TITLE: 工具
+#+DATE: 2014-07-21
+#+KEYWORDS: 工具
+
+* remark/reveal - 基于 Web 的，Markdown 驱动的幻灯片工具
++ https://github.com/gnab/remark
++ [[https://linuxtoy.org/archives/remarkjs.html][Remarkjs: 使用 Markdown 做幻灯]]
+
+** 案例
++ [[http://gnab.github.io/remark/][Introduct of remark]]
++ [[http://asmeurer.github.io/python3-presentation/slides.html][10 awesome features of Python that you can't use because you refuse to upgrade to Python 3]]
++ [[http://www.yushufang.me/doit-im/reveal-js-master-zh.html#/][REVEAL.JS HTML 让演示更便捷]]
+* Gollum
+* Poole/Lanyon
+* Vimium <2015-08-16 日>
+Mac 下的无鼠标操作 Chrome 让我手疼，我找到了 Vimium 这个插件，初步试了一下，
+发现非常适合我，很多操作都得以简化，手指移动减少量目测超过 50%。
+
+真尼玛给力！
+
+| 操作                 | 快捷键      |          |
+|----------------------+-------------+----------|
+| 新标签打开链接       | F + 缩略符  |          |
+| 复制当前页面链接     | yy          |          |
+| 复制链接             | yf + 缩略符 |          |
+| 关闭当前标签页       | x           |          |
+| 恢复上次关闭的标签页 | X           |          |
+| 新标签页打开链接     | F + 缩略符  |          |
+| 下一个标签页         | ]           | 我改键了 |
+| 上一个标签页         | [           | 我改键了 |
+
+附上当前的快捷键：
+#+CAPTION: ./imgs/tools/20150818105739.png
+[[../static/imgs/tools/20150818105739.png]]

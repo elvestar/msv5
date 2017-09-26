@@ -1,0 +1,41 @@
+#+TITLE: VPS
+#+DATE: 2015-04-12
+
+* 又搞了一个 BudgetVM 家的 VPS
+** 安装 Nginx
+- [[https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-centos-6-with-yum][How To Install nginx on CentOS 6 with yum]]   
+
+#+BEGIN_SRC sh
+yum install epel-release
+sudo yum install nginx
+sudo /etc/init.d/nginx start
+#+END_SRC
+
+** 安装 Shadowsocks
+- [[https://github.com/shadowsocks/shadowsocks/wiki/Shadowsocks-%25E4%25BD%25BF%25E7%2594%25A8%25E8%25AF%25B4%25E6%2598%258E][Shadowsocks 使用说明]]
+
+#+BEGIN_SRC sh
+yum install python-setuptools && easy_install pip
+pip install shadowsocks
+#+END_SRC
+
+启动和停止：
+#+BEGIN_SRC sh
+sudo ssserver -p 443 -k password -m rc4-md5 --user nobody -d start
+sudo ssserver -d stop
+#+END_SRC
+
+* 又搞了个搬瓦工家的 VPS
+上一家（BudgetVM）的 VPS 不知为啥突然无法访问了，我现在又有了翻墙的需求，所
+有值得另寻它法。
+
+** 购买（通过 Paypal 转招行信用卡）
+要点：
+1. 预先弄好 Paypal，绑定上信用卡
+2. Paypal 转到招行信用卡时，选手机支付
+3. 最后流程转到手机上，在此完成支付
+
+#+CAPTION: ./imgs/vps/20150517191540.png
+[[../static/imgs/vps/20150517191540.png]]
+
+** 

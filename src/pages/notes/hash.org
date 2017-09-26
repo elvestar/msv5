@@ -1,0 +1,15 @@
+#+TITLE: 哈希
+#+DATE: 2015-10-30
+
+
+* Murmur 哈希
+*MurmurHash* 哈希是一种非加密型哈希函数，适用于一般的哈希检索操作。该类型哈
+希的变种特别多。有两个变种产生 64-bit 哈希值：
+- MurmurHash64A，为 64 位处理器做了优化
+- MurmurHash64B，为 32 位处理器做了优化
+  
+参考：
+- [[https://zh.wikipedia.org/wiki/Murmur%25E5%2593%2588%25E5%25B8%258C][Murmur 哈希（Wiki）]]
+
+* Jump Consistent Hash
+- [[https://arxiv.org/pdf/1406.2294.pdf][A Fast, Minimal Memory, Consistent Hash Algorithm]]

@@ -1,0 +1,8 @@
+#+TITLE: Pandoc
+#+DATE: 2014-07-28
+#+KEYWORDS: HTML, Unix 工具
+
+* html -> rst
+#+BEGIN_SRC sh
+pandoc -s -t rst --toc minos-user-manual.html -o user_manual.rst
+#+END_SRC

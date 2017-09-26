@@ -1,0 +1,10 @@
+#+TITLE: Lua
+#+DATE: 2017-08-04 11:52:26
+
+* LuaJIT
+- [[http://luajit.org/luajit.html][LuaJIT]]
+#+BEGIN_QUOTE
+LuaJIT is a Just-In-Time Compiler (JIT) for the Lua programming
+language. Lua is a powerful, dynamic and light-weight programming
+language. It may be embedded or used as a general-purpose, stand-alone language.
+#+END_QUOTE

@@ -1,0 +1,22 @@
+#+TITLE: GRPC
+#+DATE: 2015-05-18
+#+KEYWORDS: RPC
+
+* 前言
+Google 开放出来的基于 Protobuf 的 RPC 框架，看样子是新搞的，卖点是支持
+HTTP2，以及支持多语言。我关注一下，谷歌出品的东西一般都很不错的。
+
+* 资料收集
+- [[http://www.infoq.com/cn/news/2015/03/grpc-google-http2-protobuf][gRPC：Google 开源的基于 HTTP/2 和 ProtoBuf 的通用 RPC 框架]]
+- [[https://github.com/grpc/grpc-common/blob/master/PROTOCOL-HTTP2.md][gRPC over HTTP2]]
+
+* gRPC - Java
+- [[https://grpc.io/docs/tutorials/basic/java.html][gRPC Basics - Java]]
+概念：
+-  Service
+- StreamObserver :: StreamObserver<XxxReply>: a response observer, which is
+                    a special interface for the server to call with its
+                    response.
+- onNect, onComplete
+- ServerBuilder
+- newBlockingStub/newStub

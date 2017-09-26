@@ -1,0 +1,117 @@
+#+TITLE: Protobuf
+#+DATE: 2014-02-02
+#+KEYWORDS: C++
+
+* 前言
+深入研究一下经典的 protobuf。
+
+* 资料收集
+- https://developers.google.com/protocol-buffers/docs/encoding  （讲述
+  Protobuf 编码原理的官方文档）
+
+* 基础知识
+** 名词解释
+| 概念       | 解释                                                                      |                             |
+|------------+---------------------------------------------------------------------------+-----------------------------|
+| tag        | 可以转化为 field number                                                   |                             |
+| wire types | 目前包括 Varint/64-bit/Length-delimited/Start group/End group/32-bit 五种 | 和 proto 里的 type 相区别 |
+|            |                                                                           |                             |
+|            |                                                                           |                             |
+
+** 限制
+- tag 取值范围：1 到 2^29 - 1
+
+* 先零散地按照技术点来写
+** Closure
+中文翻译做闭包。Protobuf 用于 RPC 时，Client 和 Server 间是一种网络通讯，这是一种耗时操
+作。Client 有时希望 RPC 调用不阻塞自己的线程，所以它会以异步的方式来调用 RPC，这时候
+就要把回调函数及其参数传入 RPC 方法之中。如何传入它们呢？Protobuf 为我们提供了
+Closure。
+
+在软件设计中，封装能够带来各种好处。假如我们把回调函数和参数直接传入到 RPC 方法里的
+话，封装性很不好，接口也会很难看，而我们把这些东西封装成某个东西再传入 PRC 方法的话，
+就会获得（梦寐以求的）封装性。*Closure，就是指回调函数及其参数的封装*。
+
+** Message 的 ParseFromString()方法的简单原理
+一个 Message 序列化生成的 String 是有格式有层级的，即使我们不知道 Message 本身（静态），
+甚至连 proto 都不知道（动态），我们也可以把它的各个字段，各个嵌套 Message 都给解析出
+来。
+
+拿一个简单的没有嵌套子 Message 的 Message 序列化成的 String 作例子，我们解析它时，会先
+遇到 Message 的标志，接着我们能获得该 Message 在 String 上的长度。然后进入到 Message 内部，
+我们遇到了第一个字段，我们能从 String 中获得该字段的 id，长度以及类型（整型表示），
+我们能截取出这个字段并打印出来（只不过这时我们不知道该字段的名字）。我们依次截取
+各个字段，直到完成这个 Message 的解析。总的来说，我们能获取这个结构未知的 String 的除
+了名字之外的所有信息。
+
+** C++代码生成器概览
+
+C++代码生成器的代码位于 google/protobuf/compiler/cpp/目录下面，外层实现位于
+cpp_generator.cc 里面，使用了 io::*ZeroCopyOutputStream*来作为生成代码的输出文件，
+使用了 io::*Printer*来做生成代码的格式化。还使用了自己实现的 FileGenerator 三个接口：
+
+#+BEGIN_SRC C++
+explicit FileGenerator(const FileDescriptor* file, const string& dllexport_decl);
+void GenerateHeader(io::Printer* printer);
+void GenerateSource(io::Printer* printer);
+#+END_SRC
+
+从接口可以看出，需要传入 FileDescriptor，这个文件描述符的来源显然是动态编译 Import
+出来的。从中我们可以看出 Protobuf 的静态代码依赖于动态，静态是动态的一种固化。
+
+** IO 子模块简介
+Protobuf 有几个地方会用到 IO：
+1. 序列化（写内存（）和反序列化（读内存）
+2. 动态编译（读 proto 文件）
+3. 代码生成（写文件）
+
+这些都是 Protobuf 的核心功能。所以 Protobuf 专门实现了自己的 IO 子模块。
+
+为了提高 IO 效率，Protobuf 提供了*ZeroCopyInputStream*/*ZeroCopyOutputStream*来减少
+不必要的字节拷贝。
+
+Protobuf 在序列化过程中对整型使用了 Varint 变长编码，以获得压缩，为了屏蔽编码细节，
+Protobuf 在 ZeroCopyStream 上派生出了*CodedInputStream*/*CodedOutputStream*。
+
+为了格式化静态生成代码，IO 子模块还实现了*Printer*类。该类的功能就是格式控制。
+
+为了解析 Proto 文件，IO 子模块实现了 Tokenizer 类。
+
+** TextFormat 简介
+* API
+** 设置 repeated 字段
+方式：通过  xxx_size() 遍历，然后通过 set_xxx(index, value) 来设值。
+
+* 编码
+** Embedded Messages
+内嵌 Message 字段作为父 Message 的子字段编码时，是被看作是 wire type 为
+~Length-delimited~ （和 string 类型相同）来编码的。
+
+所以，在反序列化时，如果发现内嵌 Message 字段，则先通过 ~ReadVarint32()~ 获
+取该字段长度，再以长度为 limit 进行 ~PushLimit()~ ，然后递归调用
+~MergePartialFromCodedStream()~ ，反序列化完这个 Message 字段后，执行
+~PopLimit()~ 。
+
+** Packed Repeated Fields
+只有 repeated 的原始数值类型才能被声明为 packed。
+
+* python
+- [[https://developers.google.com/protocol-buffers/docs/reference/python-generated][Python Generated Code | Protocol Buffers]]
+
+** 访问Message
+1. 通过message.HasField('xxx')来判断字段是否存在。
+
+* 回顾
+** 搞清楚反序列化（基于反射）原理 <2015-09-08 二>
+以前一直是作为 Protobuf 的使用者，并不清楚其反序列化和编解码原理，这几天仔
+细看了 Protobuf 的源码（重点是 message.cc/message_lite.cc 和 wire_format.cc），
+并且阅读了 [[https://developers.google.com/protocol-buffers/docs/encoding][官方的编解码的文档]] ，终于把反序列化这块搞懂了。过程中顺手画了一
+张图：
+
+（补充：下图是基于反射的反序列化的过程，而通过 protoc（优化选项为默认，即
+SPEED）而生成的 Messsage 代码中的反序列化的 ~MergePartialFromCodedStream()~
+实际上被重写了，它通过 switch(field_number) 并根据不同字段直接从
+CodedInputStream 里面取出字段值）
+
+#+CAPTION: ./imgs/protobuf/20150908141824.png
+[[../static/imgs/protobuf/20150908141824.png]]

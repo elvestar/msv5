@@ -1,0 +1,238 @@
+#+TITLE: Linux 指令
+#+DATE: 2014-03-17
+#+KEYWORDS: Linux, Shell
+
+* grep
+** 速查表
+
+| 功能     | 指令           | 助记符                |
+|----------+----------------+-----------------------|
+| 取反     | grep -v        | 全称是 --invert-match |
+| 取相邻行 | grep -A x -B x | A = after, B = before |
+
+
+* netstat
+** 查看端口被那个进程占用
+#+BEGIN_SRC sh
+netstat -apn | grep 8010
+#+END_SRC
+
+* lsof
+** 查看端口被那个进程占用
+#+BEGIN_SRC sh
+lsof -i:8010
+#+END_SRC
+** lsof 与 kill 配合来清理占用某端口的进程
+*场景* ：我的服务会通过 system 调用一些比较重的操作（比如说 hadoop），这些操作有很小的
+几率阻塞。当它们阻塞时，如果服务发生重启，服务会由于占用的端口号没得到释放而无法
+成功重启。所以我在重启服务前执行了下面指令来预先杀死重型操作的进程，以释放服务的
+端口（这里我的服务占用的端口为 8010）：
+#+BEGIN_SRC sh
+kill -9 `/usr/sbin/lsof -i :"8010" | grep "LISTEN" | awk '{print $2}'`
+#+END_SRC
+
+参考： [[http://stackoverflow.com/questions/14966064/closing-all-processes-holding-a-given-port-from-shell][Closing all processes holding a given port from shell]]
+
+* 经典案例 
+** 案例：排查进程阻塞问题 <2014-03-18 二>
++ 网络异常的情况下，MetaService_Util 通知工具阻塞，即不返回正确也不返回失败
+
+我参考 [[http://blog.tanelpoder.com/2013/02/21/peeking-into-linux-kernel-land-using-proc-filesystem-for-quickndirty-troubleshooting/][Peeking into Linux kernel-land using /proc filesystem for
+quick’n’dirty troubleshooting]] 来进行问题排查。
+
+*** 获取处于阻塞中的进程 pid
+#+BEGIN_SRC sh
+[work@cq01-dt.cq01 master]$ ps -ef | grep MetaService_Util
+work     26266 25834  0 10:59 pts/1    00:00:00 grep MetaService_Util
+work     29285 29284  0 02:34 ?        00:00:00 sh -c /home/work/noah/dm/ldm/bin/MetaService_Util --zkconf xxx.xxx:2183 /metanotice -addpart client sobar 20140518021000 WG-ECOMON /app/xxx
+work     29286 29285  0 02:34 ?        00:00:00 /home/work/noah/dm/ldm/bin/MetaService_Util --zkconf xxx.xxx:2183 /metanotice -addpart client sobar 20140518021000 WG-ECOMON /app/xxx
+#+END_SRC
+可以看出，进程在凌晨 2:34 就阻塞了，到现在（11:00）为止仍然没有恢复。这
+两个进程中，真正因为网络而阻塞的进程是 29286，29285 是 29286 的父进程，它
+阻塞在 waitpid，这是符合预期的。
+
+*** 初步判定进程状态
+*通过 top 初步查看该进程的状态，如果 CPU/MEM 有异常的话，能很快定位到原因，
+而不用继续往下走了。
+#+BEGIN_SRC sh
+[work@xxx.cq01 master]$ top -cbp 29286
+top - 11:03:30 up 124 days, 20:56,  1 user,  load average: 0.00, 0.00, 0.00
+Tasks:   1 total,   0 running,   1 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.1% us,  0.2% sy,  0.0% ni, 99.7% id,  0.0% wa,  0.0% hi,  0.0% si
+Mem:  65966260k total, 45252820k used, 20713440k free,  5057908k buffers
+Swap:        0k total,        0k used,        0k free, 36979200k cached
+
+  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND                                                                                          
+29286 work      20   0 42524 3556 3256 S  0.0  0.0   0:00.00 /home/work/noah/dm/ldm/bin/MetaService_Util --zkconf xxx.xxx:2183,jx
+#+END_SRC
+
+可以看到 MetaService_Util 使用的 CPU 很少，说明它确实是阻塞住了（当然也
+有可能是整个系统 idle 太少，导致它抢不到 CPU，但是这很罕见，而且很容易排
+除这种情况）。
+
+*** strace 跟踪系统调用
+#+BEGIN_SRC sh
+[work@xxx.cq01 master]$ strace -p 29286
+Process 29286 attached - interrupt to quit
+recvfrom(9, ^C <unfinished ...>
+Process 29286 detached
+#+END_SRC
+   
+可以看出该进程阻塞在 recvfrom 这个系统调用上。
+
+*** pstack 查看进程函数调用栈
+#+BEGIN_SRC sh
+[work@xxx.cq01 master]$ pstack 29286
+#0  0x000000302b80b52a in recv () from /lib64/tls/libpthread.so.0
+#1  0x00000000007a38f0 in apache::thrift::transport::TSocket::read ()
+#2  0x00000000007a5249 in apache::thrift::transport::readAll<apache::thrift::transport::TSocket> ()
+#3  0x00000000005b697e in apache::thrift::transport::TTransport::readAll ()
+#4  0x00000000005b6db6 in apache::thrift::protocol::TBinaryProtocolT<apache::thrift::transport::TTransport>::readStringBody ()
+#5  0x00000000005b6b8c in apache::thrift::protocol::TBinaryProtocolT<apache::thrift::transport::TTransport>::readString ()
+#6  0x00000000005b56eb in apache::thrift::protocol::TVirtualProtocol<apache::thrift::protocol::TBinaryProtocolT<apache::thrift::transport::TTransport>, apache::thrift::protocol::TProtocolDefaults>::readString_virt ()
+#7  0x00000000005dcb4a in apache::thrift::protocol::TProtocol::readString ()
+#8  0x00000000005c157d in dt::biglog::meta::HadoopClusterInfo::read ()
+#9  0x00000000006463fe in dt::biglog::meta::BigLogMeta_get_hadoop_cluster_list_presult::read ()
+#10 0x000000000069c93c in dt::biglog::meta::BigLogMetaClient::recv_get_hadoop_cluster_list ()
+#11 0x000000000069c57c in dt::biglog::meta::BigLogMetaClient::get_hadoop_cluster_list ()
+#12 0x00000000005a1745 in dt::biglog::meta::MetaService_Client::get_hadoop_cluster_list ()
+#13 0x00000000005a4b08 in main ()
+#+END_SRC
+   
+可以看出，MetaService_Util 的调用栈，使用的是 Thrift 通信框架。
+
+*** 另一种跟踪系统调用的方法：/proc/pid/syscall
+如果无法使用 strace，则可以使用利用 proc 文件系统。
+#+BEGIN_SRC sh
+[work@xxx.cq01 master]$ cat /proc/29286/syscall 
+45 0x9 0xd1d181 0x1b 0x0 0x0 0x0 0x7fffb71c03e0 0x302b80b52a
+#+END_SRC
+
+可以看到，阻塞在第 45 号系统调用上面了。通过查看
+*/usr/include/asm-x86_64/unistd.h* 得知，第 45 号函数调用是 recvfrom。
+#+BEGIN_SRC cpp
+#define __NR_sendfile                           40
+#define __NR_socket                             41
+#define __NR_connect                            42
+#define __NR_accept                             43
+#define __NR_sendto                             44
+#define __NR_recvfrom                           45
+#define __NR_sendmsg                            46
+#define __NR_recvmsg                            47
+#+END_SRC
+
+* proc
+** 已知进程id，求其部署位置 <2016-08-02 二 16:17>
+以前只知道，通过 cat /proc/{pid}/cmdline 可以获取其启动命令，如果这个命令使
+用的是相对路径启动，那就无法知道其部署路径了。今天在排查一个 ps -ef hang 住
+的问题时，在 [[https://rachelbythebay.com/w/2014/10/27/ps/][Reading /proc/pid/cmdline can hang forever]] 这篇文章里学到了通
+过 ~ll /proc/{pid}/exe~ 得到进程部署路径的魔法。原来啊，这个exe，它是一个软
+链，它链到真实的binary，ll一下它，可以得到其全路径。
+#+BEGIN_SRC sh
+[root@xxx.yyy.zzz hahaha]# ll /proc/25353/exe
+lrwxrwxrwx  1 mqy mqy 0 Jul 27 18:11 /proc/25353/exe -> /home/mqy/.jumbo/bin/tmux
+#+END_SRC
+
+* 信号
+** 获取信号全集
+使用 kill -l 即可得到本系统的信号全集。
+#+BEGIN_SRC sh
+[work@xxx-master02.m1.xx master]$ kill -l
+ 1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL
+ 5) SIGTRAP      6) SIGABRT      7) SIGBUS       8) SIGFPE
+ 9) SIGKILL     10) SIGUSR1     11) SIGSEGV     12) SIGUSR2
+13) SIGPIPE     14) SIGALRM     15) SIGTERM     17) SIGCHLD
+18) SIGCONT     19) SIGSTOP     20) SIGTSTP     21) SIGTTIN
+22) SIGTTOU     23) SIGURG      24) SIGXCPU     25) SIGXFSZ
+26) SIGVTALRM   27) SIGPROF     28) SIGWINCH    29) SIGIO
+30) SIGPWR      31) SIGSYS      34) SIGRTMIN    35) SIGRTMIN+1
+36) SIGRTMIN+2  37) SIGRTMIN+3  38) SIGRTMIN+4  39) SIGRTMIN+5
+40) SIGRTMIN+6  41) SIGRTMIN+7  42) SIGRTMIN+8  43) SIGRTMIN+9
+44) SIGRTMIN+10 45) SIGRTMIN+11 46) SIGRTMIN+12 47) SIGRTMIN+13
+48) SIGRTMIN+14 49) SIGRTMIN+15 50) SIGRTMAX-14 51) SIGRTMAX-13
+52) SIGRTMAX-12 53) SIGRTMAX-11 54) SIGRTMAX-10 55) SIGRTMAX-9
+56) SIGRTMAX-8  57) SIGRTMAX-7  58) SIGRTMAX-6  59) SIGRTMAX-5
+60) SIGRTMAX-4  61) SIGRTMAX-3  62) SIGRTMAX-2  63) SIGRTMAX-1
+64) SIGRTMAX
+#+END_SRC
+** SIGCONT
+有一些进程用 kill -9 都无法杀死（例如 pstack 和 gdb 调试时由于它们意外杀死产生的进程），
+这时候我们可以用 SIGCONT 来杀死它们。
+
+* ulimit
+ulimit 可以用来查看和修改进程的各种资源限制，如栈大小、最大打开文件数等。
+如下：
+#+BEGIN_SRC sh
+ulimit -a # 查看所有资源限制
+ulimit -n # 查看最大打开文件数
+ulimit -n 204800 # 修改最大打开文件数为 204800
+#+END_SRC
+
+任何用户都可以用 ulimit 查看，但是只有 root 才有权用 ulimit 修改，并且，用
+ulimit 修改只针对当前的 ssh 连接有效，一旦退出，期间作的修改就全部作废。
+
+** 案例：ulimit 与 popen 相关 <2014-03-20 四>
+我负责的模块遇到一个问题： *popen()频繁返回 NULL* ，进而触发模块 coredump。
+这很诡异，网上也查不到答案。不得已我用 man 来查看 popen()函数的说明。
+#+BEGIN_SRC sh
+man popen
+#+END_SRC
+
+得到如下信息：
+#+BEGIN_EXAMPLE
+RETURN VALUE
+       The popen function returns NULL if the fork(2) or pipe(2) calls fail, or if it cannot allocate memory.
+       The pclose function returns -1 if wait4 returns an error, or some other error is detected.
+#+END_EXAMPLE
+
+于是怀疑是系统资源不足。我用 free 查看，发现系统的内存是充足的。
+
+#+BEGIN_SRC sh
+[work@cq01.xxx.cq01.xxxxx.com master]$ free
+	     total       used       free     shared    buffers     cached
+Mem:      49429336   39001528   10427808          0     750044   34474160
+-/+ buffers/cache:    3777324   45652012
+Swap:      1020088     588288     431800
+#+END_SRC
+
+于是，我怀疑是进程打开的文件数目达到了上限，导致无法返回 FD，于是我用
+ulimit -a，发现最大打开文件数目是 10240。
+
+对于一般模块，10240 是完全够用的，但是我开发是一个 server 模块，它会跟整个
+系统的 10000 多个 client 有交互，并且会维持着长连接，消耗掉很多 FD。于是怀疑是
+打开文件数目超过限制导致 popen()返回 NULL。联想到今天下午系统的很多 client 有
+过升级，与 server 的连接数会大大增加。这更加印证了我的怀疑。
+
+我用 netstat 查看模块与系统的各个 client 的连接数目：
+#+BEGIN_SRC sh
+netstat -lanp | grep 8010 | wc # 8010 是我的模块占用的端口号
+#+END_SRC
+
+得到的结果是 8915，也就说说我的模块至少要维护着 8915 个 FD，这确实容易达到资源的
+上限。于是我尝试修改这个资源上限。
+
+我在网上查资料，在 IM 上问同事，多番尝试后都没找到修改这个 FD 资源上限的方法。我
+只好采用一个临时的解法： *在 root 下修改，然后 su 到 work 账号，并重启进程* 。这
+样，新起的进程就拥有了新设的 FD 资源上限了。模块重启后，观察一段时间，没发生
+popen()返回 NULL 导致的 coredump 问题。
+
+问题虽然被临时解决了，但是还有尾巴。我通过 ssh 实现的模块一键部署，这样会
+导致模块重新部署后，进程的 FD 资源上限仍然是 10240。于是我继续寻找长期的解
+决方案。最后我通过 *ulimit*, *ssh* 这两个关键词在 Google 搜索，终于找到
+了解法。
++ [[http://stackoverflow.com/questions/1887365/ssh-remote-command-execution-and-ulimit][ssh remote command execution and ulimit]]
+
+解法就是修改 */etc/security/limits.conf* 文件，在尾部加入：
+#+BEGIN_SRC sh
+ *           soft    nofile          204800
+ *           hard    nofile          204800
+#+END_SRC
+
+然后保存文件，退出 ssh，再重新用 ssh 登陆，用 ulimit -n 观察，发现最大打开文
+件数终于被成功地改为 204800 了。
+
+得到一些经验：
+1. 对于 popen 这些系统函数，man 文档是很靠谱的。
+2. 每个模块都有其特殊性。server 类型的模块要维持其与 client 的连接数，它对
+   FD 资源的消耗与 client 类型的不在一个量级的。
+3. 一个经过深思熟虑的 *搜索关键词* 是解决问题的良方。

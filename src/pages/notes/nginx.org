@@ -1,0 +1,73 @@
+#+TITLE: Nginx
+#+DATE: 2014-05-31
+#+KEYWORDS: Web 服务器
+
+* 配置 Nginx
+** 静态内容
+如下配置，通过/path/to 开头的 url 访问，其实际访问的文件位于本地的
+/Users/elvestar/github/elvestar.github.io/path/to 路径。
+#+BEGIN_SRC sh
+server {
+    root /Users/elvestar/github/elvestar.github.io;
+
+    location / {
+    }
+}
+#+END_SRC
+
+** 负载均衡
+upstream 这个里面可以配置多个 ip:port，nginx 会通过轮询的方式来将请求负载到
+各个 ip:port 上。当然，nginx 也支持根据访问者的 ip 将来自该访问者的请求固化
+到某个 ip:port 上。
+
+** 反向代理
+这个在 location 里面设置，一般上，会与 upstream 合用。
+
+** location
+~ 符号代表使用正则。
+
+** 日志打印
+默认情况下，Nginx 的日志是不带 Cookie 的，我想把 Cookie 中的 minos_uid 字段打印
+到日志中，以记录访问者是谁。
+
+可以在 nginx.conf 中作如下配置：
+#+BEGIN_SRC sh
+http {
+    log_format log_with_cookie '$remote_addr $server_addr [$time_local] "$request" '
+                               '$status $body_bytes_sent "$http_referer" "$http_user_agent" $minos_uid ';
+    access_log  ./logs/access.log  log_with_cookie;
+...
+...
+    server { 
+        listen 8099;
+        server_name www.example.org *.example.org;
+
+        set $minos_uid "-";
+        if ( $http_cookie ~* "(minos_uid=\S+)(;.*|$)") {
+            set $minos_uid $1;
+        }       
+...
+...
+} 
+
+#+END_SRC
+
+该配置会从 Cookie 中取出 minos_uid 字段，赋给 $minos_uid。
+
+** 遇到问题
+minos.css 被~* /minos 这个 location 给捕获了。我将之改为~* /minos/后，问题
+解决。
+
+* 问题记录
+** Resource interpreted as Stylesheet but transferred with MIME type text/plain <2015-07-28 二>
+结果导致了浏览器获得 css 文件后不会当做 css 类型的文件来处理，进而导致页面样式
+无法生效。
+
+解法：在 location 的配置里加入 ~include /path/to/mime.types;~ 。例如：
+#+BEGIN_SRC sh
+    location ~* /static/v3.0 {                                                                     
+        root /home/work/minos/minosweb/;                                                           
+        include mime.types;                                                                        
+    } 
+#+END_SRC
+

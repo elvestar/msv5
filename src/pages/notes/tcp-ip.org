@@ -1,0 +1,187 @@
+#+TITLE: TCP/IP 相关
+#+DATE: 2013-03-04
+#+KEYWORDS: TCP
+
+* 概念
+** 什么叫做网络字节序？
+网络字节序是跟 CPU 的大小端或者操作系统环境是无关的，它被规定为 Big-endian。
+- http://zhidao.baidu.com/question/43793821.html
+
+* 资料收集
+- [[http://coolshell.cn/articles/11564.html][TCP 的那些事儿（上）- CoolShell]]
+
+* 常用函数
+** 如何根据 interface 获取 ip？
+源码如下：
+#+BEGIN_SRC cpp
+#include <arpa/inet.h>
+#include <net/if.h>
+
+bool GetLocalIpByInterface(const std::string& interface, std::string* local_ip) {
+   CHECK_NOTNULL(local_ip);
+
+   if (interface.length() > IFNAMSIZ - 1) {
+       XXX_LOG_FATAL("interface length is too long, longer than IFNAMSIZ - 1. [%d vs. %d]",
+                         interface.length(), IFNAMSIZ - 1);
+       return false;
+   }
+
+   struct ifreq ifr;
+   strncpy(ifr.ifr_name, interface.c_str(), IFNAMSIZ);
+
+   int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+   if (sockfd <= 0) {
+       return false;
+   }
+
+    // Get IP address of interface by ioctl
+    if (0 != ioctl(sockfd, SIOCGIFADDR, &ifr)) {
+        close(sockfd);
+        return false;
+    }
+
+    struct sockaddr_in* addr = (struct sockaddr_in*)&(ifr.ifr_addr);
+    const char* ip = inet_ntoa(addr->sin_addr);
+    if (NULL == ip) {
+        close(sockfd);
+        return false;
+    }
+
+    ,*local_ip = ip;
+    close(sockfd);
+
+    return true;
+}
+#+END_SRC
+
+** 将 32 位网络字节序二进制的 IP 转化为点分十进制
+原型如下：
+#+BEGIN_SRC cpp
+  char FAR * inet_ntoa( struct in_addr in);
+#+END_SRC
+
+它会把转化成的点分十进制形式的 IP 字符串临时存放在一个静态缓冲区，下一次调用
+该函数，该缓冲区将会被重写！
+
+实例：
+#+BEGIN_SRC cpp
+   uint32_t ip_int = baidu_log.user_ip();                                     
+   struct in_addr addr;                                                       
+   addr.s_addr = static_cast<in_addr_t>(ip_int);                              
+   char* ip_str = inet_ntoa(addr);                                            
+   string user_ip = string(ip_str); 
+#+END_SRC
+
+** 将 IP 从点分十进制转化为整数形式
+来看下 inet_ntoa 的内涵，n 代表 network（即点分十进制），a 代表 application（整数）
+
+实例如下：
+#+BEGIN_SRC app
+struct in_addr addr;                                                         
+if (0 == inet_aton(local_ip.c_str(), &addr)) {                               
+  XXX_LOG_FATAL("Fail to convert IP by inet_aton");                      
+  return false;                                                              
+}                                                                            
+int32_t ip_int = ntohl(addr.s_addr); 
+#+END_SRC
+
+注意函数 ntohl，它负根据本机的大小端情况来进行进一步的转化。
+- http://baike.baidu.com/view/569207.htm 
+
+* TCP 基本概念
+** 分组
+
+由于网络各块的不确定性，TCP 分组也是无法确定的。
+
+** TCP 的四个定时器
+对于每个连接，TCP 管理着四个不同的定时器，他们是：
+1. 重传定时器
+2. 坚持（Persist）定时器
+3. 保活（Keepalive）定时器
+4. 2 MSL 定时器
+
+* 建立 TCP 连接
+** 三次握手
+
+* TCP 数据流
+** Delay ACK 与 Nagle 算法
+TCP 通过两个手段来减少网络中的数据块的个数：
+- Delay ACK（经受延时的 ACK）
+- Nagle 算法
+
+** TCP 滑动窗口 <2015-06-06 六>
+滑动窗口，也叫接收窗口，指的是接收端空闲缓冲区的大小。TCP 的接收端接到数据
+以后，在回包（ACK 或数据）时，会将当前滑动窗口的大小写入到 TCP 头部的 *16
+位窗口大小* 这个字段，借此告诉发送端自己的当前的处理能力。如果发送端发现这
+个窗口太小，会先不发送数据。接收端可以通过发送专门的窗口更新的 ACK，告诉发
+送端自己又可以接收数据了。
+
+* TCP 网络状态
+TCP 协议一共涉及到 11 个网络状态。
+
+** TIME_WAIT
+要点：
+1. Client 和 Server，谁主动 close，谁就会将处 TIME_WAIT 状态一段时间
+2. TIME_WAIT 状态持续 2 个 MSL（最大报文段生存时间），Linux 上大约有 2x30 =
+   60 秒
+3. 处于 TIME_WAIT 状态时，Client 和 Server 的 ip 和端口将处于被占用的状态，
+   除非设置了 SO_REUSEADDR
+
+参考：
+- [[http://huoding.com/2013/12/31/316][再叙 TIME_WAIT（火丁笔记）]]
+  
+** SIGPIPE 信号与 TCP <2015-06-05 五>
+Client 端向一个已经断开连接的 Server 发数据，会收到一个 RST 响应，如果 Client 端继
+续发，系统会发出一个 SIGPIPE 信号给进程，告诉它不要再写了。该信号的默认处理动
+作时终止进程。Client 端可以通过将 SIGPIPE 设为 SIG_IGN 来规避。
+
+* UDP
+UDP 的应用面与 TCP 相比显得很狭窄，不过用于它与 TCP 不同的特性，所以还是能
+找到用武之地的。例如：
+1. TCP 会重传，而 UDP 不会重传。有的应用就应该避免重传，例如在线视频和在线
+   音频，这些应用就可以考虑 UDP。
+
+* Socket
+一个 Socket 对应一个五元组：
+1. Protocol
+2. Local address and local port
+3. Remote address and remote port
+   
+不过，对于用作 Listener 的 Socket 而言，它对应着三元组。
+
+参考：
+- [[http://stackoverflow.com/questions/152457/what-is-the-difference-between-a-port-and-a-socket]]
+- http://lxr.free-electrons.com/source/include/net/sock.h?v=2.4.37#L557
+- http://man7.org/linux/man-pages/man7/socket.7.html
+
+* 工具
+常用工具：
+- ps/top
+- tcpdump
+- netstat  -s, -nap
+- netstat -a -n -f inet
+- ifconfig
+- ethtool, mii-tool
+- sar -n DEV/EDEV 1 0
+- mpstat -P ALL 1
+- iostat -x 1
+- vmstat 1
+- netcat
+
+* 回顾
+** 重看了《TCP/IP 详解，卷一：协议》的前 50% <2015-06-05 五 23:00>
+大学时看过这本书，但是现在已经完全忘记了，工作中做 Linux 服务器编程都是基于
+RPC 框架，跟 TCP 协议打交道的机会实在是少。这次重看，复活了很多记忆，并且将
+这些基础知识与这几年工作遇到的一些问题关联了起来。
+
+我就不总结了，只记录一些让我印象深刻的点：
+1. 对于同一个网络层，其下面的链路层可替换，可选项以太网，或者 802.3。这是分
+   层带来的优势
+2. MTU（最大传输单元）是链路层的一个特性，各种链路层的取值不同，以太网是
+   1500 字节
+3. IP 数据包首部位 20 字节或更多（如果加了选项），其中一种字段叫 TOS（服务
+   类型），其中有 4 bit 分别表示：最小时延，最大吞吐量，最高可靠性和最小费
+   用
+4. TIME_WAIT 与 MSL 与 SO_REUSEADDR
+5. TCP 连接双方的同时打开和同时关闭
+6. ...... 还有好多，我得整一篇读书笔记了

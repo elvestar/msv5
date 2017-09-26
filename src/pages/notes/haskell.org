@@ -1,0 +1,7 @@
+#+TITLE: Haskell
+#+DATE: 2014-12-31
+
+* 前言
+
+* 资料收集
++ [[http://learnyouahaskell-zh-tw.csie.org/zh-cn/chapters.html][Haskell 趣學指南]]

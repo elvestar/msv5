@@ -1,0 +1,9 @@
+#+TITLE: Xv6
+#+DATE: 2014-04-16
+#+KEYWORDS: Unix
+
+* 资料搜集
++ [[http://baike.baidu.com/view/4715931.htm?fr%3Dwordsearch][Xv6（百度百科）]]
++ [[http://pdos.csail.mit.edu/6.828/2011/xv6.html][Xv6, a simple Unix-like teaching operating system]]
++ [[http://pdos.csail.mit.edu/6.828/2012/overview.html][6.828: Operating System Engineering (MIT)]]
++ [[http://pdos.csail.mit.edu/6.828/2011/xv6/xv6-rev6.pdf][xv6-rev6.pdf (MIT)]]

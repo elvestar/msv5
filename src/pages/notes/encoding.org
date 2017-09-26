@@ -1,0 +1,17 @@
+#+TITLE: 编码和解码
+#+DATE: 2015-04-16
+#+KEYWORDS: 编解码
+#+DESCRIPTION: 编码和解码是很棘手的领域
+
+* 问题记录
+** Python: 'ascii' codec can't decode byte 0xe6 in position 2: ordinal not in range(128)
+原因：未知的编解码问题
+
+解法：如果是字符串处理和格式化中出现的话，在字符串前加一个 u。如下：
+
+#+BEGIN_SRC python
+def update_minos_owner(self, request, queryset):
+        minos_owner = request.POST['minos_owner']
+        rows_updated = queryset.update(minos_owner=minos_owner)
+        self.message_user(request, u'%d 条记录的 minos_owner 被设置为 %s' % (rows_updated, minos_owner))
+#+END_SRC

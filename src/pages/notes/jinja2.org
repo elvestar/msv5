@@ -1,0 +1,94 @@
+#+TITLE: Jinja2 Template System
+#+DATE: 2014-07-30
+#+KEYWORDS: HTML
+
+* 内置函数/过滤器
+** 数值取整
+使用内置的 round 函数。用法如下：
+#+BEGIN_SRC python
+{% if data_slice.data_size > 512 * 1024 * 1024 %}
+    {{ (data_slice.data_size / (1024 * 1024 * 1024)) | round(2) }} GB
+{% endif %}
+#+END_SRC
+
+Jinja 内置函数的使用模式基本都是如上的 filter 风格。参考：[[http://jinja.pocoo.org/docs/templates/#list-of-builtin-filters][Template Designer Documentation]]
+* Macros
++ [[http://jinja.pocoo.org/docs/dev/templates/#macros]]
+** 用法示例：
+在 _macros.html  中定义：
+#+BEGIN_SRC html
+{% macro render_tablersorter_filter(filter_id) %}
+<input class="search selectable pull-right" id="{{ filter_id }}" type="search" placeholder="Search" data-column="all">
+{% endmacro %}
+#+END_SRC
+
+在 product_line.html 里使用，为一个 table 加上 filter（过滤/搜索框）：
+#+BEGIN_SRC html
+<div class="page-header">
+    <h3> 
+    日志列表 
+    {{ macros.render_tablersorter_filter('table_filter') }}
+    </h3>
+</div>
+#+END_SRC
+
+#+CAPTION: ./imgs/jinja2/20141005142329.png
+[[../static/imgs/jinja2/20141005142329.png]]
+
+* Escaping 转义
+** 将HTML不转义直接传递到模板里面 <2016-07-31 日 21:53>
+假设 ~item.output~ 是一段HTML格式的字符串，我们想在模板里面展示这个HTML（不
+是转义后的HTML字符串），我们需要在后面加上 ~|safe~ ，否则render后的结果是转
+以后的各种HTML字符串（包括各种标签）。Jinja2会自动为这段HTML执行转义，我们
+需要通过 ~|safe~ 来将其标志为无需转义。
+
+#+BEGIN_SRC html
+<div>
+    {{ file_item.output|safe }}
+</div>
+#+END_SRC
+
+参考：
+1. [[http://jinja.pocoo.org/docs/dev/templates/#working-with-automatic-escaping][Working with Automatic Escaping (Jinja2 Docs)]]
+2. [[http://stackoverflow.com/questions/3206344/passing-html-to-template-using-flask-jinja2][Passing HTML to template using Flask/Jinja2 (stackoverflow)]]
+
+* 问题记录
+** 如何实现Nested rendering ？ <2016-07-23 六>
+在Django中使用Jinja时，可以将url传递到模板里面。url是个函数调用，参数是
+"app:view" 类型。假设我们想定义一个macro，传输app名字和view名字，macro里面
+组装出这个url调用，我们写下了如下代码：
+#+BEGIN_SRC html
+{% macro admin_section_item(app_name, view_name, title, icon) %}
+    <li class="section-item">
+        <a href="{{ url("{{ app_name }}:{{ view_name }}") }}">
+            <i class="fa fa-{{ icon }}"></i>
+            {{ title }}
+        </a>
+    </li>
+{% endmacro %}
+#+END_SRC
+
+运行后，会报 ~u'{{ app_name }}' is not a registered namespace~ 这样的错误。
+分析了一下，产生错误的原因是Jinja的render只做一次，即{{}}里面的{{}}将不会被
+render。为了寻求解法，我做了很多尝试，也在网上寻求答案，但是都不行。
+- [[http://jinja.pocoo.org/docs/dev/templates/][Template Designer Documentation]]
+- [[http://stackoverflow.com/questions/8862731/jinja-nested-rendering-on-variable-content][Jinja nested rendering on variable content (stackoverflow)]]
+- [[http://stackoverflow.com/questions/20843661/nested-print-statements-in-jinja-template][Nested Print statements in jinja template (stackoverflow)]]
+  
+不得已，我开始找变通，最终轻易地解决了这个问题，那就是：将
+~url("app:view")~ 整体作为参数传入到macro里面。macro的定义和调用如下：
+#+BEGIN_SRC html
+{% macro admin_section_item(page_url, title, icon) %}
+    <li class="section-item">
+        <a href="{{ page_url }}">
+            <i class="fa fa-{{ icon }}"></i>
+            {{ title }}
+        </a>
+    </li>
+{% endmacro %}
+{{ admin_section_item(url('tms:project'), '视频', 'tasks') }}
+#+END_SRC
+
+经验和教训：
+1. 在解决问题的初期就要尝试寻求变通，而不是到了实在无路可走才寻求变通，这样
+   耗费的时间太久，士气也会受损。

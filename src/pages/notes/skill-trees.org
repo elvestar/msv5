@@ -1,0 +1,57 @@
+#+TITLE: 技能树
+#+DATE: 2015-05-15
+
+* 资料收集
+- [[http://www.quora.com/If-there-were-skill-trees-for-programming-development-what-would-they-look-like]]
+
+* 以往的总结
+     
+突然想起 14 年 3 月整理过一次技术笔记的归类，正好可以参考一下。如下：
+
+#+BEGIN_EXAMPLE
+Org 笔记中包括所有适合发布到网络上与人分享的笔记，那些不适合分享的笔记记录在我的 Evernote 上，或者只是发布在公司内网上。
+
+Programming
+笔记内容是编程语言和编程技巧，也包括与特性系统密切相关的脚本语言，如 Unix 下的 shell，和 Mac 下的 Apple script。
+
+Operating system (or Computer system? 不倾向了)
+操作系统，包括操作系统的原理，API 设计。如果叫 compute system 的话，这里还会包括体系架构，硬件，嵌入式等等。
+
+Database (or Storage system)
+数据库系统，不仅包括 RDBMS，也包括各种 NoSQL，KV 存储，缓存服务器（如 Redis）。
+
+Algorithm
+算法与数据结构。其他特性系统下的设计到算法与数据结构的分析也再此分类（如 Linux 的红黑树算法实现分析）
+
+Web
+包括 Web 服务器，HTTP，Web 浏览器，web 开发框架。不包括开发语言（如 Javascript）
+
+Networking
+网络编程，RPC 框架，TCP/UDP 等，也包括跟网络密切相关的序列化/反序列化（如 protobuf），压缩与解压等。
+
+Distributed system
+大型分布式系统的分析，不包括存储系统。
+
+Tools
+各种工具，这个分类将海量大，可能要细分。
+
+Complier
+编译器，解释器。
+
+Baidu
+在百度的笔记，不会发布到公网。
+#+END_EXAMPLE
+
+
+
+* 急需补完的技能
+有一些技能很常用，但我懂得还不够透彻，虽然可以应用于工作，但是经常要借助搜
+索和手册，没达到游刃有余和举重若轻的境地，这些值得挑出来进行特训。
+
+- GDB
+- sed/awk
+- HTTP 协议
+
+** 备用技能
+- Nginx 模块开发
+

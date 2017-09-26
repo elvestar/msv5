@@ -1,0 +1,208 @@
+#+TITLE: Javascript
+#+DATE: 2014-10-15
+#+KEYWORDS: 前端, 正则
+
+* 日期处理
++ [[http://www.w3school.com.cn/jsref/jsref_obj_date.asp][JavaScript Date 对象]]
+** 格式化输出日期
+JS 的 Date 对象提供了一堆方法，但是一个能打的都没有。我只好使用 jQuery UI 的
+DatePicker 来简单实现：
+#+BEGIN_SRC js
+var today = $.datepicker.formatDate('yy-mm-ddT00:00', new Date());
+$('#start_time').val(today);
+$('#end_time').val(today);
+#+END_SRC
+** 将日期字符串转化为 Date 对象
+#+BEGIN_SRC js
+var start_time = new Date(Date.parse($('#start_time').val()));
+var end_time = new Date(Date.parse($('#end_time').val()));
+#+END_SRC
+
+*** Chrome 和 Firefox 的 Date() 的实现的不同 <2015-12-28 一>
+Chrome 的 new Date() 能兼容 ~2013-08-31T17:00:00~ 和 ~2013-08-31 17:00:00~
+两种格式，而 Firefox 不兼容 ~2013-08-31 17:00:00~ 。
+
+为了浏览器兼容我们使用 Date() 时，应该只使用 EMCAScript 标准定义的日期格式。
+#+BEGIN_SRC js
+var backtrace_start_time = new Date($('#backtrace_start_time').val().replace(' ', 'T'));
+#+END_SRC
+参考：
+- http://stackoverflow.com/questions/3257460/new-date-is-working-in-chrome-but-not-firefox
+
+** 对日期做 Delta 运算
+解法：使用 Date 对象的 setDate(2) 方法。示例如下：
+#+BEGIN_SRC js
+var def_start_time = new Date();
+def_start_time.setDate(def_start_time.getDate() + 1)
+$('#parallel_start_time).val($.datepicker.formatDate('yy-mm-dd 00:00', def_start_time));
+#+END_SRC
+* 字符串
+
+| 功能                     | 实现                                | 说明                             |
+|--------------------------+-------------------------------------+----------------------------------|
+| 截取字符串到指定子串位置 | s1.substring(0, s1.lastIndexOf(s2)) | substring 的参数是(start, [end]) |
+|                          |                                     |                                  |
+|                          |                                     |                                  |
+|                          |                                     |                                  |
+
+** String's replace by using regex
+下面的例子中，fileMatchPattern 为 ~baiduvoice.b2log.{DATE}{HOUR}{MINUTE}~
+，经过这个带正则的 replace，生成的字符串为 ~baiduvoice.b2log~ 。
+#+BEGIN_SRC js
+var fileRegex = $scope.fileMatchPattern;
+var realtimeFile = fileRegex.replace(/\.{.*/i, '');
+#+END_SRC
+
+** replace 默认只处理首次出现的字符串
+除非我们使用正则，并在后面加上 ~g~ 参数，例如：
+#+BEGIN_SRC js
+data.content = data.content.replace(/\\t/g, '\t');
+#+END_SRC
+** 从字符串中抽取数字（如金额） <2016-05-21 六>
+思路：先用正则将数字和小数点抽取出来，然后强转为Float。不过本方法有个局限，
+假如字符串中多个部分中含有数字，那就无能为力了。
+#+BEGIN_SRC javascript
+var price = '27.99元';
+$('#price').val(parseFloat(price.replace(/[^0-9\.]/g, ''), 10));
+#+END_SRC
+
+** 在字符串的指定位置插入另一个字符串 <2017-02-20 一 13:36>
+方法：使用indexOf找到插入点，使用slice切割字符串。例如：
+#+BEGIN_SRC js
+var pos = contentHTML.indexOf('<h2 id=')
+if (pos !== -1) {
+  contentHTML = [contentHTML.slice(0, pos), tocHTML, contentHTML.slice(pos)]
+}
+#+END_SRC
+
+使用substr的话也可以，但是当字符串较长时，性能会不好。
+- [[http://stackoverflow.com/questions/4364881/inserting-string-at-position-x-of-another-string][javascript - Inserting string at position x of another string - Stack Overflow]]
+
+* 整数
+** 取整
+两种方法：
+1. Math.floor(), Math.cell(), Math.round()
+2. Number().toFixed()
+
+* 数组（or 列表）
+Javascript 里的列表叫做数组 Array，准确地说，叫做数组对象。
+
+for in 语句的写法：
+#+BEGIN_SRC js
+for (var i in all_paths) {
+    var single_path = all_paths[i];
+    ...
+}
+#+END_SRC
+
+蛋疼的地方：迭代的不是元素，而是元素下标。
+
+** 经典问题：迭代数组，判断并删除元素 <2015-05-13 三>
+
+C++ 使用迭代器迭代容器时，一旦通过迭代器 erase 掉某元素，该容器的整个结构就
+发生变化，迭代器立刻非法了。而 Javascript 里面也有类似的问题，在迭代数
+组时，我尝试了两种方式，结果发现都不理想：
+
+1. delete 元素。该方法可以将数组的某元素置为 undefined，但是整个数组大小不
+   变，被删元素留下空槽。
+2. splice(i ,1) 。该方法会产生和 C++迭代器类似的问题，因为执行 splice(i, 1)
+    后，数组的索引变化了，下一轮迭代获得的元素其实是下下一轮的元素。
+   
+思考了一会儿，我决定使用不改变原数组的方式实现我的功能，即新建一个数组，然
+后遍历原数组，将不删除的元素放到这个新数组里面。
+
+#+BEGIN_SRC js
+var allFileItems = data;
+var filteredFileItems = [];
+var fileRegex = 'xxxx.\\d{8}';
+for (var i in allFileItems) {
+    var filename = allFileItems[i].name;
+    if (filename.match(fileRegex) != null) {
+        filteredFileItems.push(allFileItems[i]);
+    }
+}
+$scope.fileItems = filteredFileItems;
+#+END_SRC
+
+这种解法我觉得可以推而广之，类似问题都使用这种解法，核心思想就是： *不改变
+原数组的结构，额外构造数组* 。
+
+* Object
+** 如何遍历Object？ <2017-02-18 六 11:25>
+通过lodash的groupBy返回的是对象，遍历的方法是：
+#+BEGIN_SRC js
+const pagesGroupByYear = _.groupBy(sortedPages, (page) => {
+    return (new Date(access(page, 'data.date'))).getFullYear()
+})
+Object.keys(pagesGroupByYear).map((year) => {
+    console.log(year)
+    console.log(pagesGroupByYear[year].length)
+})
+#+END_SRC
+* 正则表达式
+
+- [[https://regex101.com/][JS 正则在线测试]]
+
+** Javascript 正则转义的总结 <2015-05-19 二>
+字符转义是正则表达式的痛处，每种正则工具或正则库的规则都或多或少有差异，给
+学习者带来了巨大的不满和对正则工具设计者的鄙视之意。
+
+JS 正则的转义也是如此，不过我们可以尝试总结一些规则：
+1. 英文字符和数字默认为普通字符，加上 \ 转义才变为元字符
+2. 特殊字符（如 . , + [ ] { } ^ $）默认为正则元字符，加上 \ 转义才为普通字符
+3. / 字符也属于元字符，加上 \ 转义才是普通字符
+   
+** 执行正则的exec后通过RegExp.$来捕获匹配到的内容 <2017-09-17 日 23:02>
+代码如下：
+#+BEGIN_SRC javascript
+  var re = /^(.+)\s*&#60;(\d{4}.+)&#62;$/;
+  if (re.exec(childText) !== null) {
+      var timeStr = RegExp.$2
+      var eventTitle = RegExp.$1
+  }
+#+END_SRC
+
+注意事项：
+- RegExp.$是个全局性的内容，加入在执行exec之后到执行RegExp.$取值之前执行
+  其他任意的正则匹配过程（包括string.replace()），都可能会导致无法正确捕获。
+
+* Template Engine 
+** Underscore Templates <2016-05-28 六>
+为了一更少的代码来编写HTML，我们需要模板引擎。Ruby有ERB/Liquid，Python有
+Jinia/Django，而JS呢，React可以用，不过太重且太丑陋。[[http://underscorejs.org/#template][Underscore]] ，是JS玩家
+喜爱的基础库，它提供了简单的Template功能，语法和ERB类似。
+
+下面一段JS代码通过Underscore的template函数生成了表格：
+#+BEGIN_SRC javascript
+var clockItemsTemplate = _.template("<table>" +
+    "<table>" +
+    "<caption><%= date %></caption>" +
+    "<tr> <th>事情</th> <th>开始时间</th> <th>耗时（分）</th> <th>类别</th> <th>项目</th> </tr>" +
+    "<% _.each(items,function(item){ %>"  +
+    "<tr> <td><%= item.thing %></td> <td><%= item.start_time %></td> <td><%= item.time_cost_min %></td> <td><%= item.category %></td> <td><%= item.project %></td> </tr>" +
+    "<% }) %>" +
+    "</table>");
+var dateStr = moment(date).format('YYYY-MM-DD');
+$.get('tms/clock_items/?date=' + dateStr, function(data) {
+    $("#placeholder").html(
+        clockItemsTemplate({items: data, date: dateStr})
+    );
+});
+#+END_SRC
+
+* History API
+** 使用History API来实现JQuery下的页面历史状态记录 <2017-08-09 三 17:59>
+像AngularJS和React这样的的框架，自带的前端路由功能可以在不重载页面的情况下
+记录页面访问历史。而使用JQuery的话，我们也可以使用History API实现Angular和
+React类似的前端路由功能。
+#+BEGIN_SRC js
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    // Modify url
+    // window.location.hash = e.target.hash;
+    history.pushState({}, "", e.target.hash);
+    alert('Push: ' + e.target.hash);
+    gotoTabByUrl();
+});
+#+END_SRC
+
+- [[https://segmentfault.com/a/1190000002447556][HTML5 history API，创造更好的浏览体验 - 庭院茶 - SegmentFault]]

@@ -1,0 +1,42 @@
+#+TITLE: Visual Studio Code
+#+DATE: 2016-09-06
+
+* 前言
+今天下午听贴吧同学的一个React Native的分享，下面有人问，为啥要用TypeScript，
+分享着说TypeScript是一种强类型语言。正好最近我在研究一个试用Typescript和D3
+来做数据可视化的工具，这激起了我学习TypeScript的兴趣。我在网上搜一下，读了
+[[http://www.tuicool.com/articles/J36zi23][用typescript写react和node是怎样的一种体验]] 这篇文章，此文力推TypeScript，并
+力推其配套的开发工具 ~Visual Studio Code~ 。这 ~Visual Studio Code~ 我很早
+就装过，当时感觉不太成熟，现在看起来是到了重新拾起的时机了。
+
+* 资料收集
+** 官方链接
+- [[https://github.com/Microsoft/vscode]]
+- [[https://code.visualstudio.com/]] （官网）
+- [[https://marketplace.visualstudio.com/]] （扩展中心）
+- [[https://code.visualstudio.com/docs/]] （帮助文档）
+  
+** 讨论
+- [[https://www.zhihu.com/question/29984607][如何评价 Visual Studio Code？ - 知乎]]
+
+* 设置：settings.json
+** 隐藏文件
+例如，我们使用python，不想在vscode中看到.pyc文件，我们可以打开设置文件
+settings.json（Mac下的快捷键是Command-,），然后加上如下设置：
+#+BEGIN_SRC js
+    "files.exclude": {
+        "**/*.pyc": true
+    }
+#+END_SRC
+
+然后保存setting.json文件，这个设置会立刻生效，.pyc文件立刻就不见鸟。
+
+* 插件
+** vscodevim
+- [[https://github.com/VSCodeVim/Vim]]
+- [[https://marketplace.visualstudio.com/itemsitemName%3Dvscodevim.vim][https://marketplace.visualstudio.com/itemsitemName=vscodevim.vim]]
+
+- 试用评价：很不好用。
+- (2016-09-08 12:28:07) 更新了版本，发现支持Ctrl-d了和Shift-v了，顺手了些。
+  然后将Esc用kj映射，Vim手感又回来了一些。Good！
+* 代码Snippets

@@ -1,0 +1,49 @@
+#+TITLE: Go 语言
+#+DATE: 2014-03-03
+#+KEYWORDS: Go 语言
+
+* 前言
+我用 C++用得也有点烦了，所以来学习一下 Go 语言。
+
+
+** 文章收集
++ [[http://www.csdn.net/article/2012-07-05/2807113-less-is-exponentially-more][Go 语言之父谈 Go：大道至简]]
++ [[http://www.zhihu.com/question/21409296][为什么要使用 Go 语言，Go 语言的优势在哪里？]]
+
+* 安装环境以及写 Hello world
+我在 Go 官网上下载了 [[https://code.google.com/p/go/downloads/listq%3DOpSys-OSX%2BType-Installer][Mac OS X package installer]] 来进行安装，安装包 52M，安装完后要 200 多 M，还是挺重的。
+
+安装程序会把文件放到/usr/local/go 下面，所以需要在设置一下 PATH：
+#+begin_src sh
+export PATH=/usr/local/go/bin:$PATH 
+#+end_src
+
+然后，我们发现 Go 提供了 3 个工具，它们的作用如下：
+| 名称  | 功能                                                      | 用法                           |
+|-------+-----------------------------------------------------------+--------------------------------|
+| go    | 编译运行 Go 源码。Go is a tool for managing Go source code. | go run hello.go                |
+| godoc | 查看 package 文档，搭建简易 doc 服务器（cool）                | godoc fmt 与 godoc -http=:8088 |
+| gofmt | 代码格式化                                                | gofmt -w hello.go              |
+
+我们写一个 Hello world 程序：
+#+begin_example
+package main                                                                                           
+                                                                                                       
+import "fmt"                                                                                           
+                                                                                                       
+func main() {                                                                                          
+    fmt.Printf("Hello, world\n")                                                                       
+}        
+#+end_example
+
+然后执行：
+#+begin_src sh
+go run hello.go
+#+end_src
+
+返回结果： *Hello, world*
+
+* 学习回顾
+** 会写 Hello world 了 <2014-03-03 一>
+今天心血来潮学了一把 Go 语言，完成第一个 Go 程序。但我近期不能花很多精力在这上面了，
+先暂停学习，以后我与 Go 如何发展只能看缘分了。

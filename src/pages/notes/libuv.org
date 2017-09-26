@@ -1,0 +1,93 @@
+#+TITLE: Libuv 跨平台异步 IO 库
+#+DATE: 2015-02-04
+#+KEYWORDS: 网络编程
+
+* 前言
+实现一个 RPC 框架需要用到 epoll 这个多路复用 IO 机制，而 epoll 是 Linux 专用
+的，为了方便跨平台，需要找一个支持跨平台的事件库。一次看了过 Libevent，Libev，
+Boost::ASIO，Libuv，发现 Libuv 最吸引人。
+
+下面是官方宣称 Libuv 拥有的特性：
+- Full-featured event loop backed by epoll, kqueue, IOCP, event ports.
+- Asynchronous TCP and UDP sockets
+- Asynchronous DNS resolution
+- Asynchronous file and file system operations
+- File system events
+- ANSI escape code controlled TTY
+- IPC with socket sharing, using Unix domain sockets or named pipes (Windows)
+- Child processes
+- Thread pool
+- Signal handling
+- High resolution clock
+- Threading and synchronization primitives
+
+* 阅读 An Introduction to libuv
+** 总览
+本书介绍了 Libuv 的用法，给出可以仿照的例程，如果我要用它的话，得要常翻着本书。
+
+本书先讲了 Libuv 的基本用法，包括如何启动 loop，如何处理错误，以及各种
+watchers。然后分章节依次介绍了 Libuv 是如何在文件系统，TCP/UDP，进程控制，多
+线程这几个方面为使用者提供编程支持的，然后介绍了 Libuv 的几个高级用法，最后介
+绍了 Libuv 提供的几个 Utilities，例如定时器，时间循环的引用计数等等。
+
+** Asynchronous and non-blocking style（啥叫异步，啥叫非阻塞？）<2015-02-21 六>
+异步就是在某个时间点发出请求，在此后的另外一个时间点接收请求的结果。
+#+BEGIN_QUOTE
+It is *asynchronous* because the application expressed interest at one
+point, then used the data at another point (in time and space). It is *non-
+blocking* because the application process was free to do other tasks.
+#+END_QUOTE
+
+进一步思考：异步指的是一种工作模式，发起请求和接收请求的结果这两个过程可以
+发生在不同的时间序列，异步框架可以让用户方便地组织这两个过程。而阻塞指的是
+某函数调用的特点，即该函数会执行相当长的一段时间，而调用者的线程会因为该函
+数的调用而阻塞住。
+
+** 实现 tcp server
+实现要点：
+1. 首先，要有 server 和 loop。server 绑定到某个 ip:port 上，并挂在某个 loop
+   上
+2. 然后，执行 uv_listen，挂载 on_new_connection 回调函数。然后将 loop 运行起
+   来
+3. 在新的连接到来时，构造名为 client 的 uv_stream_t，供 tcp 通信的双方读写数
+   据。然后执行 uv_accept，最后执行 uv_read_start，开始通信。uv_read_start
+   会挂载两个回调函数，一个用来 *分配内存* ，一个用来做读取到数据时的 *请求
+   处理* 。
+
+* 问题记录
+** 实现回调函数时，参数类型需要和 libuv 的回调原型完全匹配 <2015-02-22 日>
+即使是 size_t 和 unsigned int 也不能换用，否则编译器会报找不到匹配的函数。
+
+例如， 我们想使用 libuv 的 uv_read_start 函数，原型如下：
+#+BEGIN_SRC cpp
+UV_EXTERN int uv_read_start(uv_stream_t*,
+                            uv_alloc_cb alloc_cb,
+                            uv_read_cb read_cb);
+#+END_SRC
+
+其回调函数 alloc_cb 的原型如下：
+#+BEGIN_SRC cpp
+typedef void (*uv_alloc_cb)(uv_handle_t* handle,
+                            size_t suggested_size,
+                            uv_buf_t* buf);
+#+END_SRC
+
+如果我们错误地实现为：
+#+BEGIN_SRC cpp
+void on_alloc(uv_handle_t* handle, unsigned int suggested_size, uv_buf_t* buf) {
+  *buf = uv_buf_init((char*)malloc(suggested_size), (unsigned int)suggested_size);
+}
+#+END_SRC
+
+我们的实现和回调函数的原型只在某个参数的类型上有细微的差别（size_t 和
+unsigned int），但是这个差别却让代码无法编译，报错如下：
+#+BEGIN_SRC cpp
+./zrpc/main.cpp:44:5: No matching function for call to 'uv_read_start'
+#+END_SRC
+
+编译器的这个错误提示很隐晦，让我们摸不着头脑。但毕竟我们是以回调的风格来使
+用 libuv，编译器也不好做人。我们不能轻易责备编译器，我们应该事后总结好编程经
+验。
+
+* 安装和使用
+** 

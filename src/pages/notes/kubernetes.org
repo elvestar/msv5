@@ -1,0 +1,47 @@
+#+TITLE: Kubernetes: Production-Grade Container Orchestration
+#+DATE: 2017-08-28 23:19:32
+
+
+* 资料收集
+- [[https://kubernetes.io/][Kubernetes - Production-Grade Container Orchestration]]
+
+- [[https://research.google.com/pubs/pub44843.html][Borg, Omega, and Kubernetes]]
+
+* Kubernetes Concepts
+- [[https://kubernetes.io/docs/concepts/][Concepts - Kubernetes]]
+
+** 节点间通信 <2017-08-29 二 11:11>
+- [[https://kubernetes.io/docs/concepts/architecture/master-node-communication/][Master-Node communication - Kubernetes]]
+
+*** Cluster -> Master
+从Cluster到Master的通信全部走apiserver（apiserver是K8s唯一一个对外暴露远程
+服务的组件）。
+     
+在一个典型的K8s部署中，会配置一个监听HTTPS端口（443）的apiserver，并附带几
+种形式的鉴权。
+
+而Master内部的各个组件是通过无安全保证的端口来访问apiserver，这些端口暴露在
+本机的localhost网卡interface上，这些组件都位于同一台机器。以后这些组件将逐
+步迁移到带验证和授权的安全端口上面。
+
+*** Master -> Cluster
+从Master（apiserver）到Cluster有两种主要的通信通路。第一种通路是从apiserver
+到到kubelet进程（kubelet进程运行在集群中的每个节点上面），第二种通路是从
+apiserver到任意node，pod或者是service，通过apiserver的proxy functionality。
+
+从apiserver到kubelet的连接的终点是kubelet的HTTPS端口。默认情况，apiserver不
+会检查kubelet的服务证书，这会使连接有遭受中间人攻击的风险，也使得它在公网或
+不受信任的网络中存在安全隐患。K8s提供了 ~--kubelet-certificate-authority~
+这个flag，开启后就会检查kubelet的服务证书，这样提高了连接的安全性。
+
+从apiserver到node/pod/service的连接默认是用普通的HTTP连接，这种连接既未授权，
+又未加密。虽然可以运行在HTTPS端口上，但是在公网或不受信任的网络中仍然是不安
+全的。
+
+* Kubernetes Design Docs
+
+** Kubernetes Design and Architecture
+- [[https://research.google.com/pubs/pub44843.html][Borg, Omega, and Kubernetes]]
+
+** 
+- [[https://github.com/kubernetes/community/blob/master/contributors/design-proposals/monitoring_architecture.md][Kubernetes monitoring architecture at master · kubernetes/community]]

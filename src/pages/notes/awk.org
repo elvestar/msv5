@@ -1,0 +1,16 @@
+#+TITLE: Awk
+#+DATE: 2014-04-15
+
+* Awk 是什么？
+下面的定义来自于1979年随同Unix v7一起发布的Awk作者写的Awk说明文档。
+#+BEGIN_QUOTE
+Awk is a programming language designed to make many common information
+retrieval and text manipulation tasks easy to state and to perform.
+
+Awk是一种被设计出来使 *通用信息检索* 和 *文本操纵* 的任务更加容易被陈
+述和执行的 *编程语言* 。
+#+END_QUOTE
+* 统计总和与平均值
+#+BEGIN_SRC sh
+grep "succeed to update node status." log/master.INFO | awk '{ print $17}' | awk -F ',' '{sum+=$1;count+=1} END{print "SUM:"sum"\nAVG:"sum/count}'
+#+END_SRC

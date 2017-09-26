@@ -1,0 +1,49 @@
+#+TITLE: Latex
+#+DATE: 2014-04-07
+#+KEYWORDS: Unix 工具
+
+* 资料搜集
++ [[http://cs2.swfu.edu.cn/~wx672/lecture_notes/linux/latex/latex_tutorial.html][Emacs + LaTeX 快速上手]]
+* MacTex
+在主页：http://tug.org/mactex/ 下载，安装后大小为 4.33G，这个有点太大了。
+* 中文
+* 问题记录
+** 安装好 MacTex 后，无法找到 latex
+显示结果为：
+#+BEGIN_SRC sh
+bin/sh: latex: command not found
+#+END_SRC
+
+我搜索了一下，找到了答案：  [[http://my.oschina.net/rockbaby/blog/171296][mactex 配置 emacs 和 auctex]] 。原来是安装好 MacTex 后，没
+有设置 PATH，导致 Terminal 无法使用 latex 等 binary。于是修改了~/.zshrc 的 PATH 变量为：
+#+BEGIN_SRC sh
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/texbin"
+#+END_SRC
+然后执行 *source ~/.zshrc* ，于是 latex 等一系列 binary 都可用了。
+** 通过 Emacs.app 启动 Emacs 无法找到 latex
+通过设置 PATH，解决了终端中的 Emacs 调用 latex 的问题，但是通过 GUI 也就是 Emacs.app 的方
+式来编写 LaTex 仍然提示找不到 latex。我修改了下设置，重启后无效！
+
+[[../static/imgs/latex/1.png]]
+
+我搜索了一下，发现解法： [[http://blog.csdn.net/pfanaya/article/details/7669211][Emacs 修改 exec-path]] 。于是我在我的~/.emacs.d/init.el 中
+设置了 exec-path。
+#+BEGIN_SRC emacs-lisp
+(setq exec-path (append exec-path '("/usr/texbin")))
+#+END_SRC
+
+但是我发现， *问题仍然没有解决！*
+
+看来，我只能现在按时用临时解法：
+#+BEGIN_EXAMPLE
+在终端中通过 /Applications/Emacs.app/Contents/MacOS/Emacs 来启动 Emacs.app。
+#+END_EXAMPLE
+
+* 回顾
+** 构建 Emacs + LaTex 的写作环境遇到不少坑 <2014-04-07 一>
+折腾了许久，还是无法在 Emacs.app 中写 Latex。我不想耽搁太久，所以我先直接在终端里用
+Emacs 写 Latex，同时开另外一个终端专门用来通过 xelatex 将 LaTex 编译成 PDF。
+** 无限期中止学习 Latex <2014-10-03 Fri>
+在这半年的实践中，我发现用 Org/Markdown/RST 再辅以转化工具，已经能够生成让我满意的
+文档了，Latex 不是必需品。尤其是 Org + Emacs 这个工具组合，让我感觉无比顺手。于是我
+决定不搞 Latex 了，专心于使用现有的工具。

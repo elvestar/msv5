@@ -1,0 +1,254 @@
+#+TITLE: React：一个构建用户界面的框架
+#+DATE: 2015-12-30
+
+* 资料收集
+- [[https://github.com/facebook/react/wiki/Complementary-Tools]]
+- https://github.com/facebook/react/wiki/Examples
+- https://react.rocks/ （各种炫酷的例子）
+
+** React UI
+- [[http://www.material-ui.com/][React Material-UI]]
+- [[http://ant.design/][React Ant Design]]
+- [[http://reapp.io/][reapp]]
+- [[https://github.com/ant-design/ant-design/issues/477][Ant Design Users]]
+
+** 文章
+- [[https://facebook.github.io/react/blog/2013/06/05/why-react.html][Why did we build React?]]
+- [[https://blog.risingstack.com/from-angularjs-to-react-the-isomorphic-way/][From AngularJS to React: The Isomorphic Way]]
+- [[https://github.com/my-fe/wiki/issues/1][百度母婴技术团队—基于 Reactjs 实现 webapp]]
+- [[https://medium.freecodecamp.com/angular-2-versus-react-there-will-be-blood-66595faafd51][Angular 2 versus React: There Will Be Blood]]
+- [[https://github.com/lcxfs1991/blog/issues/8][React移动web极致优化 ]]
+- [[https://segmentfault.com/a/1190000004660725][玩物圈前端技术栈总结（React+Redux）]]
+- [[http://react-china.org/t/react-redux/9072/4][分享一个 react + redux 完整的项目，同时写一下个人感悟 - 作品 - React 中文]]
+- [[https://helloruli.github.io/reactjs/2016/12/21/reactjs-001.html][reactjs-sample]]
+- [[https://vuejs.org/v2/guide/comparison.html][Comparison with Other Frameworks — Vue.js]]
+
+** 工具
+- https://github.com/reactjs/react-python
+
+** 库
+- https://github.com/rackt/react-router
+- https://facebook.github.io/fixed-data-table/ （针对大数据集的可排序、可过
+  滤的数据表）
+
+* 安装
+先安装 react 和 babel：
+#+BEGIN_SRC sh
+bower install react
+bower install babel
+#+END_SRC
+
+再引入下面三个 js 文件（注意：不能缺少 babel/browser.min.js，否则不认识
+~text/babel~ 标签，无法将 JSX 转化为 JS）
+#+BEGIN_SRC html
+    <script src="/static/bower_components/react/react.min.js"></script>
+    <script src="/static/bower_components/react/react-dom.min.js"></script>
+    <script src="/static/bower_components/babel/browser.min.js"></script>
+#+END_SRC
+
+* React SSG
+- [[http://jxnblk.com/writing/posts/static-site-generation-with-react-and-webpack/][Static Site Generation with React and Webpack]]
+- [[http://braddenver.com/blog/2015/react-static-site.html][React Static Site]]
+
+* React.Component
+- [[https://facebook.github.io/react/docs/react-component.html][React.Component - React]]
+  
+** 如何在React Component中使用Bootstrap的JS库？ <2017-02-12 日 12:31>
+想在React中使用Bootstrap的scrollspy功能，安装好jQuery和Bootstrap，并在文件
+头部加上依赖，一运行，报出这样的错误：
+#+BEGIN_SRC sh
+Uncaught Error: Bootstrap's JavaScript requires jQuery
+#+END_SRC
+
+去网上找找解法，找到这篇文章：
+- [[http://stackoverflow.com/questions/37651015/webpack-using-bootstrap-jquery-is-not-defined][Webpack using bootstrap - jquery is not defined - Stack Overflow]]
+
+要点如下：
+
+1. webpack.config.js中的plugins里加上ProvidePlugin。
+#+BEGIN_SRC js
+    config.plugin('provide', webpack.ProvidePlugin, [{
+      $: "jquery",
+      jQuery: "jquery"
+    }])
+#+END_SRC
+
+2. 在组件所在的文件头部依赖jquery和bootstrap.js。
+#+BEGIN_SRC js
+import $ from 'jquery'
+import '../node_modules/bootstrap/dist/js/bootstrap.min'
+#+END_SRC
+
+3. 在组件的componentDidMount()方法里调用boostrap.js提供的方法。
+#+BEGIN_SRC sh
+export default class Index extends React.Component {
+  componentDidMount() {
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+    $('body').scrollspy({ target: '#toc' })
+  }
+  ...
+}
+#+END_SRC   
+
+* props and state
+** 通过props传递来实现子Component的更新 <2017-01-21 六 16:50>
+之前我认为，props用来管理静态不变的数据，而所有动态更新的数据是通过state来
+维护。所以，我在父组件中通过props将数据传递到子组件，并保存在子组件的state
+里面，当我改变父组件的props时，我期望看到子组件随之而更新，但是我发现它们并
+没有更新。
+
+这让我困惑，我多方查阅文档，最后在官方文档里看到这句话 *In the typical
+React dataflow, props are the only way that parent components interact with
+their children* 。这句话说明父组件和子组件的通信靠的是props而不是state，
+state是子组件自持的。于是我修改代码， *在子组件中直接使用父组件传递过来的
+props*  ，然后发现子组件可以随着父组件的props的改变而自动更新了。
+
+参考：
+1. [[https://facebook.github.io/react/docs/refs-and-the-dom.html][Refs and the DOM - React]]
+   
+** Uncaught TypeError: Can't add property defaultDate, object is not extensible <2017-01-21 六 17:23>
+原因：无法在组件内部修改props，它是immutable的。
+
+参考：
+1. [[http://stackoverflow.com/questions/26089532/why-cant-i-update-props-in-react-js][javascript - Why can't I update props in react.js? - Stack Overflow]]
+
+* Webpack
+
+* react-router
+** Uncaught TypeError: Cannot read property 'getCurrentLocation' of undefined <2017-01-15 日 13:44>
+问题原因：<Router>中未设置history。
+
+参考： 
+1. [[http://stackoverflow.com/questions/40872481/react-router-uncaught-typeerror-cannot-read-property-getcurrentlocation-of][reactjs - React-Router - Uncaught TypeError: Cannot read property 'getCurrentLocation' of undefined - Stack Overflow]]
+2. [[https://github.com/ReactTraining/react-router/blob/v3.0.0/docs/guides/Histories.md][react-router/Histories.md at v3.0.0 · ReactTraining/react-router]]
+
+** 在react-router中使用anchor <2017-09-18 一 14:07>
+使用了react-router之后，发现正常的网页anchor功能失灵了，具体地说，就是点击
+一个带有锚点的链接（如xxx.xxx.xxx/xxx#2017）后，页面不会自动滚动到页面上锚
+点指定的区域。
+
+网上搜索了一下，发现有类似的问题：
+- [[https://stackoverflow.com/questions/40280369/use-anchors-with-react-router][javascript - Use anchors with react-router - Stack Overflow]]
+- [[https://stackoverflow.com/questions/28893855/how-to-use-normal-anchor-links-with-react-router][javascript - How to use normal anchor links with react-router - Stack Overflow]]
+  
+所以猜测是由于react-router和anchor冲突导致的，并且按照网上的解法在Router的
+onUpdate方法上加入了锚点定位的代码，发现问题解决了。
+
+#+BEGIN_SRC javascript
+function onUpdate () {
+  if (onRouteUpdate) {
+    onRouteUpdate(currentLocation)
+  }
+  // 判断链接内是否有锚点，如果有，则跳转到锚点，覆盖react-router的行为
+  const { hash } = window.location;
+  if (hash !== '') {
+    // Push onto callback queue so it runs after the DOM is updated,
+    // this is required when navigating from a different page so that
+    // the element is rendered on the page before trying to getElementById.
+    setTimeout(() => {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) element.scrollIntoView();
+    }, 0);
+  }
+}
+#+END_SRC
+
+* 工具
+** 日期时间的格式化 <2017-01-19 四 00:19>
+建议使用Moment.js。
+#+BEGIN_SRC js
+import moment from 'moment'
+
+render() {
+  return (
+    <span>
+      {moment(item.start_time).format('hh:mm')}
+    </span>
+  )
+}
+#+END_SRC
+
+
+参考：
+- [[http://stackoverflow.com/questions/25275696/javascript-format-date-time][Javascript format date / time - Stack Overflow]]
+- [[http://momentjs.com/][Moment.js | Home]]
+
+
+* 库
+** react-lazyload（延迟加载） <2017-09-18 一 15:15>
+使用react-lazyload，用法很简单，就是在组件外面包一层<LazyLoad>。
+- [[https://github.com/jasonslyvia/react-lazyload][jasonslyvia/react-lazyload: Lazy load your component, image or anything matters the performance.]]
+
+** 动画
+- [[https://github.com/reactjs/react-transition-group][reactjs/react-transition-group: An easy way to perform animations when a React component enters or leaves the DOM]]
+
+* 静态化
+** 使用static-site-generator-webpack-plugin报错：Error: TypeError: Cannot read property 'jquery' of undefined <2017-02-13 一 01:52>
+原因：这次build是在在服务器环境下运行，而不是在浏览器环境下运行的，一些东西
+（例如window变量）在服务器环境下是未定义的。
+
+解决方法：
+1. 在componentDidMount()里使用jQuery和Bootstraop.js等只能再浏览器下运行的JS
+   库。
+2. 使用require而不是import，后者只能在代码首层使用，不能在函数里（如
+   componentDidMount()）使用。
+   
+#+BEGIN_SRC javascript
+import $ from 'jquery'
+
+export default class Index extends React.Component {
+  componentDidMount() {
+    require('../node_modules/bootstrap/dist/js/bootstrap.min')
+    $('#toc').affix({
+      offset: {
+        top: $('#toc').offset().top,
+        bottom: ($('#footer').outerHeight(true))
+      }
+    });
+    $('body').scrollspy({ target: '#toc' })
+  }
+  ...
+}
+#+END_SRC
+
+参考：
+1. [[https://github.com/gatsbyjs/gatsby/issues/309][Window is not defiend · Issue #309 · gatsbyjs/gatsby]]
+2. [[https://github.com/webpack/react-starter/issues/37]["window is not defined" error when starting production · Issue #37 · webpack/react-starter]]
+
+* 问题记录
+** Uncaught (in promise) TypeError: Cannot read property 'setState' of undefined(…) <2017-01-18 三 15:09>
+类似的错误还有 ~Uncaught TypeError: this.setState is not a function~ 。
+
+代码如下：
+#+BEGIN_SRC js
+componentDidMount() {
+  fetch('/tms/api/v1/clock_items/').then(function (response) {
+      return response.json();
+  }).then(function (responseJson) {
+      this.setState({clockItems: responseJson.results})
+  })
+}
+#+END_SRC
+
+解决方法：在外部使用一个变量来保存this引用。改进后的代码如下（JQuery版）：
+#+BEGIN_SRC js
+componentDidMount() {
+  var that = this
+  $.get('/tms/api/v1/clock_items/', function(data) {
+      that.setState({clockItems: data.results})
+  })
+}
+#+END_SRC
+
+参考：
+1. [[http://stackoverflow.com/questions/27175184/setstate-in-get][javascript - setState in $.get - Stack Overflow]]
+
+* 回顾
+** React 的社区让我震惊 <2016-02-20 六>
+以前在使用 AngularJS 时，感觉第三方组件很少，且完成度大都不高。而今天在了解
+React 时，搜了一下 React UI，搜到了一大堆高能玩意儿，如 Material UI，Ant
+Design，reapp 等，真是琳琅满目，让我头晕目眩。其组件之丰富和炫酷，其完成度之高，
+让我震惊。这是一股强大的力量。

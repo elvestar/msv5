@@ -1,0 +1,114 @@
+#+TITLE: Python libraries
+#+DATE: 2016-10-03
+
+* PIL(Pillow)
+** 处理EXIF
+参考：
+- [[http://stackoverflow.com/questions/19804768/interpreting-gps-info-of-exif-data-from-photo-in-python][Interpreting GPS info of exif data from photo in python - Stack Overflow]]
+- [[http://www.exiv2.org/tags.html][Exiv2 - Image metadata library and tools]]
+
+** 关于GPS坐标：差之毫厘，谬之千里 <2016-10-24 一 01:35>
+最近使用PIL来从iPhone拍摄的照片中抽取坐标信息，并在百度地图描点展示地理位置
+流和时间流。我使用PIL的Image._getexif()来从照片中获得EXIF信息，并从34853字段
+中取得GPS信息。当我通过百度地图的API在百度地图上绘制坐标点时，我发现绘制出
+来的坐标和实际坐标有不小的偏移。我多方查阅，才知道原来世上有GPS坐标、火星坐
+标、百度坐标这么多种坐标，于是我通过百度的API进行坐标纠偏，之后我发现位置还
+是有偏移，而同一张照片在Mac的 "照片" APP的高德地图上显示的位置却十分准确，
+这让我很纠结，我通过各种途径也没找到解法。
+
+今天，我决定专心将这个问题解决，我仔细查看从EXIF的34853字段里获得的GPS信息，
+发现我在计算经纬度的时候，只取了度和分，而没有取到秒。我之所以没取，是因为
+我认为秒这个单位很小，只有度的1/3600，舍掉它无关紧要。例如下面的的三元组：
+#+BEGIN_SRC sh
+((116, 1), (20, 1), (4785, 100))
+#+END_SRC
+
+这个三元素是某张照片的经度信息，单位分别是(度, 分, 秒)， *我的计算方法认为
+(4785, 100)这个秒值是无关紧要的，可以直接舍弃* ，所以我得到了的经度值是
+116.333333。
+
+而当我计算一下这个秒值对应的度时，我发现这个值并非无关紧要，而是 *很急很关
+键* ，它等于0.01329度，加上它之后，算出来的经度值是116.346625。虽然就差0.01
+度，但是体现在地图上，却是相当巨大的一段距离，用脚可能要走一小时，而且还要
+经过百度坐标纠偏，这样更是歪到不知哪里去了。
+
+于是我修改了算法，将这个丢失的秒值加上，然后为照片重新生成坐标信息，然后成
+功地在地图上的正确位置展示了照片。当看到最终效果时，我的眼里洋溢着令人信服
+的泪水。。
+
+#+CAPTION: ./imgs/python-libs/20161024015931.jpg
+[[../static/imgs/python-libs/20161024015931.jpg]]
+  
+* BeautifulSoap
+** 如何复制节点（或称tag）？ <2016-10-08 六 17:51>
+BS的append/insert操作是节点的引用，这就意味操作完毕，这个节点原来所属的文档
+结构可能会随之被破坏，在很多场景里我们需要复制这个节点，而不是直接操作它的
+引用。BS并未提供节点复制的方法，但是我们有其他的解法，那就是先将将节点转化
+为str，然后用这个str来通过BS构造新的节点，这两个节点是完全一样，所以说也就
+实现了节点复制。代码如下：
+
+#+BEGIN_SRC python
+event_tag_names = ['h2', 'h2', 'h3', 'h4', 'h5', 'h6']
+next_sibling = event_tag.next_sibling
+while next_sibling is not None and next_sibling.name not in event_tag_names:
+    copied_element = BeautifulSoup(str(next_sibling)).body.contents[0]
+    event_html_root.append(copied_element)
+    next_sibling = next_sibling.next_sibling
+#+END_SRC
+
+补充：此法复制生成的节点带有<html><body>外标签，通过.body.contents[0]来获取
+节点本身。
+
+参考：[[http://stackoverflow.com/questions/23057631/clone-element-with-beautifulsoup][python - clone element with beautifulsoup - Stack Overflow]]
+
+** 用HTML内容构造一个节点append到文档树上 <2016-10-12 三 23:31>
+之前我做了一个将org文件转化为HTML的库（起名叫pyorg，目前还未开源），最近发
+现它转化 ~BEGIN_HTML~ 块级元素时会出问题，具体表现为将一个org文件构造为一棵
+文档树时，假如其中有~BEGIN_HTML~ 块级元素，则转化后的文档树部分节点无法被
+BS 的 find_all() 函数搜索到。
+
+这让我感到奇怪，网上搜索，查看文档也没有人遇到类似问题，最后我加了几行print
+语句，将 ~BEGIN_HTML~ 块级元素转化后的节点的类型打印出来后，真相水落石出。
+
+原始的org文本是：
+#+BEGIN_SRC org
+#+BEGIN_HTML
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="http://music.163.com/outchain/player?type=2&id=615891&auto=0&height=66"></iframe>
+#+END_HTML
+#+END_SRC
+
+构造节点的Python代码如下：
+#+BEGIN_SRC python
+def parse_begin_xxx(self, m, root):
+     symbol = m.group(1)
+     if symbol in ['html', 'HTML']:
+         new_tag = BeautifulSoup(m.group(2), 'html.parser')
+         print(type(new_tag))
+         print(new_tag)
+#+END_SRC
+
+打印出的内容是：
+#+BEGIN_SRC sh
+<class 'bs4.BeautifulSoup'>
+<iframe border="0" frameborder="no" height="86" marginheight="0" marginwidth="0" src="http://music.163.com/outchain/player?type=2&amp;id=615891&amp;auto=0&amp;height=66" width="330"></iframe>
+#+END_SRC
+
+原来，通过 ~BeautifulSoup(html_content, 'html.parser)~ 构造出来东西的类型不
+是节点（bs4.element.Tag），而是bs4.BeautifulSoup。将这个东西append到文档树
+后面，会导致BS直接凌乱。
+
+正确的Python代码如下：
+#+BEGIN_SRC python
+def parse_begin_xxx(self, m, root):
+    symbol = m.group(1)
+    if symbol in ['html', 'HTML']:
+        new_tag = BeautifulSoup(m.group(2), 'html.parser').contents[0]
+        print(type(new_tag))
+        print(new_tag)
+#+END_SRC
+
+正确的打印如下：
+#+BEGIN_SRC sh
+<class 'bs4.element.Tag'>
+<iframe border="0" frameborder="no" height="86" marginheight="0" marginwidth="0" src="http://music.163.com/outchain/player?type=2&amp;id=779844&amp;auto=0&amp;height=66" width="330"></iframe>
+#+END_SRC

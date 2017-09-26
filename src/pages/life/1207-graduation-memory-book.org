@@ -1,0 +1,110 @@
+#+TITLE: 毕业纪念册
+#+DATE: 2012-07-01
+
+今天是我从西电毕业的日子。这最后一学期，我一直在百度实习，一直到6月5日才赶
+回西安，和室友们度过了大学的最后一月。
+
+在这个月，我大部分时间都是宅在宿舍里、上网、看视频、喝果啤，偶尔学学技术，
+当然最多的还是玩英雄联盟。
+
+我从北京回到西安的第一天，室友们就勾引我玩英雄联盟。我玩了几局之后立刻就上
+瘾了，天天和室友们开黑。不开黑的时候，我会自己单排体验英雄，每新玩一个英雄，
+我都会记笔记，积累英雄的加点出装连招的经验。
+
+这段时光很快乐很充实，很幸运能在大学的末尾玩到这样一款游戏，这将成为我们409
+的共同记忆。
+
+可惜快乐的时光里总会夹杂着阴霾，那就是毕业设计，由于我之前被盲审抽中，所以
+总感觉被额外照顾。来回整改好几次，终于在6月23日被盖上合格的章子，一块石头终
+于落地，最后一丝阴霾也除去了。
+
+可是这也意味着剩下的日子也不多了，随着离校日的临近，我的内心也感到了忧郁。
+
+6月24日，我们带上学位服，到新校区去怀旧拍照。我们在新校区学习生活了三年，在
+这里留下了无数记忆。我们沿着以前的足迹，重游了竹园、409宿舍、食堂、报亭、中
+央广场、综合楼、图书馆、A楼B楼一直到G楼，然后在学校门口的大石头上拍了合影。
+
+最后几天很忙碌，要忙着拍毕业合影、聚餐、体检、填档案、帮同学搬家、领毕业证
+和学位证。晚上的时候，我经常请大家吃西瓜。
+
+终于，到7月1日，我收拾好了东西，和室友们告别，离开了西安。
+
+#+CAPTION: 校园网断网 - 用户已失效
+[[../static/imgs/1207-graduation-memory-book/last_day.jpg]]
+
+* 大一
+<无照片>
+
+* 大二
+#+CAPTION: 宿舍的光与影
+[[../static/imgs/1207-graduation-memory-book/100122A005.jpg]]
+#+CAPTION: 期末考试最后一门考完后的宿舍楼下
+[[../static/imgs/1207-graduation-memory-book/100122A008.jpg]]
+#+CAPTION: 寒假期间的图书馆，空无一人
+[[../static/imgs/1207-graduation-memory-book/100123A014.jpg]]
+#+CAPTION: 寒假期间的校园
+[[../static/imgs/1207-graduation-memory-book/100123A016.jpg]]
+
+#+CAPTION: 大二下的某节课堂
+[[../static/imgs/1207-graduation-memory-book/100310A001.jpg]]
+#+CAPTION: 宿舍的日常，我在床上看阿振玩电脑
+[[../static/imgs/1207-graduation-memory-book/100310A006.jpg]]
+#+CAPTION: 昏昏欲睡的课间
+[[../static/imgs/1207-graduation-memory-book/100323A002.jpg]]
+#+CAPTION: 四班祥峪森林公园春游
+[[../static/imgs/1207-graduation-memory-book/DSC04780.jpg]]
+#+CAPTION: 买的S639到货了，真让我兴奋
+[[../static/imgs/1207-graduation-memory-book/100402A011.jpg]]
+#+CAPTION: 迟来的雪
+[[../static/imgs/1207-graduation-memory-book/100414A021.jpg]]
+#+CAPTION: 体育课上的放风
+[[../static/imgs/1207-graduation-memory-book/100506A000.jpg]]
+#+CAPTION: 暑假期间在宿舍里远眺
+[[../static/imgs/1207-graduation-memory-book/100710A000.jpg]]
+
+* 大三
+#+CAPTION: 雾雨中的竹园宿舍楼
+[[../static/imgs/1207-graduation-memory-book/101024A001.jpg]]
+#+CAPTION: 去信远楼自习看算法导论时的校园风景
+[[../static/imgs/1207-graduation-memory-book/101025A002.jpg]]
+#+CAPTION: 409宿舍的暴行
+[[../static/imgs/1207-graduation-memory-book/101027A002.jpg]]
+#+CAPTION: 宿舍全体去西安市里看电影吃回民街羊肉泡馍
+[[../static/imgs/1207-graduation-memory-book/101211A003.jpg]]
+#+CAPTION: 雪与圣诞节
+[[../static/imgs/1207-graduation-memory-book/101224A015.jpg]]
+#+CAPTION: 雪后的阳光与操场
+[[../static/imgs/1207-graduation-memory-book/101225A001.jpg]]
+#+CAPTION: 元旦节冒着冰雪去图书馆上自习
+[[../static/imgs/1207-graduation-memory-book/110102A005.jpg]]
+
+#+CAPTION: 去老校区参加腾讯暑期实习招聘的笔试的路上遇到两只著名的狗
+[[../static/imgs/1207-graduation-memory-book/110426A000.jpg]]
+#+CAPTION: 大三下的最后一门考试
+[[../static/imgs/1207-graduation-memory-book/110705A001.jpg]]
+#+CAPTION: 搬家去老校区
+[[../static/imgs/1207-graduation-memory-book/110709A001.jpg]]
+#+CAPTION: 暑期实习时在腾讯大楼17层的远眺
+[[../static/imgs/1207-graduation-memory-book/110830A002.jpg]]
+
+* 大四
+#+CAPTION: 百度一面完成回学校时路过西安女子医院
+[[../static/imgs/1207-graduation-memory-book/110925A000.jpg]]
+
+#+CAPTION: 毕业前的最后一月整个宿舍天天开黑英雄联盟（撸啊撸）
+[[../static/imgs/1207-graduation-memory-book/IMG_20120607_165815.jpg]]
+#+CAPTION: 409宿舍集体去新校区怀旧拍照
+[[../static/imgs/1207-graduation-memory-book/IMG_20120624_091745.jpg]]
+#+CAPTION: 睡了三年的床铺，坐了三年的桌椅
+[[../static/imgs/1207-graduation-memory-book/IMG_20120624_101441.jpg]]
+#+CAPTION: 新校区图书馆前的合影（缺尧子）
+[[../static/imgs/1207-graduation-memory-book/DSC07496.jpg]]
+#+CAPTION: 新校区门口的八人合影
+[[../static/imgs/1207-graduation-memory-book/DSC07531.jpg]]
+#+CAPTION: 互换照片，贴在毕业证书上
+[[../static/imgs/1207-graduation-memory-book/IMG_20120701_105907.jpg]]
+#+CAPTION: 用了四年的钥匙链，工作以后还要继续用
+[[../static/imgs/1207-graduation-memory-book/IMG_20120701_111532.jpg]]
+#+CAPTION: 最后一眼看宿舍
+[[../static/imgs/1207-graduation-memory-book/IMG_20120701_171814.jpg]]
+

@@ -1,0 +1,12 @@
+#+TITLE: 正则表达式
+#+DATE: 2014-04-30
+
+* 匹配 URL
+#+BEGIN_EXAMPLE
+^https?://(?:.*:.*@)?(?P<HOST>[^/:]+)(:(?P<PORT>\\d+))?(?P<PATH>/.*)?$
+#+END_EXAMPLE
+
+说明：
+1. 本正则基于 Google 的 RE2 正则引擎。
+2. (?P<XXX> )的命名分组。
+3. (?: )是分组不匹配。

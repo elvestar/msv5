@@ -1,0 +1,161 @@
+#+TITLE: 入手佳明 Fenix 3 HR
+#+DATE: 2017-02-10
+
+从15年开始，我喜欢上了去奥森跑步。我跑步时使用了咕咚APP，这个APP记录了我每
+次跑步的时长、路线、配速等数据，这种数据对我相当有意义。我一直在寻求将我在
+咕咚APP的个人数据导出的方法，以做个人珍贵数据的备份和进一步分析，但是最后都
+无果。
+
+14年底，我的Mac升级成了Yosemite，我发现新出的 "照片" 很不错，能够在地图上标
+出iPhone拍摄的照片的拍摄地点。受此启发，我做了一个小应用，实现了将每次出游
+拍摄的照片标记到百度地图的功能。但是这个应用还存在两个不足之处：
+1. 使用单反拍摄的照片是不带GPS坐标信息的。
+2. 只能标记处零散的照片拍摄地点，无法绘制出整体出游路线。
+
+#+CAPTION: 在百度地图上标出出游时的照片
+#+ATTR_HTML: style="width: 450px; margin: 0 auto"
+[[../static/imgs/1702-garmin-fenix-3-hr/2.jpg]]
+   
+
+以上两点催生出了一个需求： *我需要一个能定时记录GPS数据，续航给力，支持跑步，
+数据开放的随身设备* 。自从16年国庆开始，我一直在寻找这种设备，我发现微软手
+环二代可以满足我的需求，但是当我了解到它的样子以及购买难度之后，我很快放弃
+了。后来我又看上了16年9月发布的Apple Watch二代，和上一代相比，它增加了独立
+的GPS模块，我甚至复习了一下它的发布会视频，但是最后我又放弃了它，因为它的续
+航只有一天，它能用来记录运动，但是肯定无法支持外出旅游时的高强度记录。
+
+最后，我在知乎上的 [[https://www.zhihu.com/question/26544212/answer/33238205][求各位推荐一款满 足以下功能的GPS运动手表或手环？ - 知乎]]
+这个回答上了解到了有佳明、松拓等厂商在做这种专业的GPS运动手表，这种设备看起
+来就是为迎合我这种需求而产生的。于是我进行了详细深入的了解，从Garmin
+Forerunner 15到Forerunner 220到Forerunner 235到Forerunner 735XT，胃口也是越
+来越大（很类似我13年入手Korg PA500的剧情），最后当我看到Garmin Fenix 3时，
+我被迷住了。这个Fenix 3拥有Forerunner全系列的所有低阶和高阶功能，还拥有
+Forerunner系列所没有气压计功能，续航也惊人，而且Fenix 3的外形很硬朗，像个真
+正的玩具。
+
+#+CAPTION: Garmin Fenix 3 HR 
+#+ATTR_HTML: style="width: 450px; margin: 0 auto"
+[[../static/imgs/1702-garmin-fenix-3-hr/1.jpg]]
+
+* 购买
+17年春节前后，我一直在关注着Garmin Fenix 3 HR，准备择机入手。期间还听到了
+Fenix 5发布的消息，我详细了解了一下，总结Fenix 5的主要改进点：
+1. 重量变轻。这个改进不错，因为Fenix 3 HR有点重。
+2. 腕式心率感应模块不像Fenix 3那样突出。
+3. Fenix 5X版本内置了全国地图。这颇有一点未来产品的味道。
+   
+Fenix 5的改进有是有，但是我认为还不够大，核心功能方面Fenix 3做得已经够好了。
+而且Fenix 5上市时间未定，初期价格也一定很贵（尤其是蓝宝石版本的Fenix 5X），
+所以我最后决定还是入手Fenix 3 HR。
+
+Fenix 3版本众多，有国行/港行/美行，有中文版/英文版，有蓝宝石版/普通版，有腕
+式心率版/不带腕式心率版，其中国行中文版本最贵，价格区间是4000元到5000元。最
+后我选择了价格相对较低的Fenix 3港行英文蓝宝石HR版，价格是2830元，在淘宝某买
+家购买，购买时间是2017年2月7日。
+
+#+CAPTION: 淘宝订单截图
+[[../static/imgs/1702-garmin-fenix-3-hr/20170207141655.jpg]]
+
+* 开箱
+三天后，也就是2月10日，我的Fenix 3到货了。上午我拿到快递，放到工位上，但是
+我没有立刻打开，我还有周报要写。等到下午周会开完，我才迫不及待地开箱。
+
+#+CAPTION: 开箱之前
+[[../static/imgs/1702-garmin-fenix-3-hr/IMG_7770.jpg]]
+
+Fenix 3的包装盒还是相当上档次的，打开包装盒手表呈现在我眼前，表的边框是黑色，
+金属质感强烈，并且有做旧的痕迹，表的背面是玻璃纤维，表的正面是蓝宝石玻璃，
+表带是黑色硅胶的，手感很好。
+
+#+CAPTION: 打开包装
+[[../static/imgs/1702-garmin-fenix-3-hr/DSC00264.jpg]]
+#+CAPTION: 充电
+[[../static/imgs/1702-garmin-fenix-3-hr/IMG_7775.jpg]]
+
+冲了已回电，我将手表戴在手上，发现手表真大，直径几乎覆盖了我的手腕，所以感
+觉它不适合一般女生佩戴。我调出了心率界面，发现上面说我的心跳是63。我以前从
+来不知道我的心率是多少。
+
+#+CAPTION: 心率功能
+[[../static/imgs/1702-garmin-fenix-3-hr/IMG_7776.jpg]]
+
+为了试验Fenix 3的GPS记录功能，我戴着它爬到了楼顶天台，然后选择开始跑步，从
+K3天台跑到了K2天台。完成后，我在Fenix 3上查看到了我跑步的运动轨迹，然后通过
+蓝牙同步数据，然后登录Garmin Connect，查看更详细的分析。
+
+#+CAPTION: 去天台跑了一圈看看轨迹
+[[../static/imgs/1702-garmin-fenix-3-hr/DSC00270.jpg]]
+
+今天是入手Fenix 3的第一天，我只做了简单的体验，目前感觉还是很新奇的。说给同
+事听，同事也觉得这个手表很炫酷。Fenix 3的功能很多，我会逐步探索它的功能。
+
+* 功能探索
+** Garmin Express 和 Connect IQ
+Garmin有一个类似于Apple App Store的东西，可以在上面下载各种应用程序，叫做
+Connect IQ。我先下载Mac版本的Garmin Express，再将Fenix 插入Mac，然后登录
+Garmin Express。
+
+在Gamin网站上找到一个很炫酷的GearMin表盘，将其下载后，在Express中发现了
+这个表盘。点击同步到Fenix 3上，然后就可以选择这个炫酷的表盘了。
+
+#+CAPTION: GearMin表盘
+[[../static/imgs/1702-garmin-fenix-3-hr/20170124005131.jpg]]
+#+CAPTION: 安装GearMin表盘
+[[../static/imgs/1702-garmin-fenix-3-hr/IMG_7779.jpg]]
+
+这个GearMin盘的显示内容相当丰富，所以加载速度也较慢，不过目前还能忍受。
+
+** 室外跑步
+入手Fenix 3的第二个周末（2月18日），我戴着它去奥森跑步。在这之前，我戴着它
+在公司健身房来进行室内跑步，感觉确实有点重，并且腕式心率计有点硌手。不过这
+次在室外跑步，反而觉得并不重，硌手现象也感觉减轻了不少。看来，我的手腕是逐
+渐适应了。另外，我现在是左右手腕轮流戴的，避免腕式心率计在手腕上留下痕迹。
+
+开始跑步时，我按一下START按钮，开始计时，跑完后，再按一下START按钮结束计时，
+然后保存本次跑步活动，手表和通过蓝牙将运动数据同步到手机上，然后上传到
+Garmin的数据中心里。我之前一直使用咕咚来做跑步的记录，现在可以完全用Garmin
+手表来替代了。
+#+CAPTION: 奥森跑步
+#+ATTR_HTML: style="width: 450px; margin: 0 auto"
+[[../static/imgs/1702-garmin-fenix-3-hr/IMG_7836.jpg]]
+
+** 登山
+2月26日，我爬了一下香山，顺便体验一下Fenix 3的登山功能。登山完毕，我通过手
+表能够清楚查看到本次登山路线，Fenix 3会定时记录GPS坐标、海拔、温度，频率应该
+是一秒一次，而这些数据可以很方便地导出。例如，本次登山我使用单反拍了一些照
+片，而这些照片时不带GPS坐标的，我利用这些导出的数据可以为我喜爱的照片标记
+GPS坐标。有一些摄影爱好者通过外挂GPS定位模块来实现地理坐标的标记，而我可以
+通过佩戴Fenix 3能达到同样的目的。
+
+#+CAPTION: 香炉峰，海拔572米
+[[../static/imgs/1702-garmin-fenix-3-hr/IMG_7896.jpg]]
+
+** 室内器械运动
+刚拿到Fenix 3时，我翻了几遍它支持的运动列表，但是没有找到室内健身器械相关的
+运动，我以为它不支持或者需要安装第三方应用。后来，我发现Fenix 3显示的运动列
+表仅仅是一个子集，在APP管理页面可以添加新的运动，而可选的运动是相当丰富的，
+包括了室内器械运动，Garmin把这类运动统称为Strengh类运动。我添加了两种新的运
+动，一个是在公司健身房进行的器械运动，一个是在家中进行的腹部运动。
+
+** 旅行
+4月份团队去厦门旅游。4月22日晚上，我独自一人沿着鹭江道走到筼筜湖，又走回了
+中山路的旅馆。我全程使用Fenix 3记录，它记录的路线和坐标很精确，途中我拍摄了
+一些夜景照片，通过导出的各秒的GPS坐标数据，我可以为这些夜景照片标记上地理位
+置。
+
+#+CAPTION: 夜晚徒步体验厦门
+#+ATTR_HTML: style="width: 450px; margin: 0 auto"
+[[../static/imgs/1702-garmin-fenix-3-hr/IMG_9017.jpg]]
+#+CAPTION: 路线图
+#+ATTR_HTML: style="width: 450px; margin: 0 auto"
+[[../static/imgs/1702-garmin-fenix-3-hr/IMG_9018.jpg]]
+
+
+** 数据导出和分析
+关于数据导出和分析，我做过一些粗略的调研，至少可以确认Garmin的设备的数据是
+相当开放的。等我在这块做出进展之后，我会单独写一篇文章来作个分享。下面先列
+出一些他人的成果：
+- [[https://github.com/johnsug/garmin][johnsug/garmin: Data analysis using my Garmin Forerunner 620]]
+- [[https://johnsug.shinyapps.io/garmin/#introduction][Garmin Demo]]
+- [[https://www.r-bloggers.com/garmin-data-visualization/][Garmin data visualization | R-bloggers]]
+- [[https://connect.garmin.cn/features/export][Garmin Connect - 功能 - 输出至第三方程序]]

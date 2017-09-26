@@ -1,0 +1,8 @@
+#+TITLE: 邮件列表
+#+DATE: 2014-02-06
+
+* Gmane
+[[http://en.wikipedia.org/wiki/Gmane][Gmane's wiki]]。
+
+** Emacs Org-mode
+[[http://news.gmane.org/gmane.emacs.orgmode][Org mailing list]]

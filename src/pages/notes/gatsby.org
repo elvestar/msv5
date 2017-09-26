@@ -1,0 +1,211 @@
+#+TITLE: Gatsby：一个基于Webpack和React的SSG
+#+DATE: 2017-01-22 15:11:31
+
+* 资料收集
+- [[https://github.com/gatsbyjs/gatsby][gatsbyjs/gatsby: Transform plain text into dynamic blogs and websites using React.js]]
+
+* 实现
+** HMR
+- [[https://webpack.js.org/guides/hmr-react/][Hot Module Replacement - React]]
+
+* 归档和标签
+- [[https://github.com/gatsbyjs/gatsby/issues/420][1.0 new GraphQL data layer · Issue #420 · gatsbyjs/gatsby]]
+* 问题记录
+** sh: babel: command not found
+需要安装babel-cli，并保证bin/babel位于PATH下面。
+
+#+BEGIN_SRC sh
+cnpm install -g babel-cli
+export PATH=/usr/local/Cellar/node/7.4.0/bin:$PATH
+#+END_SRC
+
+** 扩展Gatsby使其支持org时报错：Error: Error: Cannot find module './django.org' <2017-01-24 二 17:59>
+我在改造Gatsby，想要添加对于org文件的支持，我在代码中的一些文件列表中加上
+org 文件类型，然后build，发现报如下的错误：
+#+BEGIN_SRC sh
+Error: Error: Cannot find module './django.org'.
+    at render-page.js:46671:42
+    at webpackContextResolve (render-page.js:46671:90)
+    at webpackContext (render-page.js:46668:30)
+    at render-page.js:25255:20
+    at Array.forEach (native)
+    at module.exports (render-page.js:25250:10)
+    at render-page.js:88:40
+    at module.exports (render-page.js:46641:11)
+    at Object.<anonymous> (render-page.js:87:2)
+    at __webpack_require__ (render-page.js:30:30)
+#+END_SRC
+   
+首先，这个 *render-page.js* 是webpack.config.js文件中当stage为 *build-html*
+时的output文件，这个文件应该包含所有依赖的所谓模块及其信息，另外这个文件会
+在整个build过程成功完成后被删除掉。抛异常的那段代码如下：
+#+BEGIN_SRC js
+    var map = {
+        "./404.md": 491,
+        "./_template.jsx": 368,
+        "./coffee-react.cjsx": 492,
+        "./css-modules.js": 493,
+        "./html.html": 498,
+        "./index.js": 499,
+        "./json": 500,
+        "./json.json": 500,
+        "./less.js": 501,
+        "./markdown.md": 503,
+        "./postcss.js": 504,
+        "./react.js": 506,
+        "./sass.js": 507,
+        "./toml": 509,
+        "./toml.toml": 509,
+        "./yaml": 510,
+        "./yaml.yaml": 510
+    };
+    function webpackContext(req) {
+        return __webpack_require__(webpackContextResolve(req));
+    };
+    function webpackContextResolve(req) {
+        return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+    };
+#+END_SRC
+
+粗略分析一下过程，应该是webpack编译出一堆modules打完包，然后开始网页静态化
+的过程（使用static-site-generator插件），在遍历pages（保存在routes变量里）
+时，发现django.org这个page没有在webpack编译出的modules里找到。于是，问题焦
+点转移到，为啥webpack编译时没有把django.org给弄进去？
+
+细看了一下代码，再细看了一下webpack.config.js，没有发现疑点。最后我决定通过
+grep看一下Gatsby里对于Markdown等它支持类型做的全部操作和配置。
+#+BEGIN_SRC sh
+➜  lib git:(master) ✗ grep 'markdown' -R *
+isomorphic/create-routes.js:    'markdown',
+isomorphic/wrappers/md.js:      <div className="markdown">
+loaders/markdown-loader/index.js:import markdownIt from 'markdown-it'
+loaders/markdown-loader/index.js:const md = markdownIt({
+utils/build-page/load-frontmatter.js:  if (ext.match(/^(md|rmd|mkdn?|mdwn|mdown|markdown|litcoffee)$/)) {
+utils/load-context.js:  let context = require.context('./pages', true, /(coffee|cjsx|ts|tsx|jsx|js|md|rmd|mkdn?|mdwn|mdown|markdown|litcoffee|ipynb|html|json|yaml|toml)$/) // eslint-disable-line
+utils/load-context.js:      context = require.context('./pages', true, /(coffee|cjsx|ts|tsx|jsx|js|md|rmd|mkdn?|mdwn|mdown|markdown|litcoffee|ipynb|html|json|yaml|toml)$/) // eslint-disable-line
+utils/page-file-types.js:  'markdown',
+utils/webpack.config.js:      test: /\.(md|rmd|mkdn?|mdwn|mdown|markdown|litcoffee)$/,
+utils/webpack.config.js:      loader: 'markdown',
+#+END_SRC
+
+我之前改了很多地方来增加对org文件的支持，但是 *utils/load-context.js* 被我
+漏掉了，难道梗在这里？于是我改了这个文件的两个正则，加上 *|org* ，然后重新
+运行build，发现不再报错！
+
+经验教训：
+1. 要通过笔记记录排查过程，而不是光是肉眼看代码。光看不记，没有沉淀，排查进
+   程容易止步不前。
+2. 尝试多个角度解决问题，例如本次通过grep代码来列出代码中和Markdown相关的所
+   有代码和配置。
+3. Gatsby项目代码风格令人无法赞美，其中包含很多硬编码，很多重复。扩容一个特
+   性要在多个地方加代码。可能它目前处于不成熟期，也可能是作者认为轻量型标记
+   语言只支持Markdown就够了。
+
+** 扩展Gatsby使其支持org时，最终页面的内容为空 <2017-01-25 三 15:47>
+我已经在各处都加上了对org的支持，还简单写了一个org-loader（拷贝
+markdown-loader），但是build后的org笔记还是无法显示。
+
+我在org-loader里加上日志打印，并且让markdown文件也经过org-loader，这时我发
+现无论是markdown文件还是org文件，经过org-loader时，打印的内容都是正常的，都
+包含title和body，其中body都如预期低被转化为HTML。看来，webpack运行到loader
+这一步还是没问题的。看了一下生成的bundle.js，org文件生成的module和markdown
+文件生成的module也没有啥差别。
+
+但是看了一下通过build生成到public下面的文件，发现django/index.html的body里
+的HTML是空的，而markdown/index.html的boby里是有静态网页内容的。这说明，至少
+经过了 *StaticSiteGeneratorPlugin* 之后，该生成的东西没有生成。
+
+*** 研究develop的过程
+这个问题耗费了不少精力，我决定彻底解决。我从头阅读develop过程的代码，发现主
+要是构建webpackConfig，并执行webpack，然后通过HAPI启动HTTP Server。我发现构
+建了两次webpackConfig，stage名称不一样，第一次用develop，第二次用
+develop-html。第一次执行了webpack返回complier，而第二次没有执行，而是使用了
+[[https://www.npmjs.com/package/webpack-require][webpack-require]] 。而从其他地方得知，要对webpack返回的complier执行run()，才
+能使编译过程真正执行。
+
+然后看不大懂了。我先放一下，看一下build的过程。
+
+*** 研究build的过程
+Gatsby的build的过程，就是通过webpack，将各类型的文件，经过不同的loader，转
+化为module，然后通过react来组装dom，然后转化为静态的HTML文件写入磁盘。
+
+stage为build时，ouput文件是render-page.js，当build完毕，静态HTML生成后，会
+删掉此文件。在此文件中，各个module都有其id，如下：
+#+BEGIN_SRC js
+var map = {
+    "./404.md": 491,
+    "./_template.jsx": 368,
+    "./django_md.org": 492,
+    "./html.html": 493,
+    "./index.js": 494,
+    "./markdown.md": 495,
+    "./notes/django.org": 496,
+    "./toml": 497,
+    "./toml.toml": 497
+};
+#+END_SRC
+
+根据id挨个对照markdown文件和org文件，发现没啥差别，这再次说明，webpack执行
+的过程是对org文件做了正常处理。
+
+那么问题出在哪里呢？
+1. 从org文件经过webpack成为module，没问题。
+2. 从module再经过react和静态化生成最终的HTML页面，可能有问题。
+
+问题可能出在react和静态化的过程中。我再次review Gatsby代码目录，发现很多代
+码文件还不知道干嘛用的，包括wrappers下面的md.js，看了一下，貌似是被react用
+来组装最终的HTML页面，而且我发现org.js文件也在里面。我查了一下谁调用了
+wrappers下面的模块，发现 *create-routes.js* 里有调用，它会针对每一种文件类
+型都尝试获取其wrapper文件，代码如下：
+#+BEGIN_SRC js
+const wrappers = {}
+staticFileTypes.forEach((type) => {
+  try {
+    // $FlowIssue - https://github.com/facebook/flow/issues/1975
+    wrappers[type] = require(`wrappers/${type}`)
+  } catch (e) {
+    // Ignore module not found errors; show others on console
+    if (e.code !== 'MODULE_NOT_FOUND'
+        && (e.message && !e.message.match(/^Cannot find module/))
+        && typeof console !== 'undefined') {
+      console.error('Error requiring wrapper', type, ':', e)
+    }
+  }
+})
+#+END_SRC
+
+这让我起了疑心，我加了一行代码，看看有没有正确获取org文件的wrapper，结果让
+我大吃一惊，我发现markdown文件可以正确获取wrapper，而org文件无法正确获取
+wrapper！我稍作分析，发现原来我在gatsby源码的wrappers目录里加上org.js，但是
+在我的项目msv4的wrappers目录里没有加上org.js！
+
+加上以后，发现，org文件终于可以转化为对应的HTML，并可以借助HMR实时更新了！
+
+*** 结论
+1. Gatsby真的挺坑爹的，它还很年轻。我只不过是想扩展一下使其能够支持一种新的
+   文件类型，结果春节前就被此问题困扰，春节后又被困扰了半天，直到此刻（2017
+   年02月05日15:01:41），问题才被解决。
+2. 借助这个问题的排查，我摸清楚通过Webpack构建Gatsby这样的SSG的一些原
+   理。
+3. 针对这种问题，实时留下排查笔记，这能让排查的进度得以持久化，也能沉淀出
+   （可被共享的）经验。
+
+** 修改源文件目录（默认为pages目录） <2017-02-14 二 11:36>
+Gatsby不支持配置源文件的目录，所以不得不改代码才能实现此需求。尝试了好长时
+间，终于成功。涉及到的文件如下：
+#+BEGIN_SRC sh
+modified:   lib/isomorphic/create-routes.js
+modified:   lib/utils/build-page/index.js
+modified:   lib/utils/develop.js
+modified:   lib/utils/glob-pages.js
+modified:   lib/utils/load-context.js
+modified:   lib/utils/post-build.js
+modified:   lib/utils/webpack.config.js
+#+END_SRC   
+
+* 回顾
+** 初步了解Gatsby，并开始Hack  <2017-01-23 一 11:57>
+这几天一直研究Gatsby，了解到了很多新东西，包括炫酷的HMR、HAPI等技术，同时还
+发现markdown-it也是丰富多彩，不弱于我的org。但是我想在我的org之路走得更远，
+于是扩展Gatsby来支持org。研究了一下Gatsby，发现东西都是写死的，包括pages目
+录和Gatsby支持的文件类型列表。所以我需要Hack一下而不是只是使用。

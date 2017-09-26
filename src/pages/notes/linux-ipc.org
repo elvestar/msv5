@@ -1,0 +1,30 @@
+#+TITLE: Linux IPC
+#+DATE: 2013-12-09
+
+* 共享内存
+帮 Review 一段使用共享内存的代码，顺便学习下相关知识。
+** Linux 手册
+#+BEGIN_SRC cpp
+  NAME
+         shm_open, shm_unlink - Create/open or unlink POSIX shared memory objects
+
+  SYNOPSIS
+         #include <sys/types.h>
+         #include <sys/mman.h>
+
+         int shm_open(const char *name, int oflag, mode_t mode);
+
+         int shm_unlink(const char *name);
+#+END_SRC
+   
+** shm_open(3) 函数
+shm_open 后，会在/dev/shm 下面新建一个文件。这个文件看起来和普通文件没差别，
+但是当机器重启时，这个目录下的所有文件都会被清空。
+
+一般上，shm_open 获得一个 fd 之后（最小的可用 fd），会执行 ftruncate(2)和 mmap(2)。
+mmap 函数会把文件执行字节映射到内存，如果 mmap 失败，会返回 MAP_FAILED((void *)
+-1))。mmap 之后，fd 其实就可以 close 掉了。
+
+** shm_unlink(1) 函数
+shm_unlink(1) 函数会删除指定的共享内存对象，并且，当进程调用 munmap，不再
+mmap 这个对象后，该对象关联的内存区域也会被释放。

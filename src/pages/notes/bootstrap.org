@@ -1,0 +1,180 @@
+#+TITLE: Bootstrap
+#+DATE: 2014-03-06
+#+KEYWORDS: JQuery, 前端框架, CSS
+
+* 页面设计
+一个 Bootstrap 风格的页面经常包括标题栏，侧边栏和主体，并且使用容器和栅格等元素来作
+管理。下面文章手把手教导我们构建 Bootstrap 风格的页面：
++ [[http://www.revillweb.com/tutorials/twitter-bootstrap-tutorial/][Twitter Bootstrap Tutorial – Up and running with Twitter Bootstrap in 20 Minutes]]
++ [[http://django-china.cn/topic/212/][上文的中文版]]
+
+* 通过 Open CDN 来加速
+如果将 Bootstrap 放在自己的空间里面，速度可能比较慢，这回延迟整个页面的渲染。我发现
+了有一个雷锋网站提供了常用的前端开源库的加速获取：http://open.bootcss.com/ ，赞！
+
+只需要在 HTML 里面加上：
+#+BEGIN_SRC html
+<link href="http://cdn.bootcss.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+#+END_SRC
+就可以方便地调用 Bootstrap 的 css 文件了。
+* Bootstrap 扩展插件
++ [[http://www.oschina.net/news/43645/30-amazing-plugins-extend-twitter-bootstrap][30 个惊艳的 Bootstrap 扩展插件]]
+
+我看中了 [[https://github.com/gfranko/jquery.tocify.js][jquery.tocify.js]] 和 [[http://www.datatables.net/blog/Twitter_Bootstrap_2][jquery.dataTables.js]] 。
+* 表单
++ [[http://v3.bootcss.com/css/#forms][Bootstrap 表单]]
++ [[http://www.w3cschool.cc/bootstrap/bootstrap-forms.html][Bootstrap 表单（W3cSchool）]]
+
+Bootstrap 支持四种表单布局：
++ 垂直（默认）
++ 搜索
++ 内联
++ 水平
+* 样式
+** class="nav"
+.nav 下面的 <li> 带有 ~list-style: none~ 和 ~padding-left: 0~ 的效果，不用
+自己写 CSS。所以常用 .nav 来实现无样式的且呈块状的列表（一键加特技）。例如：
+#+BEGIN_SRC html
+<ul class="nav">
+  <li>haha</li>
+  <li>hehe</li>
+  <li>hoho</li>
+</ul>
+#+END_SRC
+
+** .clearfix() 清除浮动 <2015-04-11 六>
+这是 CSS 界著名的坑，即将某个元素设为 float: left 或 float: right 后，会导
+致该元素周围的某元素也被浮动到该元素旁边了，这样带来的结果是：页面结构被破
+坏。
+
+业界解决该问题的常用方法就是 *清除浮动* ，而 Bootstrap 提供了 *clearfix* 这
+样的样式来让我们一键加特技。如果我们使用 Less 的话，还可以是 Bootstrap 提供
+的 *.clearfix()* 这个 Mixins 来加特技。
+#+BEGIN_SRC css
+.tags {                                                                                                
+    .tags-header {                                                                                     
+        padding-left: 10px;                                                                            
+    }                                                                                                  
+    .tags-list {                                                                                       
+        margin-top: 30px;                                                                              
+        background-color: #f7f5fa;                                                                     
+        .clearfix();  
+    }
+}
+#+END_SRC
+
+* Collapse（塌陷）
+** 在collapse状态切换时改变元素的样式 <2016-07-17 日>
+#+BEGIN_SRC js
+  $('#collapseExample').on('hidden.bs.collapse', function () {
+      $(this).prev().find("i.fa").removeClass("fa-caret-down").addClass("fa-caret-right");
+  })
+  $('#collapseExample').on('show.bs.collapse', function () {
+      $(this).prev().find("i.fa").removeClass("fa-caret-right").addClass("fa-caret-down");
+  })
+#+END_SRC
+
+参考：[[http://stackoverflow.com/questions/18147338/twitter-bootstrap-3-0-icon-change-on-collapse][Twitter bootstrap 3.0 icon change on collapse]]
+
+* Scrollspy（滚动监听）
+- [[http://getbootstrap.com/javascript/#scrollspy][Bootstrap Scrollspy]]
+- [[http://jsfiddle.net/gableroux/S2SMK/][模仿 Bootstrap 3 的官方文档实现的滚动监听（JSFiddle）]]
+
+** 记录一个坑爹的问题，为啥我的 scroll-spy 不起作用？<2015-01-20 二>
+最后查明原因：原来我没在我的 HTML 开头加上 ~<!DOCTYPE html>~ ！
+
+我被坑了两个晚上了，尝试了 N 种方式，改了 N 多 HTML 和 CSS 语句都不行。最后，
+我将别人的 HTML/CSS/JS 打包好的 scroll-spy 实现拷贝到到我的 erb 文件里面，
+然后依次删除语句， *看看到底是哪行导致我的 scroll-spy 不起作用。* 最后，我
+发现我将 ~<!DOCTYPE html>~ 放到开头就能让 scroll-spy 生效，否则不生效。于是
+我怀疑到这一行语句，并最终在我 layouts 模板的开头加上 ~<!DOCTYPE html>~ 之
+后，问题得以解决。
+
+经验和教训：
+1. ~<!DOCTYPE html>~ 是 HTML 的一个坑，每个教程会指出这个坑，但是实际踩到这
+   个坑之后我们才会印象深刻。
+2. *一定* 会有排查问题的更快捷径！
+
+** 又踩到 ~<!DOCTYPE html>~ 这个坑了 <2015-04-05 日>
+又踩到 ~<!DOCTYPE html>~ 这个坑了，我就日了狗了，浪费了我清明节整整两个小时
+的时间，还搞坏了我的心情。
+
+教训：
+1. 可以在 [[http://jsfiddle.net/gableroux/S2SMK/][JSFiddle]] 上尝试在线 Debug
+2. 还是尼玛的 ~<!DOCTYPE html>~ ！
+* Affix（顶部附着）
+- [[http://getbootstrap.com/javascript/#affix][Bootstrap Affix]]
+- [[http://www.sitepoint.com/understanding-bootstraps-affix-scrollspy-plugins/][Understanding Bootstrap’s Affix and ScrollSpy plugins]]（文章写得很认真，值得国人学习）
+- [[http://codepen.io/SitePoint/full/GgOzwX/][Playing with Bootstrap]]（是上文的示例网站）
+
+利用 Bootstrap 的 JS 组件实现 Affix 其实很简单，有两种途径：
+1. 直接在元素上加入 data-spy="affix"，并设置 data-offset-top 和
+   data-offset-bottom（可选）来实现
+2. 如果有动态计算 data-offset-top 的需求，通过调用 $('#xx').affix() 函数，
+   传入计算后得到的 top 和 bottom 的偏移来实现
+   
+   
+** 旧 CSS 导致我使用 Bootstrap Affix 时踩坑 <2015-04-06 一>
+而我在使用 Bootstrap Affix 功能时，却踩到了一个坑，耗费了我两个小时的时间，
+我必须得记一笔。
+
+本来准备自己实现 TOC 滚到顶部时自动切 fixed 定位的，原理是根据页面位置，来
+将侧边栏的 position 置为不同类型。代码如下：
+#+BEGIN_SRC javascript
+  window.onscroll = function(){
+      var pos = document.documentElement.scrollTop || document.body.scrollTop;
+      if (pos >= 50) {
+          $('.notes-sidebar').css('position', 'fixed');
+          $('.notes-sidebar').css('padding-top', '0px');
+      } else {
+          $('.notes-sidebar').css('position', 'static');
+          $('.notes-sidebar').css('padding-top', '50px');
+      }
+  }
+#+END_SRC
+
+但是发现效果总是不理想。最后看到了 Bootstrap 提供了 Affix 功能，而且看起来
+效果很好，于是准备尝试。结果踩坑了，花了约两个小时才调好了。原来坑我的是我
+原来的 CSS 中将改元素预先置为 position: fixed 了！删掉之，发现问题解决，真
+是病去去抽丝啊，截图留念（尼玛坑爹）：
+#+CAPTION: ./imgs/bootstrap/20150406013610.png
+[[../static/imgs/bootstrap/20150406013610.png]]
+
+最终 Affix 代码：
+#+BEGIN_SRC js
+$('#notes-sidebar').affix({                                                                            
+    offset: {                                                                                          
+        top: $('#notes-sidebar').offset().top,                                                         
+        bottom: ($('#footer').outerHeight(true))                                                       
+    }                                                                                                  
+});                                                                                                    
+#+END_SRC
+
+** 使用占位符解决让元素被affix后下部区域突然跳上去的问题 <2016-10-03 一 01:01>
+补充一句：如果一个元素被affix，那么就意味着它被从正常文档流中摘掉了并变为
+fixed元素，对于原来的文档流，由于突然缺少了一部分，会有部分区域突然跳上去了
+的现象，影响体验。解决方法就是为这个元素加上一个指定高度的div.wrapper作为占
+位符。
+
+** 当父元素（如<html>）被设置为 overflow: hidden; height: 100%; 后，Affix插件失效 <2017-08-14 一 10:54>
+解决方法：当Affix失效时，看看该HTML的父元素是否设置了 ~overflow: hidden;
+height: 100%;~ 。如果设置了，去掉看看。
+
+* 标签页组：Navs
+** 让Bootstrap的标签页支持锚点 <2016-10-02 日 23:44>
+Bootstrap的标签页组（Navs）功能不支持锚点，这就意味着，你无法将某个具体标签
+页精准地分享给其他人类，从此信息得不到有效地传递。而在开源JS库中，
+jQuery-EasyTabs支持带锚点的标签页，我之前用就是它。今天我在开发照片管理功能
+时想用Bootstrap的标签页功能，我使用 ~bootstrap navs with anchor~ 作为关键词
+来搜索，看看有没有啥好的方案让Bootstrap的标签页组支持锚点，结果很快就找到方
+案了。
+
+原理很简单：
+1. 加载页面时，从页面URL中截取锚点，然后对该锚点对应的标签页执行tab('show')。
+1. 监听 *shown.bs.tab* 事件，一旦发生，则修改 *window.location.hash* 为带锚
+   点的URL（从e.target.hash中获取）。
+
+参考：
+- [[http://stackoverflow.com/questions/7862233/twitter-bootstrap-tabs-go-to-specific-tab-on-page-reload-or-hyperlink][javascript - Twitter Bootstrap Tabs: Go to Specific Tab on Page Reload or Hyperlink - Stack Overflow]]
+- [[https://github.com/JangoSteve/jQuery-EasyTabs][GitHub - JangoSteve/jQuery-EasyTabs: Easy and flexible jQuery tabbed functionality without all the styling.]]
+- [[https://getbootstrap.com/components/#nav][Components · Bootstrap: Navs]]

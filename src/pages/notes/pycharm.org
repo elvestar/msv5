@@ -1,0 +1,42 @@
+#+TITLE: PyCharm
+#+DATE: 2014-06-14
+#+KEYWORDS: IDE
+
+* 前言
+我在 Mac 下做 Python 以及相关的 Web 开发用的编辑器是 Sublime Text 2，配上 Vim 插件，用起来
+还是很是很顺手的。ST2 的界面很简洁美观，基本功能都有，但是还欠缺一些东西：
+1. Vim 插件很简陋（相对于原生 Vim 和 Emacs 下的 Evil 插件），Vintage 只有一些基础功能，而
+   且还有写恼人的 bug（尤其是中文输入法）。
+2. 多语言能力较弱。Web 开发至少要三门语言：服务器脚本语言，Javascript，HTML 模板语
+   言。而 ST2 在不同语言间切换时比较恼人。
+3. IDE 功能比较薄弱（文件跳转做得还是挺好的）。
+
+我在不同的途径听说到了 PyCharm，各种人对它赞不绝口，于是便开始了使用它，希望能借
+此升级我 Web 开发的工具。
+
+
++ [[http://andrewbrookins.com/tech/one-year-later-an-epic-review-of-pycharm-2-7-from-a-vim-users-perspective/][An Epic Review of PyCharm 3 from a Vim User’s Perspective]]
+* 快捷键  
+| 功能               | 快捷键     | 使用频率 |
+|--------------------+------------+----------|
+| Refactor -> Rename | Shift + F6 |       常用 |
+|                    |            |          |
+|                    |            |          |
+|                    |            |          |
+
+
+* 语法检查
+** 总是抱怨 "This dictionary creation could be rewritten as a dictionary literal."
+解法：对于 dict，不要用 d = {} 来初始化，而应该用 d = dict() 来初始化。
+#+BEGIN_EXAMPLE
+{} is a literal and dict() is not.
+#+END_EXAMPLE 
++ [[http://stackoverflow.com/questions/8406242/why-does-pycharms-inspector-complain-about-d]]
+* 设置
+** 修改字体大小
+不能直接修改自带主题的字体大小，只能先通过复制原有主题来创建自己的自定义主题，然
+后在此基础上修改字体大小。
+
+* 回顾
+** 第一天就喜欢上了 PyCharm，同时抛弃掉了 ST2
+[[../static/imgs/pycharm/1.png]]

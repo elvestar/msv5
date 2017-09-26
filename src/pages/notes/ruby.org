@@ -1,0 +1,131 @@
+#+TITLE: Ruby
+#+DATE: 2014-11-18
+#+KEYWORDS: Ruby, XPath
+
+* 字符串
+| 功能                             | 函数                      | 备注                                                                     |
+|----------------------------------+---------------------------+--------------------------------------------------------------------------|
+| 转化为整数                       | str.to_i()                 |                                                                          |
+| 切分                             | str.split(':')            | 注意：Ruby 单引号不转义，例如我们想要按行切分，应该传入 "\n" 而不是 '\n' |
+| 替换                             | str.gsub('xx', 'yy')      |                                                                          |
+| trim space                       | str.strip()               |                                                                          |
+| trim specific char               | Ruby 并没有提供这个函数！ |                                                                          |
+| 判断字符串是否以另一字符串为开头 | str.start_with?('abc')     | 1. 要加?，2. 不是 startswith                                             |
+|                                  |                           |                                                                          |
+
+** Ruby: 判断字符串是否以某字符串列表中的某字符串为开头 <2015-05-18 一>
+
+start_with? 无法传入列表，但是我搜到了通过 %w 和 * (splat) 来传入列表的方法，
+如下：
+
+#+BEGIN_SRC ruby
+  unused_prefixes = %w[/time/ /baidu/]                                                             
+  if item.identifier.start_with?(*unused_prefixes)                                                 
+    next                                                                                           
+  end     
+#+END_SRC
+   
+参考：
+-  [[http://stackoverflow.com/questions/16258975/how-to-pass-an-array-as-an-argument-list]]
+
+* 列表
++ [[http://ruby-doc.org/core-2.2.0/Array.html]]
+| 功能         | 函数                                            | 备注 |
+|--------------+-------------------------------------------------+------|
+| 取元素下标   | list.index(e)                                   |      |
+| 带着下标遍历 | list.each_with_index do \vert{}item, idx\vert{} |      |
+| 插入元素     | list.push(e)                                    |   不是 insert! |
+|              |                                                 |      |
+
+* 正则表达式
++ [[http://rubular.com/][Rubular 在线正则编辑]]
+* Nokogiri
++ [[http://www.nokogiri.org/]]
++ [[http://elvestar.com/notes/xml/]]
+
+** 按照 id 搜索并删除
+#+BEGIN_SRC ruby
+body.xpath('//*[@id = "postamble"]').remove
+#+END_SRC
+** 按照 class 搜索
+#+BEGIN_SRC html
+<div id="postamble" class="status">
+  <p class="date">Date: 2014-11-18</p>
+  <p class="author">Author: elvestar</p>
+  <p class="date">Created: 2015-01-18 日 00:20</p>
+</div>
+#+END_SRC
+
+#+BEGIN_SRC ruby
+html_doc.xpath('//*[@id = "postamble"]/p[@class="date"]')
+#+END_SRC
+
+** 按照属性（如 name）搜索
+#+BEGIN_SRC html
+<head>
+  <title>Ruby</title>
+  <meta  name="keywords" content="MySQL" />
+</head>
+#+END_SRC
+
+#+BEGIN_SRC ruby
+keywords_node = html_doc.xpath('//meta[@name = "keywords"]').first
+#+END_SRC 
+
+** 按照节点内容搜索
+#+BEGIN_SRC ruby
+reviews = html_doc.xpath('//h2[text() = " 回顾"]') 
+#+END_SRC
+
+** 获取节点下排除子节点的文本内容
+#+BEGIN_SRC html
+<h3 id="sec-9-1">
+  <span class="section-number-3">9.1</span> 成为 Emacs 用户 <span class="timestamp-wrapper"><span class="timestamp">&lt;2014-02-20 四&gt;</span></span>
+</h3>
+#+END_SRC
+
+#+BEGIN_SRC ruby
+event['content'] = h3.xpath('text()').to_s
+#+END_SRC
+** XPath 相关的大坑
+在 Nokorigi 下使用 XPath 这个 XML/HTML 查找语言有个大坑，就是使用
+node1.xpath('//xx') 来查找结点时，返回的不是 node1 结点下面的 xx 类型节点，而是
+整棵树下面的 xx 类型节点，要想实现这种需求，需要在 =//= 前面加上 =.= ，
+node1.xpath('.//xx')。
+
+** 遍历节点并改变节点本身 <2016-02-13 六>
+首要原则： 
+- *在 Ruby 这样的动态语言中，遍历访问的不是元素本身，而是改元素的引用*  
+- ~我们不能对引用本身进行修改，而通过引用来修改我们想要修改的东西~
+
+#+BEGIN_SRC ruby
+  # For fancybox image group
+  html_doc.xpath('//div[@class="figure"]').each do |node|
+    children = node.xpath('./p/a/img[@image-group]')
+    if children.length >= 1
+      img_node = children.first
+      img_node['class'] = 'figure-thumbnail'
+      node.name = 'a'
+      node.inner_html = img_node.parent.inner_html
+      node['class'] = 'fancybox'
+      node['rel'] = img_node['image-group']
+      node['href'] = img_node['src']
+      node['title'] = img_node['alt']
+    end
+  end
+#+END_SRC
+
+* 文件读取
+
+* 回顾 
+** 有点习惯了再 Vim 下写 Ruby <2015-01-12 一>
+最近在使用一个用 Ruby 写的工具（Nanoc）来将我的 Org 文件转化为静态网站，所
+以不得不学习了 Ruby。一开始感到各种不顺，为了缓解，我下载了 JetBrains 出品的
+RubyMine 来开发，但是感觉还是不爽，而且我发现 RubyMine 速度比 PyCharm 还要
+慢。所以我又转回 Vim，并且找了几个 Ruby 插件来使用。
+
+经过一段时间的磨合（尤其是 Vim 的 CtrlP 插件的发现），以及对 Ruby 语法的学
+习，我编辑 Ruby 第一次有了得心应手的感觉。
+
+我第一批熟悉的 Ruby 库是 Nanoc 和 Nokogiri，在此纪念一下。
+

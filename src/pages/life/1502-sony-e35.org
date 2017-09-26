@@ -1,0 +1,53 @@
+#+TITLE: 入手 SONY E35/1.8 定焦镜头
+#+DATE: 2015-02-13
+
+这两年多我一直用 NEX-6 和1650套头，自从买了 iPhone 6 后，发现两者的相机性能
+能然不相伯仲！我了不让我在 NEX-6 上花的五千多块打水漂，我决定再卖一个好点的
+镜头。
+
+E口的镜头是在很缺乏，研究一番后，我选择了 E35 1.8 OSS 定焦镜头。主要原因如
+下：
+1. E35镜头在NEX-6上的等效焦距是52.5mm，这是标准镜头的焦距，适用面较广。
+2. E35光圈大带光学防抖，夜拍能力很强。
+
+* 开箱
+我淘宝商城上选了个卖家，并在2月12日下单。这是截图：
+#+CAPTION: 下单购买E35
+[[../static/imgs/1502-sony-e35/1.jpg]]
+
+第二天上午，我的镜头就到货了。取了快递，到了工位，拆开包装，拿出镜头，感觉
+金属质感很好，而且很轻便。
+#+CAPTION: 开箱前
+[[../static/imgs/1502-sony-e35/IMG_0811.jpg]]
+#+CAPTION: 取出镜头
+[[../static/imgs/1502-sony-e35/IMG_0814.jpg]]
+#+CAPTION: 和NEX-6的首次合体
+[[../static/imgs/1502-sony-e35/IMG_0817.jpg]]
+
+装在 NEX-6 上，对准镜头盖撸一张，一眼就体会到了定焦大光圈镜头的好处了，那就
+是背景虚化，突出主体。这一点相对iPhone 6 有着本质的提升，看来我的目的达到了。
+#+CAPTION: E35 拍 NEX-6 套头
+[[../static/imgs/1502-sony-e35/DSC08346.jpg]]
+#+CAPTION: 喜糖盒子
+[[../static/imgs/1502-sony-e35/DSC08348.jpg]]
+#+CAPTION: 俯视窗外建筑
+[[../static/imgs/1502-sony-e35/DSC08359.jpg]]
+#+CAPTION: 工位旁绿植
+[[../static/imgs/1502-sony-e35/DSC08373.jpg]]
+#+CAPTION: 西二旗大街
+[[../static/imgs/1502-sony-e35/DSC08392.jpg]]
+
+* 北航拍夜景
+入手后的第二天，我去北航逛一圈拍摄夜景。当我达到北航时，我发现校园里人好少。
+这时我才意识到，现在已经快到春节了，学生们早就放假回家了。
+
+#+CAPTION: 大钟寺站（知春路站今日关闭，故在此下车）
+[[../static/imgs/1502-sony-e35/DSC08413.jpg]]
+#+CAPTION: 北航七号公寓楼
+[[../static/imgs/1502-sony-e35/DSC08421.jpg]]
+#+CAPTION: 宿舍外的路灯
+[[../static/imgs/1502-sony-e35/DSC08422.jpg]]
+#+CAPTION: 北航超市发
+[[../static/imgs/1502-sony-e35/DSC08425.jpg]]
+#+CAPTION: 北航东南门
+[[../static/imgs/1502-sony-e35/DSC08438.jpg]]

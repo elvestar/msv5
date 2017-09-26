@@ -1,0 +1,871 @@
+#+TITLE: Django
+#+DATE: 2014-03-06
+#+KEYWORDS: Logging, Python, Web 框架
+
+* 前言
+今年过年在家学了一轮 Ruby on Rails，后来由于兴趣转移，决定专精 Python，于是
+顺手学了一下 Django。
+
+Django 官网的描述：
+#+BEGIN_QUOTE
+Django is a high-level Python Web framework that encourages rapid development and clean, pragmatic design.
+#+END_QUOTE
+
+Django 的特性
+- Object-relational mapper（对象关系映射）
+- Automatic admin interface（自动生成管理员界面）
+- Elegant URL design（优雅的 URL 设计）
+- Template system（模板系统）
+- Cache system（缓存系统）
+- Internationalization（国际化支持）
+
+* 资料收集
+** 文档
+- [[https://docs.djangoproject.com/][Django documentation]]
+
+** 文章
+- [[http://stackoverflow.com/questions/1499543/good-open-source-django-project-for-learning][Good open source django project for learning]]
+- [[http://docs.django-blog-zinnia.com/en/v0.14/index.html][Django-Blog-Zinnia’s documentation!]]
+- [[https://code.djangoproject.com/wiki/DjangoResources#Djangobooks][Django resources]]
+- [[http://www.djangobook.com/en/2.0/index.html][The Django Book (The Definitive Guide to Django: Web Development Done Right)]]
+- [[http://www.reddit.com/r/django/comments/1c5u23/excellent_open_source_django_projects_to_learn/][Excellent open source Django projects to learn from?]]
+
+** 项目
+- [[https://github.com/torchbox/wagtail]]
+- [[https://github.com/stephenmcd/mezzanine]]
+- [[https://github.com/Fantomas42/django-blog-zinnia]]
+
+Django App
+- [[https://github.com/rossp/django-helpdesk][django-helpdesk - A Django powered ticket tracker for small enterprise]]
+
+* 安装和部署
+** 安装 Django
+看了下 Django 的[[https://docs.djangoproject.com/en/1.6/intro/install/][官方安装指南]] ，发现 Django 的安装非常简易（至少在 Mac 下如此）。我执行:
+#+begin_src sh
+sudo pip install Django
+#+end_src
+
+安装完毕，然后在 Python 解释器下验证安装结果。如下：
+#+begin_src python
+>>> import django
+>>> print (django.get_version())
+1.6.2
+#+end_src
+
+于是，Django 已经安装好了
+
+** 部署 Django 应用
+参考：
++ [[https://docs.djangoproject.com/en/1.6/howto/deployment/wsgi/][How to deploy with WSGI]]
++ [[https://docs.djangoproject.com/en/1.6/howto/deployment/wsgi/modwsgi/][How to use Django with Apache and mod_wsgi]]
++ [[https://library.linode.com/frameworks/django-apache-mod-wsgi/ubuntu-10.04-lucid][Django, Apache and mod_wsgi on Ubuntu 10.04 (Lucid)]]
++ [[https://www.digitalocean.com/community/articles/how-to-configure-the-apache-web-server-on-an-ubuntu-or-debian-vps][How To Configure the Apache Web Server on an Ubuntu or Debian VPS]]
++ [[http://stackoverflow.com/questions/1020390/how-do-i-run-django-and-php-together-on-one-apache-server][How do I run Django and PHP together on one Apache server?]]
+
+我选择了 mod_wsgi。Apache2 的配置文件是 */etc/apache2/sites-available/default* ，
+log 目录为 */var/log/apache2* 。重启 Apache2 的指令是：
+#+begin_src sh
+/etc/init.d/apache2 restarto
+#+end_src
+
+对于 Apache 的 module 和配置，我很不熟悉，还好最后搞出来了。
+
+* 阅读 Djaogo 文档
+[[https://docs.djangoproject.com/en/1.6/][Django documentation]]
+
+执行下面几步后，一个 Django app 就已经运行并拥有自己的 admin 界面了。
+#+begin_src sh
+django-admin.py startproject mysite
+cd mysite
+python manage.py syncdb
+python manage.py runserver
+#+end_src
+
+** Part 1: Start a project and ORM
+本章讲述了如何创建一个 project，如何创建一个 app，如何创建 model。有两个要点：
++ Projects vs. apps
++ Philosophy (of model)
+
+每个 model 都与数据库中的某张表相关，Django 的 *对象关系映射（ORM）* 特性让我们可以通过调用
+对象来操纵数据库，例如调用对象的 save()就代表将该对象以一条记录的形式插入到数据库。
+
+** Part 2: Admin interface
+本章给我们秀了 Django 的 *管理员界面* ，用户不需要一行特别的代码，就能拥有良好的管
+理员界面。它还特别提到，管理员界面是用 Django 自身来实现的。用户可以定制管理员界面，
+通过修改自己的 app 下面的 admin.py 文件。
+
+本章后面提到了 Django 的 *模板系统* ，建议我们将 Django 默认的模块拷贝到自己项目里然
+后更改。
+
+** Part 3: Views and template system
+本章开始将 Django 的 views 了。Django 的 url 设计得很优雅，它通过一些机制来将 url 来分发给
+相应的 view。
+
+project 的 url.py 负责将请求根据 url 来分发给各个 app，而 app 的 url.py 则负责将请求根据
+url 开分发给各个 view。Django 是根据预设的 url 正则表达式来进行请求分发的。
+
+*** Django 的 views 可以做什么？
+Django 的 views 的主要职责是生成网页内容，并通过 HttpResponse 对象来返回给浏览器。如果
+异常了，它还得返回一个 404 页面(Http404 对象）啥的。
+
+Django 的 views 具体可以做：
++ 从数据库读取记录
++ 调用 Django 或第三方的模板系统
++ 生成 PDF 文件，或输出 XML
++ 生成 ZIP 文件来供下载
++ 以及其他任何 Python 能干的事情
+
+*** Django 的模板系统
+Django 的模板系统看起来非常眼熟，跟我去年研究过的 Jinja2 语法几乎一样，但是 Django 的
+模板的语法据说很薄弱。
+
+view 调用模板渲染函数时，Django 提供了两个捷径：
++ [[https://docs.djangoproject.com/en/1.6/topics/http/shortcuts/#django.shortcuts.render][django.shortcuts.render]]
++ [[https://docs.djangoproject.com/en/1.6/topics/http/shortcuts/#django.shortcuts.get_object_or_404][django.shortcut.get_object_or_404]]
+
+使用它们可以减少好几行代码和去掉异常分支，赞！
+
+模板中可以使用 url 变量来避免硬编码，但这样做可能会带来命名冲突，因为一个 project 下
+可能会有几十个 app，这些 app 下的 view 的命名极可能重复。为了解决这个问题，Django 提供
+了 *Namespacing URL names* 机制。
+
+** Part 4: Action in view and generic views
+本章继续将模板和 view，实现了 vote（投票）和 result（查看投票结果）功能。最后提到了
+*generic views* ，它们是 Django 提供通用 view，用来快速满足 web 开发中一些通用场景。例如：
++ generic.ListView
++ generic.DetailView
+
+用户需要在 views.py 中集成这些类，然后告诉它 model 是啥，template 是啥，剩下的交割这些
+*generic views* 就好了。
+
+这章我看得不仔细，以后遇到问题了再翻翻。
+
+** TODO Part 5: Testing
+这章讲如何在 Django 下进行测试，以及自动化测试相关的内容。暂时用不着，以后看。
+
+** Part 6
+这一章很简短，介绍如何修改 style.css 来定制 app 的外观。重点是如何组织 app 的 statis 文件
+的目录。
+
+* Django 第三方
+** Django REST framework 
+- [[http://www.django-rest-framework.org/]]
+** Django import/export
+- http://django-import-export.readthedocs.org/en/latest/index.html
+
+*** 问题：ImportError: No module named related
+原因：通过 pip 安装的 django-import-export 与 Django 1.8 不兼容。
+
+解决：从 GitHub 上下载安装最新的开发中版本。
+
+** 使用 Django cas 实现单点登录 <2015-08-05 三>
+- https://github.com/kstateome/django-cas
+
+要点：
+1. urls.py 里设定登录和登出的 url，指向 cas.views.login 和 cas.views.logout
+2. 默认情况下，单点登录后会重定向到首页，但是我们在登录的 url 后面可以加上
+   next=xxx 参数，这样登录可以重定向到 xxx 页面（一般是登录前的页面）
+
+在 AngularJS 环境下，还有几个要点：
+1. 可以在一个必然被执行的 Controller 里来从后端获取登录信息。如果未登录，则
+   跳转到上面提到的登录的 url。
+2. AngularJS 的 url 中经常含有 ~#~ ，将其作为 next 的参数会发生问题，我们需
+   要对这个 url 执行 url encode。 ~#~ 被 url encode 后变为 ~%23~ 。 ~&~ 也
+   要做类似处理。总之，作为 next 参数的值，url 需要转义。如果没人帮我们转义，
+   辣么就要我们自己转义。
+
+* Django Models
+** 字段
+- 每个 Model 隐式创建一个 id 字段，它的类型是 AutoField。
+
+** Relationships
+- [[https://docs.djangoproject.com/en/1.8/topics/db/models/#relationships][Django Model Relationships (1.8)]]
+
+很显然，关系型数据库的强力之处（之一）在于表和表之间的相互关联。Django 提供
+了三种最通用的数据库关系类型：
+- Many-to-one (Foreign Key)
+- Many-to-many
+- One-to-one
+  
+*** Many-to-many Relationships <2015-04-21 二>
+实例：一个日志可能会被多个 Dag 任务使用，而一个 Dag 任务也可能使用多份日志。
+
+ManyToManyField 可以定义在相关联的两个 Model 的任意一个之中，但不能在两个之
+中都定义。
+
+如果多对多的关系中除了关系本身，还有其他额外的信息要记录的话，我们可以使用
+~through~ 参数，并需要额外定义一个 Model 来描述这个关系。例如：
+#+BEGIN_SRC python
+...
+class Person(models.Model):
+    name = models.CharField(max_length=128)
+... 
+class Group(models.Model):
+    name = models.CharField(max_length=128)
+    members = models.ManyToManyField(Person, through='Membership')
+... 
+class Membership(models.Model):
+    person = models.ForeignKey(Person)
+    group = models.ForeignKey(Group)
+    date_joined = models.DateField()
+    invite_reason = models.CharField(max_length=64)
+#+END_SRC
+
+在使用 ~through~ 的情况下，我们在创建这些 Model 的对象时，不能直接通过
+~add~ / ~create~ / ~赋值~ 来创建关系，而应该先创建关系两头的 Model 对象，然
+后在以这两个对象以及关系的的额外字段为参数来创建关系。例如：
+
+#+BEGIN_SRC python
+>>> ringo = Person.objects.create(name="Ringo Starr")
+>>> paul = Person.objects.create(name="Paul McCartney")
+>>> beatles = Group.objects.create(name="The Beatles")
+>>> m1 = Membership(person=ringo, group=beatles,
+...     date_joined=date(1962, 8, 16),
+...     invite_reason="Needed a new drummer.")
+>>> m1.save()
+#+END_SRC
+
+** Django Model 的查询语法
+- [[https://docs.djangoproject.com/en/1.8/topics/db/queries][Django Making queries (v1.8)]]
+
+Django Model 的查询是以 QuerySet 这个数据结构为核心，并支持链式查询。
+
+| 查询条件           | 语法                            | 说明                               |
+|--------------------+---------------------------------+------------------------------------|
+| 返回全集           | objects.all()                   |                                    |
+| 等于               | objects.filter(xx=yy)           |                                    |
+| 不等于             | objects.exclude(xx=yy)          |                                    |
+| 大于等于           | objects.filter(xx__gte=yy)       |                                    |
+| 小于               | objects.filter(xx__lt=yy)        |                                    |
+| where in           | objects.filter(xx__in=yys)       |                                    |
+| where not in       | objects.exclude(xx__in=yys)      |                                    |
+| 按字段排序（正序） | objects.order_by('xx')           |                                    |
+| 按字段排序（倒序） | objects.order_by('-xx')          |                                    |
+| xx like '%yy%'     | objects.filter(xx__contains='yy') | 如果大小写不敏感，则使用 icontains |
+| xx like 'yy%'      | objects.filter(xx__startswith='yy') | 同上，使用 istartswith             |
+| xx like '%yy'      | objects.filter(xx__endswith='yy') | 同上，使用 iendswith          |
+|                    |                                 |                                    |
+
+** Aggregation, values and annotations
+- [[https://docs.djangoproject.com/en/1.8/topics/db/aggregation/][Django Model Aggregation (1.8)]]
+给个具体例子吧。下面是一个普通的 group by + 聚集的 SQL，我们想要将它改造为
+Django ORM 的方式。
+
+SQL：
+#+BEGIN_SRC sql
+select log_module_id, count(base_time), min(base_time), max(base_time) from data_slice where base_time >= '2015-04-01 00:00:00' group by log_module_id;
+#+END_SRC
+
+改造后的 Django ORM：
+#+BEGIN_SRC python
+query_set = DataSlice.objects.values('log_module_id').annotate(max_bt=Max('base_time'), min_bt=Min('base_time'), cnt=Count('base_time'))
+#+END_SRC
+
+** Legacy Database（非 Django ORM 生成和管理的数据库）
+所谓 *Legacy Database* 就是指那些以前项目遗留的，没有通过 Django ORM 来生成
+和管理的数据库。Django 提供 inspectdb 命令，来根据 Legacy 数据库的表结构来
+自动生成 models.py。
+#+BEGIN_SRC sh
+python manage.py inspectdb > legacy_models.py
+#+END_SRC
+
+*** 标记位：Model::Meta::managedb <2015-04-02 四>
+注意 Meta 子类的 managedb 变量。Legacy 数据库通过 inpectdb 命令生成的 Model
+的 Meta 子类的 managedb 变量被置为 False，即指明该 Model 不被 Django ORM 所
+管理，无论是 *数据库迁移* 或者是 *单测时自动建立测试表* 都不会对该 Model 生
+效。如果我们想让该 Modle 在 *单测时自动建立测试表* ，则可以手动将 managedb
+变量置为 True。
+
+** Multiple Databases
+要点：
+- 配置 DATABASES（在 settings.py 中）
+- 配置 DATABASE_ROUTERS（在 settings.py 中）
+- 实现 XxxRouter，并将路径配置在 DATABASE_ROUTERS 中
+
+*** 使用 Raw SQL 时，如何选择数据库 <2015-09-15 二>
+DB Router 只在使用 ORM 时生效，如果使用 Raw SQL，则需要通过 connections 来
+选择 cursor。例如：
+#+BEGIN_SRC python
+from django.db import connections
+cursor = connections['minos_db'].cursor()
+#+END_SRC
+
+参考：
+- [[https://docs.djangoproject.com/en/1.8/topics/db/multi-db/#using-raw-cursors-with-multiple-databases][Using raw cursors with multiple databases (1.8)]]
+
+** null=True and blank=True
+总结：Django 的 ORM 用起来真是不省心，比 SQLAlchemy 差的有点远。使用 Django
+有种类似大口吃翔的感觉。
+
+** 在Django应用之外使用Django Models <2016-07-31 日 21:41>
+有时候我们写的一些外部脚本想要访问Django管理的数据库，Django提供了方法来在
+第三方脚本里初始化Django环境，使得外部脚本可以像Django应用一样访问Django
+Models。代码如下：
+#+BEGIN_SRC py
+import django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
+django.setup()
+from cms.models import FileItem
+#+END_SRC
+
+说明：
+1. 一定要在 ~django.setup()~ 之后再 ~import Django Models~ 。
+2. 这是一个不得已的做法，一般情况推荐使用Django Management Commands将这些脚
+   本维护起来。
+
+** 在Django中执行 Raw SQL <2017-08-14 一 20:56>
+#+BEGIN_SRC py
+sql = ' SELECT id, COUNT(id) as cnt FROM data_slice WHERE is_notify_%s = 1 AND is_%s_notified = 0' \
+      % (downstream, downstream)
+logger.info('Execute sql: ' + sql)
+result = DataSlice.objects.raw(sql)
+downstream_status['unfinished_records_num'] = 0
+for row in result:
+    downstream_status['unfinished_records_num'] = row.cnt
+downstream_status['unfinished_records_num'] = -1
+#+END_SRC
+
+要点：
+1. 调用方法：XxxModel.objects.raw(sql)，返回一个RawQuerySet。
+2. 返回的RawQuerySet是一个支持iterate的对象（因为定义了 ~__iter__~ 方法。
+3. 如果Raw SQL返回结果为空，不会抛异常，只是iter迭代次数为零。
+
+** 根据字段名判断Model存不存在某字段的定义 <2017-07-09 日 13:31>
+要点：
+1. ~getattr()~ 和 ~_meta.get_field()~ 都可以用来判断字段定义是否存在。
+2. 不要使用Model的实例，而应该使用Model这个类本身来进行判断。使用实例的话，
+   无default值或者null=True的字段将会被漏掉。
+
+#+BEGIN_SRC py
+if not getattr(XxxModel, field_name, False):
+    logger.error('Field not exist, name: %s' % field_name)
+
+field_type = XxxModel._meta.get_field(field_name).get_internal_type()
+#+END_SRC
+* Django Route
+** 通过reverse来在redirect时实现动态构造URL <2017-03-31 五 16:28>
+#+BEGIN_SRC py
+return redirect(reverse(xxx:bad_file', args=(xxx_bad_file_task.id,)))
+#+END_SRC
+
+* Django Template
+** extends（继承）
+同 Jinja2
+** 在Django中使用Jinja2 <2016-07-20 三>
+自从某一版本开始，Jinja2成为了Django内置支持的一种可选模板，这个做法很好，因
+为Django原生模板（DTL）有些奇怪的禁忌，比如说不能在模板里面调用函数，也不能
+定义变量，导致用户不得不消耗更多的代码在其他地方实现相同的功能。
+
+要在Django中使用Jinja2，要点如下：
+1. 在settings.py中的TEMPLATES配置项添加类型为Jinja2的BACKEND，通过DIRS指定
+   Jinja2模板的路径，通过OPTIONS中的environment来设置Jinja2环境。
+2. 在OPTIONS的environment中设置的py文件中更新Jinja2的全局环境，将static和
+   url作为两个全局函数传入到Jinja2模板里面。
+3. 使用static和url时需要注意，Jinja2下的用法和Django不同，Jinja2下，这两个
+   是函数，需要以函数调用的方式来使用。
+4. settings.py里的TEMPLATES配置项的Jinja2部分要放在Django之前，这样就可以同
+   时使用这两种模板。
+
+参考：
+1. [[https://docs.djangoproject.com/ja/1.9/topics/templates/][Django Templates (V1.9)]]
+2. [[http://jonathanchu.is/posts/upgrading-jinja2-templates-django-18-with-admin/][Upgrading to Jinja2 Templates in Django 1.8 With Admin - jonathanchu.is]]
+
+** 自定义filter和tag <2016-08-22 一 04:08>
+要点：
+1. 将filter和tag的定义单独放到和views.py平行的目录templatetags里面，文件名
+   可以任取，例如叫xxx。
+2. 在使用到该filter和tag的模板里执行 {% load xxx %}。注意，不要认为在
+   base.html里面load一次就够了。
+3. 下面就是具体用法的事情了。
+
+参考：[[https://docs.djangoproject.com/en/1.10/howto/custom-template-tags/][Custom template tags and filters | Django documentation | Django]]
+
+** 自定义filter时，使输出的HTML不被转义 <2016-12-03 六 14:55>
+要点：return返回HTML时，使用 ~make_safe~ 。如下：
+#+BEGIN_SRC py
+# -*- coding: utf-8 -*-
+
+from django import template
+from django.shortcuts import render_to_response
+from django.utils.safestring import mark_safe
+
+register = template.Library()
+
+
+@register.filter()
+def form_field(value):
+    return mark_safe(render_to_response('_partials/form_field.html', {
+        'field': value
+    }).content)
+#+END_SRC
+
+* Django Forms
+- [[https://docs.djangoproject.com/en/1.8/topics/forms/modelforms/][Creating forms from models]] (1.8)
+** Django Forms应用经验 <2016-08-14 日 22:22>
+1. 在模板中通过 {{ form.xxx }} 可以直接渲染出表单字段的HTML（不带Label）。
+2. 通过 {{ form.xxx.label }} 可以取到表单字段的标签，如果是ModelForm，那么
+   就取Model字段的 ~verbose_name~ 属性，如果没设置它，则取Model字段名的首字
+   母大写形式。
+3. 只有在执行is_valid()之后，才能访问form的cleaned_data。
+
+** 如何在一次请求提交多个表单？ <2016-08-16 二 20:23>
+要点：
+1. 在view里面通过prefix定义不同的表单。
+2. 在模板里面将不同的表单的字段写到同一个<form>标签内。
+3. 在view里面通过多次使用request.POST以及不同的prefix（起过滤作用）来构造不
+   同的表单。
+
+#+BEGIN_SRC py
+def order_book(request):
+    if request.method == 'POST':
+        add_book_form = AddBookForm(request.POST, prefix='add_book')
+        order_book_form = OrderBookForm(request.POST, prefix='order_book')
+        if add_book_form.is_valid() and order_book_form.is_valid():
+            book = Book.objects.filter(isbn=add_book_form.cleaned_data['isbn']).first()
+            if book is None:
+                book = add_book_form.save()
+                messages.info(request, 'Success to add book: %s' % book.isbn)
+            book_order = order_book_form.save()
+            messages.info(request, 'Success to order book: %s' % book_order.location)
+            return redirect('/book/my_books')
+    else:
+        add_book_form = AddBookForm(prefix='add_book')
+        order_book_form = OrderBookForm(prefix='order_book')
+    return render(request, 'book/order.html', {
+        'add_book_form': add_book_form,
+        'order_book_form': order_book_form,
+    })
+#+END_SRC
+
+参考：
+1. [[https://docs.djangoproject.com/ja/1.10/topics/forms/formsets/][Formsets | Django documentation | Django]]
+
+** 处理ModelForm中的Foreign Key字段 <2016-08-16 二 22:28>
+要点：
+1. ModelForm会自动将Foreign Key字段转化为<select>。
+2. 在ModelForm的init函数中填充<select>的options。
+
+下面的例子中，book和location都是Foreign Key。
+#+BEGIN_SRC py
+class BookOrder(models.Model):
+    username = models.CharField(max_length=255, default='')
+    book = models.ForeignKey('Book')
+    order_batch = models.ForeignKey('OrderBatch')
+    order_time = models.DateTimeField(default=datetime.now(), blank=True)
+    location = models.ForeignKey('Location')
+    status = models.CharField(max_length=255, default='unfinished')
+
+    def __str__(self):
+        return (u'%s - %s' % (self.username, self.book.title)).encode('utf-8')
+
+
+class OrderBookForm(ModelForm):
+    class Meta:
+        model = BookOrder
+        fields = ['username', 'book', 'order_batch', 'order_time', 'location']
+
+        widgets = {
+            'location': widgets.Select(attrs={'class': 'form-control'}),
+            'order_batch': widgets.Select(attrs={'class': 'form-control'}),
+        }
+#+END_SRC
+
+** 提交表单后，在views中检验表单前，修改表单字段值 <2016-08-17 三 18:39>
+这块折腾了许久，终于搞定了，记一下要点：
+1. request.POST是一个immutable的QueryDict，通过它生成的表单是无法被修改，需
+   要通过 ~request.POST = request.POST.copy()~ 来将其改为 mutable 的，进而
+   生成可被修改的表单。
+2. form有cleaned_data和data两个属性，前者只有在调用form.is_valid()后才能被访
+   问。
+3. form可以通过initial设定的初始值，但这只能用来设定初始值，而不能通过它来
+   修改已提交的form的字段值。
+4. 结论：在调用form.is_valid()之前通过form.data['xxx']来修改字段值。
+5. 补充：如果构造表单时设置了prefix，那么通过form.data['xxx']取字段时，字段
+   名需要同步地加上前缀。
+   
+#+BEGIN_SRC py
+  ...
+  order_book_form.data['order_book-book'] = book.id
+  if order_book_form.is_valid():
+      book_order = order_book_form.save()
+      messages.info(request, 'Success to order book: %s' % book_order.location)
+      return redirect('/book/my_books')
+  ...
+#+END_SRC
+感想：Django的form是很便利的，但是Django的学习成本确实很高。
+
+** 如何非form中发起POST请求时关闭csrf保护以解决403错误？ <2016-08-18 四 23:39>
+在form中，可以加上 ~{% csrf_token %}~ 来实现跨站请求伪造保护，默认情况下，
+Django后端是要求全部的POST情况都带上csrf_token的。但是有时候，我们并不是在表
+单中发起POST情况，csrf_token就不方便加上，我们可以关闭csrf。关闭csrf很简单，
+就是在settings.py中去掉 ~django.middleware.csrf.CsrfViewMiddleware~ 即可，
+但是这样的话，会导致全部请求的csrf被关闭，这会带来一定的风险。我们可以只针
+对特定的views关闭csrf，方法就是使用修饰器 ~@csrf_exempt~ 。具体如下：
+
+#+BEGIN_SRC py
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def notification(request):
+    event = request.POST['event']
+    if event in ['arrival', 'shortage']:
+        order_id = request.POST['id']
+        book_order = get_object_or_404(BookOrder, pk=order_id)
+        book_order.status = event
+        book_order.save()
+        return JsonResponse({'order_status': book_order.status})
+    return HttpResponse(event)
+#+END_SRC
+
+参考：
+1. [[http://stackoverflow.com/questions/6800894/django-returns-403-error-when-sending-a-post-request][python - Django returns 403 error when sending a POST request - Stack Overflow]]
+2. [[https://docs.djangoproject.com/en/1.10/ref/csrf/][Cross Site Request Forgery protection | Django documentation | Django]]
+
+* Django Logging
+- [[https://docs.djangoproject.com/en/1.7/topics/logging/]]
+** Django 使用 Python 内建的 logging 模块 <2015-03-31 二>
+Django 使用 Python 内建的 logging 模块来做日志打印。Python 的 logging 模块
+的配置分为四个部分：
+- Loggers
+- Handlers
+- Filters
+- Formaters
+-------
+*Logger* 是 Python logging system 的入口。用户通过 logger 进行打日志，每条
+日志（logger record）都具有 log level。Log level 有如下几种：
+
+#+CAPTION: Log Level
+| 日志等级  | 描述                                                         |
+|-----------+--------------------------------------------------------------|
+| DEBUG:    | Low level system information for debugging purposes          |
+| INFO:     | General system information                                   |
+| WARNING:  | Information describing a minor problem that has occurred.    |
+| ERROR:    | Information describing a major problem that has occurred.    |
+| CRITICAL: | Information describing a critical problem that has occurred. |
+
+*Handlers* 是决定对 logger 中每条 message 做和处理的引擎。Handlers 也拥有
+log level，如果某个 log record 的 log level 大于等于该值，则忽略这个 log
+record。一个 logger 可拥有多个 handlers，而每个 handler 都有其自己的 log level。
+
+*Filters* 提供了额外的手段，来控制那些 log records 会被从 logger 传递到
+handler，它既可以被安装到 logger 上，也可以安装到 handler 上。
+
+*Formatters* 能够控制 log record 打印成文本的格式。参考：[[https://docs.python.org/3/library/logging.html#logrecord-attributes][LogRecord attributes]]
+
+** 使用 Python logging
+发生异常后，可以使用 logger.exeception() 来打日志，因为它可以同时记录发生异
+常时的函数调用栈。
+#+BEGIN_SRC sh
+logger.exception(): Creates an ERROR level logging message wrapping the current exception stack frame.
+#+END_SRC
+
+* Django Management Commands
+我们使用 Django 来做 Web 开发，但是总有一些定期或者非定期的后台任务需要运行，
+这时我希望 Django 能够提供相关的设施，来让我方便实现并执行这些后台任务。我的需求有
+下面几点：
+1. 能让我的任务脚本很方便地获得 Django 的运行环境（主要是数据库）
+2. 提供一个优雅的接口，来让我方便管理这些任务。当我的任务越来越多，且要交接
+   给别人时，这一点显得更为重要
+   
+PHP 有个 Web 框架叫 YII，在百度使用广泛。它的 yiic 脚本可以注册命令，然后通
+过 ./yiic xxx 来运行相应的脚本。这样带来的好处就是接口统一，可维护性好。
+
+Django 框架也提供了 Management Command 功能，它能让我们写自己的后台脚本，并
+注册到 manage.py 上，只需要通过 python manage.py xxx 就可以执行它，并且带着
+Django 的运行环境。
+- [[https://docs.djangoproject.com/en/1.7/howto/custom-management-commands/][Writing custom django-admin commands]]
+  
+该功能的目录格式和必须的文件如下：
+#+BEGIN_SRC sh
+[zy@xxx.com]$ tree -A  minos/management/
+minos/management/
+├── commands
+│   ├── data_quality.py
+│   ├── __init__.py
+├── __init__.py
+#+END_SRC
+
+文件 ~minos/management/commands/data_quality.py~ 内容如下：
+#+BEGIN_SRC python
+from django.core.management.base import BaseCommand, CommandError
+
+
+class Command(BaseCommand):
+    help = 'Minos data quality'
+
+    def handle(self, *args, **options):
+        print self.help
+#+END_SRC
+
+当我执行 ~python manage.py data_quality~ 后，即可得到返回：
+#+BEGIN_SRC sh
+Minos data quality
+#+END_SRC
+
+* Django Admin
+** 自定义 Action
+- [[https://docs.djangoproject.com/en/1.8/ref/contrib/admin/actions/][Admin actions (1.8)]]
+- [[http://agiliq.com/blog/2014/08/passing-parameters-to-django-admin-action/][Passing parameters to Django admin action]]  
+  
+自定义 Action，配合 Filter 来在 Admin 页面上对数据进行批量操作。
+
+** 自定义 Admin 页面的外观
+- [[https://docs.djangoproject.com/en/1.8/intro/tutorial02/#customize-the-admin-look-and-feel][Customize the admin look and feel (Django 1.8 Tutorial)]]
+- [[http://stackoverflow.com/questions/6583877/how-to-override-and-extend-basic-django-admin-templates][How to override and extend basic Django admin templates?]]（看起来过期了，只能供参考）]]
+- [[http://heyman.info/2011/jul/5/extending-templates-specific-django-app/][Extending templates from a specific Django app]]（看起来过期了，只能供参考）
+
+官方文档介绍的方法很 hack，是拷贝 Admin 页面的默认模板到自己的
+templates/admin 目录下，并直接在上面修改来完成的，而不是通过 Django 模板系
+统的 extends 机制。估计是 Django 的模板系统也无法处理不同模板路径下的模板文
+件寻找的问题吧。
+
+* Django Unittest
+Django 的单测其实是完全基于 Python 的 unittest 模块，只要了解后者，Django
+的单测其实是没有学习成本的。
+
+Django 的 django.test.TestCase 扩充了 unittest 模块，增加了许多特有的
+assert 方法，例如：
+
+#+BEGIN_SRC python
+assertHTMLEqual()
+assertFormError()
+assertContains() # 检查 response 的状态码
+#+END_SRC
+
+执行单测的命令是：
+#+BEGIN_SRC sh
+python manage.py test minos
+#+END_SRC
+
+参考：
+- [[https://docs.python.org/2/library/unittest.html][25.3. unittest — Unit testing framework]]
+- [[https://docs.djangoproject.com/en/1.8/intro/tutorial05/][Writing your first Django app, part 5 (Django 1.8)]]
+- [[https://docs.djangoproject.com/en/1.8/topics/testing/overview/][Writing and running tests (Django 1.8)]]
+
+* 邮件和短信
+Django 支持 SMTP 协议来发送邮件，不过我不喜欢，我想使用 ~sendmail~ 这个
+Linux 指令来发送。我搜到了一个解法：
+- [[https://djangosnippets.org/snippets/1864/][email backend which use sendmail subprocess]]
+
+* Middleware
+** 将异常调用栈打印出来（通过 Middleware） <2015-06-14 日>
+用户请求过来，如果处理请求时抛出了异常，Django 日志里只能简单地打印一条 500
+（或其他错误码）的日志，无法看到异常的调用栈。这对我们 Debug 是非常不利的。
+
+为了能在异常时打印调用栈，我们需要 Django 提供一种类似于 Flask 的
+~before_app_request~ 这样的自定义钩子函数，在每次访问前或访问后， *对异常进
+行统一的处理* 。
+
+Django 提供了被称为 Middleware 的机制，引用 [[https://docs.djangoproject.com/en/dev/topics/http/middleware/#process_exception][Django 文档]] ，Middleware 是：
+
+#+BEGIN_QUOTE
+Middleware is a framework of hooks into Django’s request/response
+processing. It’s a light, low-level “plugin” system for globally
+altering Django’s input or output.
+#+END_QUOTE
+
+我们可以自定义自己的 Middleware 来在每次处理请求的异常时做我们想要的处理，
+例如打印调用栈。为了实现这个自定义，我们需要做：
+1. 定义 Middleware 类，在类中实现 ~process_exception()~ 函数。
+2. 修改 setting.py 中的 MIDDLEWARE_CLASSES，在里面引入此类。
+
+具体实现的例子是：我们在项目目录下新建一个叫做 middleware.py 的文件，并在里
+面加入：
+#+BEGIN_SRC python
+import traceback
+import sys
+
+class ProcessExceptionMiddleware(object):
+    def process_response(self, request, response):
+        if response.status_code != 200:
+            print '\n'.join(traceback.format_exception(*sys.exc_info()))
+        return response
+#+END_SRC
+
+然后在 setting.py 的 MIDDLEWARE_CLASSES 里加入：
+#+BEGIN_SRC python
+MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    # 省略其他 Middleware
+    'minosweb.middleware.ProcessExceptionMiddleware'
+)
+#+END_SRC
+
+参考：
+- http://stackoverflow.com/questions/5137042/how-can-i-get-django-to-print-the-debug-information-to-the-console
+- [[https://docs.djangoproject.com/en/1.8/topics/http/middleware/#process-exception][Middleware (Django 1.8)]]
+
+* 问题记录
+** css 文件有时候需要重启 server 才能生效
+例如：bootstrap.min.css
+
+** TODO 线上部署时是 static 文件寻址
+解法：临时先把 static 目录一股脑拷贝到/var/www 目录下。
+** WSGIPythonPath cannot occur within <VirtualHost> section
+解法：换用 WSGIDaemonProcess 来设置 python-path
+** OperationalError: unable to open database file
+Django 在读写 sqlite 时会在 project 目录下产生临时文件，所以不仅要对 db.sqlite3 执行 chmod 777，还要对整个 project 目录执行 chmod 777 -R。
+** TypeError: can't compare offset-naive and offset-aware datetimes
+Django 支持 Python datetime 里面的时区特性。这样就导致了一个问题，开启时区
+特性后：
+1. Django 框架生成的 datetime 是 ~offset-aware~ 的。
+2. 通过 datetime 模块生成的 datetime 是 ~offset-naive~ 的。
+
+两种方式产生的 datetime 变量一比较，就会抛出 ~TypeError: can't compare
+offset-naive and offset-aware datetimes~ 这样的异常，让用户感觉很坑。
+
+解法：将 settings.py 里的 ~USE_TZ~ 设为 False。参考：
+- [[https://docs.djangoproject.com/en/1.8/topics/i18n/timezones/][Time zones (Django 1.8)]]
+
+** Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT
+我使用 Django 的 raw SQL 来执行 update，但是抛出了下面的异常：
+#+BEGIN_SRC sh
+Warning: Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT. Statements writing to a table with an auto-increme
+nt column after selecting from another table are unsafe because the order in which rows are retrieved determines what (if any) rows will be written. This orde
+r cannot be predicted and may differ on master and the slave.
+#+END_SRC
+
+Google 一下，发现有人和我遇到了 [[http://stackoverflow.com/questions/17057593/warning-unsafe-statement-written-to-the-binary-log-using-statement-format-since][同样的问题]] ，他们的解法是修改 mysqld 的配置
+将 binlog_format 改为 mixed 并重启。我修改了一下我的 ~my.conf~ ，发现确实解
+决了问题：
+#+BEGIN_SRC sh
+# binary logging format - mixed recommended                                                         
+binlog_format=mixed     
+#+END_SRC
+
+补充一句，我是在测试环境下的 MySQL 出现的这个问题，线上环境（公司 DBA 维护）
+的并没有，说明将 binlog format 设为 mixed（而不是 statement）应该是推荐的配
+置。
+- [[http://dev.mysql.com/doc/refman/5.1/en/binary-log-setting.html][Setting The Binary Log Format (MySQL 5.1 Reference Manual)]]
+
+** 通过 Admin 页面新增对象时，抛出 Error creating new content types. Please make sure contenttypes is migrated before trying to migrate apps individually.
+原因：建表时，没有卫生地通过 Django 的 Migration 机制来迁移，
+django_content_type 表中不含有该表的记录。
+
+解决方法（假设我们的表明叫做 data_flow）：
+#+BEGIN_SRC sql
+insert into django_content_type (name, app_label, model) value ('data flow', 'management', 'dataflow');
+#+END_SRC
+** 当 DEBUG = False 时找不到 static 文件，除非 python manage.py runserver --insecure 
+Django 还是很挫的，并不站在用户角度设计。使用 Flask 让人惬意，使用 Django
+经常给你来个惊异，然后耗费掉你大量时间。
+
+** ADMINS 的值是个 tuple 的 tuple，后面有个逗号
+#+BEGIN_SRC python
+# 错误！
+ADMINS = (('Zhong Yi', 'zhongyi@xxx.com'))     
+# 正确
+ADMINS = (('Zhong Yi', 'zhongyi@xxx.com'),)     
+#+END_SRC
+
+使用 Django 经常给你来个惊异，然后耗费掉你大量时间。
+
+** [Errno socket error] [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:590) <2016-08-17 三 02:49>
+我使用Django cas实现单点登录时，将cas server指向公司的测试服务器地址，结果
+报了上面的错误。网上搜了一下，别人说这是Mac下的OpenSSL升级导致产生了不兼容
+的问题。我通过brew重装了OpenSSL，发现搞不定。
+
+最后，我在 https://github.com/servo/servo/issues/5917 一文中找到了几行代码，
+粘贴到views.py的开始处，发现问题解决了。
+#+BEGIN_SRC py
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+#+END_SRC
+
+** 首次线上部署时，执行 python manage.py makemigrations 没有如预期地生成迁移指令 <2016-08-21 日 19:33>
+原因：开发环境下，我们通过startapp来新增应用，这个指令会生成一个migrations
+目录，这个步骤是迁移初始化。没有这个步骤，执行 ~python manage.py
+makemigrations~ 是不会发现models的diff并生成数据库迁移指令的。 
+
+当我们将应用部署到线上是，则不会执行startapp，而是直接从代码库拉取代码，而
+且线上环境和开发环境的migrations目录不会共用。这就导致了首次线上部署是没有
+经过迁移初始化的步骤，进而导致标题上提到的这个问题。
+
+解决方法很简单，以应用标签为参数再执行一篇。例如：
+#+BEGIN_SRC sh
+python manage.py makemigrations book
+#+END_SRC
+
+参考：
+1. [[http://stackoverflow.com/questions/23068275/migrations-in-django-1-7][Migrations in Django 1.7 - Stack Overflow]]
+2. [[https://docs.djangoproject.com/en/1.10/topics/migrations/#adding-migrations-to-apps][Migrations | Django documentation | Django]]
+** django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet. <2016-11-25 五 09:26>
+现象：在一个app的views.py中引入Model，报这个错误，但是在其他app中引入，则不
+会报。
+#+BEGIN_SRC sh
+Traceback (most recent call last):
+  File "/home/work/.jumbo/lib/python2.7/site-packages/django/utils/autoreload.py", line 226, in wrapper
+    fn(*args, **kwargs)
+  File "/home/work/.jumbo/lib/python2.7/site-packages/django/core/management/commands/runserver.py", line 113, in inner_run
+    autoreload.raise_last_exception()
+  File "/home/work/.jumbo/lib/python2.7/site-packages/django/utils/autoreload.py", line 249, in raise_last_exception
+    six.reraise(*_exception)
+  File "/home/work/.jumbo/lib/python2.7/site-packages/django/utils/autoreload.py", line 226, in wrapper
+    fn(*args, **kwargs)
+  File "/home/work/.jumbo/lib/python2.7/site-packages/django/__init__.py", line 27, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/home/work/.jumbo/lib/python2.7/site-packages/django/apps/registry.py", line 85, in populate
+    app_config = AppConfig.create(entry)
+  File "/home/work/.jumbo/lib/python2.7/site-packages/django/apps/config.py", line 90, in create
+    module = import_module(entry)
+  File "/home/work/.jumbo/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/work/minos/nimos/minos/__init__.py", line 3, in <module>
+    from . import views
+  File "/home/work/minos/nimos/minos/views.py", line 16, in <module>
+    from minos.models import LogConfig
+  File "/home/work/minos/nimos/minos/models.py", line 8, in <module>
+    class LogConfig(models.Model):
+  File "/home/work/.jumbo/lib/python2.7/site-packages/django/db/models/base.py", line 105, in __new__
+    app_config = apps.get_containing_app_config(module)
+  File "/home/work/.jumbo/lib/python2.7/site-packages/django/apps/registry.py", line 237, in get_containing_app_config
+    self.check_apps_ready()
+  File "/home/work/.jumbo/lib/python2.7/site-packages/django/apps/registry.py", line 124, in check_apps_ready
+    raise AppRegistryNotReady("Apps aren't loaded yet.")
+django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
+#+END_SRC
+
+检查一遍，发现该app的 ~__init__.py~ 中有奇怪的代码，而其他app中则没有。
+#+BEGIN_SRC py
+from django.conf.urls import url
+
+from . import views
+
+app_name = 'xxxxx'
+urlpatterns = [
+    url(r'^/$', views.index, name='index'),
+]
+#+END_SRC
+
+这些代码本来应该出现在 ~urls.py~ 中的。我删除这些代码，再观察，发现问题解决。
+
+原因总结：这个app下的 ~__init__.py~ 是在Django app注册之前加载的，在里面引
+入了views.py会导致这种问题。
+
+* 回顾
+** 看完了官方 Tutorial <2014-03-01 六>
+Django 的官方 Tutorial 写得确实很赞，我照着它很流畅地学完了 Django。下一步我会寻求
+Django 与 Bootstrap 的集成。
+
+** 再度使用 Django <2015-03-27 五>
+存在问题：
+1. Python 语法文件
+2. 缺乏 Web 开发的 snippets
+3. Admin 页面加 Modle 过程繁琐。为了将一个 Model 添加到 Admin 页面，我需要在 N 个地方加代码，我感觉很不爽。
+4. 设定模板加载路径
+
+相关工具:
+1. vim-surround 解决 HTML 标签的修改问题
+2. Django 项目管理插件在哪里？
+
+
+** Django 还是很挫的 <2015-06-19 五>
+Django 还是很挫的，并不站在用户角度设计。使用 Flask 让人惬意，而使用 Django
+则会经常给你来个惊异，然后耗费掉你大量时间。
+
+今天实现 EmailBackend 和程序异常时自动发邮件时，连续踩到了多个坑。包括：
+1. DEBUG 从 True 设置为 False 时，static 文件突然不声不响地不能访问了。
+2. ADMINS 这个 tuple 中的 tuple 需要在后面补上一个逗号。
+3. Django 拥有大量组织良好制作精美且全面的文档，然而卵用并不大。
+   
+

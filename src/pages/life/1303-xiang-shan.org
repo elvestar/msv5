@@ -1,0 +1,34 @@
+#+TITLE: 初春爬香山
+#+DATE: 2013-03-02
+
+今天带着NEX-6爬了香山。虽然到了三月，但是没有一点春天的意思，花木没有变绿，
+积冰仍未消，再加上是多云天气，所以拍出来的效果很不理想。等到山顶时，发现正
+是夕阳落山时，观感很震撼，尤其是夕阳从云层中射出的万丈光芒，可惜我用NEX-6拍
+不出来我想要的效果。
+
+#+CAPTION: 香山公园正门
+[[../static/imgs/1303-xiang-shan/DSC04413.jpg]]
+#+CAPTION: 静翠湖
+[[../static/imgs/1303-xiang-shan/DSC04417.jpg]]
+#+CAPTION: 枯树残桓
+[[../static/imgs/1303-xiang-shan/DSC04420.jpg]]
+#+CAPTION: 由此路上山
+[[../static/imgs/1303-xiang-shan/DSC04422.jpg]]
+#+CAPTION: 枯草枯树
+[[../static/imgs/1303-xiang-shan/DSC04431.jpg]]
+#+CAPTION: 回望
+[[../static/imgs/1303-xiang-shan/DSC04435.jpg]]
+#+CAPTION: 观景台
+[[../static/imgs/1303-xiang-shan/DSC04456.jpg]]
+#+CAPTION: 夕阳
+[[../static/imgs/1303-xiang-shan/DSC04474.jpg]]
+
+另外，昨晚看了一下Evernote上的工作笔记，发现月度笔记正好满十二篇，说明我在
+百度已经工作了一年。我在工作上使用Evernote的方法是每月新开一篇月度笔记。在
+月度笔记上：
+1. 每天新开一个二级标题，以日期为标题名，记录每天的工作TODO和完成情况。
+2. 遇到重要事情，会单独开一篇笔记来跟进，并在月度笔记上留下链接。
+3. 月度笔记的标题命名是 *20XX年XX月在XX的工作* 。
+
+#+CAPTION: 百度工作一年记
+[[../static/imgs/1303-xiang-shan/1.jpg]]

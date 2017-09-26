@@ -1,0 +1,18 @@
+#+TITLE: Erb
+#+DATE: 2015-04-08
+#+KEYWORDS: SSG
+
+* 前言
+我使用 Nanoc 来做静态站点生成，而 Nanoc 默认是使用 erb 作为 HTML 模板工具的。
+在使用 erb 的过程中，我发现它好像挺弱的，没找到类似于 Jinja 和 Liquid 的
+extends 的功能。我想，既然 Rails 也使用 erb 作为 HTML 模板工具，这些基础的
+特性应该是支持的吧，否则太残疾了。
+
+于是我就开了一篇笔记深入地了解一下 erb。
+
+* 资料收集
+** 文章
+- [[http://www.sitepoint.com/ditching-erb-a-guide-to-using-liquid/][Ditching ERB: A Guide to Using Liquid]]
+
+** 文档
+- [[http://guides.rubyonrails.org/layouts_and_rendering.html#structuring-layouts][Layouts and Rendering in Rails]]

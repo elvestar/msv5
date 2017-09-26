@@ -1,0 +1,550 @@
+#+TITLE: 摄影和后期处理经验
+#+DATE: 2017-03-18 10:01:52
+
+
+- 光圈开到F16，拍夜景路灯会有好看的光圈。
+
+* 周末开始调研 <2016-11-13 日>
+** a6000系列
+- [[http://www.bilibili.com/video/av4218379/][「科技美学」索尼α6300 松下 LX100 最强微单对比测评a6300_数码_科技_bilibili_哔哩哔哩弹幕视频网]]
+学到了：
+1. a6300配置了4K、超采样、慢动作、4D对焦、S-Log2、S-Log3等黑科技，就比a7s2少
+   了五轴防抖，还多了4D对焦。
+2. 旅游带两个镜头，一个是旅游变焦头，一个是大光圈的定焦头（提到了我曾经入手
+   过E-35）。
+3. 飞羽MG手持稳定器，提升视频拍摄的稳定性。
+4. 通过热靴连上运动相机，在拍摄的同时实现自拍（就像斗鱼直播那样），记录拍摄
+   者表情和对话。
+   
+** a7系列
+- [[http://forum.xitek.com/thread-1444047-1-1-1.html][A7+24240澳洲纪行 - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://www.dgtle.com/article-15577-1.html][听说向阳花和萌妹更搭，Sony a7 人像体验丨数字尾巴]]
+- [[http://www.bilibili.com/video/av2910084/][【CamLogic 相机逻辑】索尼Sony A7R II评测_数码_科技_bilibili_哔哩哔哩弹幕视频网]]
+- [[https://www.chiphell.com/thread-1275831-1-1.html][随走随拍-SONY A7M2+FE 28mm F2.0（已补FE28样张） - 器材展示和评测 - Chiphell - 分享与交流用户体验的最佳平台]]
+- [[http://forum.xitek.com/thread-1616503-1-1-2.html][SONY A7R2万言书 - α|Sony/KM/M SLR/DSLM论坛]]
+
+- [[http://forum.xitek.com/thread-1625098-1-1-1.html][A7R2 or A99M2 ? - α|Sony/KM/M SLR/DSLM论坛]]
+
+#+BEGIN_EXAMPLE
+pennyboy 
+YY鱼 发表于 2016-11-12 07:59
+
+1，个人还是选择便携一点比较好，毕竟不是职业的，带不带的出去是一个很大的问题...
+这兄弟所言极是，N年前曾背A900和三大元A口去到处折腾，现在换7后，真正感觉到一种轻松与舒服。
+本帖由 iPhone7,2 客户端发布
+2016-11-12 18:33
+#+END_EXAMPLE
+
+- [[http://forum.xitek.com/thread-1273152-1-1-2.html][佳能EF24-70/F4和索尼FE24-70/F4哪个画质好。 - α|Sony/KM/M SLR/DSLM论坛]]
+
+#+BEGIN_EXAMPLE
+heyulou 
+jsm186 发表于 2014-2-25 19:11 
+我有佳能,5D3+EF24-70/F4套机，由于年龄较大，感觉就这套也太大太重，外出旅游很累。最近在朋友建议下又头脑发热进了索尼的A7，在配镜的问题上，有人告诉我买一个索尼的蔡斯头FE24-70/F4，也有人说不如买个转接环就用佳能的EF24-70/F4，可以省下一大笔钱。由于我还是比较注重画质的，所以在此弱弱地问一下，有人比较过这两头的画质吗？也就是说，如果A7+FE24-70/F4画质会有5D3+EF24-70/F4那么好吗？（当然不考虑重量、体积、做工等因素，因为那是明摆着的。纯就画质而言。）
+我有5d2+ef24-70 2.8,通过转接环上a7r,大约只能发挥24-70 2.8的70%的性能。
+蔡司24-70/4我也一直想买，仔细看过样片，感觉F4的水准好于ef 24-70 2.8 ,不过可以光圈小了点。
+我思考再三，最后入了一支徕卡的R35-70 e67
+虽是手动，徕卡才是这个焦段的王者
+2014-02-25 23:43
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+cqkxzdh 
+我与楼主的机器大致相当，无敌兔加大三元，不过近年添了一台NEX-7+几个半幅E卡口镜头，现经不起诱惑又添了索尼a7r（配FE24-70mmf4/FE55mmf1.8镜头)，论感受既然爱上了A7还是购置一个FE24-70mmf4镜头吧，效果挺不错的，可以说中心与边缘锐度都尚佳，特适合我们这个年纪的人。现在佳能的那套是我的备用了，几乎长时间在防潮箱中睡大觉。
+2014-02-25 22:49
+#+END_EXAMPLE
+
+
+** RX100系列
+- [[https://www.chiphell.com/thread-1088503-1-1.html][想请问下A6000要配个什么镜头才能和RX100m3差不多 - 器材展示和评测 - Chiphell - 分享与交流用户体验的最佳平台]]
+** RX10系列
+- [[https://www.zhihu.com/question/28418165][如何评价索尼RX10? - 知乎]]
+** 镜头
+- [[http://www.sonystyle.com.cn/products/nex/gm/interview/index.htm][G大师镜头工程师访谈]]
+- [[http://www.sonystyle.com.cn/products/nex/lens/selp28135g.htm][FE PZ 28-135mm F4 OSS (SELP28135G) | 微单TM数码相机 索尼 Sony 官方网站]]
+- [[http://www.sonystyle.com.cn/products/nex/lens/sel2470z.htm][Vario-Tessar T* FE 24-70mm F4 ZA OSS(SEL2470Z) | 微单TM数码相机 索尼 Sony 官方网站]]
+- [[http://www.sonystyle.com.cn/products/alphauniverse/stories/stories_zql.htm][轻便摄影，一镜天涯 |微摄会]]
+
+- [[http://www.sonystyle.com.cn/products/nex/lens/sel85f14gm.htm][FE 85mm F1.4 GM(SEL85F14GM) | 微单TM数码相机 索尼 Sony 官方网站]]
+#+BEGIN_EXAMPLE
+2016-2017欧洲年度最佳专业紧凑型系统镜头：SEL85F14GM
+SEL85F14GM全画幅中远摄定焦G大师镜头对于任何一位有志向的人像摄影师都是一件真正的资产。光学设计和先进透镜元件确保镜头能够提供现代照相机所必备的超高分辨率。11枚圆形光圈叶片提供了一个顺滑且具有吸引力的模糊背景，而索尼传统的纳米抗反射涂层减少了炫光和背光主体的重影。它拥有传感器的环形驱动SSM（超声波马达）系统以及两个位置传感器，支持快速准确的自动对焦。此外FE 85mm F1.4 GM也符合人们对专业镜头的预期，防潮且防尘。
+#+END_EXAMPLE
+** 摄影帖子
+- [[http://bbs.ngacn.cc/read.php?tid=9294811][51南京难得好天 市区爬楼风光和郊区星空合集 轻拍 by索尼a7大法]]
+- [[http://bbs.ngacn.cc/read.php?tid=8572334][买了个索尼a7之后买了三阳14，算是入了摄影的门了，请大家大力点评]]
+- [[https://www.chiphell.com/thread-1625703-1-1.html][这次要写个够！说说我是怎么从全幅“降级”到截副的！ - 器材展示和评测 - Chiphell - 分享与交流用 户体验的最佳平台]]
+
+** 徕卡 Q
+- [[https://www.zhihu.com/question/31202142][ 如何评价徕卡 Q (Leica Q)? - 知乎]]
+- [[https://www.chiphell.com/thread-1315282-1-1.html][买了个松下全幅卡片机，信仰充值了——徕卡Q（Typ 116）开箱 - 器材展示和评测 - Chiphell - 分享与交流 用户体验的最佳平台]]
+
+** 三脚架
+推荐用捷信，我到JD搜索了一下，尼玛6000多一台。
+- [[http://bbs.ngacn.cc/read.php?tid=10337080][【器材求助】三脚架什么材质的好？]] 
+
+** M43
+- [[http://byleon.com/archives/3353][奥林巴斯OMD EM5独立评测及使用指南：单反和微单的混血！ | 叶梓的摄影术]]
+- [[http://bbs.ngacn.cc/read.php?tid=10287225][双11适合入A7R2吗？]] （em5拍摄的照片非常棒，M43适合变焦头？）
+** 佳能G5X/G7X
+- [[http://forum.xitek.com/thread-1528638-1-1-1.html][什么情况？DPREVIEW同场景实拍，RX100M3力挫G5X和RX100M4 - 数码相机]]
+- [[http://bbs.zol.com.cn/dcbbs/d232_810820.html][放弃索尼RX100IV选佳能G5X的理由-中关村在线摄影论坛]]
+- [[https://vloggerpro.com/is-canon-powershot-g5x-good-for-vlogging/][Is the Canon PowerShot G5 X Good for Vlogging?]]
+- [[http://www.bilibili.com/video/av3263715/][【CamLogic相机逻辑】佳能 Canon Powershot G5X G9X 相机 体验_超清_数码_科技_bilibili_哔哩哔哩弹幕视频网]]
+- [[http://forum.xitek.com/thread-1531871-1-1-2.html][佳能G5X随拍 - 数码相机]]
+- [[https://www.dpreview.com/products/canon/compacts/canon_g5x][Canon PowerShot G5 X: Digital Photography Review]]
+- [[https://www.dpreview.com/products/compare/side-by-side?products=canon_g5x&products=sony_dscrx100m3][GX5 and RX100 M3 Comparison: Digital Photography Review]]
+  
+仔细看了DPR上的评测：
+1. GX5是续航是210张照片，而同样电池容量的RX100则是320张照片。
+2. 照片画质不如RX100 M3
+** 松下LX100
+- [[http://photo.pcpop.com/vis-1055908.htm][RX100III/G7X/LX100 谁才是最佳备机?_泡泡网]]
+- [[http://www.dgtle.com/article-9891-1.html][新机半月谈，简评 LX100 优缺点丨数字尾巴]]
+- [[http://www.dgtle.com/article-9755-1.html][除了逼格，我可以做更多，邂逅 Panasonic Lx100丨数字尾巴]]
+
+- [[https://www.dpreview.com/reviews/panasonic-lumix-dmc-lx100/13][Panasonic Lumix DMC-LX100 Review: Digital Photography Review]]
+#+BEGIN_EXAMPLE
+Conclusion
+The LX100 is a very specific tool - a usefully small camera with an impressively bright lens and good sized sensor. Its short zoom and low pixel count will limit its appeal but dependable image quality and excellent hands-on controls make this one of the best zoom compacts we've ever tested.
+#+END_EXAMPLE
+
+- [[http://jinghuasoft.com/smthview.jsp?board=DC&id=451886][入手LX100 - 水木快照 JinghuaSoft]]
+#+BEGIN_EXAMPLE
+发信人: bigbear (被跳槽了), 信区: DC 
+标  题: 入手LX100 
+发信站: 水木社区 (Mon Jun  8 18:15:16 2015), 站内 
+  
+已有RX100M2，A6000，犹豫了半年，还是没忍住，淘宝上下手了，港货。 
+  
+体积比RX100M2大了一圈，跟A6000加套头差不多大小，肯定不算口袋机了。 
+  
+先说几个不如RX100或者A6000的地方 
+  
+1. 没有翻转屏，用惯了翻转屏的再用这个，实在落差太大，宁愿不要EVF 
+2. 非标准MicroUSB数据接口，要用松下专用的数据线 
+3. 无法像SONY相机那样通过USB接口充电，充电宝派不上用途了 
+4. 闪光灯没有内置，外置的闪光灯做工极其粗糙，和机身相比落差太大， 
+    宁愿不要闪光灯，省两百块钱 
+5. 镜头上的控制环阻尼不足，一碰就转，容易不小心误操作。 
+  
+几个优点： 
+1. 对焦速度快，快得非常明显，无论是对比RX100还是A6000（配18-200LE） 
+    弱光下对焦能力也很强。不过有失焦的情况，远景拍摄出现几率高一些。 
+2. 相比RX100，宽容度明显高，死白和死黑的问题明显减轻，这是我对RX100 
+    最不满意的地方，也是想要更换的主要原因。和A6000相比半斤八两。 
+3. 按钮多，操作比较方便，不过有些操作设置不太合理，和SONY的相比各有 
+    优劣。 
+4. 做工好，比RX100和A6000都强，看起来象工艺品，相比而言A6000就很粗糙， 
+    RX100也还可以，但比LX100还是明显不如。 
+5. 液晶显示屏和EVF效果好，特别是相对A6000，看起来就是IPS视网膜屏和 
+    普通TN屏的差别 
+
+-- 
+  
+※ 修改:·bigbear 于 Jun  8 18:24:07 2015 修改本文·[FROM: 218.94.96.*] 
+#+END_EXAMPLE
+
+** 松下LX10
+- [[http://dcdv.zol.com.cn/605/6052108_all.html][松下正式发布LUMIX LX10便携卡片机（全文）_松下 LX10_数码影像新闻-中关村在线]]
+
+优点：
+- 五轴防抖
+- 触摸屏
+
+弱点：
+- 无EVF
+- 光圈缩减厉害
+  
+- [[http://forum.xitek.com/thread-1627277-1-1-2.html][lx15/lx10 行货发售价格 - 数码相机]]
+- [[http://forum.xitek.com/thread-1627551-1-1-2.html][lx15/lx10/lx9 评测 - 数码相机]]
+
+** RX100 M4
+- [[http://cnc.xitek.com/thread-1541365-1-1-2.html][兜里乾坤----------谈谈我的RX100MK4和GRII（TYP109打酱油）（S坛） - 数码相机]]
+
+#+BEGIN_EXAMPLE
+AreX 
+刚入LX100
+
+广角端光圈全开比之前的rx100m4差了不少，本来像素就低，成像还偏软，差距不小，和1200w的三星S7拍出来效果接近(我用二者raw出图lightroom解，做了相当多的不同场景的对比)...
+
+光圈收到f2.2就好了很多，变焦到最大光圈f2.8的焦段以后，画质提升一些，不收光圈也不错了
+
+另外我认为虽然LX100体积大了不少，按键数量也比RX100m4多，但是在操控方面并不一定就能胜过M4
+
+首先缺乏翻转屏，不能腰平取景，必须EVF和LCD二选一，扫街其实并不方便
+
+而且LX100的界面，基本类似松下的M43微单，但M43微单基本都是有触摸的，LX100没有，很多时候操作并没有本身就是为按键设计的RX100m4方便，比如对焦点的选择之类。
+
+在一个LX100按键数量虽然多，但是很多按键的作用都是定死的，而M4的按键大多数都是可以自定义的
+
+这就有个问题，如果两台机子都没用过的人，直接拿起来用，可能会觉得LX100操控好些，但是喜欢自定义，找到适合自己操作的人来说，M4的提升潜力更大，用多了会更顺手。
+
+然后就是LX100光圈快门这种手动式的操作，因为不能完全对应，比如变焦以后光圈放f1.7并没有意义，用了电子快门以后转盘超过4000了，快门转盘此时就没有意义了，镜头上的环大多数时候用来变焦，和快门上的变焦拨杆作用也重复，这多少让人感觉有些不爽。
+
+*****
+反观RX100m4，整个机身上面几乎没有多余的设计，我平时基本只用A档，镜头上面的环设置为曝光补偿了，机背的拨盘调光圈，相当于中端单反的双拨轮操控了，再加上背面4个方向设置为常用的设置项，基本上操作起来非常顺手。
+
+EVF的效果，LX100除了尺寸稍大，显示效果是完败给M4的，主要是两个方面，第一点LX100的EVF不管是亮度还是色彩，和机背的LCD有明显的差异，M4相对来说一致性非常高；第二点LX100的EVF在光线不好的情况下，会有闪烁感，M4几乎感觉不出，另外LX100的EVF在比较暗的环境下，会出现画面显示丢帧，不够平滑的情况，M4也会，但是并不明显。
+
+但是对焦，LX100确实比M4要强些，尤其是暗光下，这方面松下做的确实好
+
+一周时间LX100用下来以后，和预期的差不多吧，没什么惊喜，考虑到现在价格和M4差了2000块，比M3还要便宜，也算是可以接受的吧...
+
+至于黑卡M5，个人感觉比M4提升有限，最大的提升估计就是对焦了，应该是目前所有机子里面最快的了，倒是很符合黑卡本身的定位，其他的连拍，4K的提升，属于锦上添花了，毕竟这两个方面M4本身已经是这个级别里面的顶级了。
+
+最后期待楼主M5上市后购入和M4进行对比...
+本帖最后由 AreX 于 2016-10-20 09:37 编辑
+#+END_EXAMPLE
+
+- [[http://forum.xitek.com/thread-1627533-1-1-2.html][RM100M3成像是比RXM100M4来得好吗？ - 数码相机]]
+#+BEGIN_EXAMPLE
+点缀星空 
+stanleyxiao 发表于 2016-11-22 09:50 
+看了论坛里和网上很多片子，发现RX100M3拍的片子普遍要比RX100M4拍的片子来得透和亮，故有此问，特此请教。
+俺个人意见：有4K刚需和喜欢直出，黑卡4更合适；
+习惯RAW出片，黑卡3更合适；
+黑卡5的混合对焦很强，画质也最好，但太贵。
+本帖最后由 点缀星空 于 2016-11-23 09:37 编辑
+2016-11-23 09:32
+#+END_EXAMPLE
+
+* RX100M4功能研究
+** SLog-2
+- [[http://www.filmaker.cn/thread-72334-1-1.html][Sony RX100V 裤兜里的4K，slog2测试小短片 更新709lut@拍电影filmaker.cn]]
+** Dual Rec
+#+BEGIN_QUOTE
+設定是否在拍攝動態影像時自動拍攝靜態影像。在偵測到令人印象深刻的構圖（包括
+人物）時拍攝。此功能也可能錄製數個版本已裁切為最佳構圖的自動拍攝影像。當錄
+製裁切的影像時，裁切前與裁切後的影像都會錄製。
+#+END_QUOTE
+
+** 对焦模式和自动对焦区域
+#+BEGIN_EXAMPLE
+7、对焦模式
+（1）单次AF（自动对焦）：可作为常用模式。此模式下可进行跟踪对焦，就是半按快门的同时按住拨轮中间的按钮出现回字形的方框，然后你移动相机构图（不一定非得平移），焦点会跟踪原先对焦的地方，然后再半按快门对焦后拍摄。
+（2）连续AF（AF-S）：一般用于连拍模式下，如果单张拍摄情况下用连续AF，对焦点会飘忽，反而不利于对焦。此模式下无论是否开启声音对焦后均无“嘀”一声。
+（3）DMF：自动和手动合一，此模式下不能进行跟踪对焦。适合自动手动经常切换的场景，比如你到动物园，拍笼中的鸟，这时就自动加手动，否则容易合焦到笼子的铁圈上，但你一转身又拍外面的斑马，又得要自动。
+（4）MF（手动对焦）：主要用于微距拍摄及对焦困难的情况下，比如你隔着纱窗、车窗拍窗外风景。
+摄像情况下只有AF-S（可跟踪对焦）和MF对焦可选。
+8、自动对焦区域
+（1）多重：相机自动选择焦点，有时一个，有时多个，自已不能调整。所以有时这个不太方便，不少情况下相机自选的焦点不是你想拍的，你还调不了，只有反复换角度让相机再选。
+（2）中心：大多数情况下选择的模式，用中心点对准拍摄的物体然后再平移相机构图，这也是传统的拍摄方法。
+（3）自由点：按拨轮中间的按钮，对焦框变成黄色，这时你点击拨轮的上下左右键就能调整对焦框。当对焦物体不在画面中心时，不需要重新构图就能改变焦点，然后半按快门对焦，黄色对焦框变绿，再按下快门就行了。这个操作有点费时，不喜欢用这个可用跟踪对焦代替。
+摄像时此项不可选。
+#+END_EXAMPLE
+
+** 测光模式
+#+BEGIN_EXAMPLE
+13、测光模式
+（1）多重：也叫平均测光、评价测光，就是按取景画面全部来测光。
+（2）中心：也叫局部测光，中央重点测光，就是取画面中心一部分来测光。
+（3）点测光：取画面中间一小部分测光。比如你离电视五米远要把电视屏幕上内容拍下来，那就得用点测光，用其他测光方式那么电视屏幕就会一片白。
+以拍照为主建议选中心测光，会更准确，如用多重测光有时会造成主体偏暗。
+拍照视频兼顾的话建议选多重测光，否则移来移去的话测光值变化大，视频画面会忽明忽暗。
+#+END_EXAMPLE
+* 选购RX100M4配件
+** 三脚架
+- [[http://photo.withqiuliang.com/travel/travel_photography/11_carry_tripod.htm][如何在旅途中携带三脚架_秋凉的旅行摄影纵横谈之十一]]
+- [[https://www.zhihu.com/question/21712126][RX100推荐三脚架？ - 知乎]]
+
+** 手持稳定器 <2017-04-15 六>
+- [[http://info.xitek.com/pzreview/paocaisj/201603/11-194625.html][当我的黑卡四遇上三轴稳定器 - 摄影器材资讯频道]]
+- [[http://forum.xitek.com/thread-1444410-1-1-1.html][有烧摄像稳定器的没！！！- 玩主论坛]]
+- [[http://forum.xitek.com/thread-1664298-1-1-1.html][买了个三轴稳定器，搭配a6300，有点小遗憾。 - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://107cine.com/stream/82591/][小有乾坤，大有作为——智云Crane-M（云鹤M） - 影视工业网]]
+- [[http://www.pc426.com/thread-107330-1-1.html][【开箱】智云云鹤M 开箱照 - 硬件/数码 - PC426 | 学会思考，停止盲从 - Powered by Discuz!]]
+- [[http://v.youku.com/v_show/id_XMTY3NzMxNzAyMA==.html?spm=0.0.collectVideo.5~5!2~5~5~A.qCulb2][超轻便改装智云手机三轴稳定器配Sony a5100单反视频—在线播放—优酷网，视频高清在线观看]]
+- [[http://news.smzdm.com/p/30301/][【众测新品】直播拍摄不怕手抖：悠拍 Uoplay2 三轴稳定器防抖直播手持云台_资讯中心_什么值得买]]
+- [[http://www.bilibili.com/video/av4957629/?from=search&seid=1921989305653508975][飞宇MG Lite 稳定器开箱_数码_科技_bilibili_哔哩哔哩]]
+
+| 型号                          | 自重 | 最大承重 | 说明                                           |
+|-------------------------------+------+----------+------------------------------------------------|
+| 星云4000                      |      |          |                                                |
+| 智云云鹤M                     | 740g | 650g     | 能                                             |
+| 智能鸟uoplay2（淘宝店主自制） | 350g | 500g     | 店主是保修6个月，询问店家，无法控制rx100的调焦，这让我失望 |
+| 智能鸟uoplay2                 |      |          | 只能接手机和GoPro                              |
+| 飞宇MG Lite                   | 887g | 1630g    | 貌似无法控制rx100的调焦                        |
+|                               |      |          |                                                |
+
+** 4K存储卡
+- [[http://post.smzdm.com/p/492186/p2/#comments][论一个存储卡控的修炼历程：闪迪 Sandisk & 三星 Samsung篇_使用评测_第2页_什么值得买]]
+- [[http://forum.xitek.com/thread-1497631-1-1-1.html][还是提个醒吧，新买了张存储卡，仍然无法记录最高画质4K视频，等于白买了 - α|Sony/KM/M SLR/DSLM 论坛]]
+- [[http://item.jd.com/530218.html][【闪迪SD存储卡】闪迪至尊超极速 SDXC UHS-I存储卡 64GB Class10 读速95MB/s 写速90MB/s]]
+
+之前买了一个金士顿的64G SDXC SD卡，买回来后装上，发现无法拍摄4K视频，最后得
+明白，原来我买的这个是U1的，一定要是U3的才可以拍4K视频。坑爹，还不能退换。
+
+于是不得不再买一个，这次买了个好点的，闪迪的Extreme Pro 64G SDXC U3 V30的，
+号称读速95MB/s，写速90MB/s。
+* 又蠢蠢欲动 <2017-05-14 日 22:39>
+** SONY A7R2
+- [[http://forum.xitek.com/forum.php?mod=viewthread&tid=1352624&ordertype=2&highlight=16-35][索尼FE35、FE55、FE16-35、FE24-70、FE70-200及E10-18等六款微单镜头点评 - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://forum.xitek.com/forum-viewthread-tid-1257990-ordertype-2-highlight-fe%2B55.html][Sonnar T* FE 55mm F1.8 ZA 俱乐部--锐度典范、蔡司标准 - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://forum.xitek.com/forum-viewthread-tid-1674459-ordertype-2-highlight-fe%2B55.html][Sonnar T* FE 55mm F1.8 ZA 俱乐部--锐度典范、蔡司标准(续) - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://forum.xitek.com/forum-viewthread-tid-1434098-ordertype-2-highlight-fe%2B28.html][【FE28 F2俱乐部】廉价小巧E口机身的好搭档 - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://forum.xitek.com/forum-viewthread-tid-1617057-ordertype-2-highlight-fe%2B55.html][a7r2+40 饼+FE55厦门扫街 - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://forum.xitek.com/forum.php?mod=viewthread&tid=1539460][【有图有真相】a7r2+FE55 1.8真是私房利器呀 - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://post.smzdm.com/p/495758/][索尼微单选购全攻略 | SONY A7R2评测 & 使用心得_什么值得买]]
+- [[http://www.slrclub.com/bbs/vx2.php?id=slr_review&page=22&no=462][SLRCLUB, 디지털 사진가를 위한 커뮤니티]]
+- [[http://post.smzdm.com/p/493834/][索尼微单镜头使用心得 | 索尼微单选购经验_什么值得买]]
+- [[http://forum.xitek.com/thread-1661671-1-1-2.html][7r2&24-240与一个非文艺中老年的喜马拉雅山沟徒步减肥之旅（文字整理完毕） - α|Sony/KM/M SLR/DSLM论坛]]
+
+*** 有关A7R2挂机头
+- [[http://post.smzdm.com/p/475710/][我的SONY A7挂机头：SONY 索尼 FE16-35mm F4 ZA 附精美样张_使用评测_什么值得买]]
+- [[http://post.smzdm.com/p/302670/][#本站首晒# ZEISS 蔡司 小蓝标 BATIS 2/25 广角镜头 简单试用_开箱晒物_什么值得买]]
+- [[http://cnc.xitek.com/thread-1570053-1-1-1.html][终于给A7R2找到了合适的挂机头--Batis 25/2 - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://forum.xitek.com/forum.php?mod=viewthread&tid=1613687&page=1&ordertype=1][新人求助：A7Rii选择什么定焦头作为挂机头？ - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://forum.xitek.com/forum-viewthread-tid-1609530-ordertype-2-highlight-%B9%D2%BB%FA.html][异想黑科技，A7R2+55mm常年挂机+DIY一个袖珍前置28mm广角转换器放口袋随时拆 装 - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://post.smzdm.com/p/263514/][信仰充值！只为更好的享受摄影——Sony A7R2之开箱初评_使用评测_什么值得买]]
+- [[http://www.irentals.cn/article.php?id=102&page=all][【小痰盂的大乱斗】——佳能、尼康、索尼50（55）mm f/1.8镜头横评_镜头_评测_兰拓科技-iRentals 最佳摄 影器材租赁·评测品牌]]
+  
+- [[http://forum.xitek.com/forum-viewthread-tid-1635726-ordertype-2-highlight-24240.html][fe24240 与2870同焦段画质对比咋样 - α|Sony/KM/M SLR/DSLM论坛]]
+#+BEGIN_EXAMPLE
+橡树oak - 2016-12-25 13:12
+
+24-240同焦段画质好于28-70，跟FE24-70差不多，同焦段画质跟一代A口70-300接近。
+
+我是同时拥有以上四个头，最后留了24-240，出掉其他三个头，现在24-240是我的主力头。
+
+我有个24-240专帖，可以查看我的文集参考。
+
+http://forum.xitek.com/forum-viewthread-tid-1635726-ordertype-2-highlight-24240.html
+#+END_EXAMPLE
+
+** 富士XT-20
+- [[https://www.zhihu.com/question/54982360/answer/165275699][如何评价富士新出的fujifilm xt20？ - 知乎]]
+- [[http://forum.xitek.com/thread-1607009-1-1-1.html][我摄影，我快乐！堪与全幅媲美的富士X-T20和X-Pro2使用点评 - Fujifilm SLR/DSLM论坛]]
+- [[http://tieba.baidu.com/p/5014287043][想入XT2和XT20,XPRO2其中一款_富士摄 影吧_百度贴吧]]
+** A6300 <2017-06-27 二 20:54>
+- [[https://www.chiphell.com/thread-1605744-1-1.html][轻便兼具性价比的万金油 a6300+1670za简单开箱 - 影像器材 - Chiphell - 分享与交流用户体验的最佳平台]]
+- [[https://www.chiphell.com/thread-1562810-1-1.html][7r2的好备机，aps无反新标杆－a6300+1670开箱及使用感受分享 - 影像器材 - Chiphell - 分享与交流用户体验的最佳平台]]
+#+BEGIN_EXAMPLE
+云游剑侠 36# 发表于 2016-4-8 10:07 | 只看该作者
+陆鲨 发表于 2016-4-8 09:38
+6300和6K相比是不是就是多了4K一个明显的强项？对焦和追焦和M43的旗舰类相比如何？比如EM-1或者EM-5II？ ...
+
+A6300可以看作C副不带防抖的A7R2了，使用中和A6000的明显区别包括ISO6400可用，自动ISO最小快门设定，高ISO动态范围大幅提升，对焦、静音快门，人脸/严控实用度大幅提升，放大后再对焦，白平衡、直出色彩接近A7R2，至于4K，非视频党不关注这个。
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+A99 49# 发表于 2016-4-8 15:07 | 只看该作者
+shszvvc 发表于 2016-4-8 08:45
+出了A6000 1670，入手A7R2，感觉A6300没必要了
+
+2470 F4画质其实没有1670好，后者焦段也更适合旅游，如果全副要出个24-105 F4有多大？可以想象。
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE
+firello 151# 楼主| 发表于 2016-7-1 08:24 | 只看该作者
+codex777 发表于 2016-7-1 00:32
+问下楼主 入了a6300和套头16 50 有必要换16 70这个头么 差距大么
+
+我个人觉得还是蛮大的，主要是1650成像略渣，影响整机性能，我是在店里试过，1650拍的颜色不好，而且分辨率好像也有点低，放大看很容易出现画面塌陷及模糊
+至于换1670还是别的什么都可以考虑
+#+END_EXAMPLE
+
+-[[http://post.smzdm.com/p/487808/][索尼A6300微单相机使用评测 & 拍娃实战经验分享_什么值得买]]
+#+BEGIN_EXAMPLE
+如果你懒得看下面的文字说明，直接照抄我的设置也没关系。下面我挑几个关键的参数设置说。
+
+1. 人脸测光。同时开启人脸识别和多重测光模式即可。设置完了所有测光都会以人脸正常曝光为准，张张曝光准确。然后你就可以忘了测光模式了，记得看见人脸小方框再按快门就好。如果你不拍人像，没关系，依然可以忘记测光模式。EVF所即所得，没理由曝光不准。
+2. 关闭自动检视。很多人觉得微单有时滞，其实是忘了关闭自动检视。导致每拍完一张照片，系统都给你看照片回放，所以才让人产生“卡”，或者“时滞”的错觉。关了吧，就能体验机关枪一般扫射的快感了。
+3. 优先级设置。无论是AF-S单次对焦，还是AF-C连续对焦，优先级都请设置AF。意思就是先保证对焦，合焦的情况下才允许按快门。这样做的目的是保证每张照片都能对上焦，而不是拍出一大堆糊片。当然也有可能一直无法合焦导致你一直无法按快门。看你的取舍了，我的选择是对焦。
+4. 关闭静音快门。静音快门偷拍很美妙，但是拍摄运动题材时，请关闭。否则容易产生果冻效应。至于什么是果冻效应，问度娘。
+5. 自定义按键（拍摄）。很多人吐槽微单™菜单难找。其实我除了第一次拿到机器需要设置一下之外，其余拍摄从来不需要进菜单。原因就在这，自定义按键。还有下面的那条“功能菜单设置”。眼部对焦放在AEL按钮，就是AF/MF和AEL那个拨杆，拨到AEL就好。这个位置操作眼部对焦很顺手。中央键设置对焦标准，其实就是中心点对焦的意思，方便中心点对焦平移构图，不要在设置对焦区域了。至于对焦区域，请万年停留在广域对焦即可。
+6. 功能菜单设置。就是设置FN那个按钮里面出现的菜单。配合自定义按钮，平时真心没什么机会按MENU了。我进MENU一般只干一件事，格式化。这个真心没法自定义，好忧伤。
+#+END_EXAMPLE
+
+
+视频拍摄相关：
+- [[http://www.filmaker.cn/thread-72512-1-1.html][兼顾拍照和视频，A6300和老款A7哪个值得买@拍电影filmaker.cn]]
+- [[http://www.filmaker.cn/thread-72006-1-1.html][a6300旅拍，全程手持120p升格@拍电影filmaker.cn]]
+- [[http://www.filmaker.cn/thread-73217-1-1.html][用6300拍拍美女拉@拍电影filmaker.cn]]
+  
+- [[http://forum.xitek.com/forum.php?mod=viewthread&tid=1662804&ordertype=2&highlight=16-70][【A6000自留地】纪念陪伴我两年的a6000及镜头们（E16-70/F4、三阳12/F2、E35/F1.8） - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://forum.xitek.com/forum.php?mod=viewthread&tid=1676976&ordertype=2&highlight=16-70][出rx1换a6500+16-70，如何？ - α|Sony/KM/M SLR/DSLM论坛]]
+#+BEGIN_EXAMPLE
+小纱 2017-05-06 23:56
+1670和2470两个f4头都没做好，空有颜值，那啥其中。唉。e口旅游良心头在我眼中现在就2个：e1650和fe24240，fe24105G那啥能出呢？
+#+END_EXAMPLE
+
+- [[http://forum.xitek.com/forum.php?mod=viewthread&tid=1615555&ordertype=2&highlight=16-70][旅游选择困难:a6000+16-70za还是5D3+24-105F4L - α|Sony/KM/M SLR/DSLM论坛]]
+#+BEGIN_EXAMPLE
+mahe88 2016-10-07 21:48
+微单吧，我也有a6300+1670za，还有a7r2+2470za还有24-240，定焦若干，几次旅游都是a6300，周边游a7r2，白天光线好不放大看差不多，要为女友拍糖水就必须上全幅，但糖水片可等周边游时拍，远游还是轻便为好，毕竟还有好多东西要随身带，能轻一点是一点，拍照不是旅游中的全部。
+#+END_EXAMPLE
+** FE24-240
+想入A6300/A6500，但是觉得半幅以后可能会后悔，而且很多人都建议，没有全幅则优
+先上全幅。全幅的话，A7R2当然最好，但是略贵，而且像素对我而言太大了，这会导
+致我的照片管理很麻烦。而A7M2的话，很便宜，并且画质已经能满足我了。但是A7M2
+已经太落伍了，今年年底索尼可能就要发布A7M3了，它可以不足A7M2的一些不足（对
+焦、视频等），所以现在入手A7M2时机不大好。
+
+我现在有个想法，那就是先入FE24240镜头，接在我的NEX-6上先玩着，等到A7M3发布
+了，再入手A7M3。
+
+- [[http://bbs.fengniao.com/forum/9407512.html][【图】a7m2＋24-70f4与a6300＋16-70f4比较-蜂鸟摄影论坛]]
+** FE55 1.8 <2017-06-30 五 23:00>
+又觉得FE24-240太重，并且画质平庸，入了后会后悔。所以想先入个最不容易后悔的
+FE 55，等到A7M3发布后，再入A7M3。
+- [[http://forum.xitek.com/thread-1223715-1-1-1.html][出E24，入FE55 1.8，配Nex6，坐等下一代全副微单 - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://forum.xitek.com/thread-1249043-1-1-1.html][fe55头用在nex6上，到底焦距是多少？ - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://forum.xitek.com/thread-1250286-1-1-1.html][FE55 1.8和FE35 2.8用在NEX系列机器上怎么样 - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://forum.xitek.com/thread-1275140-1-1-1.html][纠结于E2418与FE5518的选择 - α|Sony/KM/M SLR/DSLM论坛]]
+** FE24-70
+- [[http://forum.xitek.com/forum.php?mod=viewthread&tid=1334229&ordertype=2&highlight=24-70][最近被各位老泡菜们毒的厉害，想出了FE28-70的狗头入FE24-70，求打醒 - α|Sony/KM/M SLR/DSLM论坛]]
+** A7M2
+又觉得先买个用上，等到A7M3出了再换上（也许直接上A7R3了），期间的就当是二手
+折旧了。
+- [[http://forum.xitek.com/forum-viewthread-tid-1439830-ordertype-2-highlight-a7m2.html][我摄影，我快乐！—— 索尼微单A7M2点评 - α|Sony/KM/M SLR/DSLM论坛]]
+- [[https://www.chiphell.com/thread-1696817-1-1.html][A7II 还是 XT2？ - 摄影讨论 - Chiphell - 分享与交流用户体验的最佳平台]]
+- [[https://www.chiphell.com/thread-1578357-1-1.html][二月中购入A7M2 四月中换购A7R2 一点对比感受 一些随拍 - 影像器材 - Chiphell - 分享与交流用户体验的最佳平台]]
+- [[https://www.chiphell.com/thread-1690491-1-1.html][全副邪教——A7M2两天简单试用体会 - 摄影讨论 - Chiphell - 分享与交流用户体验的最佳平台]]
+- [[https://www.chiphell.com/thread-1283618-1-1.html][（CHH首发)谁家防抖技术强？A7M2+55/1.8开箱SHOW - 影像器材 - Chiphell - 分享与交流用户体验的最佳平台]]
+- [[https://www.chiphell.com/thread-1192942-1-1.html][【15.01.30更新】 SONY A7II / A72 开箱&样张 （欧洲旅游+女友） - 摄影讨论 - Chiphell - 分享与交流用户体验的最佳平台]]
+- [[https://www.chiphell.com/forum.php?mod=viewthread&tid=1673293][来自未来的黑科技——sony A7II不专业开箱（二楼更新） - 影像器材 - Chiphell - 分享与交流用户体验的最佳平台]]
+
+- [[http://forum.xitek.com/thread-1536983-1-1-2.html][手动为主，自动为辅，A7M2为底，扫街随拍 - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://post.smzdm.com/p/576345/][(最全攻略)如果你选择了索尼A7M2+FE551.8/ZA，先把这些参数设置好！（简短评测+大量解毒照片）_使用评测_什么值得买]]
+- [[https://www.zhihu.com/question/31204521][sony A7m2配蔡司24-70f4好还是24-240的那支镜头好，两者画质差多少？ - 知乎]]
+- [[https://www.chiphell.com/thread-1272382-1-1.html][A7II旅游头的哪个比较好？24-70的F4到底有没有必要？ - 摄影讨论 - Chiphell - 分享与交流用户体验的最佳平台]]
+- [[http://forum.xitek.com/thread-1505474-1-1-2.html][A6000升级A7M2拍娃，顺便谈谈升级感受 - α|Sony/KM/M SLR/DSLM论坛]]
+
+** 三脚架
+* A7M2&FE55&FE24-240用法研究
+** A7M2
+- [[http://forum.xitek.com/thread-1422388-1-1-1.html][**色彩从未如此性感**A7II和A7S 图像配置文件推荐，再也没人吐槽索尼黄！ - α|Sony/KM/MSLR/DSLM论坛]]
+- [[http://forum.xitek.com/thread-1434481-1-1-1.html][你的A7ii自定义键是如何设置的？拿来分享一下呗～ - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://post.smzdm.com/p/576345/][(最全攻略)如果你选择了索尼A7M2+FE55 1.8/ZA，先把这些参数设置好！（简短评测+大量解毒照片）_使用评测_什么值得买]]
+- [[http://post.smzdm.com/p/495758/][索尼微单选购全攻略 | SONY A7R2评测 & 使用心得_什么值得买]]
+- [[http://forum.xitek.com/thread-1692775-1-1-2.html][《《SONY A9，拍娃党的春天》》。这一次真的性能过剩了。 - α|Sony/KM/M SLR/DSLM论坛]]
+
+** FE24-240
+- [[http://forum.xitek.com/forum.php?mod=viewthread&tid=1438842&ordertype=2&highlight=24-240&page=1][24-70，24-240 纠结的不行，求大神给个建议 - α|Sony/KM/M SLR/DSLM论坛]]
+#+BEGIN_EXAMPLE
+gaolianj 2017-04-14 22:44
+最近专门研究了这个问题：
+
+拍风光，或旅游，24240是不二之选。我用此头拍风光一年多，非常满意。
+
+但是，抓拍纪实或人文，特别是暗光下这头对焦就口气。因为是大变焦，对焦慢一点正常，单反的镜头也一样。
+
+由此，我准备再入一只2470，专门用于抓拍纪实和人文。
+
+这样看起来有点重复，但很实用。24240是主力，2470是备用。比2470+70200方便。供参考。
+#+END_EXAMPLE
+** 视频拍摄
+- [[http://forum.xitek.com/thread-1692551-1-1-2.html][周末娱乐，索尼a6300拍的MV，主要练习调色。 - α|Sony/KM/M SLR/DSLM论坛]]
+* 照片
+** Serenity is my Name
+#+BEGIN_EXAMPLE
+Sony Alpha a7R II
+Sony FE 24-240mm f/3.5-6.3 OSS
+82mm/ƒ/8/1/10s/ISO 100
+#+END_EXAMPLE
+#+BEGIN_HTML
+<div class='pixels-photo'>
+  <p>
+    <img src='https://drscdn.500px.org/photo/198062353/m%3D900/v2?client_application_id=15699&webp=true&sig=ec3fdfcc658d92ed81e0558cc909306cb3b808cc4ff4681f346ddcd1f247fb5b' alt='Serenity is my Name by Lars van de Goor on 500px.com'>
+  </p>
+  <a href='https://500px.com/photo/198062353/serenity-is-my-name-by-lars-van-de-goor' alt='Serenity is my Name by Lars van de Goor on 500px.com'></a>
+</div>
+<script type='text/javascript' src='https://500px.com/embed.js'></script>
+#+END_HTML
+
+** On the way to the forest.
+#+BEGIN_EXAMPLE
+Sony Alpha a7R
+Sony Vario-Tessar T* FE 16-35mm f/4 ZA OSS
+16mm/ƒ/7.1/1/400s/ISO 100
+#+END_EXAMPLE  
+#+BEGIN_HTML
+<div class='pixels-photo'>
+  <p>
+    <img src='https://drscdn.500px.org/photo/220468791/m%3D900/v2?client_application_id=15699&webp=true&sig=520108a88c7bc29b8446ce13ced7f9b044d7b5da6a8850b5cc0fd3ec1585212c' alt='On the way to the forest. 由 Nikolay Roshchin 发布在 500px.com'>
+  </p>
+  <a href='https://500px.com/photo/220468791/on-the-way-to-the-forest-by-nikolay-roshchin' alt='On the way to the forest. 由 Nikolay Roshchin 发布在 500px.com'></a>
+</div>
+<script type='text/javascript' src='https://500px.com/embed.js'></script>
+#+END_HTML
+
+** Cherry Blossoms
+#+BEGIN_EXAMPLE
+Sony Alpha a7 II
+Sony FE 24-240mm f/3.5-6.3 OSS
+24mm/ƒ/8/1/30s/ISO 400
+#+END_EXAMPLE
+#+BEGIN_HTML
+<div class='pixels-photo'>
+  <p>
+    <img src='https://drscdn.500px.org/photo/178947225/m%3D900/v2?client_application_id=15699&webp=true&sig=8688305a8c849abe9d9a992ee6a086bb805073cb8f61324463a26150bdf0b23d' alt='Cherry Blossoms by Jimmy Chau on 500px.com'>
+  </p>
+  <a href='https://500px.com/photo/178947225/cherry-blossoms-by-jimmy-chau' alt='Cherry Blossoms by Jimmy Chau on 500px.com'></a>
+</div>
+<script type='text/javascript' src='https://500px.com/embed.js'></script>
+#+END_HTML
+
+** Shandong style garden at beijing
+#+BEGIN_EXAMPLE
+Sony Alpha a7 II
+Sony FE 24-240mm f/3.5-6.3 OSS
+29mm/ƒ/9/1/80s/ISO 200
+#+END_EXAMPLE
+#+BEGIN_HTML
+<div class='pixels-photo'>
+  <p>
+    <img src='https://drscdn.500px.org/photo/194802013/m%3D900/v2?user_id=6803140&webp=true&sig=32b6b4a66379c523c09dc26d9ca2f346d239e0ea03b9671fc40d69e513076a59' alt='Shandong style garden at beijing by Jimmy Chau on 500px.com'>
+  </p>
+  <a href='https://500px.com/photo/194802013/shandong-style-garden-at-beijing-by-jimmy-chau' alt='Shandong style garden at beijing by Jimmy Chau on 500px.com'></a>
+</div>
+<script type='text/javascript' src='https://500px.com/embed.js'></script>
+#+END_HTML
+
+** Hong Kong at night
+#+BEGIN_EXAMPLE
+Sony Alpha a7 II
+Sony FE 24-240mm f/3.5-6.3 OSS
+73mm/ƒ/8/5s/ISO 100
+#+END_EXAMPLE
+#+BEGIN_HTML
+<div class='pixels-photo'>
+  <p>
+    <img src='https://drscdn.500px.org/photo/190764453/m%3D900/v2?user_id=6803140&webp=true&sig=e9d59b1e4e70085b0565a2b307c7da2e13ec36e480fc48c12649ea1cf3209896' alt='Hong Kong at night by Jimmy Chau on 500px.com'>
+  </p>
+  <a href='https://500px.com/photo/190764453/hong-kong-at-night-by-jimmy-chau' alt='Hong Kong at night by Jimmy Chau on 500px.com'></a>
+</div>
+<script type='text/javascript' src='https://500px.com/embed.js'></script>
+#+END_HTML
+
+** Dog of lotus pond
+#+BEGIN_EXAMPLE
+Sony Alpha a6000
+Sony Vario-Tessar T* FE 16-35mm f/4 ZA OSS
+16mm/ƒ/8.0/1/125s/ISO 100
+#+END_EXAMPLE
+#+BEGIN_HTML
+<div class='pixels-photo'>
+  <p>
+    <img src='https://drscdn.500px.org/photo/220491631/m%3D900/v2?client_application_id=15699&webp=true&sig=8c9879dd33e67e26d396cb4f0d67112b8be6a44993725d8b5959694d52d0b4e6' alt='Dog of lotus pond 由 Masahiro Ikebe 发布在 500px.com'>
+  </p>
+  <a href='https://500px.com/photo/220491631/dog-of-lotus-pond-by-masahiro-ikebe' alt='Dog of lotus pond 由 Masahiro Ikebe 发布在 500px.com'></a>
+</div>
+<script type='text/javascript' src='https://500px.com/embed.js'></script>
+#+END_HTML
+
+** Natural History
+#+BEGIN_EXAMPLE
+Sony Alpha a7 II
+Sony Vario-Tessar T* FE 16-35mm f/4 ZA OSS
+16mm/ƒ/8/1/40s/ISO 100
+#+END_EXAMPLE
+#+BEGIN_HTML
+<div class='pixels-photo'>
+  <p>
+    <img src='https://drscdn.500px.org/photo/220528625/m%3D900/v2?client_application_id=15699&webp=true&sig=7a2d1b7bf6186eb75937a5d89880dc42e851ef66f52c616ee81f5bf53424c03e' alt='Natural History by David Abbs on 500px.com'>
+  </p>
+  <a href='https://500px.com/photo/220528625/natural-history-by-david-abbs' alt='Natural History by David Abbs on 500px.com'></a>
+</div>
+<script type='text/javascript' src='https://500px.com/embed.js'></script>
+#+END_HTML

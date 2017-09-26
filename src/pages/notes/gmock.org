@@ -1,0 +1,9 @@
+#+TITLE: GMock
+#+DATE: 2014-10-02
+
+* 回顾
+** 大概看完了作者在 Google Talks 上的视频
+了解了：
++ MOCK_METHOD0(xxx, xxx(xx, xx));
++ Times(3), AtLeast(3)
++ WillOnce(Return(true)), WillRepeatedly(Return(false))

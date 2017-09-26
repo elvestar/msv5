@@ -1,0 +1,20 @@
+#+TITLE: MongoDB
+#+DATE: 2015-04-20
+
+* 前言
+以前主要使用 MySQL，以 ORM 的方式来使用。
+
+MongoDB 能流行开来，甚至能和 Express、AngularJS、NodeJS 组成 MEAN 来和传统
+的 LAMP 相抗衡，这只能说明这个技术提高了工程师的生产率，加速了产品的开发。
+很多创业公司选择 MEAN 作为其技术框架也能说明这一点。
+
+我没有在项目中使用过 MongoDB，我对 MongoDB 有这下面粗浅的认识（2015-04-20）：
+1. 支持直接存储复杂的数据结构（Schema Free），能更快地完成数据建模
+2. 从前端到后端到数据库，一路 JSON 到底，通行无阻
+3. 性能和扩展性，能满足当今 Web 应用的需求
+4. 支持 SQL（存疑）
+
+
+* 资料收集
+** 文章
+- [[http://www.searchdatabase.com.cn/showcontent_67311.htm][MongoDB 为何如此流行？]]

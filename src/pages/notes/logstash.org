@@ -1,0 +1,853 @@
+#+TITLE: Logstash
+#+DATE: 2017-05-05 13:21:25
+
+
+* 资料收集
+- [[https://github.com/elastic/logstash][elastic/logstash: Logstash - transport and process your logs, events, or other data]]
+- [[https://www.elastic.co/guide/en/logstash/current/getting-started-with-logstash.html][Getting Started with Logstash | Logstash Reference 5.4 | Elastic]]
+- [[https://www.elastic.co/guide/cn/elasticsearch/guide/current/index.html][Elasticsearch: 权威指南 | Elastic]]
+- [[https://kibana.logstash.es/content/logstash/][Logstash · ELKstack 中文指南]]
+
+** 文章：
+- [[http://soft.dog/2016/01/05/logstash-basic/#section-6][Logstash 基础]]
+- [[http://www.cnblogs.com/kylecky/p/5207198.html][ELK架构浅析 - chenkeyou - 博客园]]
+
+
+
+** 讨论
+- [[https://www.zhihu.com/question/54058964][logstash 和filebeat 是什么关系？- 知乎]]
+- [[https://www.zhihu.com/question/31200212][请对logstash与flume做比较？ - 知乎]]
+
+* ELKstack 中文指南
+
+* 插件
+** filter-grok
+#+BEGIN_EXAMPLE
+Grok is currently the best way in logstash to parse crappy unstructured log data into something structured and queryable.
+
+This tool is perfect for syslog logs, apache and other webserver logs, mysql logs, and in general, any log format that is generally written for humans and not computer consumption.
+#+END_EXAMPLE
+
+** filter-metrics
+- [[https://www.elastic.co/guide/en/logstash/current/plugins-filters-metrics.html][Metrics filter plugin | Logstash Reference 5.5 | Elastic]]
+- [[https://github.com/logstash-plugins/logstash-filter-metrics/blob/master/lib/logstash/filters/metrics.rb][logstash-filter-metrics/metrics.rb at master · logstash-plugins/logstash-filter-metrics]]
+
+* 初次使用Logstash <2017-06-15 四 00:14>
+参考：
+- [[https://www.elastic.co/guide/en/logstash/current/getting-started-with-logstash.html][Getting Started with Logstash | Logstash Reference 5.4 | Elastic]]
+  
+附上各安装包的大小：
+
+| 安装包                             | 安装包大小 |
+|------------------------------------+------------|
+| logstash-5.4.1.zip                 | 98.8 MB    |
+| filebeat-5.4.1-darwin-x86_64.tar.gz | 8.8 MB     |
+| elasticsearch-5.4.1.zip            | 33.3 MB    |
+| kibana-5.4.1-darwin-x86_64.tar.gz   | 52 MB      |
+
+** 安装Logstash
+先确认Java版本没问题之后，在下面页面下载LogStash：
+- [[https://www.elastic.co/downloads/logstash][Download Logstash Free • Get Started Now | Elastic]] 
+
+然后执行下面语句，启动一个从标准输入到标准输出的 *Logstash pipeline* 。
+#+BEGIN_SRC sh
+cd logstash-5.4.1
+bin/logstash -e 'input { stdin { } } output { stdout {} }'
+#+END_SRC
+
+发现启动非常非常慢，在我在Mac启动耗时14秒，看来是加载JVM的锅。
+
+启动后，在终端输入任何语句都会得到相应的输出，并且是标准化的，被附加了时间
+戳和IP。例如：
+#+BEGIN_SRC sh
+hello world
+2013-11-21T01:22:14.405+0000 0.0.0.0 hello world
+#+END_SRC
+
+** 安装和配置Filebeat
+在下面页面下载Filebeat：
+- [[https://www.elastic.co/downloads/beats/filebeat][Download Filebeat • Lightweight Log Analysis | Elastic]]
+
+Filebeat使用YAML格式来来配置，例如：
+
+#+BEGIN_SRC yaml
+filebeat.prospectors:
+- input_type: log
+  paths:
+    - /path/to/file/logstash-tutorial.log 
+output.logstash:
+  hosts: ["localhost:5043"]
+#+END_SRC
+
+然后执行下面语句来启动Filebeat：
+#+BEGIN_SRC sh
+./filebeat -e -c filebeat.yml -d "publish"
+#+END_SRC
+
+可以发现， *Filebeat的启动速度远快于Logstash* ，主要原因是Filebeat是使用Go语言
+来写的。
+- [[https://github.com/elastic/beats/tree/master/filebeat][beats/filebeat at master · elastic/beats]]
+
+关于YAML这个格式的介绍，下面这篇文章写得不错：
+- [[http://www.ruanyifeng.com/blog/2016/07/yaml.html][YAML 语言教程 - 阮一峰的网络日志]]
+
+#+BEGIN_EXAMPLE
+YAML 是专门用来写配置文件的语言，非常简洁和强大，远比 JSON 格式方便。
+
+YAML （读音：耶mer）语言的设计目标，就是方便人类读写。它实质上是一种通用的数据串行化格式。
+它的基本语法规则如下。
+- 大小写敏感
+- 使用缩进表示层级关系
+- 缩进时不允许使用Tab键，只允许使用空格。
+- 缩进的空格数目不重要，只要相同层级的元素左侧对齐即可
+#+END_EXAMPLE
+
+** 配置Logstash和Filebeat打通
+在Logstash根目录新建稳健 ~first-pipeline.conf~  ，然后填入以下内容：
+#+BEGIN_SRC sh
+# The # character at the beginning of a line indicates a comment. Use
+# comments to describe your configuration.
+input {
+    beats {
+        port => "5043"
+    }
+}
+# The filter part of this file is commented out to indicate that it is
+# optional.
+# filter {
+#
+# }
+output {
+    stdout { codec => rubydebug }
+}
+#+END_SRC
+
+然后执行下面指令测试配置的正确性：
+#+BEGIN_SRC sh
+bin/logstash -f first-pipeline.conf --config.test_and_exit
+#+END_SRC
+
+测试通过后，执行下面指令以该配置启动Logstash：
+#+BEGIN_SRC sh
+bin/logstash -f first-pipeline.conf --config.reload.automatic
+#+END_SRC
+
+然后，我们就可以在终端上看到Filebeat发过来的数据。
+#+BEGIN_SRC json
+{
+    "@timestamp" => 2017-06-14T16:00:31.678Z,
+        "offset" => 24464,
+      "@version" => "1",
+          "beat" => {
+        "hostname" => "zy-rmbp13.local",
+            "name" => "zy-rmbp13.local",
+         "version" => "5.4.1"
+    },
+    "input_type" => "log",
+          "host" => "zy-rmbp13.local",
+        "source" => "/Users/elvestar/baidu/elk/logstash-tutorial.log",
+       "message" => "86.1.76.62 - - [04/Jan/2015:05:30:37 +0000] \"GET /style2.css HTTP/1.1\" 200 4877 \"http://www.semicomplete.com/projects/xdotool/\" \"Mozilla/5.0 (X11; Linux x86_64; rv:24.0) Gecko/20140205 Firefox/24.0 Iceweasel/24.3.0\"",
+          "type" => "log",
+          "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ]
+}
+#+END_SRC
+
+** 使用Grok Filter Plugin
+#+BEGIN_QUOTE
+The grok filter plugin enables you to parse the unstructured log data into
+something structured and queryable.
+#+END_QUOTE
+   
+grok插件可以解析非结构化的log数据，转化成为结构化的、可查询的数据。
+
+修改 ~first-pipeline.conf~ ，配置filter。filter部分的配置如下：
+#+BEGIN_SRC sh
+filter {
+    grok {
+        match => { "message" => "%{COMBINEDAPACHELOG}"}
+    }
+}
+#+END_SRC
+
+由于我们只开启了Logstash自动重载配置，所以我们不需要重启Logstash就可以让修
+改生效。 *但是Logstash重载配置也比较慢 ，花费了7秒* 。 
+
+为了测试新加的Grok filter，需要重置Filebeat的发送进度，具体操作方法就是：
+- Ctrl-C 关闭Filebeat
+- 删除 ~data/registry~ 文件
+- 重启Filebeat
+
+这是 ~data/registry~ 文件的内容：
+#+BEGIN_SRC 
+[{"source":"/Users/elvestar/baidu/elk/logstash-tutorial.log","offset":24464,"FileStateOS":{"inode":335855486,"device":16777220},"timestamp":"2017-06-15T00:00:37.363280549+08:00","ttl":-1}]
+#+END_SRC
+
+重置完Filebeat的发送进度并重启Filebeat后，我们可以在Logstash的标准输出中看
+到结构化的输出（JSON格式）。例如：
+#+BEGIN_SRC sh
+{
+        "request" => "/style2.css",
+          "agent" => "\"Mozilla/5.0 (X11; Linux x86_64; rv:24.0) Gecko/20140205 Firefox/24.0 Iceweasel/24.3.0\"",
+         "offset" => 24464,
+           "auth" => "-",
+          "ident" => "-",
+     "input_type" => "log",
+           "verb" => "GET",
+         "source" => "/Users/elvestar/baidu/elk/logstash-tutorial.log",
+        "message" => "86.1.76.62 - - [04/Jan/2015:05:30:37 +0000] \"GET /style2.css HTTP/1.1\" 200 4877 \"http://www.semicomplete.com/projects/xdotool/\" \"Mozilla/5.0 (X11; Linux x86_64; rv:24.0) Gecko/20140205 Firefox/24.0 Iceweasel/24.3.0\"",
+           "type" => "log",
+           "tags" => [
+        [0] "beats_input_codec_plain_applied"
+    ],
+       "referrer" => "\"http://www.semicomplete.com/projects/xdotool/\"",
+     "@timestamp" => 2017-06-14T16:18:35.548Z,
+       "response" => "200",
+          "bytes" => "4877",
+       "clientip" => "86.1.76.62",
+       "@version" => "1",
+           "beat" => {
+        "hostname" => "zy-rmbp13.local",
+            "name" => "zy-rmbp13.local",
+         "version" => "5.4.1"
+    },
+           "host" => "zy-rmbp13.local",
+    "httpversion" => "1.1",
+      "timestamp" => "04/Jan/2015:05:30:37 +0000"
+}
+#+END_SRC
+
+** 使用Geoip Filter Plugin
+除了grok之外，geoip插件也很常用，它可以根据IP查询地理位置信息并附加在日志中。
+配置方法如下：
+#+BEGIN_SRC sh
+filter {
+    grok {
+        match => { "message" => "%{COMBINEDAPACHELOG}"}
+    }
+    geoip {
+        source => "clientip"
+    }
+}
+#+END_SRC
+
+输出内容如下：
+#+BEGIN_SRC sh
+    ...
+    "geoip" => {
+        "timezone" => "Europe/London",
+            "ip" => "86.1.76.62",
+            "latitude" => 51.5092,
+            "continent_code" => "EU",
+            "city_name" => "London",
+            "country_code2" => "GB",
+            "country_name" => "United Kingdom",
+            "country_code3" => "GB",
+            "region_name" => "England",
+            "location" => [
+                [0] -0.0955,
+            [1] 51.5092
+            ],
+            "postal_code" => "EC4N",
+            "longitude" => -0.0955,
+            "region_code" => "ENG"
+    },
+    ...
+#+END_SRC
+
+** 将数据索引到Elasticsearch
+** Stitching Together Multiple Input and Output Plugins
+进一步配置Logstash，将从twitter和Filebeat获取数据，然后写入到Elasticseach和
+本地文件中。配置如下：
+#+BEGIN_SRC sh
+input {
+    twitter {
+        consumer_key => "enter_your_consumer_key_here"
+        consumer_secret => "enter_your_secret_here"
+        keywords => ["cloud"]
+        oauth_token => "enter_your_access_token_here"
+        oauth_token_secret => "enter_your_access_token_secret_here"
+    }
+    beats {
+        port => "5043"
+    }
+}
+output {
+    elasticsearch {
+        hosts => ["IP Address 1:port1", "IP Address 2:port2", "IP Address 3"]
+    }
+    file {
+        path => "/path/to/target/file"
+    }
+}
+#+END_SRC
+
+比较简单，参考官方教程：
+- [[https://www.elastic.co/guide/en/logstash/current/multiple-input-output-plugins.html][Stitching Together Multiple Input and Output Plugins | Logstash Reference 5.4 | Elastic]]
+
+* Logstash监控
+Logstash监控基于HTTP协议，默认绑定9600作为监控端口，可以通过 ~--http.port~
+来指定其他端口。
+
+执行：
+#+BEGIN_SRC sh
+curl -XGET 'localhost:9600/?pretty'
+#+END_SRC
+
+返回：
+#+BEGIN_SRC json
+{
+  "host" : "zy-rmbp13.local",
+  "version" : "5.4.1",
+  "http_address" : "127.0.0.1:9600",
+  "id" : "a478dd74-5704-4d8b-8561-b1b472186e51",
+  "name" : "zy-rmbp13.local",
+  "build_date" : "2017-05-29T16:40:20Z",
+  "build_sha" : "cf39b7a82225994a0a3e716021c66f7a45fae46c",
+  "build_snapshot" : false
+}
+#+END_SRC
+
+** Node Info API
+可以获得 =pipeline= ， =os= ， =jvm= 三种类型的节点信息。
+- Pipeline Info :: The following request returns a JSON document that
+                    shows pipeline info, such as the number of workers,
+                    batch size, and batch delay:
+#+BEGIN_SRC sh
+➜  elk curl -XGET 'localhost:9600/_node/pipeline?pretty'
+{
+  "host" : "zy-rmbp13.local",
+  "version" : "5.4.1",
+  "http_address" : "127.0.0.1:9600",
+  "id" : "a478dd74-5704-4d8b-8561-b1b472186e51",
+  "name" : "zy-rmbp13.local",
+  "pipeline" : {
+    "workers" : 4,
+    "batch_size" : 125,
+    "batch_delay" : 5,
+    "config_reload_automatic" : true,
+    "config_reload_interval" : 3,
+    "id" : "main"
+  }
+}
+#+END_SRC
+
+
+- OS Info :: The following request returns a JSON document that shows the
+             OS name, architecture, version, and available processors:
+#+BEGIN_SRC sh
+➜  elk curl -XGET 'localhost:9600/_node/os?pretty'
+
+{
+  "host" : "zy-rmbp13.local",
+  "version" : "5.4.1",
+  "http_address" : "127.0.0.1:9600",
+  "id" : "a478dd74-5704-4d8b-8561-b1b472186e51",
+  "name" : "zy-rmbp13.local",
+  "os" : {
+    "name" : "Mac OS X",
+    "arch" : "x86_64",
+    "version" : "10.12.5",
+    "available_processors" : 4
+  }
+}
+#+END_SRC
+
+- JVM Info :: The following request returns a JSON document that shows
+              node-level JVM stats, such as the JVM process id, version, VM
+              info, memory usage, and info about garbage collectors:
+
+#+BEGIN_SRC sh
+➜  elk curl -XGET 'localhost:9600/_node/jvm?pretty'
+{
+  "host" : "zy-rmbp13.local",
+  "version" : "5.4.1",
+  "http_address" : "127.0.0.1:9600",
+  "id" : "a478dd74-5704-4d8b-8561-b1b472186e51",
+  "name" : "zy-rmbp13.local",
+  "jvm" : {
+    "pid" : 44487,
+    "version" : "1.8.0_101",
+    "vm_name" : "Java HotSpot(TM) 64-Bit Server VM",
+    "vm_version" : "1.8.0_101",
+    "vm_vendor" : "Oracle Corporation",
+    "start_time_in_millis" : 1497456014943,
+    "mem" : {
+      "heap_init_in_bytes" : 268435456,
+      "heap_max_in_bytes" : 1038876672,
+      "non_heap_init_in_bytes" : 2555904,
+      "non_heap_max_in_bytes" : 0
+    },
+    "gc_collectors" : [ "ParNew", "ConcurrentMarkSweep" ]
+  }
+}
+#+END_SRC
+
+** Plugins Info API
+插件信息API返回了当前已按照的Logstash插件信息。使用方法如下：
+#+BEGIN_SRC sh
+➜  elk curl -XGET 'localhost:9600/_node/plugins?pretty'
+{
+  "host" : "zy-rmbp13.local",
+  "version" : "5.4.1",
+  "http_address" : "127.0.0.1:9600",
+  "id" : "a478dd74-5704-4d8b-8561-b1b472186e51",
+  "name" : "zy-rmbp13.local",
+  "total" : 93,
+  "plugins" : [ {
+    "name" : "logstash-codec-cef",
+    "version" : "4.1.2"
+  }, {
+    "name" : "logstash-codec-collectd",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-codec-dots",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-codec-edn",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-codec-edn_lines",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-codec-es_bulk",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-codec-fluent",
+    "version" : "3.1.1"
+  }, {
+    "name" : "logstash-codec-graphite",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-codec-json",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-codec-json_lines",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-codec-line",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-codec-msgpack",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-codec-multiline",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-codec-netflow",
+    "version" : "3.4.0"
+  }, {
+    "name" : "logstash-codec-plain",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-codec-rubydebug",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-filter-clone",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-filter-csv",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-filter-date",
+    "version" : "3.1.5"
+  }, {
+    "name" : "logstash-filter-dissect",
+    "version" : "1.0.8"
+  }, {
+    "name" : "logstash-filter-dns",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-filter-drop",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-filter-fingerprint",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-filter-geoip",
+    "version" : "4.0.4"
+  }, {
+    "name" : "logstash-filter-grok",
+    "version" : "3.4.0"
+  }, {
+    "name" : "logstash-filter-json",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-filter-kv",
+    "version" : "4.0.0"
+  }, {
+    "name" : "logstash-filter-metrics",
+    "version" : "4.0.2"
+  }, {
+    "name" : "logstash-filter-mutate",
+    "version" : "3.1.3"
+  }, {
+    "name" : "logstash-filter-ruby",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-filter-sleep",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-filter-split",
+    "version" : "3.1.1"
+  }, {
+    "name" : "logstash-filter-syslog_pri",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-filter-throttle",
+    "version" : "4.0.1"
+  }, {
+    "name" : "logstash-filter-urldecode",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-filter-useragent",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-filter-uuid",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-filter-xml",
+    "version" : "4.0.2"
+  }, {
+    "name" : "logstash-input-beats",
+    "version" : "3.1.15"
+  }, {
+    "name" : "logstash-input-couchdb_changes",
+    "version" : "3.1.1"
+  }, {
+    "name" : "logstash-input-elasticsearch",
+    "version" : "4.0.3"
+  }, {
+    "name" : "logstash-input-exec",
+    "version" : "3.1.2"
+  }, {
+    "name" : "logstash-input-file",
+    "version" : "4.0.0"
+  }, {
+    "name" : "logstash-input-ganglia",
+    "version" : "3.1.0"
+  }, {
+    "name" : "logstash-input-gelf",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-input-generator",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-input-graphite",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-input-heartbeat",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-input-http",
+    "version" : "3.0.4"
+  }, {
+    "name" : "logstash-input-http_poller",
+    "version" : "3.1.1"
+  }, {
+    "name" : "logstash-input-imap",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-input-irc",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-input-jdbc",
+    "version" : "4.2.0"
+  }, {
+    "name" : "logstash-input-kafka",
+    "version" : "5.1.7"
+  }, {
+    "name" : "logstash-input-log4j",
+    "version" : "3.0.5"
+  }, {
+    "name" : "logstash-input-lumberjack",
+    "version" : "3.1.1"
+  }, {
+    "name" : "logstash-input-pipe",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-input-rabbitmq",
+    "version" : "5.2.3"
+  }, {
+    "name" : "logstash-input-redis",
+    "version" : "3.1.2"
+  }, {
+    "name" : "logstash-input-s3",
+    "version" : "3.1.4"
+  }, {
+    "name" : "logstash-input-snmptrap",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-input-sqs",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-input-stdin",
+    "version" : "3.2.2"
+  }, {
+    "name" : "logstash-input-syslog",
+    "version" : "3.2.0"
+  }, {
+    "name" : "logstash-input-tcp",
+    "version" : "4.1.0"
+  }, {
+    "name" : "logstash-input-twitter",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-input-udp",
+    "version" : "3.1.0"
+  }, {
+    "name" : "logstash-input-unix",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-input-xmpp",
+    "version" : "3.1.2"
+  }, {
+    "name" : "logstash-output-cloudwatch",
+    "version" : "3.0.4"
+  }, {
+    "name" : "logstash-output-csv",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-output-elasticsearch",
+    "version" : "7.3.1"
+  }, {
+    "name" : "logstash-output-file",
+    "version" : "4.0.1"
+  }, {
+    "name" : "logstash-output-graphite",
+    "version" : "3.1.1"
+  }, {
+    "name" : "logstash-output-http",
+    "version" : "4.2.0"
+  }, {
+    "name" : "logstash-output-irc",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-output-kafka",
+    "version" : "5.1.6"
+  }, {
+    "name" : "logstash-output-nagios",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-output-null",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-output-pagerduty",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-output-pipe",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-output-rabbitmq",
+    "version" : "4.0.7"
+  }, {
+    "name" : "logstash-output-redis",
+    "version" : "3.0.3"
+  }, {
+    "name" : "logstash-output-s3",
+    "version" : "4.0.7"
+  }, {
+    "name" : "logstash-output-sns",
+    "version" : "4.0.3"
+  }, {
+    "name" : "logstash-output-sqs",
+    "version" : "4.0.1"
+  }, {
+    "name" : "logstash-output-statsd",
+    "version" : "3.1.1"
+  }, {
+    "name" : "logstash-output-stdout",
+    "version" : "3.1.0"
+  }, {
+    "name" : "logstash-output-tcp",
+    "version" : "4.0.0"
+  }, {
+    "name" : "logstash-output-udp",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-output-webhdfs",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-output-xmpp",
+    "version" : "3.0.2"
+  }, {
+    "name" : "logstash-patterns-core",
+    "version" : "4.1.0"
+  } ]
+}
+#+END_SRC
+
+数了一下，我安装的5.4.1版本的Logstash附带包括 =logstash-input-beats= ，
+=logstash-input-file= ， =logstash-filter-grok= ，
+=logstash-output-elasticsearch= 等在内的93个插件。
+
+可以看出，Logstash的插件众多，并且命名都很清晰规整。
+
+** Node Stats API
+Node stats API展示了Logstash的运行时统计，API如下：
+#+BEGIN_SRC sh
+curl -XGET 'localhost:9600/_node/stats/<types>'
+#+END_SRC
+
+其中type包括下面几类：
+| Type     | 描述                                                                                           |
+|----------+------------------------------------------------------------------------------------------------|
+| jvm      | Gets JVM stats, including stats about threads, memory usage, garbage collectors, and uptime.   |
+| process  | Gets process stats, including stats about file descriptors, memory consumption, and CPU usage. |
+| pipeline | Gets runtime stats about the Logstash pipeline.                                                |
+| reloads  | Gets runtime stats about config reload successes and failures.                                 |
+| os       |  Gets runtime stats about cgroups when Logstash is running in a container.                                                                                              |
+
+我对 =process=  和 =pipeline= 两项状态监控比较感兴趣。执行结果如下：
+#+BEGIN_SRC sh
+➜  elk curl -XGET 'localhost:9600/_node/stats/process?pretty'
+{
+  "host" : "zy-rmbp13.local",
+  "version" : "5.4.1",
+  "http_address" : "127.0.0.1:9600",
+  "id" : "a478dd74-5704-4d8b-8561-b1b472186e51",
+  "name" : "zy-rmbp13.local",
+  "process" : {
+    "open_file_descriptors" : 135,
+    "peak_open_file_descriptors" : 135,
+    "max_file_descriptors" : 10240,
+    "mem" : {
+      "total_virtual_in_bytes" : 5431574528
+    },
+    "cpu" : {
+      "total_in_millis" : 2288523605000,
+      "percent" : 2,
+      "load_average" : {
+        "1m" : 4.64404296875
+      }
+    }
+  }
+}
+#+END_SRC
+
+#+BEGIN_SRC sh
+➜  elk curl -XGET 'localhost:9600/_node/stats/pipeline?pretty'
+{
+  "host" : "zy-rmbp13.local",
+  "version" : "5.4.1",
+  "http_address" : "127.0.0.1:9600",
+  "id" : "a478dd74-5704-4d8b-8561-b1b472186e51",
+  "name" : "zy-rmbp13.local",
+  "pipeline" : {
+    "events" : {
+      "duration_in_millis" : 1341408,
+      "in" : 300,
+      "filtered" : 300,
+      "out" : 300,
+      "queue_push_duration_in_millis" : 1370
+    },
+    "plugins" : {
+      "inputs" : [ {
+        "id" : "b58455958c511b5a826dfca6707a476182f10ea7-1",
+        "events" : {
+          "out" : 300,
+          "queue_push_duration_in_millis" : 1370
+        },
+        "name" : "beats"
+      } ],
+      "filters" : [ {
+        "id" : "b58455958c511b5a826dfca6707a476182f10ea7-2",
+        "events" : {
+          "duration_in_millis" : 149,
+          "in" : 300,
+          "out" : 300
+        },
+        "matches" : 300,
+        "patterns_per_field" : {
+          "message" : 1
+        },
+        "name" : "grok"
+      }, {
+        "id" : "b58455958c511b5a826dfca6707a476182f10ea7-3",
+        "events" : {
+          "duration_in_millis" : 273,
+          "in" : 300,
+          "out" : 300
+        },
+        "name" : "geoip"
+      } ],
+      "outputs" : [ {
+        "id" : "b58455958c511b5a826dfca6707a476182f10ea7-4",
+        "events" : {
+          "duration_in_millis" : 1340736,
+          "in" : 300,
+          "out" : 300
+        },
+        "name" : "elasticsearch"
+      } ]
+    },
+    "reloads" : {
+      "last_error" : null,
+      "successes" : 3,
+      "last_success_timestamp" : "2017-06-14T16:30:53.777Z",
+      "last_failure_timestamp" : null,
+      "failures" : 0
+    },
+    "queue" : {
+      "type" : "memory"
+    },
+    "id" : "main"
+  }
+}
+#+END_SRC
+
+** Hot Threads API
+Hot theads API可以返回当前Logstash的热点线程信息。返回的线程信息包括CPU占用，
+以及trace信息，当加上human=true参数之后，返回的结果很易读，这对于排查程序运
+行问题相当有好处。
+
+#+BEGIN_SRC sh
+➜  elk curl -XGET 'localhost:9600/_node/hot_threads?pretty&human=true&threads=2'
+::: {}
+Hot threads at 2017-06-15T09:43:40+08:00, busiestThreads=2:
+================================================================================
+1.4 % of cpu usage, state: timed_waiting, thread name: '[main]>worker1'
+    sun.misc.Unsafe.park(Native Method)
+    java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)
+    java.util.concurrent.SynchronousQueue$TransferStack.awaitFulfill(SynchronousQueue.java:460)
+    java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:362)
+    java.util.concurrent.SynchronousQueue.poll(SynchronousQueue.java:941)
+    sun.reflect.GeneratedMethodAccessor3.invoke(Unknown Source)
+    sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    java.lang.reflect.Method.invoke(Method.java:498)
+    org.jruby.javasupport.JavaMethod.invokeDirectWithExceptionHandling(JavaMethod.java:466)
+    org.jruby.javasupport.JavaMethod.invokeDirect(JavaMethod.java:324)
+--------------------------------------------------------------------------------
+1.35 % of cpu usage, state: waiting, thread name: '[main]>worker0'
+    sun.misc.Unsafe.park(Native Method)
+    java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+    java.util.concurrent.locks.AbstractQueuedSynchronizer.parkAndCheckInterrupt(AbstractQueuedSynchronizer.java:836)
+    java.util.concurrent.locks.AbstractQueuedSynchronizer.doAcquireInterruptibly(AbstractQueuedSynchronizer.java:897)
+    java.util.concurrent.locks.AbstractQueuedSynchronizer.acquireInterruptibly(AbstractQueuedSynchronizer.java:1222)
+    java.util.concurrent.locks.ReentrantLock.lockInterruptibly(ReentrantLock.java:335)
+    org.jruby.RubyThread.lockInterruptibly(RubyThread.java:1470)
+    org.jruby.ext.thread.Mutex.lock(Mutex.java:91)
+    org.jruby.ext.thread.Mutex.synchronize(Mutex.java:147)
+    org.jruby.ext.thread.Mutex$INVOKER$i$0$0$synchronize.call(Mutex$INVOKER$i$0$0$synchronize.gen)
+--------------------------------------------------------------------------------
+#+END_SRC
+* 源码分析
+以5.4.x版本为例，Logstash代码库的语言比例如下：
+#+CAPTION: ../static/imgs/logstash/20170615100121.png
+[[../static/imgs/logstash/20170615100121.png]]
+
+可以看出，Ruby占了66.1%，Java占了30.7%，剩下语言只占了3.2%。
+- [[https://gist.github.com/jordansissel/978956][logstash, why jruby?]]
+- [[https://kibana.logstash.es/content/logstash/source-code-analysis/][源码解析 · ELKstack 中文指南]]
+
+重要文件：
+- [[https://github.com/elastic/logstash/blob/master/logstash-core/lib/logstash/plugin.rb][logstash/plugin.rb at master · elastic/logstash]]
+- [[https://github.com/elastic/logstash/blob/master/logstash-core/lib/logstash/pipeline.rb][logstash/pipeline.rb at master · elastic/logstash]]
+- [[https://github.com/elastic/logstash/blob/master/logstash-core/src/main/java/org/logstash/Event.java][logstash/Event.java at master · elastic/logstash]]
+
+参考：
+- [[https://kibana.logstash.es/content/logstash/source-code-analysis/pipeline.html][pipeline 流程 · ELKstack 中文指南]]
+
+** Event和本地计算
+Event定义在 [[https://github.com/elastic/logstash/blob/master/logstash-core/src/main/java/org/logstash/Event.java][Event.java]]  文件里

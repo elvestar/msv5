@@ -1,0 +1,34 @@
+#+TITLE: XLS
+#+DATE: 2015-05-14
+#+KEYWORDS: 办公, 工作流
+
+* 资料收集
+- [[http://www.python-excel.org/][Working with Excel Files in Python]]
+
+* 需求：遍历，判断并填充 xls 文件 <2015-05-14 四>
+
+假设一个 xls 文件中每行记录了一个高优日志的信息，遍历 xls 文件中的所有行，
+通过每行的某两个字段（产品线和日志名）来从另外一个字典里面查询该日志的集群
+信息，然后填充到该行的另外一个字段里面，最后保存该 xls 文件。
+
+我们来拆解一下这个需求。
+1. 首先，我们需要一个库，能够打开 xls 文件的某个 Sheet
+2. 然后，需要知道如何遍历这个 Sheet 的所有行
+3. 然后，需要知道如何读写指定行的指定列的数据
+
+拿 Python 下的 openpyxl 库为例，具体实现代码如下：
+#+BEGIN_SRC python
+from openpyxl import load_workbook
+
+wb = load_workbook(filename='original.xlsx')                               
+for ws_name in ['Sheet3', 'Sheet4']:                                            
+    ws = wb.get_sheet_by_name(ws_name)                                          
+    for row in ws:
+        product_line = row[0].value                                             
+        log_name = row[1].value                                                 
+        row[2].value = product_line + '/' + log_name
+wb.save(filename='new.xlsx')                                                    
+#+END_SRC
+
+参考：
+- [[https://openpyxl.readthedocs.org/en/latest/usage.html][Openpyxl Simple usage]]

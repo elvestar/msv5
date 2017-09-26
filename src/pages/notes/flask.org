@@ -1,0 +1,737 @@
+#+TITLE: Flask Web 框架
+#+DATE: 2014-08-29
+#+KEYWORDS: Python, Web 框架
+#+DESCRIPTION: Flask 框架提供了很多便利设施，并且保留了自由度。用户可以选择 SQLAlchemy 和 Jinja 作为 ORM 组件和模板组件。
+
+* Introduction
+Tornado 用了大半年，有些不爽的地方，主要在于 Tornado 太自由了，无法在所谓的 "最佳
+实践" 上给我指导。想换回 Django，但一想到它的 ORM 和 Template System，我又产生了
+抗拒之心。于是，我想到了 Flask。
+
+Flask 是著名的 Pocoo 团队出品的 Python Web 框架。
+
+* 资料搜集
++ [[http://flask.pocoo.org/snippets/][Flash Snippets]]
++ [[http://python-china.org/topic/93][flask 的优点是什么？]]
++ [[http://neue.v2ex.com/t/28701][有没有用 Flask 做的比较大的开源项目？]]
++ [[http://www.reddit.com/r/Python/comments/1phog0/im_writing_a_web_app_flask_tornado_and_would/][Expert's opinion on best practices about python web]]
++ [[http://kochiya.me/www/posts/%25E4%25BB%258Eflaskbb,june%25E5%2588%25B0lolipop%25EF%25BC%2588%25E4%25B8%2580%25EF%25BC%2589.html][从 flaskbb,june 到 lolipop]]
+
+** Flask Blog
++ [[http://blog.miguelgrinberg.com/post/about-this-blog]]
++ [[http://www.jamesharding.ca/posts/simple-static-markdown-blog-in-flask/][Build a Simple, Static, Markdown-Powered Blog with Flask]]
+
+** Flask BB
++ 配置模块是 flaskbb.configs
+** 谁在使用 Flask？
++ [[https://bitbucket.org/thomaswaldmann/moin-2.0][MoinMoin - a wiki engine in Python]] 
+
+* 学习 Flask 文档
+** 官方文档
++ [[http://dormousehole.readthedocs.org/en/latest/index.html][Flask 中文文档]]
+virtualenv 是个好东西，解决了广受诟病的 Python 部署的环境依赖问题。在 virtualenv 下安
+装 Flask：
+1. sudo pip install virtualenv
+2. . venv/bin/activate
+3. sudo pip install Flask
+   
+打开调试模式（不需要每次修改代码后都重启 Flask），这个功能真赞啊。
+#+BEGIN_SRC python
+app.run(debug=True)
+#+END_SRC
+
+另外，打开调试模式后，还可以获得另外的好处，就是出错时，能在网页上弹出非常详细的
+错误调试信息，让开发者能快速定位错误，而且还能在 Web 上直接调试！再次好顶赞啊！不
+过要记住， *生产环境下不能打开调试模式* 。
+
+Flask 默认使用 Jinja2 模板，相对 Tornado，它加入了很多便利的措施。如：
+1. 直接可以调用 render_template 来渲染 Jinja2 模板。
+2. 模板内部可以直接访问 request，session，g 对象和 get_flashed_messages() 函数。
+   
+request 对象如同 Tornado 的 self.request 一样。由它可以通过 key 获取表单的各个
+value，如果 key 不存在，会抛出个 KeyError 的异常。如果不捕捉，会弹出 400（请求出
+错）页面，用户可能会略有不爽。如果通过 request.args.get('key', '') 来获取的话，则
+会好一点。
+
+session 对象可以用来在不同的请求间传递信息，这点类似于 Cookie。但是 session 可以
+加密，没有密钥的话，用户无法修改它。session 和 request 一样，都是内置变量。
+
+消息闪现，日志和部署。我发现 Flask 可以用过 Tornado 部署，这个很赞，我打喜欢在
+Web 服务器上直接部署，我喜欢部署在 WSGI 容器里，通过反向代理的这种部署方式。
+
+ 应用环境。。。
+
+请求环境。。。
+** The Flask Mega-Tutorial
++ [[http://www.pythondoc.com/flask-mega-tutorial/index.html][The Flask Mega-Tutorial (zh_cn)]]
++ [[https://github.com/miguelgrinberg/flasky]]
+  
+这篇教程里的 Web 表单一章介绍了使用 Flask-WTF 扩展来快捷地实现表单。
++ [[http://www.pythondoc.com/flask-mega-tutorial/webforms.html][Web 表单]]
+
+另外，官方文档里也提到用 WTForms 来实现表单验证。
++[[http://dormousehole.readthedocs.org/en/latest/patterns/wtforms.html][使用 WTForms 进行表单验证]]
+
+** Flask Web Development
+*** 第二章：Basic Application Structure
+主要关注
+*** 第七章：
+看完了 app 的_init_.py 的实现方式，但是蓝图和 manager.py 以及 make_shell_context()，
+requiremens.txt，unittest 还没看，等以后要用到再看。
+* 阅读 Flask 源码
+** 源码总览和阅读意义
+通过阅读 Flask 的源码，我想知道或者获得：
++ Web 框架实现 URL 分发，参数解析，Session 支持等功能的原理。
++ Flask 是如何支持扩展的。
++ 从源码角度学习 Flask 的功能和用法
++ 以后我用 Flask 出问题，我想更轻易地排查出问题原因。
+
+Flask 0.10.1 的源码有 5345 行，而 Tornado 的源码有 15811 行，Flask 依赖的
+Werkzeug 则有 14622 行。Tornado 比 Flask 源码多这么多的原因是 Tornado 实现了 一个
+Http Server，以及 IO Loop，Http Client 等，而 Flask 是个纯粹的 Web 框架，大量依赖
+其他 Python 库，甚至连 Route 功能都是由 Werkzeug 提供的。由此也已看出，用 Python
+开发出一个 Web 框架在技术上是件很容易的事情。
+
+** app.py
+该文件实现了主类 Flask，Flask 开头定义了几个配置项，如 DEBUG，TESTTING，
+SECRET_KEY 等，并为它们设置了缺省值。
+
+*route()* 方法定义在 Flask 类里，以修饰器的方式来将一个 View Function 注册给一个 URL
+Rule。在内部的 decorator() 函数中是调用 self.add_url_rule(rule, endpoint, f,
+**options) 来实现真正的注册。
+
+*add_url_rule()* 方法负责 生成 Rule，然后加入到 url_map 中。这两步涉及到的 Rule 和
+Map 其实是 werkzeug.routing 提供的， 不过从 Endpoint 到 View Function 的映射是由
+Flask 来维护的（Endpoint 就是路由的终点，是 werkzeug 定义的概念，Flask 沿用）。
+
+*dispatch_request()* 函数在执行之前，路由过程就已经完成（其实是由
+werkzeug.routing 来完成的）。 如果之前的路由出错了，在这个函数里会执行路由异常过
+程。在这个的末尾会调用真正的 View Function，也就是用户自己定义的部分。
+* Flask 扩展
+** 我的 Python Flask 依赖库列表 <2015-12-06 日>
+Flask 扩展：
+#+BEGIN_EXAMPLE
+pip install flask
+pip install Flask-Script
+pip install Flask-Migrate # SQLAlchemy 数据库迁移工具
+pip install flask-bootstrap # Flask 和 Bootstrap 集成
+pip install flask-admin # Flask admin 工具
+pip install flask-restful # 用于开发 RESTful API
+pip install Flask-WTF # Flask 和 WTForms 集成
+#+END_EXAMPLE
+   
+此外，还有一些通用的 Python 库：
+#+BEGIN_EXAMPLE
+pip install requests # 易用的 Python HTTP 库
+pip install tornado # Tornado Web Server 和异步的 HTTP Client
+pip install pycurl # Libcurl 的 Python 接口
+pip install suds # 轻量级的 SOAP 客户端
+pip install redis # Python 的 Redis 客户端
+pip install MySQL-python
+pip install gunicorn
+#+END_EXAMPLE
+
+还有一些依赖没有列出，因为是上述依赖的子依赖。这里有个全集（2015-12-06），
+后续可能还有增减。
+#+BEGIN_EXAMPLE
+Flask==0.10.1
+Flask-Admin==1.3.0
+Flask-Bootstrap==3.3.5.7
+Flask-Migrate==1.6.0
+Flask-RESTful==0.3.4
+Flask-SQLAlchemy==2.1
+Flask-Script==2.0.5
+Flask-WTF==0.12
+Jinja2==2.8
+Mako==1.0.3
+MarkupSafe==0.23
+MySQL-python==1.2.5
+SQLAlchemy==1.0.9
+WTForms==2.0.2
+Werkzeug==0.11.2
+alembic==0.8.3
+aniso8601==1.1.0
+backports-abc==0.4
+backports.ssl-match-hostname==3.4.0.2
+certifi==2015.11.20.1
+dominate==2.1.16
+gunicorn==19.4.1
+itsdangerous==0.24
+pycurl==7.19.5.3
+python-dateutil==2.4.2
+python-editor==0.5
+pytz==2015.7
+redis==2.10.5
+requests==2.8.1
+singledispatch==3.4.0.3
+six==1.10.0
+suds==0.4
+tornado==4.3
+visitor==0.1.2
+wsgiref==0.1.2
+#+END_EXAMPLE
+
+** Flask-Admin
++ [[http://flask-admin.readthedocs.org/en/latest/][Flask-Admin 文档]] 
+用法：
+
+** WTForms
++ [[http://dormousehole.readthedocs.org/en/latest/patterns/wtforms.html][使用 WTForms 进行表单验证]]
++ [[http://wtforms.readthedocs.org/en/latest/index.html][WTForms Documentation]]
++ [[http://www.pythondoc.com/flask-mega-tutorial/webforms.html][The Flask Mega-Tutorial: Web 表单]]
++ [[http://dormousehole.readthedocs.org/en/latest/patterns/wtforms.html][Jinja2 下的 macro：render_field]]
+*** 问题：form.validate_on_submit() 总是返回 false
+原因：这是 WTForms 的一个经典的坑，需要在表单前加上 form.csrf_token 和
+form.hidden_tag() 才能避免这种情况。
++ [[http://stackoverflow.com/questions/10722968/flask-wtf-validate-on-submit-is-never-executed]]
+
+*** 用 model 来构造 form
+#+BEGIN_SRC python
+log_config = LogConfig.query.filter_by(log_module_id=log_module_id).first()
+...
+form = EditLogConfigForm(obj=log_config)
+return render_template('edit.html', log_config=log_config, form=form)
+#+END_SRC
+*** 用 form 来更新 model
+解法：实现一个用 form 来更新 model 的函数（如下）。
+#+BEGIN_SRC python
+@staticmethod
+def update_model_by_form(form, model):
+    for key, value in form.data.items():
+        if value != '':
+            model.__setattr__(key, value)
+#+END_SRC
+
+完整的代码如下：
+#+BEGIN_SRC python
+# 编辑日志配置
+@main.route('/edit/<int:log_module_id>', methods=['GET', 'POST'])
+def edit_log_config(log_module_id):
+    log_config = LogConfig.query.filter_by(log_module_id=log_module_id).first()
+    if not log_config:
+        return '没找到！'
+    form = EditLogConfigForm()
+    if form.validate_on_submit():
+        # 用 form 来更新 model
+        Utils.update_model_by_form(form, log_config)
+        db.session.add(log_config)
+        db.session.commit()
+        return '编辑成功'
+    else:
+        # 用 model 来生成 form
+        form = EditLogConfigForm(obj=log_config)
+        return render_template('edit.html', log_config=log_config, form=form)
+#+END_SRC
+*** 遍历 form，访问其各个字段的各个属性
+#+BEGIN_SRC python
+    @staticmethod
+    def list_all_field_errors_of_form(form):
+        for field in form:
+            if field.errors:
+                form_errors = '\n'
+                form_errors += field.label.text + ' - '
+                form_errors += ' '.join(field.errors)
+        return form_errors
+#+END_SRC
+几个要点：
+1. 通过 ~for field in form:~ 可以直接遍历 form
+2. 访问 field label 要通过 field.label.text，而访问 field value 则要用 field.xxx.data
+   （xxx 是字段名）
+*** Form 中的某些字段（如密码，Token）只对部分用户展示
+我的做法是直接 delete 这个字段，然后页面就不显示了，如下：
+#+BEGIN_SRC python
+modify_xxx_info_form = ModifyXxxInfoForm(obj=xxxxx_config)
+del modify_xxx_info_form.pub_token
+#+END_SRC
+*** 为 WTForms 的 SelectField 加入动态选择项 <2015-03-03 二>
+一般情况，我们是直接在 SelectField 定义 choices 的，这样有个问题是无法动态
+化，例如我们的选项来自于数据库的某张表，而该表是动态变化的。
+
+为了使 SelectField 可以动态化，我之前的解法是先构造 Form，然后在传代码里设
+置 choices，然后将 Form 传给 View。
+#+BEGIN_SRC python
+  cluster_configs = ClusterConfig.query.all()
+  cluster_choices = [('', '请选择')]
+  for cluster_config in cluster_configs:
+      cluster_choices.append((cluster_config.cluster_name, '12' + cluster_config.cluster_name))
+  submit_migration_form.dest_cluster_name.choices = cluster_choices
+#+END_SRC
+
+这样虽然实现了动态化，但是在表单验证 form.validate__on__submit() 时，WTForms
+会因为 choices 为 None 报错，我们可以再表单验证前再次执行上面的手工设置
+choices，但是这样极度的不优雅。
+
+一种较好的解法是重写表单的构造函数。方法如下：
+#+BEGIN_SRC python
+def __init__(self):
+    super(SubmitClusterMigrationForm, self).__init__()
+
+    from minos.models import ClusterConfig
+    cluster_configs = ClusterConfig.query.all()
+    cluster_choices = [('', '请选择')]
+    for cluster_config in cluster_configs:
+        cluster_choices.append((cluster_config.cluster_name, cluster_config.cluster_name))
+    self.dest_cluster_name.choices = cluster_choices
+#+END_SRC
+
+** WTForms-Components
+#+BEGIN_EXAMPLE
+WTForms-Components provides various additional fields, validators and widgets for WTForms.
+#+END_EXAMPLE
++ [[http://wtforms-components.readthedocs.org/en/latest/][WTForms-Components Docs]]
++ [[http://www.w3school.com.cn/html5/html_5_form_input_types.asp][HTML5 input 类型]]
+感想：该扩展提供的 DateTimeField 就很赞，让我可以快速地实现 DateTime Picker。美中
+不足的是不同浏览器对 HTML5 的一些 input type 的支持参差不齐，例如，Chrome 不支持
+DateTimeField，但支持 DateTimeLocalField。
+** Flash-Script
+*** 在 shell 下操纵 Flash App
+在 manager.py 中加入：
+#+BEGIN_SRC python
+from flask.ext.script import Manager, Shell
+...
+manager.add_command('shell', Shell(make_context=make_shell_context))
+#+END_SRC
+然后，执行 python manager.py shell，即可在 shell 中启动一个 Python 解释器，且运行环境
+中包含整个 Flash App，我们可以在这个运行环境中执行 *db.create_all()* 来建表等操作。
+
+*** 配置启动的端口号
+通过 -p 传入：
+#+BEGIN_SRC sh
+python manage.py  runserver -p 8099 
+#+END_SRC
+
+*** 自定义 command
+
+** Flask-Bootstrap
++ [[http://pythonhosted.org/Flask-Bootstrap/basic-usage.html][Flask Bootstrap Docs]]
+** Flask-SQLAlchemy 
++ [[https://pythonhosted.org/Flask-SQLAlchemy/index.html][Flask-SQLAlchemy Docs]]
+*** 如何只 select 指定 column
+解法：使用 with_entities。例如：
+#+BEGIN_SRC python
+log_module_ids = LogConfig.query.with_entities(LogConfig.log_module_id).filter_by(cluster_name=cluster_name).all()
+#+END_SRC
+*** 如何动态指定要 select 的 column  <2015-12-14 一>
+解法：配合使用 ~with_entities~ 和 ~add_columns~ 。如下：
+#+BEGIN_SRC py
+    data_slices = DataSlice.query.with_entities(DataSlice.base_time).\
+        add_columns('is_%s_notified' % downstream).\
+        filter_by(log_module_id=log_module_id).order_by(DataSlice.base_time).\
+        limit(slice_num_limit).all()
+#+END_SRC
+
+注意点：
+- 不能只使用 ~add_columns~ 而不使用 ~with_entities~ ，这样 selelect 出来的
+  columns 是全集
+
+*** “MySQL server has gone away” 问题
+原因：MySQL 服务器有 wait_timeout 这样一批超时参数，它会定期回收超时的连接。
+如果连接被回收了，而 SQLAlchemy 客户端对应该连接的 session 还在，这是执行 SQL
+操作会报上面的异常。
+
+解法：配置 SQLALCHEMY_POOL_RECYCLE，让其值小于 MySQL 服务器端的超时参数。
++ [[http://pythonhosted.org/Flask-SQLAlchemy/config.html][Flask-SQLAlchemy Configuration]]
+*** SQLAlchemy 中如何拷贝对象（object copy）？<2015-03-02 一>
+SQLAlchemy 的 object 无法使用 python 的 copy.copy 或者 copy.deepcopy 来执行
+对象拷贝，因为 object 有一些字段是特殊的（如_sa_state 等），如果这样拷贝的
+好，得到的 object 是无法执行插入到数据库的。我的一个解法是在为 Model 定义一
+个 duplicate() 方法，在里面拷贝表字段，而不拷贝特殊字段。
+
+#+BEGIN_SRC python
+class LogConfig(db.Model):
+    __tablename__ = 'log_config'
+    ...
+    ...
+    def __repr__(self):
+       return str({c.name: getattr(self, c.name) for c in self.__table__.columns})
+
+    def duplicate(self):
+        arguments = dict()
+        for name, column in self.__mapper__.columns.items():
+            if not (column.primary_key or column.unique):
+                arguments[name] = getattr(self, name)
+        return self.__class__(**arguments)
+#+END_SRC
+*** Flask-SQLAlchemy 如何开启 auto commit？ <2015-09-25 五>
+DBA 建议我们将 autocommit 开启，否则 MySQL 容易发生很蛋疼的事务时间过长的问
+题。我开启了，但是这样改带来的副作用就是，每次 insert/update 都对应一次
+commit，写入效率降低（当然，可以通过手动开启事务来实现单次 commit）
+
+#+BEGIN_SRC py
+db = SQLAlchemy(session_options={'autocommit': True})
+#+END_SRC
+
+此时，事务相当于关闭。如果我们想提高批量执行 insert/update 的效率，我们可以
+这样：
+#+BEGIN_SRC py
+db.session.begin()
+# do something
+db.session.commit()
+#+END_SRC
+
+*** 解决 auto commit 开启后，退出 Flask 时抛出 No transaction is begun 异常的问题 <2015-11-21 六>
+具体异常如下：
+#+BEGIN_SRC py
+  ...
+  File "/Library/Python/2.7/site-packages/flask/app.py", line 1727, in do_teardown_appcontext
+    func(exc)
+  File "/Library/Python/2.7/site-packages/flask_sqlalchemy/__init__.py", line 751, in shutdown_session
+    self.session.commit()
+  File "/Library/Python/2.7/site-packages/sqlalchemy/orm/scoping.py", line 149, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "/Library/Python/2.7/site-packages/sqlalchemy/orm/session.py", line 763, in commit
+    raise sa_exc.InvalidRequestError("No transaction is begun.")
+sqlalchemy.exc.InvalidRequestError: No transaction is begun.
+#+END_SRC
+
+原因：SQLALCHEMY_COMMIT_ON_TEARDOWN 和 auto_commit 相冲突
+
+（貌似有问题）
+=解法：当开启了 auto_commit 后，关掉 SQLALCHEMY_COMMIT_ON_TEARDOWN=
+
+* URL 路由和请求处理
+** 如何处理 GET 方式的 search?query=xxx 形式的 URL？
+ #+BEGIN_SRC python
+@main.route('/search')
+def search():
+    query = request.args.get('query')
+...
+ #+END_SRC
+   
+** 如何处理 POST 方式的参数在 post data 里的情况？
+答案：在 request.form 里取，而不是 request.args 里面取！
+** URL 中带有 '/' 时该如何路由？
+Flask 不仅支持 int/float/string 类型的 URL 字段的路由，还支持一种 path 字段，该种字段
+里可以包含 '/'。不过要注意的是，path 字段不能以 '/ 作为开头！ 这是一个不方便的地
+方。
+#+BEGIN_SRC python
+@main.route('/ls/<int:log_module_id>/<hostname>/<path:directory>')
+def list_dir(log_module_id, hostname, directory):
+    ftp_dir = "ftp://" + hostname + '/' + directory
+#+END_SRC
++ [[http://flask.pocoo.org/snippets/76/][Handling URLs containing slash '/' character]]
+
+** 如何向后端 POST 参数格式为 JSON 的请求？
+#+BEGIN_SRC javascript
+var data = {log_plan_id: log_plan_id, machines: machines}
+$.ajax({
+    type : "POST",
+    url : "/batch_restart_agents",
+    data: JSON.stringify(data, null, '\t'),
+    contentType: 'application/json;charset=UTF-8',
+    success: function(result) {
+        alert(result);
+    },
+    error: function() {
+        alert('服务器端发生异常或者返回数据格式不正确!');
+        return false;
+    }
+});
+#+END_SRC
+后端需要在 request.json 里面获取参数。
+** Flask 处理 404 和 500 错误码
+示例代码如下：
+#+BEGIN_SRC py
+@main.app_errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@main.app_errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
+#+END_SRC
+
+注意：使用 ~app_errorhandler~ ，不用 ~errorhandler~ ，后者会遇到下面的错误。
+#+BEGIN_SRC sh
+AssertionError: It is currently not possible to register a 500 internal server error on a per-blueprint level.
+#+END_SRC
+
+参考：
+- http://stackoverflow.com/questions/30108000/flask-register-blueprint-error-python
+
+* Cookies and Sessions
+Cookies 和 Sessions 的一个重要区别在于：浏览器关闭时，Sessions 会清空，而 Cookies 不
+会，只有过期后才会清除。
+** 每次请求前通过 Cookies 获取用户名
+下面代码是个例子，@main.before_app_request 下面定义了一个钩子函数，main 这个 app 每
+次处理请求前，都会执行这个函数，尝试从 Cookies 中获取 minos_user，并设置到我自定义的
+request.minos_user 变量中。如果没在 Cookies 中，则会从其他的地方获取（如通过 SSO），
+并设置到 Cookies 中，并执行重定向。
+#+BEGIN_SRC python
+@main.before_app_request
+def before_request():
+    request.minos_user = request.cookies.get('minos_user')
+    if not request.minos_user:
+        print 'not found'
+        if request.host.startswith('localhost'):
+            request.minos_user = 'zhongyi_test'
+        else:
+            # Get and set minos_user
+
+        response = make_response(redirect(request.url))
+        response.set_cookie('minos_user', request.minos_user, 3600 * 24 * 30)
+        return response
+    else:
+        print 'found'
+#+END_SRC 
+* Http Client
+Flask 不自带 Http Client，需要额外购置。我们可以用 urlib2，不过我对 Tornado 的 Http
+Client 更熟悉一点，所以就用它吧。
++ [[http://runnable.com/Us3h5Ccn6TFMAAGu/python-tornado-http-client-example][Python Tornado HTTP client example (Runable)]] 
+** 使用 Requests
+发现了一个更易用的库：
++ [[http://docs.python-requests.org/en/latest/][Requests: HTTP for Humans]]
+* 异步，多线程，后台任务相关
+**  使用 Celery
+我需要在 Flask 中定期运行一类繁重的任务（主要是每日的业务统计），该任务需要额外的执
+行线程，还需要拥有 Flask 的执行环境（如数据库配置等），看起来 Celery 能解决我的问题。
++ [[http://www.celeryproject.org/]]
++ [[https://github.com/celery/celery]]
++ [[http://flask.pocoo.org/docs/0.10/patterns/celery/][Celery Based Background Tasks]]
++ [[https://github.com/thrisp/flask-celery-example]] （该 example 已经过期！）
+
+* Jinja 相关
+** 使用 macro 来快速实现带表单的 Modal（模态窗口）
+#+BEGIN_SRC html
+{% macro render_modal_from_form(modal_id, modal_title, form) %}
+    <div class="modal fade" id="{{ modal_id }}" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">{{ modal_title }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ bs_wtf.quick_form(form, form_type='basic', button_map={'submit':'primary'}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+#+END_SRC
+要点：
+1. 使用 Flask-Bootstrap 的 quick_form() 来一键生成表单
+2. 使用 Flask 的
+** 在 Jinja 模板文件中调用 Python 函数
+Jinja 的 Environment 的 globals 变量（是个字典）可以注册 Python 函数，如果
+在 Flask 框架下，可以这样实现：
+#+BEGIN_SRC python
+    minos = Flask(__name__, template_folder=template_folder)
+    ...
+    from minos.utils import Utils
+    minos.jinja_env.globals.update(check_if_user_is_admin=Utils.check_if_user_is_admin)
+#+END_SRC
+这样，我们就可以在模板文件的任何地方调用该函数了（其实就是一个判断访问用户
+是否为管理员的函数）。
+#+BEGIN_SRC html
+<div>
+    {% if check_if_user_is_admin(request.minos_user) %}
+        {{ macros.render_number_field(name='retention_days_num', label='集群保存天数',
+            value=log_config_in_master.retention_days_num,
+            min='1') }}
+    {% endif %}
+</div>
+#+END_SRC
+
+如果是原生 Jinja 的话，网上有个可以参考的代码段：
+#+BEGIN_SRC python
+from jinja2 import Environment, FileSystemLoader
+
+def clever_function(a, b):
+    return u''.join([b, a])
+
+env = Environment(loader=FileSystemLoader('/path/to/templates'))
+env.globals['clever_function'] = clever_function
+#+END_SRC
+- [[http://stackoverflow.com/questions/6036082/call-a-python-function-from-jinja2][Call a python function from jinja2]]
+
+** Filters in Jinja2 <2015-12-09 三>
+Jinja2 内建了非常丰富的 filter，所以说，当我们遇到相关需求时，应该先在
+Jinja2 提供的 filter 里面找。
+- [[http://jinja.pocoo.org/docs/dev/templates/#builtin-filters]]
+  
+*** truncate: 字符串截断显示
+例如，我们为了有一个字符串过长在页面上不雅观想将长度大于 50 的部分截断并填
+充以省略号这样的需求。我们在 Jinja2 内建的 filter 里找，结果发现了
+~truncate~ 这个 filter，它完美地满足了我们的需求：
+
+- truncate(s, length=255, killwords=False, end='...') :: Return a truncated
+     copy of the string. The length is specified with the first parameter
+     which defaults to 255. If the second parameter is true the filter will
+     cut the text at length. Otherwise it will discard the last word. If
+     the text was in fact truncated it will append an ellipsis sign
+     ("..."). If you want a different ellipsis sign than "..." you can
+     specify it using the third parameter.
+
+#+BEGIN_SRC py
+{{ "foo bar baz"|truncate(9) }}
+    -> "foo ..."
+{{ "foo bar baz"|truncate(9, True) }}
+    -> "foo ba..."
+#+END_SRC
+
+* Cache
++ [[http://flask.pocoo.org/docs/0.10/patterns/caching/][Flask Caching]]
++ [[https://pythonhosted.org/Flask-Cache/][Flask-Cache]]  
+** 一个简单的 Cache 实现
+#+BEGIN_SRC python
+def get_my_item():
+    rv = cache.get('my-item')
+    if rv is None:
+        rv = calculate_value()
+        cache.set('my-item', rv, timeout=5 * 60)
+    return rv
+#+END_SRC
+** 利用 Flask-Cache 来 Cache 某个 View Function
+#+BEGIN_SRC python
+@cache.cached(timeout=50)
+def index():
+    return render_template('index.html')
+#+END_SRC
+由于在 Flask 中，View Function 是不重名的，所以在 为其做 Cache 时，很容易找到一个唯
+一的 Key。
+* 数据库相关
+** 忠告
+*数据库相关操作需要谨慎* ！！！例如做数据库迁移时，要仔细阅读迁移工具生成的脚本，了
+解其带来的影响和后果， *尤其要看是否有 drop table/drop column 的操作* ，确认影响后再执
+行迁移。如下图的迁移脚本的 upgrade 会删掉两张表，这可能不是我们期望的：
+#+BEGIN_SRC python
+def upgrade():
+    ### commands auto generated by Alembic - please adjust! ###
+    op.drop_table('notice_dtmeta')
+    op.drop_table('minos_data_back')
+    op.drop_table('data_slice')
+    op.add_column('log_config', sa.Column('associated_log_module_ids', sa.String(length=2048), nullable=True))
+    op.add_column('log_config', sa.Column('is_open_associated_notify', sa.Boolean(), nullable=True))
+    op.add_column('log_config', sa.Column('notify_delay_minutes', sa.Integer(), nullable=True))
+    ### end Alembic commands ###
+#+END_SRC
+
+对于一个数据库，如果既有 ORM 在用，也有手工 DDL (Data Definition Language, such as
+CREATE, DROP, ALTER)，则迁移脚本可能会将手工建立的表给完全地抹去。 *所以说，我们
+应该只在一个地方执行数据库的 DDL* ，如果用了 ORM，则就用 ORM 提供的迁移设施来执行 DDL。
+
+#+BEGIN_EXAMPLE
+数据库一般都有回滚到某个版本的功能，不知道此功能是否能完美恢复被 drop 的 table？
+#+END_EXAMPLE
+** 如何做数据库迁移
+就几步：
+1. 使用 Flask-Migrate
+2. py manage.py db init
+3. py manage.py db migrate -m "add fields: associated notify and notify delay minutes"
+4. py manage.py db upgrade  
+最终显示：
+#+BEGIN_SRC sh
+$ xxxx git:(master) ✗ py manage.py db upgrade                                                            
+INFO  [alembic.migration] Context impl MySQLImpl.
+INFO  [alembic.migration] Will assume non-transactional DDL.
+INFO  [alembic.migration] Running upgrade None -> 389afadb5dd3, add fields: associated notify and notify delay minutes
+#+END_SRC
+*** 感受
+以前我是先改 modes.py，然后登录数据库执行 alter table xxx add column 加字段，现在用
+上了专业的数据库迁移工具，感觉确实很好。以后我不会再手工加字段了。
+** 如何在 Flask App 外部使用 Flask-SQLAlchemy？
+Flask-SQLAlcyemy 依赖 Flask App Context，如果没有这个 Context，那么使用时会抛
+出 "application not registered on db instance and no application bound to
+current context" 这样的异常。要想解决这个问题，只能在外部构造一个 Flask App
+Context。如下：
+#+BEGIN_SRC python
+app = create_app('default')
+with flask_app.app_context():
+    ftp_configs = FtpConfig.query.all()
+#+END_SRC
+参考：
+http://stackoverflow.com/questions/24060553/creating-a-database-outside-the-application-context
+
+*** 感想
+看来 Flask 主要定位于简单的 CRUD 级别的 Web 开发，想利用它启动一些例如定期任务之类的
+功能看样子还挺不方便的。
+** 在 Flask 下使用 SQLite  <2015-03-09 一>
+SQLite 的并发性能很低，因为它是通过文件锁来实现并发的，是库级别的锁。这个决
+定它的适用范围。如：
+- 不适合多线程访问
+- 不适合高耗时 SQL
+- 在 SQLAlchemy 下使用，会发生意想不到的异常
+
+SQLite 被锁住时，SQLAlchemy 抛出的异常：
+#+BEGIN_SRC sh
+sqlalchemy.exc.OperationalError: (OperationalError) database is locked u'UPDATE ftp_task SET task_status=? WHERE ftp_task.id = ?' ('done', 2576)
+#+END_SRC
+** Multiple Databases
+- [[https://pythonhosted.org/Flask-SQLAlchemy/binds.html][Multiple Databases with Binds]]
+
+* Flask 部署
+我使用下面手法，来简化我的 Flask 应用的部署：
+1. 使用 virtualenv，将所有依赖库放在子目录里，并 push 到 git 仓库里
+2. 使用 Tornado 作为 Web 服务器和 WSGI 容器
+3. 使用 Supervisor 来启停
+4. 在前端再加一层 Nginx 反向代理
+
+于是，我的部署过程就变成了这样：
+1. 找一台服务器，创建目录
+2. git clone 我的 Flask 应用的代码仓库
+3. 进入 virualevn 环境（重要！必须先于 supervisord 的启动）
+4. 配置 supervisord.conf
+5. 启动 supervisord
+   
+supervisord.conf 的配置方法是加入下面几行：
+#+BEGIN_SRC sh
+...
+[inet_http_server]         ; inet (TCP) server disabled by default                                  
+port=*:8400                 ; (ip_address:port specifier, *:port for all iface)                     
+username=minos              ; (default is no username (open server))                                
+password=xxxxx               ; (default is no password (open server))             
+...
+[program:minos-web-1]                                                                                  
+command=python runtornado.py                                    ; the program (relative uses PATH, can take args)
+process_name=%(program_name)s                                   ; process_name expr (default %(program_name)s)
+directory=/home/work/minos/web                                  ; directory to cwd to before exec (def no cwd)
+stdout_logfile=/home/work/minos/web/log/supervisor.log          ; stdout log path, NONE for none; default AUTO
+stderr_logfile=/home/work/minos/web/log/supervisor.wf.log       ; stderr log path, NONE for none; default AUTO
+stopsignal=KILL                                                 ; signal used to kill process (default TERM)
+...
+#+END_SRC
+
+通过这样的配置，我还可以在 Web 上直接启停我的 Flask 应用，HTTP 端口就像我配置的
+那样，是 8400。
+
+* Miscellaneous
+** 处理 Ajax
+Flask 提供了快捷的 jsonify 函数，能将 dict 或其他值转化为 JSON 格式，并
+通过 return 直接返回给浏览器。
++ [[http://dormousehole.readthedocs.org/en/latest/patterns/jquery.html][通过 jQuery 使用 AJAX]]
+
+** 邮件
++ [[http://flask.pocoo.org/docs/0.10/errorhandling/][Logging Application Errors]]
+Python 的 logging 库支持将邮件发送，并可以指定日志等级大于多少的才发。不
+过需要搞 SMTP，而公司项目一般用 sendmail 指令，所以我包装一下 sendmail，
+将一些重要的错误发到我的邮箱里。
+#+BEGIN_SRC python
+    @staticmethod
+    def send_mail(body):
+        p = os.popen("/usr/sbin/sendmail -t", "w")
+        p.write("MIME-Version: 1.0\n")
+        p.write("Content-type:text/html;charset=utf-8\n")
+        p.write("From: %s\n" % "xxx-admin@xxx.com")
+        p.write("To: %s\n" % "zy@xxx.com")
+        p.write("Subject: A Mail from Xxx (xxx.xxx.com)\n")
+        p.write("\n")
+        p.write(body)
+        p.close()
+#+END_SRC
+  
+** 在 Flask 里使用 Redis
++ [[http://flask.pocoo.org/snippets/71/][Counting Online Users with Redis]]
++ [[http://flask.pocoo.org/snippets/75/][Server-side Sessions with Redis]]
+** Angular.js with Flask
+如果哪天我要使用 Angular.js 的话，就再详细读一下下面的文章吧。
++ [[http://stackoverflow.com/questions/11522151/typical-angular-js-workflow-and-project-structure-with-python-flask/][Typical Angular.js workflow and project structure (with Python Flask)]]
+* RESTful API
+Django下面有强大易用的Django RESTful Framework，Flask下有一个叫
+Flask-Restless的，短小精悍，但基本能够替代DRF。
+
+* 回顾
+**  Flask 是个比 Tornado 更加理想的 Web 框架 <2014-09-20 六>
+今天在西安校招结束了，坐高铁回北京，路上无聊开始学习 Flask，发现了很多让我
+想立马就用的特性。不过回公司后还有很多事情要处理，等国庆节时，我再抽出个三
+天来把 Minos 平台用 Flask 给重构一把。

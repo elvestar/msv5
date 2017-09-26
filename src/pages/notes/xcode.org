@@ -1,0 +1,74 @@
+#+TITLE: Xcode 
+#+DATE: 2015-02-07 
+#+KEYWORDS: IDE
+
+* 资料收集
+- [[https://developer.apple.com/search/index.php?q%3Dxcode6][Xcode videos in developer.apple.com]]
+
+* 配置
+** 使用 C 静态库
+需要修改项目配置，加入头文件路径和静态库文件路径， *并且不要忘了加上-l* 。
+
+例如，我想在我的项目里使用 Libuv，我需要做的：
+1. 在 Search Paths -> Header Search Paths 里加入
+   /Users/elvestar/github/libuv/include
+2. 在 Library Search Paths 里加入
+   /Users/elvestar/github/libuv/out/Debug
+3. 在 Linking -> Other Link Flags 里加入 -luv（注意，不是 -llibuv）
+
+* 插件
+** XVim
+- https://github.com/XVimProject/XVim
+  
+安装
+1. git clone git@github.com:XVimProject/XVim.git
+2. make
+3. cp ~/.vimrc ~/.xvimrc
+4. 享受它！
+
+* 阅读 Xcode Overview
+** Maintain Your Code and Other Resources in Projects or Workspaces
+- Apply App-Specific Settings to a Target（本节主要讲 iOS 和 Mac app 的各种 target setting in pane）
+- Workspaces Extend the Scope of Your Workflow（Workspaces 是比 Project 更高一层的组织）
+
+** Write Code in the Source Editor
+- Open a File Quickly（command + shift + o，相当于 pycharm 的 command + p）
+- Automate Extensive Changes in Your Code（多重编辑，文本替换以及各种 refactor 方法等）
+- Display the Definition of a Symbol（按住 command 后，变量会变为可点击的样式）
+- Examine the Structure of Your Code with Code Folding（”Editor”下有折叠相关的操作，另外编辑器左侧能高亮和折叠函数）
+- Find Help for Using the Source Editor（control + click 可以替代双击，查看 Source Editor Help）
+  
+** Build a User Interface
+跳过 
+
+** Add Icons, Images, and Effects
+跳过 
+
+** Run Your App
+内容不多，主要讲 Build Scheme 的配置
+- Choose a Scheme to Build Your App（啥叫 schema？其实就是一个项目的构建目标的配置集合）
+
+** Debug Your App
+- Control Execution and View State Information（command + /是在当前行加断点，尝试了运行后在断点处查看变量，感觉信息很详细，以后这应该能成为我的好佐助
+- Customize Your Debugging Workflow（定制 Debug 的工作流）
+
+iOS 开发相关的略过。
+
+** Test Your App
+本章讲了构建单元测试，功能测试和性能测试，以及如何构建持续集成的工作流。
+
+** Save and Revert Changes
+- Revert to the Last Saved Version of a File（撤销上次保存以来的所有修改，用本地文件来覆盖修改后的文件。功能在”File”里）
+- Use Snapshots to Restore Projectwide Changes（Snapshot 功能能应对多文件修改以及项目配置修改等情况，每次执行多文件编辑或者 Refactor 操作，Xcode 都会自动新建一个 Snapshot）
+- Store and Track Changes with Source Control（Xcode 与 VCS 的集成都在”Source Control”里面）
+  
+* Testing in Xcode
+** 在 Xcode 中使用 GTest
+- https://code.google.com/p/googletest/wiki/XcodeGuide
+
+* 回顾
+** 看完了 Xcode Overview 文档 <2015-02-16 一>
+这份苹果出品的 Xcode 的总览文档写的很好，不仅给出了 Xcode 的总体视图，还对
+对使用 Xcode 进行开发的各种文档进行了提纲契领。另外，它是一份典型的 IDE 使用
+指南，下次我学习其他诸如 VS 等 IDE 时，我会因为似曾相识感觉而使得学习过程得
+以加速。

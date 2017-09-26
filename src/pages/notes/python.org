@@ -1,0 +1,525 @@
+#+TITLE: Python
+#+DATE: 2014-02-23
+#+KEYWORDS: 正则
+
+* 前言
+在浏览 Google 的一些网页之后，突然再次涌起了学习 Python 的热情。于是我无限期停止了学
+习 Ruby 的进程，开始系统习学习 Python。
+
+我第一次接触 Python 是在 2011 年，那时我在阅读《集体智慧编程》，并照着书敲完了上面是
+所有 Python 代码。之后在工作中也经常会用到 Python 写脚本，每次用的时候，基础语法还好，
+但是一旦用到函数库，我就不得不通过搜索，非常的没效率。我一直想找个机会来进行几轮
+系统的学习。
+
+* 资料搜集
+** 文档
++ [[http://docs.python.org/2/][Python 2.7 文档]]
++ [[http://docs.python.org/2/library/index.html][Python 标准库]]
+
+** 书籍
++ [[http://woodpecker.org.cn/diveintopython/][深入 Python :Dive Into Python 中文版（啄木鸟社区）]]
++ [[http://book.douban.com/subject/3117898/][Python 源码剖析]]
+
+* list 和 dict
+** list 的并集和交集
+求交集：
+#+BEGIN_SRC python
+log_module_ids_unfound = list(set(log_module_ids).difference(set(log_module_ids_found)))
+#+END_SRC
+求并集：
+#+BEGIN_SRC python
+# 等到用上的吧。。
+#+END_SRC
+** 将 tuple 组成的 list 转化为 int 组成的 list
+例如，将 [(1234), (4556), (6543)] 转化为 [1234, 4556, 6543]，前者是用 SQLAlchemy
+select 出来的结果，后者是我们想要的可以接在 where in 语句后面的 list。代码实现如下：
+#+BEGIN_SRC python
+log_module_ids = [t[0] for t in log_module_ids]
+#+END_SRC
+** 复杂 list 的排序
+例如，元素为 dict 的 list，想根据 dict 的某个 key 的值来进行排序。
+#+BEGIN_SRC python
+# 对节点进行排序，将故障节点排在前面
+import operator
+running_nodes.sort(key=operator.itemgetter('log_time', 'update_time'))
+disable_nodes.sort(key=operator.itemgetter('log_time', 'update_time'))
+#+END_SRC
++ [[http://www.the5fire.com/python-sort-dict-in-list-by-time.html][python 对列表中的字典按{key}时间排序]]
+** 实现 list 的分组（group by） <2015-05-25 一>
+
+有个很常见的需求： *对 list 中的元素进行分组统计* 。一个比较低效的做法是，
+遍历这个 list，然后手工构造复杂的字典，并在字典里面存储统计结果。这个构造的
+过程需要很多难看的代码，特别是在字典里取值时，需要判断 key 是否存在。
+
+Python 里有一些内建的函数能帮我们实现类似于 SQL 的 ~group by~ 的功能，借助
+分组后的结果，我们可以写出更优雅的和更简洁的代码。具体地说是使用
+*operator.itemgetter* 和 *itertools.groupby* ，大体步骤如下：
+1. 确定排序和分组的 key（借助 itemgetter）
+2. 将 list 按照 key 进行排序
+3. 对 list 按照 key 执行 groupby，生成 *可以迭代的*  key 以及对应的 group
+4. 迭代处理 key 和 group，分组统计各个 group，保存统计结果
+
+#+BEGIN_SRC python
+from operator import itemgetter
+from itertools import groupby
+
+def minos_overview():
+    ...
+    ...
+    # log_configs 的元素的形式如下：(130, 'xxx_access_log', 1130)
+    log_configs.sort(key=itemgetter(2))
+    products = list()
+    for noah_node_id, log_config_group in groupby(log_configs, itemgetter(2)):
+        product = dict(noah_node_id=noah_node_id)
+
+        logs = list()
+        logs_num = 0
+        for log_config in log_config_group:
+            logs_num += 1
+            logs.append({
+                'log_module_id': log_config[0],
+                'name': log_config[1]
+            })
+
+        product['logs'] = logs
+        product['logs_num'] = logs_num
+        products.append(product)
+#+END_SRC
+
+参考：
+- http://stackoverflow.com/questions/5695208/group-list-by-values
+- https://docs.python.org/2/library/itertools.html
+- [[http://blog.ownlinux.net/2013/10/python-groupby.html][Python 中的 groupby 用法]]
+
+** 获取 list 元素的下标
+方法：使用 list 的 index() 方法。
+
+注意，如果元素在 list 中不存在，则 index() 方法会抛出异常，为了是代码优雅，
+我可以在调用 index() 之前通过 if x in xx 来先做一个判断。
+
+** 将groupby的结果持久化为list <2016-05-02 一>
+有时候，我们groupby后的结果想多次使用。 groupby返回的是一个iterator，可以迭
+代访问各元素，但是，一旦访问完，这个元素将无法再次被访问。
+
+为了解决这个问题，我们可以手动将groupby的结果持久化为list，示例代码如下：
+#+BEGIN_SRC python
+  map(lambda it: it.update(), self.items)
+  for year, item_of_year in groupby(self.items, itemgetter('year')):
+      self.items_group_by_year.append((year, list(item_of_year)))
+  self.items.sort(key=itemgetter('date'), reverse=True)
+#+END_SRC
+
+参考：
+- https://docs.python.org/2/library/itertools.html
+
+** 根据一个数组来排序另外一个数组 <2016-05-14 六>
+第一个数组叫做基准数组，第二个数组叫做待排序数组：使用一个lamda作为待排序数
+组的排序key，该lamda以待排序数组的元素作为参数，并从基准数组中返回一个下标
+（使用index方法），这个下标可可比较的，故待排序数据的排序将以基准数组为基准。
+#+BEGIN_SRC python
+  categories = ['工作', '学习', '生活', '未归类']
+  legend_data = list(t[0] for t in week_data_group_by_category)
+  legend_data.sort(key=lambda x: categories.index(x))
+#+END_SRC
+
+参考： [[http://stackoverflow.com/questions/12814667/how-to-sort-a-list-according-to-another-list][How to sort a list according to another list?]]
+
+** 使用 * 来生成重复元素的列表 <2016-07-30 六 21:03>
+假如我们想生成一个拥有12个元素的列表，且每个元素的值都是0，可以使用下面的
+方法：
+#+BEGIN_SRC py
+valid_time_of_month = [0] * 12
+work_time_of_month = [0] * 12
+study_time_of_month = [0] * 12
+#+END_SRC
+
+这是一颗好吃的语法糖，但是有一种情况需要注意，那就是元素为字典时。如下：
+#+BEGIN_SRC py
+hours_stats = [{'work': 0, 'study': 0, 'life': 0, 'other': 0}] * 24,
+#+END_SRC
+
+需要注意的时，对于这个新生成的列表，我们改变任何一个元素，都会惊奇地发现其
+他元素也被同步改动了！究其原因，这个列表的每个字典元素其实是引用，它们指向
+的其实是同一块数据。
+
+* string
+** 搜索
+* Built-in Functions
+** getattr
+下面例子实现了通过 getattr() 实现打印 Model 的各个字段（各个字段是 Model Object 的
+Attribute）。
+#+BEGIN_SRC python
+log_config = LogConfig.query.filter_by(log_module_id=log_module_id).first()
+for col in log_config.__table__.columns:
+    print col.name, getattr(log_config, col.name)
+#+END_SRC
+** round
+*** float round "bug" <2016-03-13 Sun>
+Python 内置的 round 函数有显而易见 bug，那就是对某些特殊的浮点数进行 round
+时，得到的结果会让人大吃一惊。官方给出的解释是 ~十进制的分布无法准确地用二
+进制分数表示~ 。
+#+BEGIN_EXAMPLE
+Representation error refers to the fact that some (most, actually) decimal fractions cannot be represented exactly as binary (base 2) fractions. This is the chief reason why Python (or Perl, C, C++, Java, Fortran, and many others) often won’t display the exact decimal number you expect:
+#+END_EXAMPLE
+
+虽然这个解释让人无可指摘，但是这个 round 函数的执行结果不符合产品设计里的 ~最小惊讶原则~ 。
+
+** range 和 xrange 的区别 <2016-04-10 日>
+#+BEGIN_SRC python
+for i in range(1000): 
+  pass
+
+for i in xrange(1000): 
+  pass
+#+END_SRC   
+   
+前者会预先生成一个有 1000 元素的列表，而后者则不会预先生成，而是每轮迭代返
+回下一个数值， ~内存占用较小~ 。换句话说，xrange 不返回列表，而是返回一个
+iterable 对象。
+
+* re 模块
++ [[https://www.debuggex.com/][Python 在线正则]]
+** group
++ [[https://docs.python.org/2/library/re.html][re — Regular expression operations]]
+
+下面面的代码利用 re 模块实现了正则查找和捕获，将一行日志中的 pid 字段给捕获
+并打印。
+#+BEGIN_SRC python
+#!/bin/env python
+
+import re
+import sys 
+
+for line in sys.stdin:
+    m = re.search(r"pid=(\d+)&", line)
+    if m != None:
+        pid = m.group(1).strip("\n")
+        print pid 
+#+END_SRC
+
+** groupdict()
+我们经常遇到这样的需求：命名俘获，并转化为字典。于是我们可能会写出这样的代
+码：
+#+BEGIN_SRC py
+  regex = r' +full_name: "(?P<full_name>[^ ]+)"\n +size: (?P<size>[^ ]+)\n +mtime: (?P<mtime>[^ ]+)\n +timestamp: (?P<timestamp>[^ ]+)\
+  m_iter = re.finditer(regex, response, re.S)
+  reader_files = list()
+  for index, m in enumerate(m_iter):
+      reader_file = dict()
+      reader_file['full_name'] = m.group('full_name')
+      reader_file['size'] = int(m.group('size'))
+      reader_file['mtime'] = int(m.group('mtime'))
+      reader_file['timestamp'] = int(m.group('timestamp'))
+      reader_file['inode'] = int(m.group('inode'))
+      reader_file['index'] = int(m.group('index'))
+      reader_files.append(reader_file)
+#+END_SRC
+
+我是，我们可以使用 groupdict() 来将正则匹配结果一键转化为 dict，如下：
+
+#+BEGIN_SRC py
+  regex = r' +full_name: "(?P<full_name>[^ ]+)"\n +size: (?P<size>[^ ]+)\n +mtime: (?P<mtime>[^ ]+)\n +timestamp: (?P<timestamp>[^ ]+)\
+  m_iter = re.finditer(regex, response, re.S)
+  reader_files = list()
+  for index, m in enumerate(m_iter):
+      reader_file = m.groupdict()
+      reader_files.append(reader_file)
+#+END_SRC
+
+这样，代码就相当简洁了。不过，有个美中不足之处，就是无法对每个字段进行精细
+的处理了。
+
+* 命令行解析
+使用 optparse 库。
+#+BEGIN_SRC python
+from optparse import OptionParser
+parser = OptionParser()
+parser.add_option('--base_date', dest='base_date', help='Which date you want to statitics?')
+parser.add_option('--force_refresh', dest='force_refresh', default=True,
+                  help='If statitics exists in db, do you want to refresh them?')
+(options, args) = parser.parse_args()
+if options.base_date is None:
+    logging.error('--base_date is required')
+    sys.exit(-1)
+#+END_SRC
+* pycurl
+** curl 与 ftp
+通过 curl 配合 ftp，能实现不登陆机器就能方便地实现一些文件系统操作。如下面几行代码
+实现了远程 ls 一个指定目录的功能：
+#+BEGIN_SRC python
+# ftp_dir 变量的格式例如：ftp://ftp.cn.freebsd.org/pub/FreeBSD/
+def list_directory(ftp_dir):
+    buf = cStringIO.StringIO()
+    c = pycurl.Curl()
+
+    c.setopt(c.URL, ftp_dir)
+    c.setopt(c.WRITEFUNCTION, buf.write)
+    c.setopt(pycurl.TIMEOUT, 1)
+    c.perform()
+
+    file_list = buf.getvalue()
+    buf.close()
+    return file_list
+#+END_SRC
+** 超时设置
+curl 是一种网络交互过程，这种过程必须要考虑超时设置。
+设置方法如下：
+#+BEGIN_SRC python
+# 设置超时为 1 秒
+c.setopt(pycurl.TIMEOUT, 1)
+#+END_SRC
+* datetime
+** timedelta
+两个 datetime 相减就能得到一个 timedelta，所以要想得到两个 datetime 相差的秒数，可以
+拿它们相减，并对得到的 timedelta 调用 seconds 方法。下面例子演示了对数据库表中的
+DateTime 类型字段取它们相差的秒数：
+#+BEGIN_SRC python
+data_slices = engine.execute('SELECT base_time, end_time, ready_time, data_size FROM data_slice '
+                                     'WHERE log_module_id = ' + str(log_module_id) +
+                                     ' AND DATE(base_time) = "' + base_date + '"')
+
+for data_slice in data_slices:
+    # slice_delay_time = (data_slice.ready_time - data_slice.end_time).seconds 
+    slice_delay_time = (data_slice.ready_time - data_slice.end_time).total_seconds()
+#+END_SRC
+说明：应该使用 total_seconds()，seconds 得到的差值不包括天数。
+** string -> datetime -> timestamp
+#+BEGIN_SRC python
+datetime_start = "2014-07-29 18:00:00"
+datetime_end = "2014-07-29 19:00:00"
+timestamp_start = int(time.mktime(datetime.datetime.strptime(datetime_start, '%Y-%m-%d %H:%M:%S').timetuple()))
+timestamp_end = int(time.mktime(datetime.datetime.strptime(datetime_end, '%Y-%m-%d %H:%M:%S').timetuple()))
+#+END_SRC
+
+感想：很坑爹，很丑陋，调用了 N 多时间相关的函数。
+
+** 案例：给出两个时间点和一个时间间隔，求生成所有时间点
+解法：先将两个时间点生成 2 个 datetime，然后将一个时间间隔生成 1 个 timedelta，然后利
+用 datetime 之间可以比较，datetime 和 timedelta 可以互相加减的特性来循环生成。
+#+BEGIN_SRC python
+start_time = datetime.datetime.strptime(form.start_time.data, '%Y-%m-%d %H:%M')
+end_time = datetime.datetime.strptime(form.end_time.data, '%Y-%m-%d %H:%M')
+time_delta = datetime.timedelta(minutes=5)
+cur_time = start_time
+while cur_time <= (end_time - time_delta):
+    print cur_time.strftime('%Y-%m-%d %H:%M:%S')
+    cur_time += time_delta
+#+END_SRC
+** 案例：利用 timetuple 来对 datetime 进行按某一时间间隔取整 
+#+BEGIN_SRC python
+# 需要先对 start_time 按通知周期进行取整，天级以下的分钟位，秒位都置零， 天级的还要额外地 把小时位也置零
+start_tt = start_time.timetuple()
+if log_config.notify_interval >= 1440:
+    cur_time = datetime.datetime(start_tt.tm_year, start_tt.tm_mon, start_tt.tm_mday,
+                                 0, 0, 0, 0)
+else:
+    cur_time = datetime.datetime(start_tt.tm_year, start_tt.tm_mon, start_tt.tm_mday,
+                                 start_tt.tm_hour, 0, 0, 0)
+#+END_SRC
+* 日志打印 logging
+** 如何配置 format
+#+BEGIN_SRC python
+logging.baseConfig(format='%(levelname)s%(asctime)s %(filename)s:%(lineno)d] %(message)s', datefmt='%m%d %H:%M:%S'))
+#+END_SRC
+全部可配置的参数在这里：
++ [[https://docs.python.org/2/library/logging.html#logrecord-attributes][LogRecord attributes]]
+
+* 调用子进程
+** commands
+Python 里有 N 种方法调用子进程，我自己就用过 os.system 和 os.popen3，此外还有
+subprocess 和 commands。
+
+我有个需求，就是在 Python 中调用公司一个命令行工具来获取某个 Naming Service
+的全部实例的信息。我关注的是调用的返回状态码（用以判断调用成功与否），和标
+准输出信息（进一步解析，返回给前端），我注意到了 commands，发现它完美契合我
+的需求，并且据 [[http://blog.csdn.net/menglei8625/article/details/7494094][此文]] 的说法说还有 *不阻塞* 的特性（但经过我的测试，发现 *不
+阻塞* 纯属妄想）
+
+顺带说一句，公司环境下有这个命令行，但是我在我的 Mac 下开发，没有这个命令行，
+于是我机智地 Mock 了一把。如下：
+#+BEGIN_SRC sh
+sudo vi /bin/get_instance_by_service
+
+echo "xx-xx-xxxxxxx00.xx 10.0.0.29 xxxx-xxxxxxx-xxxxx.XX.xxx 0 0                                    
+tc-mo-xxx.tc 10.26.198.51 xxx.XX.xx 404 0                                                            
+tc-mo-xxx.tc 10.26.198.71 xxx.XX.xx 404 0"
+#+END_SRC
+
+** 解决commands.getstatusoutput() 返回值和shell下执行命令的返回值不一致的问题 <2016-09-27 二 16:02>
+原因：getstatusoutput()返回的status值是有过编码转换的，所以和shell下的不一
+致，解决方法是调用os.WEXITSTATUS(status)，将status的编码和shell下保持一致。
+
+参考：[[http://stackoverflow.com/questions/1535672/how-to-interpret-status-code-in-python-commands-getstatusoutput][How to interpret status code in Python commands.getstatusoutput() - Stack Overflow]]
+
+** 尝试使用subprocess替代commands <2016-11-09 三 12:08>
+昨晚使用commands时，发现返回的output相对直接在shell下调用返回的output有缺失，
+怀疑commands有些奇怪的地方需要设置，网上查了一下没查到，而且有人说commands
+是个将被废弃的库，建议使用subprocess。于是我开始尝试subprocess，代码如下：
+#+BEGIN_SRC py
+cmd = './lbi/scripts/lbi_utils -action=progress -key=%s' % key_str
+subp = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+for line in subp.stdout:
+    fields = line.split('\t')
+    print(fields)
+#+END_SRC
+
+结果发现报错，错误是OSError: [Errno 2] No such file or directory。查了一下，
+发现需要填上 ~shell=True~ ，然后调用成功，返回的output也是完整的。代码如下：
+#+BEGIN_SRC py
+cmd = './lbi/scripts/lbi_utils -action=progress -key=%s' % key_str
+subp = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+for line in subp.stdout:
+    fields = line.split('\t')
+    print(fields)
+#+END_SRC
+
+总结：从需要手动设置 ~shell=True~ 这点来看，这个subprocess很不友好，简直就
+是很蠢。
+
+** 未调用fflush(stdout)导致的subprocess/commands执行不正确 <2016-11-09 三 16:50>
+今天在Python下执行binary遇到了怪事，就是返回的output正常不完整，或
+者干脆就是返回空值，使用commands和subprocess都有同样的问题。我一度怀疑是
+Python的这两个库本身就有bug。
+
+直到后来，我突然怀疑到那个binary在执行printf之后该不会是没有调用flush吧？我
+N年前遇到过同样的问题。于是检查这个binary的C++代码，发现果然没有调用。于是
+我加上了flush语句，重跑发现问题解决！
+#+BEGIN_SRC cpp
+string contents_str;
+JoinStrings(contents, "\n", &contents_str);
+printf("%s\n", contents_str.c_str());
+fflush(stdout);
+#+END_SRC
+
+看来，Python的commands和subprocess并无问题，是我有问题。
+
+* 编码
+** 以unicode作为字典的key时的注意点 <2016-07-30 六 21:38>
+我们定义了一个字典，key是汉字。如下：
+#+BEGIN_SRC python
+CATEGORIES_NAME_DICT = {'工作': 'work', '学习': 'study', '生活': 'life', '其他': 'other'}
+#+END_SRC
+
+我们想对这个字段进行取值操作，如下：
+#+BEGIN_SRC py
+category_name = CATEGORIES_NAME_DICT['工作']
+#+END_SRC
+
+这时，程序抛异常，说是 ~KeyError: u'\u5de5\u4f5c'~ 。为了方便排查这个问题，
+可以通过对字典的真实key和传进去的key执行type操作，发现前者的类型是 *str* ，
+而后者的类型是 *unicode* 。稍微想一下，得出解法：我们需要修改了一下字典定义，
+在key之前加上 *u* 。如下：
+#+BEGIN_SRC 
+CATEGORIES_NAME_DICT = {u'工作': 'work', u'学习': 'study', u'生活': 'life', u'其他': 'other'}
+#+END_SRC
+
+* 包管理
+** ImportError: No module named google.protobuf <2016-09-18 日 21:54>
+最近项目需要使用pbrpc，引入google的protobuf后，发现在线上环境中，总是会报
+~ImportError: No module named google.protobuf~ 这样的错误，这让我难以理解，
+我尝试了很多办法都没有解决。
+
+最后，我决定用大脑来解决这个问题。Python的import机制其实很简单，就是在各个
+PYTHONPATH根据目录层次来寻找模块，如果没找到，那可能原因有下面几种：
+1. 模块目录不再PYTHONPATH里面。
+2. 目录中有脏的.pyc文件（Python对于.pyc文件的管理有问题，而且问题很大）。
+3. 目录中没有__init__.py文件。
+
+列出可能原因，稍微一过滤，我推测是原因3导致的。于是我到google/protobuf目录
+一看果然如此，原来 *通过pip安装的protobuf的google目录是不带__init__.py文件的！*
+
+到网上一搜，发现有几个类似提问：
+1. [[https://github.com/google/protobuf/issues/713][PyPI installation lacks __init__.py in top-level google directory · Issue #713 · google/protobuf]]
+2. [[http://stackoverflow.com/questions/13862562/google-protocol-buffers-not-found-when-trying-to-freeze-python-app][py2exe - Google protocol buffers not found when trying to freeze python app - Stack Overflow]]
+   
+Google为啥要漏一个__init__.py文件呢？我目前还不理解，但是我觉得Google这么做
+会导致很多人踩坑的。最后我果断手动在protobuf的google目录下touch一个空
+的__init__.py文件，解决了这个问题。
+
+* 解释器相关
+** inpect
+
+* 问题记录
+** Mac 下 pip 安装一些模块失败，报"clang: error"
+我在 Mac 安装 PIL，但是总是失败。错误信息如下：
+#+BEGIN_SRC sh
+sudo pip install Pillow 
+Downloading/unpacking Pillow
+  Downloading Pillow-2.4.0.zip (6.5MB): 6.5MB downloaded
+  Running setup.py egg_info for package Pillow
+...
+...
+clang: error: unknown argument: '-mno-fused-madd' [-Wunused-command-line-argument-hard-error-in-future]
+
+clang: note: this will be a hard error (cannot be downgraded to a warning) in the future
+
+error: command 'cc' failed with exit status 1
+
+----------------------------------------
+Cleaning up...
+...
+#+END_SRC
+
+用网上找到了 N 多方法尝试都无法解决此问题，最后，终于找到了这篇文章：
++ [[http://bruteforce.gr/bypassing-clang-error-unknown-argument.html][Bypassing “clang: error: unknown argument”]]
+
+并按照这篇文章提供的解法来安装，终于成功。
+#+BEGIN_SRC sh
+sudo ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future  pip install pillow
+#+END_SRC
+
+该问题的原因是： *Mac 的 LLVM compiler 升级新版后，将识别不了的命令行参数
+当成错误* 。这个改动导致了很多通过 pip 安装的 Python 模块和通过 gem 安装的
+Ruby 包发生了安装失败的问题。
+
+这里我不得不吐槽一下 Mac，在非 Xcode 开发的环境兼容性的处理上 *不够严肃*
+（相对一些 Linux 发行版）。
+
+** bad interpreter: Permission denied
+我在公司的机器上安装 percol，装好一运行，出现如下结果：
+#+BEGIN_SRC sh
+[work@cq01-xxxxxxx-xxxx327.cq01 master]$ percol
+-bash: /home/work/.xxxxx/bin/percol: /home/users/zhongyi/.xxxxx/bin/python: bad interpreter: Permission denied
+#+END_SRC
+
+怀疑是 Python 解释器环境配置问题，于是打开*/home/work/.xxxxx/bin/percol*
+，发现该 Python 脚本的第一行写着：
+#+BEGIN_SRC python
+#!/home/users/zhongyi/.xxxxx/bin/python
+#+END_SRC
+
+我将它改成如下行后，问题解决！
+#+BEGIN_SRC python
+#!/bin/env python
+#+END_SRC
+
+** ascii codec can t decode byte 0xef in position 0 ordinal not in range 128
+解法：
+#+BEGIN_SRC python
+import sys 
+reload(sys) 
+sys.setdefaultencoding('utf8') 
+#+END_SRC
++ [[http://www.cnblogs.com/DjangoBlog/p/3543430.html]]
+** 当前目录中遗留的 .pyc 文件导致的 No module named xxx <2016-04-13 三>
+我想使用 Evernote 的 API 来访问我的笔记，一开始，写了一个名字为
+~evernote.py~ 的脚本，一运行，连 from evernote.edam.userstore import
+UserStore 运行都失败，我立刻意识到，我的脚本文件命名有问题，我将之改为
+~get_evernote.py~ 。
+
+再次运行，发现仍然报错，报的还是同样的错误。这时我就感到奇怪了，我通过 pip
+安装的 evernote 稳稳地放在了 ~/Library/Python/2.7/site-packages/~ 下面了呀，
+肿么可能有差错？我百思不得其解，不得不先干点别的事情避避风头。
+
+吃饭晚饭我再次看这个问题，这是我发现了玄机，原来我的当前目录下还遗留一个名
+叫做 ~evernote.pyc~ 的文件，Python的import 看来是优先找到这个名为evernote
+的.pyc文件了！
+
+看来，Python的import还是有不小的坑的，如果改进，我会先判断.pyc对应的py文件
+是否对当前目录存在，如果不存在，则认定.pyc文件无效，并尝试到下一个目录进行
+import。
+
+* 学习回顾 
+** 或许我需要的只是背诵一下 API，以及一个能自动提示的 IDE <2014-02-23 日>
+翻几本 Python 书，发现都眼熟的很，可看的不多。
+

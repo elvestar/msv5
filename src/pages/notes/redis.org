@@ -1,0 +1,210 @@
+#+TITLE: Redis
+#+DATE: 2014-02-20
+#+KEYWORDS: NoSQL
+
+* 前言
+之前在百度的几个项目的存储选型中，曾经考虑到使用 Redis，因为应用场景很适合。但是
+最终因为对 Redis 的存储持久化，多机以及运维监控存在疑虑而放弃，并转用公司内部的
+KV 存储。
+
+* 资料搜集
++ [[http://www.cnblogs.com/liping13599168/archive/2011/04/12/2013094.html][Redis 源码解析（1）——源码目录介绍]]
++ [[http://blog.nosqlfan.com/html/2949.html][Redis 源码分析系列文章]]
++ [[http://blog.nosqlfan.com/html/4007.html][Redis 运行流程源码解析]] （对 Redis 的网络通讯层分析得很详细）
+  
+** 第二批
++ [[https://github.com/springside/springside4/wiki/redis][Redis 资料搜集（江南白衣）]]
++ [[http://origin.redisbook.com/en/latest/][Redis 设计与实现（第一版）]]
++ [[http://redis.readthedocs.org/en/latest/][Redis 命令参考]]
+
+* Redis Client
+通过 Eclipse 稍微阅读了 Redis Client 端的代码。Client 端的代码位于
+redis-cli.c 以及 hiredis.c 中，其中后者是 Client 与 Redis Server 通讯的
+核心代码，前者封装了后者，提供给用户以命令行的接口。
+
+在 redis-cli 的交互式的每轮循环中，有会两个函数被先后调用。
+#+begin_src C
+int redisAppendCommandArgv(redisContext *c, int argc, const char **argv, const size_t *argvlen);
+int redisGetReply(redisContext *c, void **reply);
+#+end_src
+* Redis Server
+main 函数位于 redis.c 的 3091 行。
+
+#+begin_src c
+/* Global vars */
+struct redisServer server; /* server global state */
+struct redisCommand *commandTable;
+#+end_src
+
+前者是 Redes 服务器的配置和状态的全局变量，其类型是个非常庞大的 struct。server 变量在
+main 函数刚开始就进行了初始化，相关函数是：
+
+#+begin_src c
+initServerConfig();
+#+end_src
+
+* redis.h
+Redis 的源码结构有个特点，就是 *在 redis.h 中声明所有重要的结构函数* 。这些函数包括
+下面几类：
+1. 工具函数。
+2. 网络以及与客户端交互相关的函数。
+3. Redis Object（如 string/list/hash/set 等）的构造和管理相关的函数。
+4. Replication 相关。
+5. 持久化相关函数（AOF 和 RDB）。
+6. Redis 核心函数（如打日志，处理命令）。
+
+* 配置 Redis
+** 如何 daemonize
+Redis 本身支持以 daemon 的方式运行，只需要将 redis.conf 中的 daemonize 设为 yes，然后以
+redis-server /path/to/redis.conf 的方式启动即可。
++ [[http://stackoverflow.com/questions/14816892/how-to-keep-redis-server-running]]
+  
+** 持久化（dump 方式）
+通过下面简单的配置能够实现 Redis 数据的 dump（写磁盘）。
+#+BEGIN_SRC sh
+# Save the DB on disk:
+#
+#   save <seconds> <changes>
+#
+#   Will save the DB if both the given number of seconds and the given
+#   number of write operations against the DB occurred.
+#   ...
+save 900 1
+save 300 10
+save 60 10000
+
+...
+
+# The filename where to dump the DB
+dbfilename dump.rdb
+
+# The working directory.
+dir /home/work/minos/redis/
+#+END_SRC
+
+上面的配置告诉 Redis 的 dump 策略（本例包括三种），dump 文件的目录和文件名。以该
+配置启动后，Redis 会以该策略执行定期 dump。当 Redis 重启时，会用 dump 文件来恢复内
+存中的数据。
+
+* 数据结构
+** redisClient
+#+BEGIN_SRC cpp
+/* With multiplexing we need to take per-client state.
+ * Clients are taken in a liked list. */
+typedef struct redisClient {
+    int fd;
+    redisDb *db;
+    int dictid;
+    robj *name;             /* As set by CLIENT SETNAME */
+    sds querybuf;
+    size_t querybuf_peak;   /* Recent (100ms or more) peak of querybuf size */
+    int argc;
+    robj **argv;
+    struct redisCommand *cmd, *lastcmd;
+    int reqtype;
+    int multibulklen;       /* number of multi bulk arguments left to read */
+    long bulklen;           /* length of bulk argument in multi bulk request */
+    list *reply;
+    unsigned long reply_bytes; /* Tot bytes of objects in reply list */
+    int sentlen;            /* Amount of bytes already sent in the current
+                               buffer or object being sent. */
+    time_t ctime;           /* Client creation time */
+    time_t lastinteraction; /* time of the last interaction, used for timeout */
+    time_t obuf_soft_limit_reached_time;
+    int flags;              /* REDIS_SLAVE | REDIS_MONITOR | REDIS_MULTI ... */
+    int authenticated;      /* when requirepass is non-NULL */
+    int replstate;          /* replication state if this is a slave */
+    int repldbfd;           /* replication DB file descriptor */
+    off_t repldboff;        /* replication DB file offset */
+    off_t repldbsize;       /* replication DB file size */
+    sds replpreamble;       /* replication DB preamble. */
+    long long reploff;      /* replication offset if this is our master */
+    long long repl_ack_off; /* replication ack offset, if this is a slave */
+    long long repl_ack_time;/* replication ack time, if this is a slave */
+    char replrunid[REDIS_RUN_ID_SIZE+1]; /* master run id if this is a master */
+    int slave_listening_port; /* As configured with: SLAVECONF listening-port */
+    multiState mstate;      /* MULTI/EXEC state */
+    int btype;              /* Type of blocking op if REDIS_BLOCKED. */
+    blockingState bpop;     /* blocking state */
+    long long woff;         /* Last write global replication offset. */
+    list *watched_keys;     /* Keys WATCHED for MULTI/EXEC CAS */
+    dict *pubsub_channels;  /* channels a client is interested in (SUBSCRIBE) */
+    list *pubsub_patterns;  /* patterns a client is interested in (SUBSCRIBE) */
+
+    /* Response buffer */
+    int bufpos;
+    char buf[REDIS_REPLY_CHUNK_BYTES];
+} redisClient;
+#+END_SRC
+
+** redisDb
+#+BEGIN_SRC cpp
+/* Redis database representation. There are multiple databases identified
+ * by integers from 0 (the default database) up to the max configured
+ * database. The database number is the 'id' field in the structure. */
+typedef struct redisDb {
+    dict *dict;                 /* The keyspace for this DB */
+    dict *expires;              /* Timeout of keys with a timeout set */
+    dict *blocking_keys;        /* Keys with clients waiting for data (BLPOP) */
+    dict *ready_keys;           /* Blocked keys that received a PUSH */
+    dict *watched_keys;         /* WATCHED keys for MULTI/EXEC CAS */
+    struct evictionPoolEntry *eviction_pool;    /* Eviction pool of keys */
+    int id;                     /* Database ID */
+    long long avg_ttl;          /* Average TTL, just for stats */
+} redisDb;
+#+END_SRC
+
+* Redis 实践经验
+** 当要 get 的 key 数目非常多时（MGET 与 pipeline）
+虽然 get 每个 key 的时间非常短，但是如果遇到那种需要 get 非常多的 key 的场景时，这
+些 get 操作的累加耗时就非常非常的长了。耗时主要好在网络连接上，所以需要研究下
+Redis 是否提供的批量 get 的方式。
+
++ [[http://stackoverflow.com/questions/3329408/is-there-mget-analog-for-redis-hashes][Is there MGET analog for Redis hashes?]]
++ [[http://stackoverflow.com/questions/4929202/most-efficient-way-to-get-several-hashes-in-redis][Most efficient way to get several hashes in Redis?]]
+
+通过上面的文章，我了解到 Redis 为 string 类型提供了 MGET 的批量 get key 的接口，这是
+符合我的需求的。但是为 hash 类型提供了 HMGET 的接口的语义却是 *一次 get 一个 key 的多
+个字段*，而不是 *一次 get 多个 key 的多个字段* ，这个接口不符合我的要求。
+
+还好 Redis 提供了强大的 pipeline 功能，能够批量执行任意操作。但是有一个副作用，那
+就是 *pipeine 会独占 redis client* ，故用 pipeline 时还是要慎重一点的。
+
+** 使用 hiredis 的 pipeline，部分 key 无法正常写入 redis
+查看官方的 test 文件，发现它的用法是： *redisAppendCommand* 和
+*redisGetReply* 一一对应。我也修改我的代码，发现这样就可以正常写入了！
+
+至于为啥，我现在还不大了解，我决定先放着，以后可以问别人。不过我通过阅
+读下面两文：
++ [[https://github.com/redis/hiredis][README.md(HIREDIS)]]
++ [[http://informatikr.com/2012/redis-pipelining.html][Automatic Optimal Pipelining of Redis Commands]]
+
+得知 redisGetReply 可能使 hiredis 阻塞。即调用 redisGetReply 时：
+#+BEGIN_EXAMPLE
+1. The input buffer is non-empty:
+  + Try to parse a single reply from the input buffer and return it
+  + If no reply could be parsed, continue at 2
+2. The input buffer is empty:
+  + Write the entire output buffer to the socket
+  + Read from the socket until a single reply could be parsed
+#+END_EXAMPLE
+
+** 数十万个 key 需要 get 时，如何利用 pipeline 机制
+方法就是分组，例如，每 1 万个 key 作为一组，调用一次 pipeline.execute()。我
+的实际场景是从 Redis 里获取 189582 个 key，10000 个 key 一组，执行 19 次 pipeline，
+一共花了约三分钟。
+
+通过调整每组 pipeline 的 key 数目，应该可以优化一下总执行时间，有时间我回做一下
+测试。
+
+* 回顾
+** 初步了解，有些质疑 <2014-02-21 五>
+初步了解了 Redis 的源码架构，并通过源码和别人的文章了解了 Redis 接受网络请求时的操作。
+看到 Redis 在网络通讯层写了那么多底层代码，我在想显然这些东西通过 RPC 库可以简单地实
+现。
+
+*Redis 目前给我的感觉是就一层套一层，而它真正属于自己的核心代码还是没有看到。*
+
+看起来 Redis 作者是非常反感使用一些开源的库的，他要保证 Redis 代码的简洁。在我看来，
+自己实现底层反倒让项目显得丑陋，因为它给自己增加了许多多余的代码，多余代码越多的
+项目越丑陋。就像我上面说的，代码包裹了一层又一层，最里面才是 Redis 自己的核心代码。

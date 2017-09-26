@@ -1,0 +1,25 @@
+#+TITLE: Rsync - 一个远程同步/增量备份的工具
+#+DATE: 2014-11-23
+#+KEYWORDS: Unix 工具
+
+* Introduction
+想要在另外一台上拷贝一个 Nginx 环境，用 scp -r 的话，logs 目录太大，拷贝时间太长，
+而 scp 没有跳过某些文件的功能。在 [[http://stackoverflow.com/questions/1228466/how-to-filter-files-when-using-scp-to-copy-dir-recursively][此文]] 的指引下，我尝试了用 rsync -r 来替代
+scp -r，发现它可以工作！
+
+* 资料搜集
+** 文档
++ [[http://rsync.samba.org/ftp/rsync/rsync.html][Rsync man page]]
+  
+* 用法
+#+BEGIN_SRC sh
+rsync -rv --exclude '*.log' work@xxxx-xxxx-xx2.xxxx01:/home/work/nginx/* .
+#+END_SRC
+
+说明：
+1. -r 是递归目录
+2. -v 是 verbose，将执行的详细打印到屏幕
+3. --exclude 是指定跳过某些文件，在这里的原因是 *.log 文件太大，不想同步过来
+   
+问题：
++ rsync 有点慢，可能是在某个地方被限速了

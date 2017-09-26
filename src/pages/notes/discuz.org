@@ -1,0 +1,61 @@
+#+TITLE: Discuz
+#+DATE: 2014-03-06
+#+KEYWORDS: CMS
+
+* 前言
+今年年初，我们数据团队从基础架构部转到了新成立的大数据部。此举带来了一个副作用，
+那就是我们原图书管理系统不能用了！我们的助理 MM 感到很着急，她说谁来帮忙搞一套啊，
+我说我顺手弄弄把。。
+
+我决定把原部门的图书管理系统的源码给弄过来，然后再 BAE 上申请一个域名开始搞。弄来源
+码后，发现用的是 Discuz。于是，就有了本文。
+
+我预想的大致步骤如下：
+1. 在我的 VPS 上搭建 LAMP 环境
+2. 把源码传到我的 VPS 上
+3. 将图书管理系统的建表语句给抠出来，然后再 VPS 的 MySQL 上建表
+4. 调试
+5. 改良页面
+6. 申请内网的 BAE 以及 Mysql
+7. 上线，然后自测一段时间
+8. 群里告知大家系统可用！
+
+预想中的坑：
++ uuap
++ soap
+
+* 搭建 LAMP 环境
+我使用的 DigitalOcean 的 VPS 支持带 LAMP 的套餐。这给我带来了方便，我选择了 *LAMP on
+Ubuntu 12.04* 这个套餐，点击 *Create Droplet* ，一分钟后，我的 VPS 建好了。
+
+用将我自己的域名 *elvestar.com* 的 DNS 指向了这个新的 VPS 的 ip 地址，下面用
+elvestar.com 指代我的 VPS 地址。
+
+* 安装 Discuz
+参考：[[http://www.discuz.net/thread-3456887-1-1.html][官方教程]]
+
+在 VPS 下用 wget 下载安装包，unzip 解压之，将 upload 目录中的内容拷贝到/var/www/bbs 目录
+下面，并根据官方教程对下面目录执行 chmod -R 777：
++ config/
++ data/
++ uc_client/
++ uc_server/
+
+然后访问 [[http://elvestar.com/bbs]] ，在 web 上进行安装。
+
+[[../static/imgs/discuz/1.png]]
+
+在数据库这一步，我选的数据库名为 discuz，用户名为 root，数据库表前缀为 dz_，管理员账
+号为 admin。当我点击下一步时，安装程序提示我连接不上数据库。我排查了一下，发现是我
+的 mysql 密码没填对。Google 一下，知道 DigitalOcean 的 LAMP Stack 的默认 mysql 密码是
+password，于是我用 *mysqladmin -u root -p password* 来修改密码。
+
+配置好数据库后，下一步 Discuz 就开始执行建表建目录，过一会，Discuz 就可用了。
+
+#+begin_example
+在后台连接到数据库，执行 show tables;，发现 Discuz 为我创建了 293 张表，我囧。
+#+end_example
+
+打开我[[http://elvestar.com/bbs/forum.php][新建好的 BBS]] ，用 admin 账号登录，发现我的 uid 是 1。 *每个新论坛诞生时，都会有一个
+uid 为 1 的 admin 账号* 。在此记一笔（2014-03-01），也许会很有纪念意义。
+

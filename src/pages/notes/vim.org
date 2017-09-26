@@ -1,0 +1,178 @@
+#+TITLE: Vim 编辑器
+#+DATE: 2014-02-23
+#+KEYWORDS: Vim, 工具
+
+* 80% - 20%理论在 Vim 中的体现
+** 文件间的跳转
+
+| 跳转类型                | 快捷健            | 相关插件                              |
+|-------------------------+-------------------+---------------------------------------|
+| .h 与.cpp 之间            | <leader>a         | a.vim                                 |
+| .h/.cpp 与_test.cpp 之间  | 需要我完善 TODO   | 拟作 at.vim                            |
+| 在 include 语句上直接跳转 | gf                | gf 是 Vim 本身支持的，但是需要预设 path   |
+| 跳转到上一处            | C-o               | Vim 本身支持                           |
+| 跳转到下一处            | C-i               | Vim 本身支持                           |
+| 跳转到变量/函数的定义处 | C-]/:cs find g    | ctags/cscope 工具，我用得还不够好 TODO |
+| 跳到指定文件（通用） | 我要继续改进 TODO | NERD_tree.vim/lookupfiles.vim         |
+* Vim 文本对象
+使用 *:help text-objects* ，查看帮助，发现了 Vim 的这个强大功能。Vim 对于 *文本编
+辑* 这个领域的问题模型做了很完善的抽象，所以它如此的锋利。
+
+** 用法示例
+清空括号内的所有内容：
+#+BEGIN_EXAMPLE
+di) 
+#+END_EXAMPLE
+
+选中光标所在的单词：
+#+BEGIN_EXAMPLE
+viw
+#+END_EXAMPLE
+
+* Buffer（寄存器）与复制粘贴
+在 Vim 中执行复制后，会把内容复制到一个 buffer 中。Vim 会维护者多个 buffer，即使退出
+Vim，这些 buffer 依然存在。buffer 分为两类：
+| 类别             | 数目        | 复制操作举例                   | 粘贴操作举例                          |
+|------------------+-------------+--------------------------------+---------------------------------------|
+| 默认 buffer       | 空，1 个      | yy，复制当前行到默认 buffer 中   | p，粘贴默认 buffer 的内容到当前位置     |
+| Numbered Buffers | 0-9，共 10 个 | ""yy，将当前复制到 buffer 2 中   | "2p，将 buffer 2 中的内容粘贴到当前位置 |
+| Named Buffers    | a-z，共 23 个 | "a7yy，将第 7 行复制到 buffer a 中 | "ap，将 buffer a 中的内容复制到当前位置 |
+
+*注意* ：Numbered Buffers 是个循环队列，每次执行复制到默认 buffer 后，该队列会整体右移，
+而 buffer 0 会被默认 buffer 占据。
+
+Vim 提供了一个 *非常有用的查看当前各个 buffer 的指令* ：
+#+BEGIN_EXAMPLE
+:reg
+#+END_EXAMPLE
+
+执行结果如下：
+
+[[../static/imgs/vim/1.png]]
+
+* Vim 正则和文本替换
+** 带捕获的文本替换
+#+BEGIN_SRC sh
+:%s/ \(2[^ ]*\) .*/\/\1/g
+#+END_SRC
+* 窗口操作
+** 调整窗口大小 resize <2015-05-23 六>  
+调整窗口大小在 vim 中的指令叫做 ~resize~ 和 ~vertical resize~ ，指令形式如
+下：
+
+#+BEGIN_SRC sh
+:res[ize] 60
+:res[ize] +5
+:res[ize] -5
+
+:vertical resr[ize] +5
+:vertical res[ize] -5
+#+END_SRC
+   
+Vim 提供了快捷键，如下：
+
+| 快捷键 | 功能                           |
+| C-w >  | 水平方向调大窗口               |
+| C-w <  | 水平方向调小窗口               |
+| C-w +  | 垂直方向调大窗口               |
+| C-w -  | 垂直方向调小窗口               |
+| C-w =  | 自动调整窗口（可用于恢复原状） |
+
+参考：
+- :help resize
+- http://vim.wikia.com/wiki/Resize_splits_more_quickly
+
+* 宏
+按键序列：
+1. qaJJjq：录制一个宏，名字叫 a，会执行 JJj（合并下一行，合并下一行，移动到
+   下一行）三个操作
+2. 400@a：在当前行将名字为 a 的宏执行 400 次
+* Marks
+** 在 Vim 中使用 marks <2015-10-09 五>
+| 功能                         | 快捷键    |
+|------------------------------+-----------|
+| 在当前光标位置设置 mark 为 a | ma        |
+| 跳转到 a                     | `a        |
+| 跳转到 a 所在行的行首        | 'a        |
+| 删除到 a                     | d`a       |
+| 删除到 a（整行删）           | d'a       |
+| change 操作（同上）          | c`a / c'a |
+| 复制操作（同上上）           | y`a / y'a |
+| 列出全部 marks               | :marks    |
+| 列出指定 marks（如 a 和 B）   | :marks aB |
+
+说明：重新打开文件后，marks 仍然在。
+
+* 折叠 Folding <2015-03-23 一>
+| 快捷键 | 功能              | 使用频率 |
+|--------+-------------------+----------|
+| zA     | 折叠/展开（递归） |       10 |
+| za     | 折叠/展开         |        8 |
+| zi     | 全局折叠/展开     |        9 |
+|        |                   |          |
+
+参考了 [[https://github.com/mbrochh/mbrochh-dotfiles/blob/master/.vimrc][别人]] 的一段代码，其中最大的好处就是使用空格作为 折叠/展开 的快捷键
+（感觉非常像 Org-mode 里的 Tag 键，Tab 键是 Org-mode 的精髓）。
+#+BEGIN_SRC sh
+" No bullshit folding magic
+" =========================
+set foldmethod=indent
+set foldnestmax=2
+nnoremap <space> zA
+vnoremap <space> zA
+#+END_SRC
+
+然后，我做了一些改进，将 TAB 作为折叠/展开的快捷键，并把 S-TAB 作为全局折叠
+/展开的快捷键。
+#+BEGIN_SRC sh
+" Folding                                                                                              
+set foldmethod=indent                                                                                  
+set foldnestmax=2                                                                                      
+nnoremap <tab> zA                                                                                      
+vnoremap <tab> zA                                                                                      
+nnoremap <s-tab> zi                                                                                    
+vnoremap <s-tab> zi 
+#+END_SRC
+
+这样改进后，Vim 有了一种 Emacs Org-mode 灵魂附体的感觉。
+
+* ctag & cscope
+** 一键生成 cscope.out 和 ctags 文件 <2016-03-16 三>
+以下脚本实现了：
+1. 递归扫描当前目录的所有 C/C++ 代码文件并生成 ctags 和 cscope.out 文件的函
+   数。
+2. 将上述函数映射到键盘上的 =F12= 键。
+3. 打开文件时，如果当前目录存在 cscope.out 文件，则连接上它，以让 cscope 生
+   效。  
+#+BEGIN_SRC sh
+""" Ctags and cscope
+" Generate tags and cscope file
+function! GenerateTagsAndCscopeFiles()
+    !find . -name "*.h" -o -name "*.c" -o -name "*.cpp" > cscope.files
+    !cscope -bkq -i cscope.files
+    !ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .
+endfunction
+map <F12> :call GenerateTagsAndCscopeFiles() <cr>
+
+"auto load cscope.out when open file
+if has("cscope")
+    set nocscopeverbose
+    if filereadable("cscope.out")
+        cs add cscope.out
+    endif
+    set cscopeverbose
+endif
+#+END_SRC
+
+* 小贴土
+** 禁止鼠标选中时自动转换为选择模式
+#+begin_example
+" Mouse, please leave terminal alone.                                                                  
+set mouse=
+#+end_example
+** 粘贴时禁止 Vim 自动应用样式（如缩进，注释等）
+#+BEGIN_SRC 
+set paste
+" do paste
+set nopaste
+#+END_SRC

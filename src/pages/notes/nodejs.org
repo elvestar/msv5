@@ -1,0 +1,120 @@
+#+TITLE: Node.js
+#+DATE: 2017-09-22 23:33:27
+
+* 命令行开发
+
+* 常用包
+** glob
+- [[https://github.com/isaacs/node-glob][isaacs/node-glob: glob functionality for node.js]]
+
+功能：使用Glob Pattern来匹配文件，就像在Shell下面一样的用法。
+
+注意：需要传入option。
+
+** sharp
+- [[https://github.com/lovell/sharp][lovell/sharp: High performance Node.js image processing, the fastest module to resize JPEG, PNG, WebP and TIFF images. Uses the libvips library.]]
+
+** fs
+包装了文件系统的操作。但是npm下的fs这个库已经被移出了， +可以用fs-extra替
+代+ ，现在直接内置了。
+- [[https://nodejs.org/api/fs.html][File System | Node.js v8.5.0 Documentation]]
+
+* 问题记录
+** SyntaxError: Unexpected token import <2017-09-23 六 10:28>
+错误如下：
+#+BEGIN_SRC javascript
+import fs from 'fs'
+^^^^^^
+SyntaxError: Unexpected token import
+    at Object.exports.runInThisContext (vm.js:78:16)
+    at Module._compile (module.js:543:28)
+    at Object.Module._extensions..js (module.js:580:10)
+    at Module.load (module.js:488:32)
+    at tryModuleLoad (module.js:447:12)
+    at Function.Module._load (module.js:439:3)
+    at Module.runMain (module.js:605:10)
+    at run (bootstrap_node.js:420:7)
+    at startup (bootstrap_node.js:139:9)
+    at bootstrap_node.js:535:3
+#+END_SRC
+
+原因：import xx from 'xx' 是ES6的语法，NodeJS还不支持，改成require即可解决。
+
+#+BEGIN_SRC javascript
+const fs = require("fs");
+const glob = require("glob")
+#+END_SRC
+** Module not found: Error: Cannot resolve module 'fs' in <2017-09-24 日 15:22>
+问题原因：fs是node的库，无法在浏览器下运行，需要修改Webpack配置，在node配置
+下加上 ~fs: "empty"~ 。如下：
+
+#+BEGIN_SRC javascript
+node: {
+      fs: "empty"
+},
+#+END_SRC
+
+参考：
+- [[https://github.com/josephsavona/valuable/issues/9][webpack throw erorr about 'fs' module · Issue #9 · josephsavona/valuable]]
+- [[https://stackoverflow.com/questions/42687641/cannot-resolve-module-fs-in-node-modules-geoip-lite-lib][node.js - Cannot resolve module 'fs' in .../node_modules/geoip-lite/lib - Stack Overflow]]
+
+** SyntaxError: Unexpected token function <2017-09-26 二 09:53>
+代码如下：
+#+BEGIN_SRC javascript
+async function onCreateNode({ node, boundActionCreators, loadNodeContent }) {
+    const { createNode, createParentChildLink } = boundActionCreators
+    return
+}
+#+END_SRC
+
+原因：node版本过低，async function只在7.6版本之后的node才支持。参考：
+- [[https://stackoverflow.com/questions/37815790/syntaxerror-unexpected-token-function-async-await-nodejs][javascript - SyntaxError: Unexpected token function - Async Await Nodejs - Stack Overflow]]
+
+* 回顾
+** Node环境下获取图片height和width <2017-09-24 日 23:17>
+我最近在折腾用Node来处理图片，想找一个能解析图片exif信息的库。我挨个试了以
+下库：
+- [[https://github.com/gomfunkel/node-exif][gomfunkel/node-exif]]
+- [[https://github.com/lovell/sharp][lovell/sharp]]
+- [[https://github.com/devongovett/exif-reader][devongovett/exif-reader]]
+
+最后都失败了，前两个是异步的，第三个只能处理exif文件。由于我的程序需要同步
+模式来处理，异步库没法用（也可能是我不会用），我还试了试一下
+[[https://github.com/luciotato/waitfor][luciotato/waitfor]] 库来尝试将以同步的方式来使用上面两个异步的库，结果都是失
+败。尝试的代码如下：
+#+BEGIN_SRC javascript
+var sharp = require("sharp");
+var ExifImage = require('exif').ExifImage;
+var wait = require('wait.for');
+var exif = require('exif-reader');
+var gd = require('easy-gd');
+
+...
+fd = fs.openSync(smallImgPath, 'r')
+const IMG_BUF_LEN = 25536
+var buffer = new Buffer(IMG_BUF_LEN);
+fs.readSync(fd, buffer, 0, IMG_BUF_LEN, 0)
+var metadata = exif(buffer)
+console.log(metadata)
+
+try {
+  new ExifImage({ image: smallImgPath }, function (error, exifData) {
+    if (error)
+      console.log('Error: ' + error.message);
+    else
+      console.log(exifData); // Do something with your data!
+  });
+} catch (error) {
+  console.log('Error: ' + error.message);
+}
+
+var result = wait.for(ExifImage, { image: smallImgPath });
+console.log(result)
+
+...
+#+END_SRC
+
+我在这个上面折腾了几个小时。最后我反思一下，我想要的只不过是获取图片的大小，
+并不是完整的exif，所以我再次搜索，终于找到了一个支持同步调用的获取图片大小
+的库，瞬间解决了我的问题。
+- [[https://github.com/image-size/image-size][image-size/image-size: Node module for detecting image dimensions]]

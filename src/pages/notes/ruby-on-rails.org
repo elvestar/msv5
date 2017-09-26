@@ -1,0 +1,150 @@
+#+TITLE: Ruby on Rails
+#+DATE: 2014-01-30
+#+KEYWORDS: Ruby, Web 框架
+
+* 安装 Rails
+ruby -v 确认的的 Mac 的 ruby 版本是 2.0，比 Rails 需要的 1.9 要高。这很好，Mac 确实对程序员
+很友好的一个系统。然后我 sudo gem install rails，安装 rails，但是遇到了一些权限问题，
+导致我无法成功安装。一查发现是我的/usr 和/usr/local 目录的权限太宽了，是 777！我对它
+们 chmod 755 后，问题解决。参考此文。
+
+然后，我用 rails new blog 来生成一个 app，发现总是失败，失败原因是缺少依赖，需要通过
+gem install 来安装某个包。我装好后，rails new blog 继续失败，提示我通过 gem install
+安装另外一个包。。。如此我一个一个地安装好了依赖后，终于 new blog 成功了。Rails 给我
+的感觉是：Rails 的依赖太多了，这个框架真的如传说中的那么庞大臃肿。
+
+* 学习 Rails Guides 
+参考：Mac 上安装 Rails。
+
+  1. gem sources --remove https://rubygems.org/
+  2. gem source -a http://ruby.taobao.org
+  3. gem sources -l
+  4. rails new blog --skip-bundle
+  5. vi blog/Gemfile (source 'https://rubygems.org' -> source
+     'http://ruby.taobao.org')
+  6. sudo gem install bundle
+  7. cd blog
+  8. rails server
+  9. http://localhost:3000  
+
+Open the file config/routes.rb in your editor.This is your
+application's routing file which holds entries in a special DSL
+(domain-specific language) that tells Rails how to connect incoming
+requests to controllers and actions.
+
+于是，我们修改 get "welcome/index"为 root "welcome#index”，告诉 rails，将
+blog 这个 application 的根页面访问请求映射到'welcome’这个
+controller 的’index’这个 action。
+
+所有的 Controller 都继承自 ApplicationController 基类，在各个 Controller 类中
+定义 method 就相当于定义 action（看来，method == action）
+
+用 erb 生成了一个提交表单的 HTML 页面。erb 应该是类似于 jinja 的 HTML 模板库。
+
+Model 在 5.4 节被引入，MVC 三者终于凑齐了。Controller 和 View 我之前就理解，而 Model，我
+看了下这一节发现它和数据库相关，具体地说，是和数据库里的某张表相关。
+
+rails g model Post title:string text:text 这行语句的效果为：创建一个名叫 Post 的
+Model，并（隐式）创建一个名为 posts 的 table，table 中有两个字段。这里还有一个对应关
+系：Modle 的 attributes 对应设 table 中的 column。
+
+改变了 Model 之后，需要执行 rake db:migrate 来应用 migrate。
+
+** Rails 的 Post 参数检验和错误提示
+参数校验（Validation）是在 Module 里面设定的，而错误提示的展现是放在 View 里面实现的。
+
+** Edit and update
+截止目前，CRUD 四者中，CR 已经实现。现在要实现 U。按照 Rails Guides，实现 updates 需的
+步骤如下：
+1. 在 posts_controller 中定义 edit action
+2. 在 views/posts/下面实现 edit 对应的 view
+3. 在 posts_controller 中定义 update action
+4. 修改 posts index view，为每个 post 加上'Edit'，链接到对应 edit view
+
+** 添加第二个 model: comment
+首先，需要生成 model：
+#+begin_src sh
+rails generate model Comment commenter:string body:text post:references
+#+end_src
+
+生成 model 之后，需要执行 migration：
+#+begin_src sh
+rake db:migrate
+#+end_src 
+
+然后，我们要将两个 model（comment 和 post）关联起来，让 post 可以通过 post.comments 来获
+取每篇文章的评论。我们要编辑 app/models/post.rb，加上一行 *has_many :comments* 
+
+我们还要修改 config/routes.rb，让 comments 属于 posts 的 *nested resource*
+
+Model 已经生成好了，下面要生成其 controller。如下：
+#+begin_src sh                                                                      
+rails generate controller Comments
+#+end_src
+
+然后编辑 app/controllers/comments_controller.rb，实现 create 方法：
+#+begin_src ruby
+def create     
+    @post = Post.find(params[:post_id])    
+    @comment = @post.comments.create(params[:comment].permit(:commenter, :body))        redirect_to post_path(@post)
+end    
+#+end_src 
+
+最后，实现 view。comment 不需要专门的 view，它是嵌套在 post 的 show view 内部的。我们需
+要编辑 app/views/posts/show.html.erb，加入新增 comment 以及展示 comments 的 erb 代码。
+
+这样，我们的新 model（comment）已经创建好并集成到 post 了。
+
+* 问题记录
+** undefined method `errors' for nil:NilClass
+Google 一下，在 [[http://stackoverflow.com/questions/18136632/undefined-method-errors-for-nilnilclass-when-calling-on-errors-method][Stackoverflow 上]] 得到答案。原来，我访问 post 的 new action 后，后端会执
+行 controller 的 new 方法，而我的 new 方法中并没有构造对象，导致了 NilClass 错误。
+
+我应该修改 *app/controllers/posts_controller.rb* 的 new 方法。如下：
+#+begin_src ruby
+def new     
+    @post = Post.new    
+end  
+#+end_src
+* 回顾
+** 看完了 Rails 入门，对 Rails 的初步感受 - <2014-01-30 Thu>
+今天是除夕之夜，晚会不大好看，家人 22 点多久不看睡觉了，我阅读了 [[http://guides.rubyonrails.org/getting_started.html][Getting
+Started with Rails]] 一文，并写了第一个 Rails App。
+
+我对 Web 开发一直挺感兴趣，13 年用 C++ 开发了基于 Protobuf RPC 的一个轻量级
+的 Web 框架，支持 URL 路由（Rpc Service/Method -> Table/Form），简单页面拼装
+（JSON/Protobuf Textformat -> HTML），Bootstrap 风格，内嵌 Http Server，基于
+此 Web 框架能快速开发分布式系统的监控页面。这个轻量级的 Web 框架受 [[http://djt.qq.com/article/view/327][腾讯的
+Poppy]] 启发。但是我对专业的 Web 开发框架仍然很好奇，希望以后工作能涉及到这方面
+的内容。
+
+Rails 是我第一个学习了 Web 框架，这很值得纪念。 我对 Rails 的初步印象如下：
+1. Rails 尽量减少不需要的重复，比如说源码文件路径结构已经隐含了
+   Model/View/Controller 的层次结构，源码中直接调用就可以了，不必要再加入
+   #include/import 这样的语句了
+2. Ruby 语法很怪异（以我这个 C++程序员的角度），但是用起来很舒服（舒服度更
+   甚于 Python）
+3. Rails 在私底下为用户做了各种事，虽然用少量代码就完成了一个 app，但我完全
+   不知道底层细节
+
+** 对 Python Web 开发挺熟了，再读一遍 Rails Guides <2014-12-14 Sun>
+2014 年一年我使用了 Python 的 Tornado 和 Flask 两个 Web 开发框架，对 Web 开
+发的要点已经是比较熟悉了，现在回头再看 Rails，有了一些更为清晰的感受。如下：
+1. 多约定，少配置是个很好的编程实践指引，数据库的表名和 Model 名，以及 URL 等
+   都应该固定化，让世界以及人脑中少一些不必要的东西。这点 Flask 和 Tornado 的重
+   视程度还不够。
+2. Rails 的 ORM（Active Record）比 Python 的 SQLAlchemy 更 "丰满"，更易学，更轻
+   量（看起来）。SQLAlchemy 太重，太 "难"。
+3. Rails 原生就有对表单的支持，提供了大量的方法，并且跟 Model/View 高度融合。而
+   Flask 则需要额外引入还不那么好用的 WTForms。据我的开发实践来看，我觉得
+   Flask/Tornado 下开发表单功能的效率很低下，没有特别好用的组件。
+4. Rails 就像 Python 下的 Django，都是向高大全的方向发展，但是 Rails 的各个组件看
+   起来更加讨喜（或许这是我这个 Rails 外行的错觉？）
+5. Rails 的 URL 路由设定没有 Flask 清晰易用。
+6. Rails 偏向于魔法攻击（隐式），Flask/Tornado 偏向于物理攻击（显式）。
+7. 还是继续用 Flask 吧。。。
+
+
+
+
+

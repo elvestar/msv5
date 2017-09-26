@@ -1,0 +1,147 @@
+#+TITLE: 个人网站 V3
+#+DATE: 2016-04-03
+
+Emacs Org-mode + Nanoc 用了几年，感觉有点慢了，有点成为了我的阻碍。我要亲手
+打造一个更顺畅的工作流。
+
+参考：
+- [[file:my-site-v2.org]]
+- [[file:my-ssg.org]]
+  
+* 资料收集
+- http://sass-lang.com/guide
+- [[http://compass-style.org/help/tutorials/best_practices/][Scss Best Practices]]
+
+* Evernote风格
+** Bootstrap分栏时如何实现侧边栏垂直滚动条？ <2016-05-01 日>
+方法：
+1. html/body标签设定为height: 100%; overflow: hidden
+2. container/row/全部aside都设定为 height: 100%
+3. 需要垂直滚动的aside设定overflow-y: auto
+   
+补充：这样设置后，整个页面的回弹特效也丧失了，让页面像个桌面应用一样。
+* 包管理
+本来使用bower，但是发现现在npm更流行，对打包的支持更好。我之前一直觉得npm很
+慢，而且经常被墙，后来发现了淘宝维护的npm镜像，速度还不错。于是就换成npm了。
+- https://npm.taobao.org/
+  
+换用npm以后，我发现有个包zoom.js并未被收录，而bower是是有它的。我执行了一下
+nmp help install，发现可以直接以github的仓库作为执行参数。
+#+BEGIN_SRC sh
+cnpm install --save fat/zoom.js
+#+END_SRC
+
+* 内容管理
+** 其他元素
+*** 引用
+#+BEGIN_QUOTE
+挡在外面，几近于神话的筑城者布兰登修建了长城。一些文献中的记载暗示那个时候
+的绝境长城比现在小得多，守夜人军团随后不断地将其修扩，才达到现在的规模。守
+夜人军团最大的敌人是异鬼，一个神秘的种族，已数千年未见。
+
+
+最近的这个阶段，守夜人军团常被作为罪犯的流放地，充斥着小偷和暴徒，政治流放
+身于军团和人类王国，阻止绝境长城以北的野人侵袭长城以南，他们的古老任务随着
+时间的流逝几乎已被遗忘，被实际的、最新的要务所取代。
+#+END_QUOTE
+
+** Example
+#+BEGIN_EXAMPLE
+书籍是鱼人进步的阶梯。
+                     —— 娜迦海妖 希利苏斯
+#+END_EXAMPLE
+  
+** 图片显示
+
+#+CAPTION: hehehe
+[[http://hbimg.b0.upaiyun.com/21ea641853ca40f3e6f910c05d5ceae0901ecc08d4dc4-WozS5Q_fw658.jpg]]
+
+
+#+CAPTION: 曲线图
+#+ATTR_HTML: class="half-right-float" style="clear: both"
+[[../static/imgs/my-site-v3/20160806160116.jpg]]
+
+2015年12月中央经济工作会议以来，以习近平同志为总书记的党中央高瞻远瞩，统揽
+全局，针对当前经济新常态提出供给侧结构性改革的新战略，并从我国经济发展的阶
+段性特征出发，形成了“三去一降一补”这一具有重大指导性、前瞻性、针对性的经
+济工作部署。针对上半年经济运行情况，习近平总书记再次提出供给侧结构性改革，
+并对改革提出新要求。目前，随着五大任务的持续推进，改革成效已经开始显现，我
+们必须把握好经济发展新常态这个大逻辑，坚定不移推进供给侧结构性改革，化压力
+为动力，推动我国经济发展长期向好。
+
+　　我们该如何客观地看待成绩与难点？如何更好地推进完成五大任务？人民网记者
+通过专家座谈、基层调研等形式，选择五大领域、七个地市以及多家企业进行深度采
+访，并就各地取得的经验、成绩进行了全面梳理。从今天起，本网将推出“聚焦供给
+侧结构性改革系列报道”，全面反映各行各地贯彻落实、精准发力“供给侧结构性改
+革”的探索实践，以期为改革提供有益的参考。
+
+　　国家统计局数据显示，2015年年末，商品房待售面积为71835万平方米，2016年2
+月商品房待售面积增加至73931万平方米，达到历史最高点。而后连续四个月库存降低，
+累计去化库存总数达到2515万平方米。在财税、金融等政策刺激下，房地产开发投资
+增速在连续23个月下滑后，今年1月份开始有所回升。
+
+*** 这个标题是专门用来看上面的漂浮有没有过界的！
+*** 这个标题是专门用来看一下标题距离的
+* 工作流优化
+** 一键拷贝网页url和标题并组装成org link格式
+- [[https://chrome.google.com/webstore/detail/copy-all-urls/djdmadneanknadilpjiknlnanaolmbfk][Copy All Urls - Chrome 网上应用店]]
+
+* 照片管理
+- [[http://photo.stackexchange.com/questions/32420/how-can-i-create-a-map-with-gps-data-from-exif][metadata - How can I create a map with GPS data from EXIF? - Photography Stack Exchange]]
+- [[https://developers.google.com/kml/documentation/][KML 文档简介  |  “Keyhole 标记语言”  |  Google Developers]]
+- [[https://developers.google.com/maps/documentation/javascript/overlays?hl=zh-cn][在地图上绘制  |  Google Maps Javascript API  |  Google Developers]]
+- [[http://lbsyun.baidu.com/index.php?title=webapi/guide/webservice-geocoding][webapi/guide/webservice-geocoding - Wiki]]
+
+* 全文搜索
+前端时间基于Pyton的Whoosh搞了个全文搜索 [[file:my-ssg.org#fullsearch]]
+* 读书管理
+- [[https://developers.douban.com/wiki/?title=book_v2#get_isbn_book][豆瓣图书 Api V2]]
+- [[https://openlibrary.org/dev/docs/api/books][Open Library Books API | Open Library]] 
+例如，想要获取《黑客与画家》的书籍目录，可以调用：
+#+BEGIN_SRC sh
+https://api.douban.com/v2/book/isbn/9787115249494
+#+END_SRC
+或者
+#+BEGIN_SRC sh
+https://openlibrary.org/api/books?bibkeys=ISBN:9787115249494&jscmd=details&format=json
+#+END_SRC
+
+** 读书管理的新设想 <2016-11-19 六 21:31>
+今天傍晚爬香山的去程和回程使用新买的iPad mini 4读完了人民邮电出版社出版的
+《爱摄影》第一季。这本书排版非常精良，mini 4的显示效果也非常好，让我沉浸在
+阅读中。在阅读时，我发现本书在讲述摄影技巧时，还搭配了非常漂亮的图片，多看
+阅读可以方便地做摘要和记笔记，但是无法摘下这些漂亮的配图（和表格）。这多么
+遗憾啊！
+
+这时我头脑中冒出了一个想法，那就是利用mini 4的截屏将图表截下来，回家后通过
+Mac上的照片应用进行裁剪并导出，然后在生成读书笔记页面时自动包含这些图片，生
+成图文并茂的读书笔记。另外由于这些图片附带时间信息的，而多看导出的读书笔记
+也是带有时间信息的，这两样一结合，就能够生成完整的阅读时间流，图表和文字就
+关联了起来。
+
+#+CAPTION: 读书笔记截图
+[[../static/imgs/my-site-v3/20161119221721.jpg]]
+
+* 回顾
+** 全文搜索是个杀手级应用 <2016-10-05 三 14:41>
+今天上午花了一个多小时在搞全文搜索功能，很快就把item导入ES这个特性开发完成
+了。ES很成熟，Python也是我所擅长的。
+
+下午我想用Mac访问PC上的照片，但是我忘记方法了，就记得好像有个啥防火墙需要设
+置。我模糊地记得，去年某天我好像遇到过同样的问题，并且在我的org笔记里留下了记
+录，但是我忘记是那篇笔记了。这可肿么办？难道一篇一篇翻？
+
+这时我想起了正在开发的全文搜索功能，于是抱着试一试的态度在浏览器里输入：
+#+BEGIN_SRC sh
+http://localhost:9200/pkm/_search?q=防火墙
+#+END_SRC
+
+这时，奇迹出现了，我想要的那篇笔记就位于搜索结果里！并且权重很高，排名第一！
+这让我很振奋，全文搜索真是个大杀器，能让人在浩如烟海的资料里快速找到自己想
+要的东西。看样子我很快就能把剩下的知识管理工作流（使用Evernote、浏览器书签
+等）全部迁移到我自己的PKM系统里面了。雾草感觉要起飞。
+
+#+CAPTION: ./imgs/my-site-v3/20161005145323.jpg
+#+ATTR_HTML: style="width: 600px; margin: 0 auto"
+[[../static/imgs/my-site-v3/20161005145323.jpg]]
+

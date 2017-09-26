@@ -1,0 +1,137 @@
+#+TITLE: Libevent 事件库
+#+DATE: 2012-04-16
+#+KEYWORDS: 内存管理, C++, 网络编程
+
+上周六 4 月 14 日，在去香山游玩的来回路上，我顺便看了两篇介绍 Libevent 的文章：
+
+* 半年前（4 月 16 日）看过，半年后，我决定再继续深入学习一下。
+上周日看了 libevent 源码分析的前几章，现回忆一下
+- Libevnet 的特点，学习它的好处；
+- 事件驱动设计模式——Reactor 模式（将事件处理流程逆置，回调函数）；
+- Reactor 模式的四大组件：事件源，事件多路分发机制，Reactor 框架——反应器，事件
+- 处理程序；
+- Reactor 的一般流程，给出了序列图（之前举的例子很生动，拿 HR 给通知应聘者而应聘
+- 者根本不知道 HR 的联系方式作比）；
+- Libevent 的基本使用场景，分为 5 步：
+  1. 初始化 libevent 库 struct event_base* base = event_init();
+  2. 初始化事件 event evtimer_set(ev.timer_cb, NULL);
+  3. 设置 event 从属的 event_base event_base_set(base, &ev);
+  4. 正式添加事件 event_add(&ev, timeout);
+  5. 进入循环，等待就绪事件并执行事件处理 event_base_dispatch(base);
+- 事件 event 分为三种：定时事件，signal 事件和 I/O 事件。定时事件用小根堆管理，后
+- 两种用双向链表管理；
+
+* 第一次试用
+http://www.cnblogs.com/hustcat/archive/2010/08/31/1814022.html
+参考上述文章，测试了下定时器的功能。该程序包括一个：
+- 回调函数 timeout_cb，当定时事件触发时调用该函数；
+- 定时事件 timeout，该事件有回调函数，当它被加入到 event base 的同时，还会
+  传入 timeval 参数；
+
+注意：该回调函数中有个参数是定时事件 event 的指针，当回调函数执行时，会把定时
+事件重新加入 event base 中，故该程序会不停地运行。
+
+待完善。。。。
+
+* Libevent 使用记录 <2013-12-08 六>
+** 启动事件循环的三种方式：event_dispatch 和 event_base_dispatch 和 event_base_loop
+event_dispatch() 可以不加 event_base 直接启动事件循环，但是这应该不是一种好
+用法，因为显然它使用了全局变量。另外 event_dispatch()启动后，无法 break。
+（存疑）
+
+event_base_dispatch(event_base) 可以加 event_base 参数来运行了，但是调用
+event_base_loopbreak(event_base) 后好像还是不返回，仍然阻塞住。（存疑）
+
+使用 event_base_loop(event_base) 启动的时间循环可以被 event_base_loopbreak
+正确地中止，很好。
+
+*我完全搞错了* ，因为我发现：
+- event_base_loop 也有不带 event_base 参数我线程不安全版本；
+- 在用 evhttp 的时候，这三种时间循环都无法正常 break 跳出循环；
+
+另外，我发现 event_base_dispatch 内部其实还是调用 event_base_loop，第二参数
+flag 被设为 0
+#+BEGIN_SRC cpp
+int event_base_dispatch(struct event_base *event_base)                                                  
+{                                                                                                   
+    return (event_base_loop(event_base, 0));                                                        
+}  
+#+END_SRC
+
+** 中止时间循环的两种方式：event_base_loopbreak 和 event_base_loopexit
+后者除了要加 event_base 参数，还要加入 timeval 参数，我试了下，用后者会有内
+存泄露。
+#+BEGIN_SRC cpp
+int event_base_loopexit(struct event_base *, const struct timeval*);
+#+END_SRC
+
+** new 和 free
+使用 event_base_new() 新建一个 event base，用完后记得要调用
+event_base_free(event_base)，否则会内存泄露。
+
+同理，使用 evhttp_new(event_base)新建的 evhttp 用完后也要调用
+evhttp_free(evhttp)来释放掉
+
+同同理，使用 evbuffer_new()新建的 evbuffer 用完后也要调用
+evbuffer_free(evbuffer)来释放掉。
+
+幸运的是，libevent 的这批 new/free 的接口风格是统一的。
+
+** 如何获取 evbuffer 里面的数据
+evbuffer 是 Libevent 实现的一种优化了内存的数据结构，它维护的数据的结构类似
+于 slab 方式，是分层次的，而不是在一个连续的一段内存上的。
+
+为了能够以连续的方式获取 evbuffer 内部维护的数据，我们可以使用
+*evbuffer_copyout* 来将 evbuffer 的数据拷贝到一个 buffer 里。
+#+BEGIN_SRC cpp
+ev_ssize_t evbuffer_copyout(struct evbuffer *buf, void *data_out, size_t datlen);
+#+END_SRC
+
+如果不想自己新建一个专门 buffer，我们可以使用 *evbuffer_pullup* 来将
+evbuffer 在内部就给“连续化”。
+#+BEGIN_SRC cpp
+     unsigned char *evbuffer_pullup(struct evbuffer *buf, ev_ssize_t size);   
+#+END_SRC
+
+Libevent 提供了一个宏 *EVBUFFER_DATA* ，来实现该功能。该宏的展开如下：
+#+BEGIN_SRC cpp
+#define EVBUFFER_DATA(x)    evbuffer_pullup((x), -1)
+#+END_SRC
+
+- 参考：http://blog.csdn.net/small_qch/article/details/9024215
+
+** 开始追查使用 evhttp 时，调用 event_base_loopbreak 无法跳出时间循环
+读了几篇 Libevent 的文章，初步探明了原因：在进入 evsel->dispatch(base,
+tv_p)之前，tv_p 被置为 NULL 了，导致进入该函数后，又以无 timeout 的方式来调
+用 epoll_wait。这样的结果是， *除非来了个 IO 事件（我的场景是发起一个
+http-rpc 请求）* ，让 epoll_wait 返回，否则永远阻塞！即使调用 loopbreak 或
+loopexit 也没用，因为它们的判断是在循环开始处执行的。
+
+tv_p 为什么被置为 NULL？看了一下源码，在每一轮事件循环中，如果没有发现
+active 的 event，那么循环会执行 *timeout_next(base, &tv_p)* 来算出本轮循环
+中 dispatch 的超时时间。在我的场景中，由于没有定时器时间，所以调用
+timeout_next 后，会把 tv_p 设置为 NULL。
+
+不过我仍然有疑问：
+- 按照上面的解释，在一般应用场景之下，在 event_base 上 add 了一个普通的时间，也会导致 epoll_wait 无限期阻塞。可是我缺没有碰到过。
+- 我的应用场景特殊在那里？是额外开启线程运行 event_loop，还是使用了 libevent 提供的 evhttp？
+
+** Libevent 用于一般网络或文件 IO
+1. 新建 event base（event_base_new）
+2. 新建 event（用 event_new 来新建）
+3. 初始化 event（通过 event_set 来设置监听 fd，监听方式，回调函数）
+4. 将 event 加入到 event base（通过 event_add）
+5. 调用 dispatch，启动事件循环
+
+** Libevent 用于定时器
+1. 新建 event base
+2. 在 event base 上新建 timer event（用 evtimer_new 来新建，同时 set 好回调函数）
+3. 调用 evtimer_add 来启动定时器
+4. 盗用 dispatch，启动事件循环
+
+Libevent 的 timer 用法比较怪异，与一般 IO 差异比较大。可以把 evtimer_add 这
+一步看做是在指定时间后，触发 IO 通知时间循环。定时器事件只需要新建一次，但
+是可以被多次触发，每次触发都可以传入不同的 timeout 参数。
+
+另外，想要删除定时器事件需要执行 event_free(timer_event)，在这里，timer 事
+件与 IO 事件统一到一起了。

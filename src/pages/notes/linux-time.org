@@ -1,0 +1,125 @@
+#+TITLE: Linux 下时间相关函数总结
+#+DATE: 2012-03-26
+
+* 前言：    
+Packetsender 需要根据当前时间来设置包中的 msg_time 字段，我对这块了解不够深
+入，所以我以此为契机，对 Linux 下与时间相关的内容进行一次全面的学习和总结。
+
+我需要根据当前时间，来构造出 struct tm，然后利用 mktime(tm)来生成 time_t 这
+个 64 位整数。
+
+* 资料收集
+- [[http://www.cnblogs.com/Wiseman/archive/2005/10/24/260576.html][C/C++中的日期和时间 TIME_T 与 STRUCT TM 转换]]
+- [[http://baike.baidu.com/view/1741851.htm][百度百科：time.h]]
+- Unix 环境高级编程
+
+* Linux 提供的时间函数 
+** 先看 C 标准库中 time.h 文件
+两个时间相关数据类型，即日历时间与分解时间。ANSI C 称用 tm 表示的时间为分
+解时间。而日历时间(Calendar Time)是通过 time_t 这个数据类型表示的，它的值表
+示从一个时间点（1970 年 1 月 1 日 0 时 0 分 0 秒）到现在的秒数。
+
+这是分解时间的 struct：
+#+BEGIN_SRC cpp
+  struct tm {
+    int tm_sec;     /* 秒 – 取值区间为[0,59] */
+    int tm_min;     /* 分 - 取值区间为[0,59] */
+    int tm_hour;    /* 时 - 取值区间为[0,23] */
+    int tm_mday;    /* 一个月中的日期 - 取值区间为[1,31] */
+    int tm_mon;     /* 月份（从一月开始，0 代表一月） - 取值区间为[0,11] */
+    int tm_year;    /* 年份，其值等于实际年份减去 1900 */
+    int tm_wday;    /* 星期 – 取值区间为[0,6]，其中 0 代表星期天，1 代表星期一，以此类推 */
+    int tm_yday;    /* 从每年的 1 月 1 日开始的天数 – 取值区间为[0,365]，其中 0 代表 1 月 1 日，1 代表 1 月 2 日，以此类推 */
+    int tm_isdst;   /* 夏令时标识符，实行夏令时的时候，tm_isdst 为正。不实行夏令时的进候，tm_isdst 为 0；不了解情况时，tm_isdst()为负。*/
+  };
+#+END_SRC
+
+这是日历时间的 typedef：
+#+BEGIN_SRC cpp
+  typedef long time_t;         /* 时间值 */ 
+#+END_SRC
+     
+** 从内核获得日历时间
+#+BEGIN_SRC cpp
+  time_t time(time_t * timer);
+#+END_SRC 
+可以通过返回值和参数两种方式来获得现在的日历时间。
+
+注意：
+- 好像每次调用 time()获得的日历时间都不相同。
+- 只能精确到秒，
+
+** 日历时间转化为分解时间
+#+BEGIN_SRC cpp
+  struct tm * gmtime(const time_t *timer);          //世界标准时间，即格林尼治时间
+  struct tm * localtime(const time_t * timer);       //本地时间，即北京时间
+#+END_SRC
+注意：
+- 这两个函数返回的是一个全局 tm 变量的指针，故使用时要注意（跟 strtok 有点
+  相似）。最好每次使用 tm 时，都调用上述函数获取一次指针，因为它可能会被意
+  外改变
+- localtime 是一个不可重入函数，它是线程不安全的！多线程下，得要使用它的多
+  线程版本 *localtime_r*
+
+*** 可重入的 localtime_r
+用法：
+#+BEGIN_SRC cpp
+  time_t time_created = time(NULL);
+  struct tm tm_created;                                                                          
+  localtime_r(&time_created, &tm_created); 
+#+END_SRC
+
+** 固定格式的输出
+#+BEGIN_SRC cpp
+  char * asctime(const struct tm * timeptr);
+  char * ctime(const time_t *timer);
+#+END_SRC
+
+注意：
+- ctime()会先把日历时间转化为本地时间存在 tm 里，再进行输出，故全局的 tm 变
+  量在此过程中被改变了！而 asctime()则只读取那个全局的 tm 的各个字段，再输
+  出。
+
+** 自定义的格式化输出
+#+BEGIN_SRC cpp
+  size_t strftime(char *strDest, size_t maxsize, const char *format, const struct tm *timeptr); 
+#+END_SRC
+注意：
+- 本函数识别一系列格式命令集合，见引用网址。
+
+** 计算时间间隔
+#+BEGIN_SRC cpp
+  double difftime(time_t time1, time_t time0); 
+#+END_SRC
+
+注意：
+- 因为 time_t 以秒为单位，故虽有返回值类型为 double，但也只精确到秒（小数点
+  后面都是 0）。
+
+** 分解时间转化为日历时间(tm -> time_t)
+#+BEGIN_SRC cpp
+  time_t mktime(struct tm * timeptr);
+#+END_SRC
+
+** 各个函数的体系结构图
+其中只有 time() 函数与内核直接交互，一部分系统 time() 是个系统调用，其他系
+统的 time()则在内部调用了 gettimeofday()这个 syscall。
+
+[[../static/imgs/linux-time/1.png]]
+
+
+
+
+
+
+
+
+
+
+
+
+* strptime
+** strptime 有 bug？ <2016-03-04 五>
+strptime 有 bug？！发现 format 参数直接传入"%Y%m%d%H%M”字符串不行，总是将
+201603030455 这样的时间解析成 2017 年的。而当我将字符串赋给一个变量后再传进
+去，却有能正常解析。

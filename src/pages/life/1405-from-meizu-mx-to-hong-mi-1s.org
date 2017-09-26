@@ -1,0 +1,64 @@
+#+TITLE: 从魅族 MX 到红米 1S
+#+DATE: 2014-05-17
+
+昨天（5.16）晚上下班后，在快走到上地十街时，发生了一件让我十分悲痛的事情，
+那就是我的手机魅族MX被我掉地上，捡起来时发现碎屏了。
+
+这部手机陪伴了我两年半。我是在大四上学期末在西安一家魅族专卖店买的，那天应
+该是2012年1月5日，MX刚刚发布，作为使用M8两年的煤油第一时间就提前预定了，然
+后从西电老校区走着去领我的MX。那天真是一个快乐的日子。
+
+当时MX的发布对于煤油来说是个振奋人心的事情，整个魅族论坛都处于癫狂的状态。
+我还搜到了我当时在魅族论坛发的帖子：
+- [[http://bbs.meizu.cn/thread-3014130-1-1.html][兽捕鸟了！明天去预定，请问西安几号能有货？-综合讨论-魅族社区]]
+- [[http://bbs.meizu.cn/thread-3006818-1-1.html][热情的MY们啊，我好感动。。-综合讨论-魅族社区]]
+- [[https://bbs.meizu.cn/thread-3088117-1-1.html][什么情况，此人的MX已经到手了吗？有图有真相-魅族手机-魅族社区]]
+  
+本文收集了一些MX相关的照片和截图，以纪念我陪伴我两年半的MX。
+  
+* 我的MX简史
+我是2011年12月底在西安电子一路的魅族专卖店预定了魅族MX，并在2012年1月5日拿
+到了手机。去取MX的那天，西安雾蒙蒙的，当时那家专卖店一屋子的煤油。我是大概
+11点半拿到MX，然后店员为我剪卡。之后我拿着MX返回了学校。
+#+CAPTION: 入手MX后拍摄的第一张照片
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/IMG_20120105_112543.jpg]]
+#+CAPTION: 入手当天回学校拍摄的操场照片
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/IMG_20120105_143151.jpg]]
+#+CAPTION: 大学毕业离开西安前最后一张照片
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/IMG_20120701_183145.jpg]]
+#+CAPTION: 13年春节后回北京后拍的第一张照片
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/IMG_20130221_074543.jpg]]
+#+CAPTION: MX碎屏前拍摄的最后一张照片
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/P40516-185146.jpg]]
+#+CAPTION: MX碎屏了
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/DSC07666.jpg]]
+
+* MX封存前的屏幕截图
+由于MX已经碎屏，无法再使用，我准备将它封存。在封存MX之前，我为它做了全方位
+的屏幕截图，以记录我对它的日常使用情况。下面是部分截图：
+#+CAPTION: MX桌面
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/S40601-163202.jpg]]
+#+CAPTION: 闹钟
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/S40601-163221.jpg]]
+#+CAPTION: 酷我音乐盒
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/S40601-163339.jpg]]
+#+CAPTION: 多看阅读
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/S40601-163420.jpg]]
+#+CAPTION: UC浏览器
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/S40601-163517.jpg]]
+#+CAPTION: 日程表
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/S40601-163826.jpg]]
+#+CAPTION: 锁屏桌面
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/S40601-165146.jpg]]
+
+* 入手红米1S
+MX碎屏之后，我在考虑换啥手机。由于短时间内没想好，所以我就买个了红米1S先用
+着。
+
+下面是刚入手红米1S时拍摄的一些照片：
+#+CAPTION: 龙腾四小区
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/IMG_20140602_151535.jpg]]
+#+CAPTION: 百望山
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/IMG_20140602_165457.jpg]]
+#+CAPTION: 奥森
+[[../static/imgs/1405-from-meizu-mx-to-hong-mi-1s/IMG_20140607_193420.jpg]]

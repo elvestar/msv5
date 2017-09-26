@@ -1,0 +1,251 @@
+#+TITLE: Shell
+#+DATE: 2014-04-30 
+#+KEYWORDS: Shell, Linux 工具
+
+这篇主要讲 bash shell。
+
+* 前言
+* 读 ABS Guide
+** Shell 是一种编程语言
+*** 关键字及其作用
+| 符号              | 作用                                                                                     |
+|-------------------+------------------------------------------------------------------------------------------|
+| #                 | 注释                                                                                     |
+| ;                 | 命令分隔符。当想要在一行执行多条 shell 指令则用它来分隔，例如在命令行里直接写 Shell 脚本 |
+| ;;                | case 选项的终结符                                                                        |
+| ' 和 "            | 都是用来框定字符串，不过 ‘ 是比 " 更强的形式                                            |
+| ,                 | 逗号将一系列运算操作链接到一起，它们都被 evaluated，但是只有最后一个被 returned          |
+| /                 | 文件路径分隔符                                                                           |
+| \                 | 转义符                                                                                   |
+| `                 | var=`commond`会执行 command 命令，再将执行结果返回赋值替换`command`                      |
+| $                 | var=$old_var 会用 old_var 的值替换$old_var（可以与 ` 类比）                              |
+| $$                | 当前进程 ID                                                                              |
+| {xxx,yyy,zzz,...} | 对 list 的每一项都单独执行某个操作（详见 ABS Guide）                                     |
+| {}                | 文本占位符，用在 xargs -i 命令后面                                                       |
+| {}\               | 文件全路径，常用在 find 命令后。它不是 shell 内建的                                      |
+| [] 和 [[]]        | 用来包含测试语句                                                                         |
+| > &> >& >> < <>   | 重定向。如 command >& filename 是将 stdout 和 stderr 同时重定向到 filename 中            |
+| \vert{}           | 管道，将前一个指令的标准输出传递到到下一个命令的标准输入                                 |
+| ~+                | 当前工作目录，等同于$PWD                                                                 |
+| ~-                | 上一个工作目录，等同于$OLDPWD                                                            |
+
+*** 变量和函数定义
+*** Shell 传参（普通传参和命令行传参）
+以 $ 开头的变量的含义如下：
++ $0 是脚本本身的名字。
++ $1 是第一个参数
++ ...
++ ${10} 是第十个参数（注意要加大括号）
++ $# 是参数个数
++ $?：上一个命令的执行状态值
+ 
+shift 命令可以用来将参数列表整体移动，如此：$1 <--- $2, $2 <--- $3, $3 <--- $4, etc.
+**** 转义（Quoting and Escape）
+同一条命令，加了双引号和不加双引号返回的结果可能是不一样的，并且不同的指令
+带来的差异还挺违背直觉，这里感觉是 shell 的不好之处。详见 ABS Gude:
+Chapter 5. Quoting。
+
+*** 条件测试（Tests）
+Shell 将一般语言的判断逻辑语句称作测试。测试语句的结构类似于 [ $a -lt $b ]，
+shell 会指向内部的语句，并获得一个 exit status，如果获得 0，则表示成功。
+
+**** 文件测试符
+除了普通的条件测试外，shell 还支持丰富的文件测试符（File test operators）。
+现从 ABS Guide 书上摘录一些比较常见的：
+| 文件测试符 | 作用                                                           |
+|------------+------------------------------------------------------------------|
+| -e         | 文件是否有存在                                                   |
+| -f         | 文件是否为正规文件（regular file）。目录或设备文件就不是正规文件 |
+| -s         | 文件大小是否为 0                                                 |
+| -d         | 文件是否为目录                                                   |
+| -b         | 文件是否为块设备                                                 |
+| -p         | 文件是否为管道（pipe）                                           |
+| -h         | 文件是否为符号链接                                               |
+| -O         | 文件属主是否是自己                                               |
+| -N         | 文件在上次被 read 之后是否被 modified 过                         |
+| f1 -nt f2  | 文件 f1 是否比文件 f2 更新                                       |
+| f1 -ef f2  | 文件 f1 和文件 f2 是否硬链接到同一个文件                         |
+| !          | 附加在以上测试符之前，表示反转测试条件                           |
+
+**** [] 和 ()
+当比较数字时，[] 与 -gt, -lt 等符号一起用，而()与 >=, <= 等符号一起用。
+
+*** for 循环和列表产生器
+**** Shell 循环的基本形式：
+#+BEGIN_SRC sh
+# 基本形式
+for arg in [list] 
+do
+  command(s)... 
+done
+
+# 单行形式（注意两个分号）
+for arg in [list]; do command(s)... ; done
+#+END_SRC
+
+**** 通过 glob 生成文件列表
+下面脚本实现了删除当前目录下所有以 tmp_开头的文件，注意 tmp_* 不能用双引号
+括起来。
+#+BEGIN_SRC sh
+for filename in tmp_*
+do
+  rm $filename
+done
+#+END_SRC
+
+**** 通过 find 来生成文件列表
+#+BEGIN_SRC sh
+# 递归列出当前目录下的所有文件
+for filename in "$(find . -type f)"; do echo $filename; done
+# 同上
+for filename in `find . -type f`; do echo $filename; done
+# 同上，不过列出的是符号链接
+for filename in `find . -type l`; do echo $filename; done
+#+END_SRC
+
+**** List strings in binary file
+使用 Shell 下的 strings 命令。下面的例子中的 sofa-pbrpc-client 是二进制文件。
+#+BEGIN_SRC sh
+for str in `strings sofa-pbrpc-client`
+do 
+  echo $str 
+done
+#+END_SRC
+
+**** 产生整数数列
+Shell 产生整数数列的方法很到，最平常的是 for (()) ，此外还有 for {m..n}，以
+及 for `sed 10`等。
+ #+BEGIN_SRC sh
+for ((a=1; a <= 10; a++))
+do
+  echo -n "$a "
+done 
+
+for a in {1..10}
+do
+  echo -n "$a "
+done 
+ #+END_SRC
+
+*** 日期相关函数
+
+** Shell 是 Linux 用户的利器
+*** Shell 的快捷键
+*** glob 模式
+** 在 Shell 里启动进程
+*** 标准输入，标准输出和错误输出
+*** 管道
+*** 重定向
+*** 后台启动
+** Shell 下有一批强大的工具
+*** sed 批量处理文本
+*** awk 正则解析
+*** grep 按行匹配
+grep 相关的笔记记录在 [[./grep.org]]
+
+* 判断传入参数个数
+利用 *$#* 来判断传入参数的个数。下面的例子是当判断传入参数不等于 1 后，执行
+*usage* 函数打印出脚本用法。
+
+#+begin_src sh
+if [ $# -ne 1 ]
+then
+    usage
+    exit 1
+fi
+#+end_src
+* 重定向
+** 重定向标准输出和错误输出到文件
+这里举的例子是一个提交 MapReduce 的脚本，该脚本接收一个参数。
+
+#+BEGIN_SRC sh
+./submit_mr.sh 0900 2>&1 > mr.log
+#+END_SRC
+   
+说明：
+1. 该重定向仍然会保留错误输出到屏幕
+2. >&1 代表重定向到标准输出，如果写成>1 的话，则是 *重定向到名为 1 的文件*
+
+如果要想错误输出和标准输出只重定向输出到文件的话，可以 *先把标准输出重
+定向到文件，再把错误输出重定向到标准输出* 。写法如下：
+#+BEGIN_SRC sh
+./submit_mr.sh 1000 1 > mr.log 2>&1
+#+END_SRC
+
+也可以用 append 的方式输出到文件，写法如下：
+#+BEGIN_SRC sh
+./submit_mr.sh 1000 1 >> mr.log 2>&1
+#+END_SRC
+
+参考：
++ [[http://blog.csdn.net/ithomer/article/details/9288353][Linux Shell 1>/dev/null 2>&1 含义]]
+
+* 命令行下直接编写和运行 shell 脚本
+如果要写的 shell 脚本较短，则可以直接在命令行中编写，不需要在编辑器中编写。这样
+做是对工作流的优化，节省了几个步骤，加速了迭代。
+#+BEGIN_SRC sh
+[work@yf-master01.text ~]$ for i in `seq 200`; curl "http://xxx.xxxxx.com/rpc/xxxxx.minos.xxx.xxx?xxx_module_id=10024737&node_id=${i}"
+#+END_SRC
+
+* Shell 实践
+** 写日志滚动删除脚本 <2015-03-06 五> 
+一般情况下，线上的日志切分程序会定期将日志切分为名字类似于
+xxx.log.2015030611 的样式，假设我们在线上机器保存三天的日志，那要实现一个滚
+动删除日志的脚本的逻辑如下：
+#+BEGIN_EXAMPLE
+遍历日志目录下的所有日志文件，通过文件名解析日志文件的切分时间，将切分时间距今超过三天的日志文件删除掉。
+#+END_EXAMPLE
+
+上面的逻辑虽然不复杂，但是仍然要写数十行 Shell 代码，我们可以利用 find 来实
+现一个简易版的日志滚动删除脚本，如下：
+#+BEGIN_SRC sh
+find /home/work/minos/inf_bce_log/ssl_new_mirror_http_bce_log_lsp/ -mmin +4320 -delete
+#+END_SRC
+
+其中，-mmin +4320 这个参数代表的是过滤出那些修改时间（mtime）大于 3 天
+（4320 分钟）的文件。
+
+通过这个简易实现，我们节省了代码，但这个实现是有缺陷的。例如，有其他程序
+touch 了日志文件，会导致通过 mtime 判定不准确。不过这没关系，在我们的场景下，
+不会发生乱 touch 的问题。
+
+* sed, tail/head, awk 取部分文件内容速度比较
+- [[http://unix.stackexchange.com/questions/47407/cat-line-x-to-line-y-on-a-huge-file]]
+* glob patterns <2015-11-29 日>
+
+glob 可以在多数简单场合替代正则，相对正则，它的心智负担较小，是一种简单强大
+的工具。它的应用场合包括 Shell、Hadoop client 等等，各大编程语言也都有
+glob 库。此外，SQL 下也有类似 glob patterns 的东西，就是写法不一样。
+
+| Wildcard                 | 描述                                | 备注                     |
+|--------------------------+-------------------------------------+--------------------------|
+| *                        | 匹配多个或者零个任意字符            | SQL 下的 ~_~ 和此同义    |
+| ?                        | 匹配单个任意字符                    | SQL 下的 ~%~ 和此同义    |
+| [abc]                    | 匹配枚举出来的字符集合中的单个字符  |                          |
+| [a-z]                    | 匹配指定范围的字符集合众的单个字符  |                          |
+| [!abc] 或 [!a-z]         | 匹配不在字符集合中的单个字符        | Hadoop client 不支持 ~!~ |
+| [ ~^~ abc] 或 [ ~^~ a-z] | 同上，Shell 下也可以用 ~^~ 替代 ~!~ | Hadoop client 支持 ~^~   |
+
+参考：
+- https://en.wikipedia.org/wiki/Glob_(programming)
+- [[https://www.tcl.tk/man/tcl8.5/tutorial/Tcl16a.html][Simple pattern matching - "globbing" (tcl8.5)]]
+
+* 回顾
+** 开始阅读 ABS Guide 来系统地学习 shell <2015-01-03 Sat>
+用了几年的 shell，每次遇到不懂都是去网上查，然后记录到 Evernote 里。渐渐地，我
+发现有些知识（如管道，重定向，基本语法等）记笔记了也没用，还是要到网上去查。
+这时我意识到我该系统地学习一下 shell 了。
+
+Google 一下，找到了知乎上面的 [[http://www.zhihu.com/question/19745611][学习 shell 有什么好书推荐？]] ，发现了 Advanced
+Bash-Scripting Guide 一书，于是开始潜心阅读起来。
+
+完整地读完此书前 7 章之后，觉得我的策略该改一下，我不应该这样学习 shell，因为
+*Shell 的部分语法诡异繁杂，心智负担重，有些时候不如用 Python* 。不过 Shell 有
+一些独特的优势，导致它还是 Unix 环境下的程序员必知必学的语言，我应该挑 Shell 的
+这些优势方面且我还不够精通的部分来学习。例如：
++ 在命令行里直接写 Shell 执行循环和判断语句，来批量执行操作
++ 管道和重定向
++ Shell 相关的 sed/awk/grep
++ 常用函数库/命令
++ ...
+

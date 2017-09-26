@@ -1,0 +1,58 @@
+#+TITLE: Markdown
+#+DATE: 2015-01-10
+#+KEYWORDS: Emacs, Makeup
+
+* Emacs Markdown
+** 快捷键
+| 功能         | 快捷键                   | 使用频率 |
+|--------------+--------------------------+----------|
+| 插入标题     | C-c C-t header_level     |          |
+| 插入同级标题 | C-c C-t h                |          |
+| 修改标题层级 | C-c C-t header_level     |          |
+|              |                          |          |
+| 大概视图     | （在标题上）TAB          |       10 |
+|              |                          |          |
+| 插入列表     | C-c C-x m（或直接 */-/1. |          |
+| 新增列表项   | M-ENTER                  | 8        |
+| 插入引用     | C-c C-s b（或直接 <）    |          |
+| 预览         | C-c C-c p                |          |
+| 插入粗体     | C-c C-s s                |          |
+| 插入本地图片 | C-c TAB i                |          |
+| 插入网络图片 | C-c TAB I                |          |
+
+** 表格
+Emacs 下输入 Markdown 表格输没有很好的解决方案。最终我找到了一个不错但是略
+显 Hack 的解法，那就是使用 Org-mode Table 的表格编辑，然后当保存文件时，将
+-+-替换为 -|- ，转化为一个 Markdown Table。再次打开后，当按 TAB，又会转化为
+Org Table，进而利用其良好的编辑功能。
++ [[http://stackoverflow.com/questions/14275122/editing-markdown-pipe-tables-in-emacs]]
+  
+#+BEGIN_SRC emacs-lisp
+(require 'org-table)
+
+(defun cleanup-org-tables ()
+  (save-excursion
+    (goto-char (point-min))
+    (while (search-forward "-+-" nil t) (replace-match "-|-"))
+    ))
+
+(add-hook 'markdown-mode-hook 'orgtbl-mode)
+(add-hook 'markdown-mode-hook
+          (lambda()
+            (add-hook 'after-save-hook 'cleanup-org-tables  nil 'make-it-local)))
+#+END_SRC
+* 回顾
+** 再见，Markdown <2015-01-13 二>
+尝试了在 Emacs 下使用一段时间 Markdown，我发现 Markdown 的编辑体验差 Org 太
+多。首先作为标记文本，Org 设计得更加优雅，心智压力更小，且文档结构更加稳固，
+其次 Org 是 Emacs 下的一等公民，得到了编辑器的最大化眷顾，最明显的例子就是
+Org 的表格编辑以及全功能的 HTML 导出功能。或许在这个星球上，再也没有一个编
+辑环境能提供比 Emacs & Org mode 提供得更多的东西了。
+
+所以，我应该继续以 Emacs & Org mode 为核心来构建我的知识管理系统和文章发布
+系统，其他的东西如 Pandoc（HTML 导出），Markdown/ReST（文档格式），
+Jekyll/Pelican/Octopress/Hexo（静态页面组织）都只应作为附属。例如，当我发现
+Pandoc 的 Org Reader 如此孱弱后，我应该利用 Org 自带的全功能 HTML 导出。当
+我发现 Jekyll 不支持 Org 之后，我抛弃了它，选择了可以自由定制的 Nanoc。
+
+再见，Markdown。

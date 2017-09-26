@@ -1,0 +1,38 @@
+#+TITLE: Sed
+#+DATE: 2015-01-01
+#+KEYWORDS: 正则
+
+* 实例
+| 命令 | 功能 |
+|------+------|
+| sed -ig "s/^\(\*\{1,6\}\) /\1* /" flask.org     | 将一篇文本里以*开头的行的前面加一个*  |
+| sed -ig "s/^\*\(\*\{1,6\}\) /\1 /" flask.org     | 将一篇文本里以**开头的行的前面减一个*  |
+|      |      |
+|      |      |
+
+** 将笔记中的 ./img/ 改为 ./imgs/
+第一步，找到它们！   
+#+BEGIN_SRC sh
+sed -n "/\/img\//p" notes/*.org
+#+END_SRC
+
+第二步：批量替换
+#+BEGIN_SRC sh
+sed -ig "s/\/img\//\/imgs\//" notes/*.org
+#+END_SRC
+
+第三步：确定结果 
+
+* 在sed中使用shell变量 <2017-09-25 一 19:02>
+我在终端里写了一段shell脚本，脚本里使用了sed，sed语句里使用了shell变量，但
+是我发现运行不成功。
+#+BEGIN_SRC sh
+for year in `seq 1900 1999`; do sed -i  's/hello-world/${year}-12-31-copy-test/' ${year}-12-31-copy-test/index.txt; done
+#+END_SRC
+
+最后我查了一下网络，发现了几个要点：
+1. 使用双引号而不是单引号，来让shell变量得以展开。
+2. 当要替换的变量和目标变量中含有 ~/~ 符号时，使用其他符号（如 ~#~ 和 ~|~ ）来替代 ~/~ 。
+
+参考：
+- [[https://stackoverflow.com/questions/19151954/how-to-use-variables-in-a-command-in-sed][unix - How to use variables in a command in sed? - Stack Overflow]]

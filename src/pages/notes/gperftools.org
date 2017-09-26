@@ -1,0 +1,11 @@
+#+TITLE: gperftools
+#+DATE: 2014-06-15
+#+KEYWORDS: C++
+
+* 资料收集
+- [[http://www.webgraphviz.com/][在线Graphviz服务]]
+
+* 问题记录
+** Graphviz安装失败该怎么办？ <2016-09-19 一 21:04>
+Graphviz比较难安装，这时该怎么办？如果我们有gperftools产出的dot文件，我们可
+以使用 [[http://www.webgraphviz.com/][在线Graphviz服务]] 。

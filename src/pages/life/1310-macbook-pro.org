@@ -1,0 +1,61 @@
+#+TITLE: 入手 Retina MacBook Pro 13
+#+DATE: 2013-10-31
+
+10 月 24 日苹果发布了两款 iPad 和两款 Retina MacBook Pro。本来我是冲着 iPad
+来的，结果却被RMBP13 给迷上了。这次的RMBP升级看起来相当给力，可以说这一系列
+已经完全成熟了。
+
+我列了几个买 Mac 的理由：
+1. 家里缺个笔记本，没法在床上写代码。
+2. 想使用原生的 UNIX 系统。
+3. 高性能的 Retina + SSD + 多维触摸板笔记本电脑。
+4. Keynote, itunes, OS X，新的世界。
+
+然后我到网上到处寻找MacBook Pro以及Mac系统的资料，当我仔细读完下面两篇文章
+之后， *我明白了Mac对于程序员的特殊意义* ，我觉得MacBook Pro已经是非买不可
+了，紧急度甚至已经到了迫在眉睫的程度。
+- [[https://blog.youxu.info/2010/02/28/why-mac-os-x-for-programmers/][开发人员为何应该使用 Mac OS X 兼 OS X 小史 - 4G Spaces]]
+- [[http://tiny4.org/blog/2010/02/why-programmers-should-use-mac-os-x/][为什么我认为每个程序员都应该用 Mac OS X？- tinyfoll]]
+
+* 购买过程
+我在网上寻找新版MacBook Pro的卖家，发现很多人都推荐福利社。这是他们的官网：
+- http://www.macx.cn/forum-5888-1.html
+
+了解了一番，觉得他们挺靠谱，而且在北京有实体店，可以自取。所以决定就在北京
+福利社买了。这是付款时刻的截图：
+#+CAPTION: 出手了，真刺激 - 2013-10-29 13:33:57
+[[../static/imgs/1310-macbook-pro/1.jpg]]
+
+* 北京自取 RMBP13 中配  <2013-10-31 四>
+前天预定的，没想到今天就到货了。接到 MacX 美女的电话之后，我请了半天假赶往
+积水潭五月华庭来取我的RMBP。MacX 的同学们服务很周到，我对机器很满意。
+
+#+CAPTION: 在MacX论坛查询乘车路线
+[[../static/imgs/1310-macbook-pro/P31031-105103.jpg]]
+#+CAPTION: 抵达五月华庭小区！
+[[../static/imgs/1310-macbook-pro/P31031-124026.jpg]]
+#+CAPTION: MacX的办公现场，坐在电脑旁的是给我打电话的美女
+[[../static/imgs/1310-macbook-pro/P31031-124747.jpg]]
+#+CAPTION: 工作人员小哥从库房里拿出了我的MBP
+[[../static/imgs/1310-macbook-pro/P31031-132617.jpg]]
+
+* 开箱
+离开五月华庭，我坐地铁回家，一路上我特别兴奋，心里想着赶快到家，到家就可以
+体验它了。终于我赶回到了家里，下面是开箱过程的一些照片：
+
+#+CAPTION: 开箱照
+[[../static/imgs/1310-macbook-pro/DSC06676.jpg]]
+#+CAPTION: 正面照
+[[../static/imgs/1310-macbook-pro/DSC06685.jpg]]
+#+CAPTION: 开机正面照
+[[../static/imgs/1310-macbook-pro/DSC06693.jpg]]
+#+CAPTION: 开机侧面照
+[[../static/imgs/1310-macbook-pro/DSC06694.jpg]]
+#+CAPTION: 硬件概览
+[[../static/imgs/1310-macbook-pro/DSC06696.jpg]]
+#+CAPTION: MBP桌面截图
+[[../static/imgs/1310-macbook-pro/20131102_011744.jpg]]
+
+* 总结
+从这一天起，我抛弃了Windows，成为了一名Mac用户。我没有丝毫的不适，只有相见
+恨晚的感觉。

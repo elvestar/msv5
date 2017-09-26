@@ -1,0 +1,33 @@
+#+TITLE: Sphinx
+#+DATE: 2014-05-01
+#+KEYWORDS: SSG
+
++ [[http://sphinx-doc.org/][主页]]
+
+* Theme
++ [[http://sphinx-doc.org/theming.html][Sphinx Builtin themes]]
++ [[https://github.com/snide/sphinx_rtd_theme][snide/sphinx_rtd_theme]]
+
+** 使用主题
+很简单，先通过 pip 安装主题：
+#+BEGIN_SRC sh
+pip install sphinx_rtd_theme
+#+END_SRC
+
+然后在 conf.py 中加入：
+#+BEGIN_SRC python
+import sphinx_rtd_theme
+html_theme = "sphinx_rtd_theme"
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+#+END_SRC
+
+然后得到的新主题的文档页面如下：
+
+[[../static/imgs/sphinx/1.png]]
+
+这个主题看着还不错，是 http://readthedocs.com/ 提供的主题。除此之外，
+Sphinx 官网使用的 sphinxdoc 主题也不错，而且是内置的，只需要在 conf.py 中
+的 html_theme 设置为 "sphinxdoc" 即可。主题效果如下：
+
+[[../static/imgs/sphinx/2.png]]
+

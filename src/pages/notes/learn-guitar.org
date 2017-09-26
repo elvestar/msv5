@@ -1,0 +1,32 @@
+#+TITLE: 学习吉他
+#+DATE: 2015-09-26
+
+* 资料收集
+- [[http://www.jitatang.com/changyonghx.html][几个常用的和弦介绍（包块和弦指法图）]]
+* TAB 吉他谱
+下面的图片都来自于 [[http://user.abang.com/u/34888][陈禹]] 的 [[http://guitar.abang.com/od/guitarpedia/a/readtab1.htm#floatlink][新手必读：如何识读六线谱]] 系列文章。
+
+** 和弦
+同时弹响的和弦
+#+CAPTION: ./imgs/learn-guitar/20150927130138.png
+[[../static/imgs/learn-guitar/20150927130138.png]]
+
+** 击弦
+这个 ~H~ 代表锤击（Hammer）
+#+CAPTION: ./imgs/learn-guitar/20150927130318.png
+[[../static/imgs/learn-guitar/20150927130318.png]]
+
+** 勾弦
+这个 ~P~ 的英文单词是 Pull-off。
+
+#+CAPTION: ./imgs/learn-guitar/20150927130353.png
+[[../static/imgs/learn-guitar/20150927130353.png]]
+
+** 划弦
+#+CAPTION: ./imgs/learn-guitar/20150927130800.png
+[[../static/imgs/learn-guitar/20150927130800.png]]   
+
+
+** 推弦
+#+CAPTION: ./imgs/learn-guitar/20150927130829.png
+[[../static/imgs/learn-guitar/20150927130829.png]]

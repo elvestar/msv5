@@ -1,0 +1,9 @@
+#+TITLE: CURL
+#+DATE: 2016-09-19
+
+* 使用libcurl实现HTTP GET <2016-09-19 一 09:14>
+
+参考：
+- [[http://stackoverflow.com/questions/9786150/save-curl-content-result-into-a-string-in-c][Save cURL content result into a string in C++ - Stack Overflow]]
+- [[http://www.cnblogs.com/moodlxs/archive/2012/10/15/2724318.html][C++ 用libcurl库进行http通讯网络编程 - 绿色冰点 - 博客园]]
+

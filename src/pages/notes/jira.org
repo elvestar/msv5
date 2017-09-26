@@ -1,0 +1,9 @@
+#+TITLE: Jira
+#+DATE: 2015-04-09
+
+* 前言
+以后可会要调用 Jira 的 API 做一些系统集成方面的事情，故开篇笔记学习一下。
+
+* 资料收集
+** 文档
+- [[https://developer.atlassian.com/jiradev/api-reference/jira-rest-apis][JIRA REST APIs]]

@@ -1,0 +1,19 @@
+#+TITLE: Jade
+#+DATE: 2015-04-17
+#+KEYWORDS: HTML
+
+* 前言
+给 AngularJS 找个 HTML 模板工具。
+
+* 资料收集
+** 文档
+- [[http://jade-lang.com/]]
+
+** 文章
+- [[http://bahmutov.calepin.co/angularjs-inside-jade-templates.html][AngularJs inside Jade templates]]
+
+
+* 回顾
+** 看起来能和 Less 一样提高效率，不过暂时先不学 <2015-05-03 日>
+暂时先使用 HTML 顶上，毕竟有 Zen Coding，不会太慢。最近头脑里学了太多东西，
+有点受不住，所以学习暂停，等以后再学习。

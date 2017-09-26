@@ -1,0 +1,45 @@
+#+TITLE: 个人知识管理
+#+DATE: 2015-01-20
+#+KEYWORDS: 知识管理
+#+DESCRIPTION: 一段很长的路
+
+* 前言
+我要立的计划不是只持续几年，而是要持续一生的计划，即使我以后换工作领域，不
+再做程序员这种必须持续学习的工作，我仍然需要保留持续学习的习惯，并持续地做
+我的知识管理。所以说，我的个人知识管理系统任然生效。
+
+* 知识管理
+- 以工具作为知识沉淀的载体。例如针对某种语言的 Vim 脚本和 snippets，以及
+  Less。
+- 正向反馈流：类似于缓存服务器，当发现想要的东西在自己的知识管理系统（类比
+  为高速缓存）里找不到时，则取其他地方搜索和询问（类比为数据库），找到后，
+  将其放入自己的知识管理系统（更新缓存）。
+
+* 工作流 Workflow 
+- [[file:workflow.org][Workflow]]: 我的一些工作流
+
+* Evernote 笔记迁移
+使用过和学习过的一些系统/库/框架：
+- [[http://elvestar.com/notes/libev/][Libev]]: 尝试过用它来实现在 Pbrpc 框架内嵌 Http Server。
+- [[http://elvestar.com/notes/boost-asio/][Boost Asio]]: 同上
+- [[http://elvestar.com/notes/libevent/][Libevent]]: 同上。最终我选择了 Libevent。
+- Scribe: 在设计百度内部的日志传输系统时，研究过它。
+- Lighttpd: 曾经学习过写 Lighttpd 插件，用来实现一个打 PB 日志的库。不过后
+  来没做
+- Chukwa: Hadoop 的日志收集系统，略微地了解过。
+- Memcached: 12 年研究过的缓存系统。
+  
+其他的学习笔记：
+- Linux Time: Linux 时间相关函数的用法。总结得比较乱。
+- Linux IPC: Linux 进程间通信相关的，如共享内存。
+- TCP/IP: IP，网卡相关的函数
+  
+* Web 框架
+- Flask: 用的最多的
+- Tornado: 在 Flask 之前，我使用 Tornado。现在不使用它了，但仍然使用它做
+  Flask 的 WSGI 容器。
+- Django: 最早学习的 Python Web 框架，但是感觉太庞杂，所以在技术选型时抛弃
+  了它。
+  
+* 记了又忘呵
+在Org插入带精确到分钟的时间戳的指令是： ~C-u C-c .~ 参考：[[http://orgmode.org/manual/Creating-timestamps.html][8.2 Creating timestamps (Org Docs)]]

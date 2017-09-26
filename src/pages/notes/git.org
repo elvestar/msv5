@@ -1,0 +1,133 @@
+#+TITLE: Git
+#+DATE: 2014-02-11
+#+KEYWORDS: VCS, 工具, Git
+
+* 小技巧
+** 查看代码库中所有 org 类型文件的改动情况
+假设目录深度最多为 2，那么可以这么写：
+#+BEGIN_SRC sh
+git st *.org */*.org 
+#+END_SRC
+
+** 删除 git 仓库中的乱码分支 <2016-02-22 一>
+无意中生成了一些乱码分支（包括以 - 开头的分支），在 Shell 中使用 git branch
+不好删除。如下：
+#+CAPTION: 乱码分支
+[[../static/imgs/git/20160222174504.png]]
+
+这时，可以使用此法来删除：
+1. cd 到项目根目录的 ~.git/refs/heads~ 目录下。我们会看到以分支名为名字的子
+   目录。
+2. 使用 Shell 的 glob 语法来删除乱码分支。此例中，我们使用 ~rm  *merged
+   -rf~ 可以实现删除。
+
+思考：原来调用 git branch 就是列出 ~.git/refs/heads~ 下的子目录。
+
+* git rm
+* git log
+** 查看某人的提交记录
+例如，我们想要查看 zhongyi01 的提交记录，可使用 --author 来指定。
+#+BEGIN_SRC sh
+git log --author="zhongyi01"
+#+END_SRC   
+** 在 git 中删除，但保留本地文件
+git rm --cached xxx 即可！
+* git branch
+** 删除分支
+- [[https://git-scm.com/book/zh/v1/Git-%25E5%2588%2586%25E6%2594%25AF-%25E5%2588%2586%25E6%2594%25AF%25E7%259A%2584%25E7%25AE%25A1%25E7%2590%2586][3.3 Git 分支 - 分支的管理]]
+
+步骤：
+1. git branch -v 查看各个分支
+2. git branch --merged 查看已经 merge 的分支
+3. git branch -d branch_name 删除已经 merge 的分支
+4. git branch --no-merged 查看未 merge 的分支
+5. 确认这些未 merge 分支可以删除后，执行 git branch -D branch_name 强制删除
+   这些分支
+
+* git push
+** 使用 HEAD 代表当前所在分支
+只需要：
+#+BEGIN_SRC sh
+git push origin HEAD:refs/for/master
+#+END_SRC
+
+而不需要：
+#+BEGIN_SRC sh
+git push origin XINOS-417-net-sub:refs/for/master
+#+END_SRC
+* 远程分支
+** 列出远程分支
+git branch -r
+** Checkout 远程分支
+git checkout -r origin/xxx
+** 新建仓库并与远程分支同步
+步骤：
+1. git init（如果本地仓库还没建好的话）
+2. git remote add origin https://github.com/elvestar/emacs.d.git
+3. git checkout -b master
+4. git checkout master（此时才会自动将本地 master 与远程 master 关联起来）
+5. git pull
+
+* submodule
+Git 的 submodule 功能允许我们将别人的 Git 仓库挂到自己的 Git 仓库的任何位置，
+成为自己的 Git 仓库的一部分。这个功能在管理大型项目时很有用。
+
+** 带 submodule 的 clone
+#+BEGIN_SRC sh
+git clone --recursive git://github.com/mozilla/kitsune.git
+#+END_SRC
+
+** 更新 Git 仓库中的 submodule
+如果想更新 submodule，或者是 clone 别人的仓库时忘记加--recursive 来 clone 它
+的 submodule，可以执行下面指令。
+#+BEGIN_SRC sh
+git submodule update --init --recursive
+#+END_SRC
+
+* git rebase <2015-02-11 三>
+团队使用 gerrit 作为代码 Review 工具，几十个人使用同一个 git 仓库，且都在
+master 分支下面开发。提交完代码，Review 通过后，如果直接通过 merge 来与远端
+仓库同步的话，会让 commit 树产生分支。这时，推荐使用 git rebase 来简化
+commit 树，让其保持只有一个枝干。具体做法是：
+#+BEGIN_SRC sh
+git fetch
+git rebase master
+#+END_SRC
+
+git rebase 的语法是：
+#+BEGIN_SRC sh
+git rebase [主分支] [特性分支]
+#+END_SRC
+
+参考：
+- [[http://gitbook.liuhui998.com/4_2.html][Git Book 中文版 - rebase]]
+- [[http://git-scm.com/book/zh/v1/Git-%25E5%2588%2586%25E6%2594%25AF-%25E5%2588%2586%25E6%2594%25AF%25E7%259A%2584%25E8%25A1%258D%25E5%2590%2588][Git 分支 - 分支的衍合]]
+
+** 衍合的风险
+《Pro Git》一书指出了一条衍合相关的准则：
+#+BEGIN_QUOTE
+一旦分支中的提交对象发布到公共仓库，就千万不要对该分支进行衍合操作。
+#+END_QUOTE
+
+解释一下，就是衍合只能作为将代码提交到公共仓库之前的优化提交历史的手段，一
+旦提交到公共仓库，就不应该对已经入公共仓库的提交对象执行衍合。
+
+* git diff
+** 如何 diff 位于不同分支的同一个文件？ <2015-10-10 六>
+#+BEGIN_SRC sh
+git diff br1 br2 -- xxx.cpp
+git diff --stat br1 br2 -- xxx.cpp
+#+END_SRC
+参考：
+- http://stackoverflow.com/questions/4099742/how-can-i-compare-files-from-two-different-branches
+
+* Git 的 GUI 工具
+** SourceTree
+[[http://www.sourcetreeapp.com/images/sourcetree_hero_mac_full_interface.png]]
+* 问题汇总
+** git push 失败，提示 "error: RPC failed; result=22, HTTP code = 411"
+原因是 git 客户端默认的 HTTP 数据传输的值过小（为 1M），改大即可。下面指令将其改为
+100M。
+#+BEGIN_SRC sh
+git config http.postBuffer 104857600
+#+END_SRC

@@ -1,0 +1,16 @@
+#+TITLE: Chukwa
+#+DATE: 2013-04-30
+#+KEYWORDS: 日志收集
+
+* 资料收集
+- [[http://chukwa.apache.org/docs/r0.4.0/admin.html][Chukwa 架构和模块的简介]]
+- [[http://chukwa.apache.org/docs/r0.4.0/admin.html][将你怎么安装 Chukwa]]
+
+* 总体架构
+| 模块      | 作用                                                                                                                                             |
+|-----------+--------------------------------------------------------------------------------------------------------------------------------------------------|
+| Adatpor   | 负责调用各种借口来将日志发往本机器唯一的 Agent，一台机器可以有多个 Adaptor，每个 Adaptor 可能是以不同的方式来发送增量的日志                          |
+| Agent     | 一条机器部署一个，负责汇聚该机器内的所有日志流量，统一发往 Collectors。一个 Agent 可以将数据分布地发往多个 Collecor，故 Agent 和 Collecor 是多对多的关系 |
+| Collector | 负责汇聚多个 Agent 发来的日志，然后存储的 HDFS 上面                                                                                                  |
+| Demux     | 负责将 Collectors 收集来的日志按 type 拆分，它执行了 Mapreduce                                                                                        |
+| HICC      | 将分析结果在前端展示                                                                                                                             |

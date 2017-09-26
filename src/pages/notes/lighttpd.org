@@ -1,0 +1,59 @@
+#+TITLE: Lighttpd
+#+DATE: 2013-12-19
+
+* 开发 Lighttpd 插件
+官方教程：
+- [[http://redmine.lighttpd.net/projects/lighttpd/wiki/HowToWriteALighttpdPlugin]]
+
+
+需要实现四个函数：
+- _plugin_init
+- _init
+- _set_defaults
+- _free
+
+** 实例：实现 logid 功能
+先从 connection 里面通过来获取 LOGID，如果为空，说明 logid 还没有被设置，这
+时候需要在模块里面生成 logid 了。
+#+BEGIN_SRC cpp
+  ds = (data_string*)array_get_element(con->request.headers, CONST_STR_LEN("LOGID"));
+#+END_SRC
+
+生成 logid 的算法如下：
+#+BEGIN_SRC cpp
+  MD5(ip + process id + time + rand)
+#+END_SRC
+
+生成完毕后，会调用 req_header_insert 把 LOGID 插入到
+connection->request.header 里面：
+#+BEGIN_SRC cpp
+  ds_old = (data_string*)array_replace(con->request.headers, (data_unset *)ds_dst);
+  req_header_insert(con, "LOGID", str64);
+#+END_SRC
+
+** Module: mod_accesslog
+- http://redmine.lighttpd.net/projects/1/wiki/Docs_ModAccessLog
+
+Lighttpd 的访问日志打印模块
+
+名词解释：CLF(Common Log Format)
+- accesslog.filename="......." Log 文件的路径
+- accesslog.format = "%V %h %l %u %t \"%r\" %>s %b \"%{Referer}i\"
+  \"%{User-Agent}i\"" Log 的拼装格式（具体参数详见 docs）
+
+打日志的函数是 log_access_write，写文件的语句在 920 行：
+#+BEGIN_SRC cpp
+write(p->conf.log_access_fd, b->ptr, b->used - 1);
+#+END_SRC
+
+如果打开了 syslog 的话，则会执行：
+#+BEGIN_SRC cpp
+syslog(p->conf.syslog_level, "%*s", (int) b->used - 2, b->ptr);
+#+END_SRC
+
+** Module: mod_access
+- http://redmine.lighttpd.net/projects/1/wiki/Docs_ModAccess
+
+该模块用来阻止对某些文件的访问。主体逻辑在 mod_access_uri_handler 函数里面，
+具体是 151 行。
+

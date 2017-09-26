@@ -1,0 +1,226 @@
+#+TITLE: Tmux
+#+DATE: 2014-02-16
+#+KEYWORDS: Unix 工具, 终端
+
+* 前言
+我用了很久的 screen，在使用过程中踩了不少坑，也排了不少坑（参考 [[file:screen.org][screen]] ）。现在我
+又遇到了一个 screen 与 vim 的兼容问题，导致很多 vim 插件的特殊符号无法显示（如倒三角和
+右三角），我决定这次先不排这个坑了，而是尝试一下据说是 screen 的替代者的 *tmux* 。
+
+*tmux* 是一种终端复用的工具。它可以在一个终端里虚拟出多个终端，而且可以将这些终端
+以 *session（会话）* 的形式保存下来，用户可以随时随地断开，随时随地连接。
+
+* 资料搜集
+** 文档
++ [[http://tmux.sourceforge.net/][tmux 的主页]] （Sourceforge 的，需要用 VPN 登陆）
++ [[http://www.openbsd.org/cgi-bin/man.cgi?query%3Dtmux&sektion%3D1][tmux 的用户手册]]
++ [[https://gist.github.com/MohamedAlaa/2961058][tmux shortcuts & cheatsheet]]
+
+** 文章
++ [[http://www.dayid.org/os/notes/tm.html][Screen and Tmux (comparison)]]
++ [[http://www.danielmiessler.com/study/tmux/][A tmux Tutorial and Primer]]
+
+* 上手
+我有 screen 的使用经验，我知道作为一种终端复用的工具最常用的操作是什么，所以我
+这里画了一张表格，列出 screen 的常用操作及其快捷键，同时还列出了 tmux 相应的快捷键。
+另外，我决定在上手之前，先不改默认的快捷键。
+
+| 操作            | screen               | tmux                     |
+|-----------------+----------------------+--------------------------|
+| 新建 session     | screen -S xxx        | tmux new -s xxx          |
+| 断开 session     | C-a d                | C-b d                    |
+| 连接 session     | screen -dr xxx       | tmux attach -d -t xxx    |
+| 删除 session     | 连续 C-d（shell 指令） | tmux kill-session -t xxx |
+| 列出全部 session | screen -ls           | tmux ls                  |
+| 新建窗口        | C-a c                | C-b c                    |
+| 删除窗口        | C-d（shell 指令）    | C-d 或 kill-window -t x  |
+| 下一个窗口      | C-a n                | C-b n                    |
+| 上一个窗口      | C-a p                | C-b p                    |
+
+可以看出，tmux 的快捷键大体上与 screen 保持了一致。只不过在命令行中使用的话，相对
+screen 语句比较繁琐。
+
+** 修改 prefix key (激活控制台的按键)
+在 screen 下，我习惯用 C-x 作为我的 prefix key，以此我在我的 *.tmux.conf* 里
+面加入了下面三行，将 prefix key 由默认的 C-b 修改为 C-x。
+
+#+begin_src sh
+set-option -g prefix C-x
+unbind-key C-b
+bind-key C-x send-prefix
+#+end_src
+
+*需要注意* 的是，修改完配置后，需要执行 *tmux source-file
+~/.tmux.conf* 重新加载配置才能使配置生效。tmux 的 server 进程只有在启动时
+才会自动加载配置。在 tmux 的 server 进程已经启动的情况下，即使是新建的
+session 也不会加载新的.tmux.conf。
+
+tmux 的这种设定导致的结果是 *一个 tmux server 下的所有 session 都使用一个配
+置* 。一旦接受了这种设定，会发现省了不少麻烦。
+
+#+begin_example
+C-x 是 Emacs 各种基本操作的引导键，所以我这样的改法，势必会导致在 tmux 中用 Emacs 发生按键冲
+突，C-x 不是一个很好的选择。还好我现在还没有在 tmux 中使用 Emacs，我先把这个问题放
+一放。
+#+end_example
+
+** 快速应用修改
+#+BEGIN_SRC screen
+bind r source-file ~/.tmux.conf
+#+END_SRC
+** 修改按键绑定
+在 tmux 中，修改按键绑定的指令是 *bind-key* 。这条指令太常用了，所以我把官网的指令
+说明给搬来了：
+
+#+begin_example
+    bind-key [-cnr] [-t key-table] key command [arguments]
+                   (alias: bind)
+             Bind key key to command.  By default (without -t) the primary key
+             bindings are modified (those normally activated with the prefix
+             key); in this case, if -n is specified, it is not necessary to
+             use the prefix key, command is bound to key alone.  The -r flag
+             indicates this key may repeat, see the repeat-time option.
+
+             If -t is present, key is bound in key-table: the binding for
+             command mode with -c or for normal mode without.  To view the
+             default bindings and possible commands, see the list-keys
+             command.
+#+end_example
+
+从说明中得知，默认情况下，绑定的按键都需要先激活控制台后（按 prefix key）。如果想
+把某个键设定为不需要 prefix key，只需要加入-n。
+
+我的习惯是将 F1 到 F4 设定为 tmux 窗口的基本操作快捷键，所以我在我的.tmux.conf 中加入了下面几行。
+#+begin_src sh
+# Key binding                                                                                          
+bind -n F1 previous-window                                                                             
+bind -n F2 next-window                                                                                 
+bind -n F3 new-window                                                                                  
+bind -n F4 command-prompt "rename-window '%%'"   
+#+end_src
+
+第四行需要解释一下，它使用了 tmux 的 *command-prompt* 功能。即当按下 F4 后，tmux
+会弹出交互式窗口，让用户填写 window name，填好回车后，这条指令才会执行。 *%%* 这个占
+位符就是指代用户填写的 window name。
+
+全部可被绑定的指令在这里 [[http://www.openbsd.org/cgi-bin/man.cgiquery%3Dtmux&sektion%3D1#WINDOWS%2BAND][tmux WINDOWS AND PANES]] 有列出，享受它！
+
+** 设置 Status Line
+tmux 的状态行设置很丰富，但我决定先从网上找一个先用着。Google 一下，找到了 [[https://gist.github.com/zolrath/2305333][wemux's
+tmux status line]]，我它粘贴到我的.tmux.conf，然后执行 *tmux source-file
+~/.tmux.conf* ，发现界面一下子变得高大上了。
+
+[[../static/imgs/tmux/1.png]]
+
+** 一些很酷炫的操作
+C-b t，然后屏幕中间就出来一个时钟了。
+
+[[../static/imgs/tmux/2.png]]
+
+* 寻找更好的 prefix key
+** Emacs 惹不起
+默认情况下，Tmux 的 prefix key 是 C-b，我修改为更为顺手的 C-x。C-x 虽好，但是与 Emacs 相
+冲突，而我即将要在 Tmux 里面用 Emacs，换 prefix key 迫在眉睫。
+
+浏览 [[http://superuser.com/questions/209437/how-do-i-scroll-in-tmux][Stack Overflow]] ，发现有人用 C-j。
+#+BEGIN_SRC screen
+set -g prefix C-j
+unbind C-b
+bind C-j send-prefix
+#+END_SRC
+
+我试了下，C-j 很顺手，于是决定就它了。但到 Emacs 里面一试，发现 C-j 是 Emacs 里的换行+
+缩进健，这是个很重要的快捷键。看来我还得另寻它法（这个键惹不起啊）。
+
+** 找到了个将就的选择
+联想到 Tmux 中进入 scroll mode 的快捷键是[，于是我想是否可以用 C-[作为我的 prefix key？
+这样的话，我进入 scroll mode 会非常快捷。但是我试了下发现老是不灵！而且问题很诡异，
+一时难以破解。
+
+终于，我在我的右手边为 prefix key 找到了个不错的归宿： *C-]* 。C-]在 Emacs 的作用是
+*visit-tags-table* ，这是 etags 提供的功能。而我不用 etags，用的是更强大的 gtags，所
+以我愉快地把它给出卖了（嘿嘿）。
+#+BEGIN_SRC screen
+set-option -g prefix C-]
+unbind-key C-b
+bind-key C-] send-prefix
+#+END_SRC
+
+** 峰回路转
+C-[不生效的问题被我解决了，，见"问题记录"一节。问题原因还不清楚，但是 C-[终于能用
+了，安逸了。C-]还是继续用来做 *visit-tags-table* 吧，或许以后来会被用来做 gtags 的
+跳转快捷键。
+
+* 设置状态行
+Tmux 的一个大卖点就是能够方便地配置状态行。Tmux 的状态行分为三块：
+1. 左侧状态行（一般用来显示用户和机器名信息）
+2. 右侧状态行（一般用来显示日期时间）
+3. 中间窗口列表（只能用来显示窗口列表）
+
+我喜欢简洁侘寂的配置。所以我把这三块相关的配置设成了如下：
+#+BEGIN_SRC screen
+set -g status-left "#[fg=green]#(whoami)#[fg=white]@#[fg=blue]#(hostname -s)#[fg=white]>"
+set -g status-right '#[fg=white]%R' 
+set -g window-status-current-format '#[fg=red]#I:#W' 
+set -g window-status-format '#I #W' 
+#+END_SRC
+
+* Scroll in Tmux
+参考 [[http://superuser.com/questions/209437/how-do-i-scroll-in-tmux][How do I scroll in tmux?]] ，进入 Scroll 模式的快捷键如下：
+#+BEGIN_SRC screen
+C-b [
+#+END_SRC
+
+然后就通过 *Emacs 的各种快捷键* 进行移动和文本选择操作了。
+
+* 问题记录
+** unbind 某个键后反悔了，只能手动 bind 回原来的健
+具体地说，就是对某个键执行 unbind 之后，想改回来，删掉 unbind 语句后，执行
+tumx source-file ~/.tmux.conf 不生效。想要改回来，只能 *手动在配置中将该
+健 bind 到原来的功能上* 。
+
+从系统设计角度，这是合理的。但是从用户角度，这有点费解，容易被认为是坑。
+
+** 无法将 prefix key 绑定为 C-[
+我尝试过各种方案，最终认为将 prefix key 绑定为 C-[最合理，但是屡次绑定都不成功。一个
+偶然的机会，我发现 *将 prefix key 和快捷键的按键间隔拉大一点，C-[是能生效的* 。于是
+我怀疑是当 prefix key 被设为 C-[时，tmux 控制台的激活因为某种原因推迟了。我尝试修改
+escape-time 来看是否能有所改变：
+#+BEGIN_SRC screen
+set -sg escape-time 1
+#+END_SRC
+
+改完后，执行 tmux source-file ~/.tmux.conf，发现 C-[作为 prefix key 的的反应快了一些，
+但仍然有些许停顿。后来我在 StackOverflow 上找到了和我一样的情况：
++ [[http://stackoverflow.com/questions/12312178/tmux-and-vim-escape-key-being-seen-as-and-having-long-delay][tmux and Vim: Escape key being seen as ^{ and having long delay]]
+我做了下面的修改后，就完全恢复正常了！
+#+BEGIN_SRC screen
+set -sg escape-time 0
+#+END_SRC
+
+** Tmux 下的某个 window 卡死怎么办？ <2015-12-05 六>
+某个 window 卡死，这时 C-d 不管用，不好杀死它。而如果不杀死，它就像一个僵尸
+一直躺在 session 里，好怕人好怕人的呢！
+
+Tmux 窗口卡死，一般是由于 tmux 下，ssh 或其他 linux 程序卡死了（tmux 和
+linux 程序可能都有锅）。假设是 ssh 卡死，这时我们可以新开一个窗口，登录到
+ssh 的宿主机，执行 ps -ef | grep ssh，从一堆进程列表中，找到那个卡死的 ssh
+连接，kill 掉它。这时我们在回到原来的窗口，我们就会欣喜地看到卡死恢复了，ssh
+被退出了。
+
+* 回顾
+** 已经可以用 tmux 替代 screen 了 <2014-02-16 日>
+经过这段时间的学习，特别是今晚的集中学习和实践之后，我已经上手了 tmux，并且已经觉得
+tmux 完全超越了 screen。tmux 对于各种 terminal（终端）的兼容性做得比 screen 好很多，特
+别体现在 F1 到 F4 的绑定上，在 screen 中，需要自己设定好 terminal 的类型（xterm,
+xterm-256color, rxvt....），而否则无法正确绑定到 F1 到 F4 上，而 tmux 已经预先把
+terminal 的兼容问题考虑到了。
+
+下周一开始，我就会扔掉 screen，将工作环境切换到 tmux 上来，并在实践中不断地熟悉 tmux。
+我下一次集中学习 tmux 的要点在于：
+1. 窗口的切分
+2. 探究是否可以用 tmux 来提供类似于 SecureCRT 的 *Session Clone* 的功能
+3. Status Line 的进一步改进
+
+
+

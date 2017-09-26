@@ -1,0 +1,16 @@
+#+TITLE: Spark
+#+DATE: 2015-08-31
+
+* 资料收集
+- [[http://rdc.taobao.org/p%3D2024][Spark 开发指南（0.8.1 中文版）]]
+
+* Spark Streaming
+- [[http://spark.apache.org/docs/latest/streaming-programming-guide.html][Spark Streaming Programming Guide]]
+
+#+CAPTION: ./imgs/spark/20150831094621.png
+[[../static/imgs/spark/20150831094621.png]]
+
+#+CAPTION: ./imgs/spark/20150831095019.png
+[[../static/imgs/spark/20150831095019.png]]
+
+Spark Stream 支持从 HDFS，Flume，Kafka，Twitter 和 ZeroMQ 读取数据

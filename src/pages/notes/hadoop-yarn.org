@@ -1,0 +1,82 @@
+#+TITLE: Apache Hadoop YARN
+#+DATE: 2016-06-23
+
+
+* YARN Architecture
+- [[http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html][Hadoop YARN Architecture]]
+
+YARN的基本想法就是将资源管理和任务调度/监控分离到不同的守护进程。想法是通过
+一个全局的ResourceManager（RM）和一个每个应用单独拥有的ApplicationMaster（AM）
+来实现。一个Application可以是单独的Job，也可以是Job Graph。
+
+ResourceManager和NodeManager构成了数据计算的框架。ResourceManager是终极权威，
+它裁决系统中的资源如何分配给Application。NodeManager每台机器单独拥有的Agent
+框架，它负责着容器，监控它们的资源使用（CPU、Memory、Disk、Network），同时
+汇报到ResourceManager/Scheduler。
+
+每个Application单独拥有的ApplicationMaster，实际上是一个特定框架下的库，它
+会从ResourceManager处协商资源，并和NodeManager一起工作来执行和监控着任务们。
+
+#+CAPTION: ./imgs/hadoop-yarn/20160623192237.png
+[[../static/imgs/hadoop-yarn/20160623192237.png]]
+
+ResourceManager主要有两个组件：Scheduler和ApplicationManager。
+
+Scheduler负责为运行中各种各样的应用分配资源（在系统容量和队列的制约下）。这
+个Scheduler是个纯粹的Scheduler，它不监控不跟踪应用的状态。同样，当应用异常
+或者硬件异常时，它也不会把失败的任务拉起来。调度器会基于应用的资源需求来执
+行雕塑，它基于资源容器这一抽象概念，资源容器将Memory、CPU、Disk、Network等
+都纳入了考虑。
+
+调度器有一个可插拔的策略，负责将集群的集群的资源划分到不同的队列和应用。当
+前的Scheduler包括CapacityScheduler和FairScheduler就是实例。
+
+ApplicationManager负责接收任务提交，协商第一个容器来执行应用在特定的
+ApplicationMaster上，并提供失败时重启ApplicationMaster的服务。每个应用独有
+的ApplicationMaster负责从调度器协商适当的资源容器，跟踪它们的状态，监控它们
+的运行过程。
+
+Hadoo- 2.x的MapReduce维持着和上一个稳定版（Hadoop-1.x）的API兼容性。这意味
+着全部MapReduce任务可以无改变地运行在YARN之上（只需要重新编译一下）。
+
+* YARN分享（国蓉）
+日期：<2016-06-23 四>
+
+MRV1的局限：
+- 可伸缩性：MR集群瓶颈在4千Node，4万Task
+- 可用性：JobTracker负责调度和监控
+- 资源利用率低
+- 只能跑MR
+  
+YARN双层调度架构
+- RM分配资源给AM
+- AM将资源分配给Task
+  
+ResourceManager（RM）是Master，负责整个集群的资源分配和调度：
+- SchedulerService
+- Applications Manager Service
+
+NodeManager（NM）是Slave，负责单个节点的资源，管理container，监控和心跳节点
+信息（CPU，Memory）给RM：
+- ApplicationMaster：应用程序的Master，向RM申请资源，汇报执行情况和进度，启
+  动/杀死Executor （本来在MRV1上这是JobTracker做的）
+- ApplicationProcess：执行AM分配的业务逻辑，运行在NM的container上
+  
+Hadoop 2.0的调度器（ResourceScheduler）是可插拔的：
+- FifoScheduler
+- CapacityScheduler：Yahoo开发，默认调度器
+- FairScheduler：Facebook开发
+- NormandyScheduler：百度开发
+
+调度器架构：是一个事件处理器，要实现一个自己的调度器，需要实现一些回调方法。
+
+调度算法：DRF算法
+
+YARN应用：Spark on YARN （Spark原来是Standalone的）
+
+YARN的发展趋势：
+
+- 支持更多的调度语义：网络IO、磁盘IO
+- 支持在线升级，升级不影响长作业
+- YARN的提交时间很长，并发粒度小
+- 应用并不能知道集群的实时资源使用情况

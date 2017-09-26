@@ -1,0 +1,285 @@
+#+TITLE: Tornado 框架
+#+DATE: 2014-04-26
+#+KEYWORDS: Python, Web 框架
+
+* 前言
++ [[http://www.tornadoweb.org/][Tornado 主页]]
+
+* 资料搜集
+** Template
++ [[http://bibhas.in/blog/using-jinja2-as-the-template-engine-for-tornado-web-framework/][Using Jinja2 as the Template Engine for Tornado Web Framework]]
++ [[http://community.itbbs.cn/thread/20131/][Python 模板引擎性能对比]]
++ [[http://docs.python-guide.org/en/latest/scenarios/web/][Web Applications（最下面有 Tornado + Jinja2 的示例）]]
+
+** 项目
++ [[https://github.com/facebook/tornado/tree/master/demos/chat][Tornado demo - Chat room]]
++ [[https://github.com/myoula/cakeshop][基于 tornado、peewee、jinja2 的商城]]
+
+** 书籍
++ [[http://demo.pythoner.com/itt2zh/index.html][《Introduction to Tornado 中文版》]]
+  
+* 用户登录/认证
+实现方式是实现一个 BaseHandler，里面实现了 get_current_user 函数。然后其他 Handler 继
+承 BashHandler，并在要做用户认证的方法（如 get 和 post）函数前面加上一个修饰器
+~@tornado.web.authenticated~  ，这样，触发该方法时，均会触发 get_current_user 函
+数，如果 get_corrent_user 放回空，则 Tornado 会自动调用 login_url，触发用户登录。
+
+* 请求处理
+** 表单与 POST
+对于 POST 类型的 Request，可以通过在 post 函数入口处 *print self.request.arguments* 打印
+出所有参数来方便调试。
+
+** 表单与 GET
+如果表单的 method 为 GET，那么还是用 get_argument 来获取参数。
+* SQLAlchemy
++ [[http://docs.sqlalchemy.org/en/rel_0_9/core/engines.html][Engine Configuration]]
++ [[http://docs.jinkan.org/docs/flask/patterns/sqlalchemy.html][在 Flask 中使用 SQLAlchemy]] （介绍了以非 ORM 的方式来使用）
+** 遍历 Model
+有一种需求，就是将需要通过遍历的方式，将一个 Model 的所有字段给吐出来展示到前端页
+面。Model 本身是无法迭代遍历的，用 for x in model 会报 *TypeError: 'LogConfig'
+object is not iterable* 的错误。
+
+我查了 Model 的所有接口，发现了__dict__，我用了一下，发现该接口把 Model 的所有字段以
+字典的方式返回，这样就很方便地遍历了。如下：
+#+BEGIN_SRC html
+<tr>
+    {% for key in log_config.__dict__ %}
+        <td>{{ log_config[key] }}</td>
+    {% endfor %}
+</tr>
+#+END_SRC
+
+** 如何 Group 和 count
+利用 SQLAlchemy 的 group_by 和 func 中的 count 函数可以轻易实现，如下：
+#+BEGIN_SRC python
+product_lines = session.query(NoahNode.department, func.count(NoahNode.department)) \
+                .group_by(NoahNode.department).all()
+#+END_SRC
+
+** filter
+*** 实现 not in
+利用 Column 的 notin_方法（感谢 PyCharm 的自动提示功能！）
+*** 实现 where in
+利用 Column 的 in_方法（好像与上面的 not in 重了）
+
+** 如何删除表中的一个记录？
+方法：
+1. 先通过 session 的 query() 配合 filter 找到该记录，返回实例
+2. 调用 session.delete(object)
+3. 调用 session.commit()
+
+参考： [[http://docs.sqlalchemy.org/en/rel_0_9/orm/session.html#delete][Using the Session]]
+
+** 更新记录
+文档里面没找到如果更新记录的方法，于是挨个尝试接口，发现 ORM 的 session 没有 update 接
+口，而且它的 flush 接口也不是用来更新记录的。
+
+最后，我尝试了 add，发现它竟然能实现 update 的功能！
+
+** 非 ORM 方式的使用
++ [[http://docs.jinkan.org/docs/flask/patterns/sqlalchemy.html][在 Flask 中使用 SQLAlchemy]] （介绍了以非 ORM 的方式来使用）
+我是这样用的：
+#+BEGIN_SRC python
+data_slices = engine.execute('SELECT * FROM data_slice WHERE log_module_id = ' + str(log_module_id) + ' ORDER BY base_time DESC')
+#+END_SRC
+execute()返回了一种类型为 ResultProxy 的结果集。 *ResultProxy 可以遍历，也有 first()
+方法，但是没有 all()方法*
+
+** 使用 MySQL engine
++ [[http://docs.sqlalchemy.org/en/rel_0_9/core/engines.html][Engine Configuration]]
+先给出最终我使用的方法吧：
+#+BEGIN_SRC python
+# 总共出现了三个 minos_test。第一个是用户名，第二是密码，第三个是数据库名
+engine = create_engine('mysql://minos_test:minos_test@localhost:3306/minos_test?charset=utf8', encoding="utf-8", echo=True)
+#+END_SRC
+
+SQLAlchemy 的 MySQL 方言支持三种 DBAPI，它们的用法分别如下：
+#+BEGIN_SRC python
+# default
+engine = create_engine('mysql://scott:tiger@localhost/foo')
+# mysql-python
+engine = create_engine('mysql+mysqldb://scott:tiger@localhost/foo')
+# MySQL-connector-python
+engine = create_engine('mysql+mysqlconnector://scott:tiger@localhost/foo')
+# OurSQL
+engine = create_engine('mysql+oursql://scott:tiger@localhost/foo')
+#+END_SRC
+
+我们用的是默认，也就是 mysql-python，也就是 MySQLdb 这个 Python 模块。注意，该模块名
+不叫 MySQLdb，而叫 MySQL-python，故安装方法如下：
+#+BEGIN_SRC sh
+sudo pip install MySQL-python
+#+END_SRC
+
+** DateTime 的处理
+可以定义一个 Column 为 DateTime 类型的，需要 from sqlalchemy import datetime
+
+insert 时，对于一个 DateTIme 类型的字段设的值其实就是 python 自带的 datetime 类型，我们
+可以 import datetime，并用 datetime 的构造接口来生成一个 DateTime。例如，我们想从一
+个 timestamp 来构造 DateTIme，那么可以这么搞：
+#+BEGIN_SRC python
+import datetime
+import time
+
+ts = int(ts_str)
+ts_max = time.mktime(datetime.datetime.max.timetuple())
+if ts > ts_max:
+    ts = ts_max
+    dt = datetime.datetime.fromtimestamp(ts)
+#+END_SRC
+三点说明：
+1. timestamp 有最大值限制，该值小于整型的最大值。它的最大值是 9999 年 12 月 31 日的最后一
+   秒。为了防止越界，我会拿它与（用抠脚的方式算出的）最大时间戳先做个比较
+2. 想要使用 fromtimestamp，需要 datetime.datetime.，而不是 datetime.
+3. 应该有个更优雅的获取最大 timestamp 的方法
+
+** unique key
+如果一张表只有一个 unique key，那么直接在 Column 中设置 unique=True 即可。如果一张表
+中有多个 unique key，则要通过 __table_args__ 来设置 UniqueConstraint。例子如下：
+#+BEGIN_SRC python
+class MinosStat(Base):
+    __tablename__ = 'minos_stat'
+
+    id = Column(Integer, primary_key=True)
+    log_module_id = Column(Integer, nullable=False)
+    base_date = Column(DateTime, nullable=False)
+    noah_node_id = Column(Integer, nullable=False)
+    total_slices_num = Column(Integer)
+    ready_slices_num = Column(Integer)
+    alarm_slices_num = Column(Integer)
+    avg_delay_time = Column(Integer)
+    final_delay_time = Column(Integer)
+
+    __table_args__ = (UniqueConstraint('log_module_id', 'base_date', name='unique'),)
+#+END_SRC
+
+** 问题记录
+*** ResourceClosedError: This result object is closed.
+我用非 ORM 的方式来使用 SQLAlchemy，当我执行完 execute，返回给我一个结果集，我先把它
+遍历 print 出来进行调试。我发现可以 print 出来，但是模板中却无法使用该结果集，并且报
+出上面的错误。这时我猜想:
+#+BEGIN_EXAMPLE
+sqlalchemy.engine.result.ResultProxy 这种类型是一次性的！遍历完了，它就会自动清空掉。
+#+END_EXAMPLE
+
+于是我尝试只在模板中遍历，这时候，可以一切正常了！
+
+* 打日志
+默认不打日志，除非在配置文件中配置了相关的配置项：
+#+BEGIN_SRC python
+log_to_stderr = True
+log_file_prefix = './log/minos_web.log'
+log_file_num_backups = 1000
+#+END_SRC
+
+并在 app 中加载配置：
+#+BEGIN_SRC python
+import tornado.options
+tornado.options.parse_config_file("./minos.conf")
+#+END_SRC
+* 加载配置
+Tornado 的 options 模块实现了类似于 GFlags 的功能，本笔记也提到了通过 options 模块的
+parse_config_file 来将日志相关的配置加载到应用中。
+
+除了 Tornado 原生的配置项外，options 模块还支持用户自定义配置型。使用流程是：
+1. 在用到该配置项的地方 define 这个配置项，可以预设 default 值。
+2. 在配置文件或者启动命令行中为该配置项设值。
+3. 在 main 函数执行 options.parse_config_file() 或 options.parse_command_line()
+4. 使用它吧！
+ 
+下面是一个具体的例子：
+** 自定义 options 的具体例子
+在 models.py 中定义配置项
+#+BEGIN_SRC python
+from tornado.options import define, options
+
+define('db_engine_config', default='sqlite:///minos.db', help='database engine')
+#+END_SRC
+
+在配置文件 minos.conf 中设值
+#+BEGIN_SRC sh
+db_engine_config = 'mysql://minos_test:minos_test@localhost1:3306/minos_test?charset=utf8'
+#+END_SRC
+
+在 main.py 中加载
+#+BEGIN_SRC python
+import tornado.options
+
+tornado.options.parse_config_file("./minos.conf")
+#+END_SRC
+
+在 models.py 中使用（注意，是用 options.options.xxx 调，而不是 options.xxx 调）
+#+BEGIN_SRC python
+from tornado.options import define, options
+
+engine = create_engine(options.db_engine_config, encoding="utf-8", echo=True)
+#+END_SRC
+
+* Tornado 与异步 <2015-05-23 六>
+
+Tornado 的主要强力之处在于其对异步的支持，使用户能基于 Tornado 构建能同时处
+理大量长耗时的请求的 Web 服务。Tornado 原生提供了针对 Http 的异步客户端，社
+区也有一些针对其他服务（如 MongoDB）的异步客户端， [[https://github.com/tornadoweb/tornado/wiki/Links][见此 Wiki]] 。
+
+** 异步 Http Client 和回调函数
+
+Tornado 提供了一个异步的 Http 客户端，即
+~tornado.httpclient.AsyncHTTPClient~ ，该客户端使用方式就是在发起 Http 请求
+时，同时传入一个回调函数，在回调函数里处理 Http response。
+
+#+BEGIN_SRC python
+class AsyncHandler(RequestHandler):
+    @asynchronous
+    def get(self):
+        http_client = AsyncHTTPClient()
+        http_client.fetch("http://example.com",
+                          callback=self.on_fetch)
+
+    def on_fetch(self, response):
+        do_something_with_response(response)
+        self.render("template.html")
+#+END_SRC
+
+注意：使用 @asynchonous 这个异步装饰器
+
+** 异步生成器 gen
+
+通过回调的方式来使用的话，代码被分割了，不利于可读和维护（对比 Javascript
+的回调函数一般是在回调的地方定义的，没有分割）。所以 Tornado 提供了 gen 的
+方式来让本来需要写到回调函数里的代码可以写到请求发起处。
+
+#+BEGIN_SRC 
+class GenAsyncHandler(RequestHandler):
+    @gen.coroutine
+    def get(self):
+        http_client = AsyncHTTPClient()
+        response = yield http_client.fetch("http://example.com")
+        do_something_with_response(response)
+        self.render("template.html")
+#+END_SRC
+
+这块很简单，参看官方文档：
+- http://tornado.readthedocs.org/en/latest/gen.html
+
+
+* 问题记录
+** 模板中的 HTML 转义
+默认情况，Tornado 的模板系统会为插入到其中的 HTML 执行转义，从而在页面上直接显示
+HTML 源码。但有时候我们希望不要转义，这时候需要在借助 raw 关键词。如下：
+#+BEGIN_EXAMPLE
+{% raw *expr* %}
+    Outputs the result of the given expression without autoescaping.
+#+END_EXAMPLE
+
+** 截取 GET 参数
+Tornado 支持更优雅的 url 拼装方式，在写 url 路由的正则时，加入 () 就可以把 GET 参
+数捕获。例如：
+#+BEGIN_SRC python
+app = tornado.web.Application(
+     [
+       (r"/", MainHandler),
+       (r"/logflow/([^/]+)", LogFlowHandler),
+     ],
+)
+#+END_SRC
+

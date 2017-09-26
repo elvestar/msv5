@@ -1,0 +1,8 @@
+#+TITLE: TypeScript
+#+DATE: 2016-09-07
+
+* 资料收集
+- [[http://video.ch9.ms/ch9/4ae3/062c336d-9cf0-498f-ae9a-582b87954ae3/B881_mid.mp4]]
+
+- [[https://github.com/techird/blog/issues/3][【翻译】TypeScript 和 JSX 搞基的事 · Issue #3 · techird/blog]]
+

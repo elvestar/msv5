@@ -1,0 +1,22 @@
+#+TITLE: JetBrains CLion
+#+DATE: 2014-11-12
+#+KEYWORDS: C++, IDE
+
+* 前言
+我做 Linux 下的 C++开发时，一直苦于没一个好用的 IDE。之前一直在用 Vim，但是我发现想用
+实现一些例如代码提示这样的高级功能时，Vim 的反应速度极慢。后来折腾了一轮 Emacs，发
+现 Emacs 插件极其丰富，社区也非常活跃，但是一旦用来做 C++ 开发，反应速度也是极慢，所
+以又继续用 Vim。Vim 虽好，用着也非常趁手，但是我想我的开发效率还可以更高，所以也一
+直在找寻更强大的开发工具。
+
+今天（2014-11-12）在用 Google 搜索 =Mac C++ Linix Development= 时，无意中转到了看到
+了 JetBrains 最近刚发布 EAP 版的 [[https://www.jetbrains.com/clion/][CLion]] 。我做 Python 一直用的是 JetBrains 出品的 PyCharm，
+对这家公司印象很好，并认为它是程序员工具界的暴雪。所以我对 CLion 的未来发展很有信
+心，希望它能改变 *Mac/Linux 下缺乏公认好用的 C++ IDE 这一长期存在的事实* 。
+
++ https://www.jetbrains.com/clion/
++ [[http://www.zhihu.com/question/25259569][如何评价 JetBrains 的新 C/C++ IDE CLion？]]
+
+* 回顾
+** 安装 CLion EAP 版，测试了段 C++11 的代码
+[[../static/imgs/clion/1.png]]

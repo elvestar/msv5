@@ -1,0 +1,32 @@
+#+TITLE: XML
+#+DATE: 2015-01-02
+#+KEYWORDS: XML
+
+* XPath (XML Path Language)
+XPath 可以类比于 CSS 选择器，/ 可以类比于 CSS 选择器里面的 =>= ，此外 XPath
+也支持过滤，语法很丰富。Ruby 下的 Nokogiri 库就包含了 XPath 功能，用来搜索
+定位 HTML/XML 中的节点。C/C++可以使用 libxml2 提供的 XPath 相关功能。
+
+** 参考
++ [[http://www.w3school.com.cn/xpath/][XPath 教程 (w3cschool)]]
++ [[http://blog.jobbole.com/58160/][XPath 是一个好工具]]
+
+** XPath 谓语
+谓语被嵌在方括号里面，用来查找某个特定的节点或者包含某个特定值的节点。下面
+表格摘自 w3cschool。
+| 路径表达式                         | 结果                                                                                      |
+| ~/bookstore/book[1]~               | 选取属于 bookstore 子元素的第一个 book 元素。                                             |
+| /bookstore/book[last()]            | 选取属于 bookstore 子元素的最后一个 book 元素。                                           |
+| /bookstore/book[last()-1]          | 选取属于 bookstore 子元素的倒数第二个 book 元素。                                         |
+| /bookstore/book[position()<3]      | 选取最前面的两个属于 bookstore 元素的子元素的 book 元素。                                 |
+| //title[@lang]                     | 选取所有拥有名为 lang 的属性的 title 元素。                                               |
+| //title[@lang='eng']               | 选取所有 title 元素，且这些元素拥有值为 eng 的 lang 属性。                                |
+| /bookstore/book[price>35.00]       | 选取 bookstore 元素的所有 book 元素，且其中的 price 元素的值须大于 35.00。                |
+| /bookstore/book[price>35.00]/title | 选取 bookstore 元素中的 book 元素的所有 title 元素，且其中的 price 元素的值须大于 35.00。 |
+** Hive中的xpath <2016-05-16 一>
+Hive支持的UDF（User-Defined Functions）中包括xpath，例如：
+#+BEGIN_SRC sql
+select xpath('<a><b id="foo">b1</b><b id="bar">b2</b></a>','//@id') from src limit 1;
+#+END_SRC
+
+参考：[[https://cwiki.apache.org/confluence/display/Hive/LanguageManual%2BXPathUDF][Hive LanguageManual XPathUDF]]
