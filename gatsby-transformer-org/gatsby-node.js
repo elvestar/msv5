@@ -11,6 +11,10 @@ async function onCreateNode({ node, boundActionCreators, loadNodeContent }) {
     if (![`text/x-org`].includes(node.internal.mediaType)) {
         return
     }
+    if (_.startsWith(node.relativePath, 'time/')) {
+        return
+    }
+
     const content = await loadNodeContent(node)
     
     var orgParser = new org.Parser();

@@ -49,6 +49,7 @@ exports.createPages = ({ graphql, boundActionCreators }) => {
 
 exports.onCreateNode = ({ node, getNode, boundActionCreators }) => {
 
+  
   const { createNode, updateNode } = boundActionCreators
   // console.log(node.internal.type, node.internal.mediaType)
 }
