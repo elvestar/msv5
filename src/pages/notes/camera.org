@@ -436,15 +436,6 @@ gaolianj 2017-04-14 22:44
 #+END_EXAMPLE
 ** 视频拍摄
 - [[http://forum.xitek.com/thread-1692551-1-1-2.html][周末娱乐，索尼a6300拍的MV，主要练习调色。 - α|Sony/KM/M SLR/DSLM论坛]]
-* 又又蠢蠢欲动 <2017-09-27 三 19:52>
-** X-T2
-对富士X-T2来了兴趣。
-- [[http://forum.xitek.com/forum-viewthread-tid-1616844-extra-page%3D1-ordertype-2-t-1506510096.html][使用X-T2一个月后的一些感受 - Fujifilm SLR/DSLM论坛]]
-- [[https://www.zhihu.com/question/51480854][a7m2 x-t2 5d3怎么样选择？ - 知乎]]  
-
-#+BEGIN_EXAMPLE
-
-#+END_EXAMPLE
 * 照片
 ** Serenity is my Name
 #+BEGIN_EXAMPLE
@@ -557,3 +548,25 @@ Sony Vario-Tessar T* FE 16-35mm f/4 ZA OSS
 </div>
 <script type='text/javascript' src='https://500px.com/embed.js'></script>
 #+END_HTML
+* 又又蠢蠢欲动 <2017-09-27 三 19:52>
+** X-T2
+对富士X-T2来了兴趣。
+- [[http://forum.xitek.com/forum-viewthread-tid-1616844-extra-page%3D1-ordertype-2-t-1506510096.html][使用X-T2一个月后的一些感受 - Fujifilm SLR/DSLM论坛]]
+- [[https://www.zhihu.com/question/51480854][a7m2 x-t2 5d3怎么样选择？ - 知乎]]  
+
+#+BEGIN_EXAMPLE
+
+#+END_EXAMPLE
+** RX10M4
+- [[http://forum.xitek.com/thread-1707882-1-1-2.html][RX10iii乐摄园（欢迎各代RX10影友的交流） - α|Sony/KM/M SLR/DSLM论坛]]
+- [[http://forum.xitek.com/thread-1710605-1-1-2.html][索尼RX10IV新鲜上手 - 数码相机]]
+
+#+BEGIN_EXAMPLE
+擦枪走水
+这几个机器拍车展有两个优点：
+
+1、有广角也有长焦，可拍小品可拍全景
+
+2、ISO设到1000完全没有噪点，室内室外随便转，不用来回更改设置，室内ISO1000足够用，室外太阳地儿下面因为有超高速快门1/32000，所以这个感光度也不需要动它。
+2017-09-23 16:48
+#+END_EXAMPLE
