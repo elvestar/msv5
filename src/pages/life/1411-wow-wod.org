@@ -68,10 +68,10 @@
 #+CAPTION: 通关塔拉多
 [[../static/imgs/1411-wow-wod/WoWScrnShot_120614_222345.jpg]]
 
-* 阿卡林峰
+* 阿兰卡峰
 #+CAPTION: 路遇鸦人流亡者
 [[../static/imgs/1411-wow-wod/WoWScrnShot_120614_223040.jpg]]
-#+CAPTION: 阿卡林峰美景
+#+CAPTION: 阿兰卡峰林美景
 [[../static/imgs/1411-wow-wod/WoWScrnShot_120614_225834.jpg]]
 #+CAPTION: 副本：奥金顿
 [[../static/imgs/1411-wow-wod/WoWScrnShot_120614_231656.jpg]]
@@ -83,9 +83,9 @@
 [[../static/imgs/1411-wow-wod/WoWScrnShot_120714_154607.jpg]]
 #+CAPTION: 林中休息
 [[../static/imgs/1411-wow-wod/WoWScrnShot_120714_161111.jpg]]
-#+CAPTION: 阿卡林峰美景
+#+CAPTION: 阿兰卡峰林美景
 [[../static/imgs/1411-wow-wod/WoWScrnShot_120714_195540.jpg]]
-#+CAPTION: 通关阿卡林峰
+#+CAPTION: 通关阿兰卡峰林
 [[../static/imgs/1411-wow-wod/WoWScrnShot_120714_231341.jpg]]
 
 * 纳格兰
