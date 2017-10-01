@@ -5,8 +5,6 @@ import concat from 'lodash/concat'
 import Helmet from 'react-helmet'
 import moment from 'moment'
 
-import { rhythm } from '../utils/typography'
-
 class Timeline extends React.Component {
   render() {
 
