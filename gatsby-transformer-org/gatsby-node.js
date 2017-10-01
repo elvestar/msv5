@@ -47,55 +47,55 @@ async function onCreateNode({ node, boundActionCreators, loadNodeContent }) {
     node.internal.content = content
     node.html = body
 
-    _.each(events, event => {
-        const contentDigest = crypto
-            .createHash(`md5`)
-            .update(event.summary)
-            .digest(`hex`)
-        createNode({
-            id: `${node.id} event ${event.anchor}`,
-            parent: node.id,
-            excerpt: event.summary,
-            children: [],
-            frontmatter: {
-                path: `${node.path}#${event.anchor}`,
-                date: event.date,
-                title: event.title,
-                cover: event.cover
-            },
-            internal: {
-                contentDigest,
-                type: 'event',
-            }
-        })
-    })
+    // _.each(events, event => {
+    //     const contentDigest = crypto
+    //         .createHash(`md5`)
+    //         .update(event.summary)
+    //         .digest(`hex`)
+    //     createNode({
+    //         id: `${node.id} event ${event.anchor}`,
+    //         parent: node.id,
+    //         excerpt: event.summary,
+    //         children: [],
+    //         frontmatter: {
+    //             path: `${node.path}#${event.anchor}`,
+    //             date: event.date,
+    //             title: event.title,
+    //             cover: event.cover
+    //         },
+    //         internal: {
+    //             contentDigest,
+    //             type: 'event',
+    //         }
+    //     })
+    // })
     
-    var contentDigest = crypto
-        .createHash(`md5`)
-        .update('nil')
-        .digest(`hex`)
-    if (metaData.summary !== undefined) {
-        contentDigest = crypto
-            .createHash(`md5`)
-            .update(metaData.summary)
-            .digest(`hex`)
-    }
-    createNode({
-        id: `${node.id} event root`,
-        parent: node.id,
-        excerpt: metaData.summary,
-        children: [],
-        frontmatter: {
-            path: node.path,
-            date: metaData.date,
-            title: metaData.title,
-            cover: '#'
-        },
-        internal: {
-            contentDigest,
-            type: 'event',
-        }
-    })
+    // var contentDigest = crypto
+    //     .createHash(`md5`)
+    //     .update('nil')
+    //     .digest(`hex`)
+    // if (metaData.summary !== undefined) {
+    //     contentDigest = crypto
+    //         .createHash(`md5`)
+    //         .update(metaData.summary)
+    //         .digest(`hex`)
+    // }
+    // createNode({
+    //     id: `${node.id} event root`,
+    //     parent: node.id,
+    //     excerpt: metaData.summary,
+    //     children: [],
+    //     frontmatter: {
+    //         path: node.path,
+    //         date: metaData.date,
+    //         title: metaData.title,
+    //         cover: '#'
+    //     },
+    //     internal: {
+    //         contentDigest,
+    //         type: 'event',
+    //     }
+    // })
 }
 
 exports.onCreateNode = onCreateNode
