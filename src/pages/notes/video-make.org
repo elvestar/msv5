@@ -1,0 +1,6 @@
+#+TITLE: 视频制作
+#+DATE: 2017-10-01 10:31:17
+
+先学习一下索尼slog调色。
+- [[http://www.sonystyle.com.cn/products/video/4k/level3_2.htm][S-Log 摄影&编辑尽在掌握 | 索尼官方网站]]
+- [[https://www.blackmagicdesign.com/products/davinciresolve/#][Blackmagic Design: DaVinci Resolve 14]]

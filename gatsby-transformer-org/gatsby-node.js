@@ -16,6 +16,7 @@ async function onCreateNode({ node, boundActionCreators, loadNodeContent }) {
     }
 
     const content = await loadNodeContent(node)
+    console.log(node.relativePath)
     
     var orgParser = new org.Parser();
     var orgDocument = orgParser.parse(content);
